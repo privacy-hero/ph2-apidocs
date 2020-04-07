@@ -1,0 +1,83 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - Email Callback"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Format of the Email Callback URL.
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+paths:
+  /{callbackpath}:
+    post:
+      tags:
+        - Account Management
+      summary: Callback to App that requested a New Customer.
+      description: |-
+        This is the format of the callback that will be presented to the
+        customer in their confirmation email.
+
+        It is linked to the instigating App, so that the App can continue
+        the process of creating the new account.
+      servers:
+        - url: https://www.myapp.url/
+          description: |-
+            The link which can open the app which called
+            /auth/newcustomer.
+            - exp=\<time>\
+
+      parameters:
+        - in: path
+          required: true
+          name: callbackpath
+          schema:
+            type: string
+            format: path
+            example: callback
+          description: Any path required by the application callback.
+            The base URL and callback path are derived from the `callback`
+            parameter from the `newcustomer` API Call.
+
+        - in: query
+          name: verify
+          required: true
+          schema:
+            type: string
+            format: token
+          description: The New Customer confirmation token.
+        - in: query
+          name: exp
+          required: true
+          schema:
+            type: integer
+            format: unix-time
+          description:
+            The Time, being the Epoch Time, after which the verification token
+            will become invalid.
+
+            Epoch Time is the number of seconds that have elapsed since the time
+            00:00:00 UTC on 1 January 1970, minus leap seconds
+        - in: query
+          name: pw
+          schema:
+            type: boolean
+            default: true
+          description:
+            If true, the user must be prompted to create a password and the
+            password must be sent in the `confirmcustomer` API call.
+            If it is not present, it defaults to `true`
+      security: []
+
+      responses:
+        "200":
+          description: |-
+            The message was accepted.
+        "400":
+          description: |-
+            The token expired before the link was used.

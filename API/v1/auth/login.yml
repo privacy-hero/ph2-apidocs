@@ -1,0 +1,96 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /auth/login"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    `/auth/login`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+components:
+  securitySchemes:
+    appToken:
+      type: http
+      scheme: bearer
+      bearerFormat: "Custom"
+      description: |-
+        App Auth Token as distributed to the APP Developers. Each app
+        has a unique App Auth Token.
+
+paths:
+  "/auth/login":
+    post:
+      tags:
+        - Account Management
+      summary: Log a Client in to their account.
+      description: |-
+        Logs a client in to their account, by validating their credentials
+        and returning a Bearer token for API access.
+
+        Must have a valid appToken for the request to be processed.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+                - pwd
+              properties:
+                id:
+                  type: string
+                  example: someone@somewhere.com
+                  description: |-
+                    The clients ID,  different clients will present different
+                    ID.
+
+                    - Customer: Their email address
+                    - Admin: Their email address
+                    - Admin as Customer: \<admin email\>:\<customer email\>
+                    - Router: MAC Address
+                pwd:
+                  type: string
+                  format: password
+                  description:
+                    The shared secret used to identify the client.  Typically
+                    this is a password.  It is sent unencrypted/unhashed because
+                    the link is protected from eaves dropping with https.
+      security:
+        - appToken: []
+
+      responses:
+        "200":
+          description: |-
+            The message was accepted, and the account has been logged in.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.yml#/components/schemas/Authorized"
+        "401":
+          description: |-
+            The Application authorization token is invalid or not recognized.
+          headers:
+            WWW-Authenticate:
+              schema:
+                type: string
+                example: Bearer realm=privacyhero2.api.com
+                description: |-
+                  indicates the authentication scheme(s) and parameters
+                  applicable to the target resource.
+
+        "403":
+          description: |-
+            The password or id is invalid.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.yml#/components/schemas/Nack"
+              example:
+                error: "Password Invalid"

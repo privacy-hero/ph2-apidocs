@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="mermaid">
+        sequenceDiagram
+            autonumber
+            participant C as Customer
+            participant A as App
+            participant M as PrivacyHero2 API
+
+            C --X A: UI: Change Email
+            A ->> M: /auth/delcustomer
+
+            note over A,M: Authority: Bearer client.token <br/> X-AppToken: app.token <br/> password: "password" <br/>callback: AppURL.Local/path
+            alt tokens OK && password OK
+                M ->> A: 200 OK
+                A -->> C: UI: Advise Email Incoming
+                M -->> C: Confirm Delete Email sent directly to customer
+                note over C: Reads email <br/> Clicks Callback Link
+
+                C ->> A: Callback
+                note over A,C: verify: verification token <br/> exp: token expiry time
+
+                A --X C: UI: Verify Deletion with captcha
+
+                A ->> M: /auth/confirmcustomer
+                note over A,M: Authority: Bearer app.token <br/> verify: verification token
+
+                note over M: Customer Deleted
+                M ->> A: 200 OK
+                note over A,M: bearer: ""<br/> renew: 0<br/> exp: 0
+
+                note over A: Removes stored<br/>customer.Token
+            else password mismatch
+                M ->> A: 400 Invalid Password
+                A --X C: UI: Error, Invalid Password
+            else client.token is invalid
+                M ->> A: 401 Bearer token invalid
+                note over A,M: WWW-Authenticate:<br/>Bearer realm=privacyhero2.api.com
+                note over A: Renew Token<br/>OR Reauthenticate
+            else app.token is invalid
+                M ->> A: 403 Invalid App token
+                note over A: FATAL
+            end
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>
+        var config = {
+            theme: "forest",
+            startOnLoad: true,
+            securityLevel: 'loose',
+            logLevel: 'debug',
+            sequence: {
+                diagramMarginX: 250,
+                diagramMarginY: 25,
+                actorMargin: 90,
+                width: 150,
+                height: 65,
+                boxMargin: 25,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: true,
+                bottomMarginAdj: 10,
+                useMaxWidth: true,
+                rightAngles: false,
+                showSequenceNumbers: false,
+            },
+        };
+        mermaid.initialize( config );</script>
+</body>
+
+</html>

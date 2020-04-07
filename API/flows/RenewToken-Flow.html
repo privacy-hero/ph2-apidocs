@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="mermaid">
+        sequenceDiagram
+            autonumber
+            participant C as User
+            participant A as App
+            participant M as PrivacyHero2 API
+
+            note over A: client.Token fails<br/>OR renew passes
+            A ->> M: /auth/renew
+
+            note over A,M: Authority: Bearer client.token
+
+            note over M: Confirms Token
+            alt Token Valid
+                M ->> A: 200 OK
+                note over A,M: bearer: client.token <br/> renew: [time] <br/> exp: [time]
+                note over A: Stores: <br/> client.Token <br/> renew <br/> exp
+            else token invalid
+                M ->> A: 401 Client token invalid
+                note over A: Reauthenticate Client
+            else token expired
+                M ->> A: 403 Client token expired
+                note over A: Reauthenticate Client
+            end
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.4.8/dist/mermaid.min.js"></script>
+    <script>
+        var config = {
+            theme: "forest",
+            startOnLoad: true,
+            securityLevel: 'loose',
+            logLevel: 'debug',
+            sequence: {
+                diagramMarginX: 250,
+                diagramMarginY: 25,
+                actorMargin: 90,
+                width: 150,
+                height: 65,
+                boxMargin: 25,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: true,
+                bottomMarginAdj: 10,
+                useMaxWidth: true,
+                rightAngles: false,
+                showSequenceNumbers: false,
+            },
+        };
+        mermaid.initialize( config );</script>
+</body>
+
+</html>

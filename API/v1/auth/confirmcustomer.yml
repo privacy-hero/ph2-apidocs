@@ -1,0 +1,87 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /auth/confirmcustomer"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    `/auth/confirmcustomer`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+components:
+  securitySchemes:
+    appToken:
+      type: http
+      scheme: bearer
+      bearerFormat: "Custom"
+      description: |-
+        App Auth Token as distributed to the APP Developers. Each app
+        has a unique App Auth Token.
+
+paths:
+  "/auth/confirmcustomer":
+    post:
+      tags:
+        - Account Management
+      summary: Confirm the New Customer Request
+      description: |-
+        Confirms creation of the new account for a Customer, from the back link
+        provided by the email to the customer.
+
+        Must have a valid appToken for the request to be processed.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - verify
+              properties:
+                verify:
+                  type: string
+                  format: token
+                  example: jE1ODU4NDQxMjEsImp0aSI6InJhbmRvbS11bmlxdWUtc3RyaW5nIiwiaWF0IjoxNTg1ODQxMTIxLCJpc3MiOiJQcml2YWN5SGVybyIsInN1YiI6InN0ZXZlbiIsImlkdCI6IkMifQ.8AlZ8De6ldta_r7IS-hR_6Nr_u8fNGcwsoY9gz6M2sA
+                  description: |-
+                    The token from the callback which invoked this API call.
+                password:
+                  type: string
+                  format: password
+      security:
+        - appToken: []
+
+      responses:
+        "200":
+          description: |-
+            The message was accepted, and the account has been created.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.yml#/components/schemas/Authorized"
+        "401":
+          description: |-
+            The Application authorization token is invalid or not recognized.
+          headers:
+            WWW-Authenticate:
+              schema:
+                type: string
+                example: Bearer realm=privacyhero2.api.com
+                description: |-
+                  indicates the authentication scheme(s) and parameters
+                  applicable to the target resource.
+
+        "403":
+          description: |-
+            The `verify` token is either invalid or expired.  In either case, it
+            is to be treated as if it simply expired.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.yml#/components/schemas/Nack"
+              example:
+                error: "Link Expired"
