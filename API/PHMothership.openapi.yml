@@ -7,6 +7,13 @@ info:
     The complete backend API for the Privacy Hero 2.
 
     The backend server infrastructure is known as the *"Mothership"*
+
+    This API Documentation may be viewed at:
+      - [PrivacyHero2 API - RapiDoc/Pdf](https://stevenj.github.io/ph2-apidocs/)
+      **DEFAULT**
+      - [PrivacyHero2 API - Swagger UI](https://stevenj.github.io/ph2-apidocs/index-swui.html)
+      - [PrivacyHero2 API - Redocly](https://stevenj.github.io/ph2-apidocs/index-redocly.html)
+
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
   contact:
