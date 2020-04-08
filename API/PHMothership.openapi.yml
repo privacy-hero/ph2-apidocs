@@ -12,6 +12,7 @@ info:
       - **[PrivacyHero2 API - RapiDoc/Pdf](https://stevenj.github.io/ph2-apidocs/)**
       - [PrivacyHero2 API - Swagger UI](https://stevenj.github.io/ph2-apidocs/index-swui.html)
       - [PrivacyHero2 API - Redocly](https://stevenj.github.io/ph2-apidocs/index-redocly.html)
+      - [Download API JSON](https://stevenj.github.io/ph2-apidocs/API/PHMothership.openapi.yml)
 
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
@@ -22,14 +23,9 @@ info:
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
-  - url: https://{baseurl}/{stage}/{apiver} # what is our URL???
-    description: Variables
+  - url: https://privacyhero2.api.com/{stage}/ # what is our URL???
+    description: What is our actual base URL??
     variables:
-      baseurl:
-        enum:
-          - privacyhero2.api.com
-        default: privacyhero2.api.com
-        description: What is our URL???
       stage:
         enum:
           - dev
@@ -37,11 +33,6 @@ servers:
           - prod
         default: prod
         description: Deployment Stages
-      apiver:
-        enum:
-          - v1
-        default: v1
-        description: API Version
 
 #########################################################
 # Components are preformatted data that can be reused in definitions.
@@ -68,26 +59,26 @@ security:
   - appToken: []
 
 paths:
-  /auth/newcustomer: # Causes a new customer email to be sent
+  /v1/auth/newcustomer: # Causes a new customer email to be sent
     $ref: "v1/auth/newcustomer.yml#/paths/~1auth~1newcustomer"
 
   /{callbackpath}: # Called when the customer clicks the link in the new customer email.
     $ref: "v1/auth/emailcallback.yml#/paths/~1{callbackpath}"
 
-  /auth/confirmcustomer:
+  /v1/auth/confirmcustomer:
     $ref: "v1/auth/confirmcustomer.yml#/paths/~1auth~1confirmcustomer"
 
-  /auth/login: # Logs in with a password
+  /v1/auth/login: # Logs in with a password
     $ref: "v1/auth/login.yml#/paths/~1auth~1login"
 
-  /auth/renew: # Renews an expired token, which is still in time for renewal
+  /v1/auth/renew: # Renews an expired token, which is still in time for renewal
     $ref: "v1/auth/renew.yml#/paths/~1auth~1renew"
 
-  /auth/chgpwd: # Change the users password
+  /v1/auth/chgpwd: # Change the users password
     $ref: "v1/auth/chgpwd.yml#/paths/~1auth~1chgpwd"
 
-  /auth/chgemail: # change the users email address
+  /v1/auth/chgemail: # change the users email address
     $ref: "v1/auth/chgemail.yml#/paths/~1auth~1chgemail"
 
-  /auth/delcustomer: # delete the customer
+  /v1/auth/delcustomer: # delete the customer
     $ref: "v1/auth/delcustomer.yml#/paths/~1auth~1delcustomer"
