@@ -13,9 +13,19 @@
       type="module"
       src="https://unpkg.com/rapidoc/dist/rapidoc-min.js"
     ></script>
+    <script src="https://unpkg.com/rapipdf/dist/rapipdf-min.js"></script>
   </head>
 
   <body>
+    <rapi-pdf
+      style = "width:700px; height:40px; font-size:16px;"
+      spec-url = "https://stevenj.github.io/ph2-apidocs/API/PHMothership.openapi.yml"
+      button-bg = "#b44646"
+      hide-input= true
+      pdf-footer-text="Copyright © 2020, HelpOn inc.  All Rights Reserved."
+      include-api-list=true
+    > </rapi-pdf>
+
     <rapi-doc
       spec-url="https://stevenj.github.io/ph2-apidocs/API/PHMothership.openapi.yml"
       regular-font="'jubilat', serif"
