@@ -37,7 +37,7 @@ servers:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-  # All Schemas are defined in  PHMothership.components.openapi.yml
+  # All Schemas are defined in ./inc/components.yml
   schemas: {}
 
   securitySchemes:
