@@ -9,10 +9,10 @@ info:
     The backend server infrastructure is known as the *"Mothership"*
 
     This API Documentation may be viewed at:
-      - **[PrivacyHero2 API - RapiDoc/Pdf](https://stevenj.github.io/ph2-apidocs/)**
-      - [PrivacyHero2 API - Swagger UI](https://stevenj.github.io/ph2-apidocs/index-swui.html)
-      - [PrivacyHero2 API - Redocly](https://stevenj.github.io/ph2-apidocs/index-redocly.html)
-      - [Download API JSON](https://stevenj.github.io/ph2-apidocs/API/PHMothership.openapi.yml)
+      - **[PrivacyHero2 API - RapiDoc/Pdf](https://privacy-hero.github.io/ph2-apidocs/)**
+      - [PrivacyHero2 API - Swagger UI](https://privacy-hero.github.io/ph2-apidocs/index-swui.html)
+      - [PrivacyHero2 API - Redocly](https://privacy-hero.github.io/ph2-apidocs/index-redocly.html)
+      - [Download API JSON](https://privacy-hero.github.io/ph2-apidocs/API/PHMothership.openapi.yml)
 
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
@@ -33,6 +33,12 @@ servers:
           - prod
         default: prod
         description: Deployment Stages
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev/
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
 
 #########################################################
 # Components are preformatted data that can be reused in definitions.
