@@ -54,6 +54,9 @@ paths:
         `confirmcustomer` after this time will fail.
 
         Must have a valid appToken for the request to be processed.
+      externalDocs:
+        url: "./API/flows/NewCustomer-Flow.html"
+        description: New Customer Message Flow
       requestBody:
         required: true
         content:
