@@ -97,12 +97,22 @@ paths:
                 $ref: "../../inc/components.yml#/components/schemas/Ack"
               example:
                 msg: "Email sent to user, OK."
-        "401":
+        "400":
           description: |-
-            The message authorization token is invalid or not recognized.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` Fatal uncategorized error in server.
           content:
             application/json:
               schema:
                 $ref: "../../inc/components.yml#/components/schemas/Nack"
               example:
-                error: "Invalid App Authorization Token."
+                error: "Internal Server Error."
+        "401":
+          description: |-
+            The APP Key is invalid or not recognized.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.yml#/components/schemas/Nack"
+              example:
+                error: "Invalid App Key."
