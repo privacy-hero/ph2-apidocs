@@ -8,6 +8,7 @@ info:
     `/auth/newcustomer`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
   contact:
     name: API Support
     url: http://www.example.com/support
