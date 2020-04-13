@@ -16,6 +16,7 @@ info:
 paths:
   /{callbackpath}:
     post:
+      operationId: appCallback
       tags:
         - Account Management
       summary: Callback to App that requested a New Customer.

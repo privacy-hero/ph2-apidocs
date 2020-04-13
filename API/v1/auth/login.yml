@@ -15,17 +15,12 @@ info:
 
 components:
   securitySchemes:
-    appToken:
-      type: http
-      scheme: bearer
-      bearerFormat: "Custom"
-      description: |-
-        App Auth Token as distributed to the APP Developers. Each app
-        has a unique App Auth Token.
+    $ref: "../../inc/components.yml#/components/securitySchemes"
 
 paths:
   "/auth/login":
     post:
+      operationId: login
       tags:
         - Account Management
       summary: Log a Client in to their account.
@@ -63,7 +58,7 @@ paths:
                     this is a password.  It is sent unencrypted/unhashed because
                     the link is protected from eaves dropping with https.
       security:
-        - appToken: []
+        - appKey: []
 
       responses:
         "200":

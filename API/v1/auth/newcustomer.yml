@@ -15,17 +15,12 @@ info:
 
 components:
   securitySchemes:
-    appToken:
-      type: http
-      scheme: bearer
-      bearerFormat: "Custom"
-      description: |-
-        App Auth Token as distributed to the APP Developers. Each app
-        has a unique App Auth Token.
+    $ref: "../../inc/components.yml#/components/securitySchemes"
 
 paths:
   /auth/newcustomer:
     post:
+      operationId: authNewCustomer
       tags:
         - Account Management
       summary: Request New Customer/Forgotten Password
@@ -85,7 +80,7 @@ paths:
                     creation. It must point to the app which instigated this
                     request.
       security:
-        - appToken: []
+        - appKey: []
 
       responses:
         "200":
