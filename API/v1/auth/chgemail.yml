@@ -13,9 +13,13 @@ info:
     url: http://www.example.com/support
     email: support@example.com
 
+tags:
+  - name: Account Management
+    description: Operations related to Account Creation and Management
+
 components:
   securitySchemes:
-    $ref: "../../inc/components.yml#/components/securitySchemes"
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
 
 paths:
   /auth/chgemail:
@@ -32,16 +36,6 @@ paths:
       security:
         - clientToken: []
           appKey: []
-
-      parameters:
-        - in: header
-          name: X-AppToken
-          required: true
-          description: The Applications Authentication Token
-          schema:
-            type: string
-            format: byte
-            example: xxxxxxx.xxxxxxxxx
 
       requestBody:
         required: true

@@ -15,7 +15,7 @@ info:
 
 components:
   securitySchemes:
-    $ref: "../../inc/components.yml#/components/securitySchemes"
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
 
 paths:
   "/auth/confirmcustomer":
