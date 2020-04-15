@@ -14,9 +14,22 @@ info:
     url: http://www.example.com/support
     email: support@example.com
 
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
 components:
   securitySchemes:
     $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Account Management
+    description: Operations related to Account Creation and Management
 
 paths:
   /auth/newcustomer:
@@ -94,7 +107,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Ack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Ack"
               example:
                 msg: "Email sent to user, OK."
         "400":
@@ -105,7 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Internal Server Error."
         "401":
@@ -114,6 +127,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Invalid App Key."
+
+        "403":
+          description: |-
+            Invalid App Key, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
