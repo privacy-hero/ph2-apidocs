@@ -13,6 +13,14 @@ info:
     url: http://www.example.com/support
     email: support@example.com
 
+servers:
+  - url: localhost
+    description: the callback is a local callback to the app.
+
+tags:
+  - name: Account Management
+    description: Operations related to Account Creation and Management
+
 paths:
   /{callbackpath}:
     post:

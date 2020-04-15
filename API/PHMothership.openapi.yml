@@ -72,7 +72,7 @@ paths:
     $ref: "v1/auth/newcustomer.oas3.yml#/paths/~1auth~1newcustomer"
 
   /{callbackpath}: # Called when the customer clicks the link in the new customer email.
-    $ref: "v1/auth/emailcallback.yml#/paths/~1{callbackpath}"
+    $ref: "v1/auth/emailcallback.oas3.yml#/paths/~1{callbackpath}"
 
   /v1/auth/confirmcustomer:
     $ref: "v1/auth/confirmcustomer.yml#/paths/~1auth~1confirmcustomer"
