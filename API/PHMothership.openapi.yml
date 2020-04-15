@@ -75,7 +75,7 @@ paths:
     $ref: "v1/auth/emailcallback.oas3.yml#/paths/~1{callbackpath}"
 
   /v1/auth/confirmcustomer:
-    $ref: "v1/auth/confirmcustomer.yml#/paths/~1auth~1confirmcustomer"
+    $ref: "v1/auth/confirmcustomer.oas3.yml#/paths/~1auth~1confirmcustomer"
 
   /v1/auth/login: # Logs in with a password
     $ref: "v1/auth/login.yml#/paths/~1auth~1login"
