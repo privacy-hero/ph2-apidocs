@@ -24,7 +24,7 @@ info:
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
-  - url: https://privacyhero2.api.com/{stage}/ # what is our URL???
+  - url: https://api2.privacyhero.com/{stage} # what is our URL???
     description: What is our actual base URL??
     variables:
       stage:
@@ -34,7 +34,7 @@ servers:
           - prod
         default: prod
         description: Deployment Stages
-  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev/
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
     description: Development URL
     variables:
       awsid:

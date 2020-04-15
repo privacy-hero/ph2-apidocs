@@ -53,7 +53,7 @@ components:
         bearer:
           type: string
           format: byte
-          example: "kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf"
+          example: kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf
           description: |-
             The Client Authorization Bearer token required to be sent in the
             `Authorization: Bearer` header of all API calls that are called on
