@@ -63,7 +63,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Ack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Ack"
               example:
                 msg: "Email sent to user, OK."
 
@@ -73,7 +73,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Invalid Password."
 
@@ -95,6 +95,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Application Token Invalid."

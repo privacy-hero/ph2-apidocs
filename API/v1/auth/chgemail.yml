@@ -70,7 +70,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Ack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Ack"
               example:
                 msg: "Emails sent to user, OK."
 
@@ -80,7 +80,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Email address already used by another account."
 
@@ -102,6 +102,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Application Token Invalid."

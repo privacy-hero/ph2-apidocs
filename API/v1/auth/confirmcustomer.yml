@@ -57,7 +57,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Authorized"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Authorized"
         "401":
           description: |-
             The Application authorization token is invalid or not recognized.
@@ -77,6 +77,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Link Expired"

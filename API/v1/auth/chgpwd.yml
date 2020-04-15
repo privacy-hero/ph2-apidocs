@@ -57,7 +57,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Authorized"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Authorized"
 
         "400":
           description: |-
@@ -65,7 +65,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: |-
                   Password must contain at least One UpperCase character, One
@@ -90,6 +90,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.yml#/components/schemas/Nack"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
                 error: "OLD Password Invalid."
