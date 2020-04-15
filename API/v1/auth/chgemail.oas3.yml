@@ -13,6 +13,14 @@ info:
     url: http://www.example.com/support
     email: support@example.com
 
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
 tags:
   - name: Account Management
     description: Operations related to Account Creation and Management

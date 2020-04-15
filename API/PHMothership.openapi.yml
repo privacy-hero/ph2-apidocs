@@ -87,7 +87,7 @@ paths:
     $ref: "v1/auth/chgpwd.yml#/paths/~1auth~1chgpwd"
 
   /v1/auth/chgemail: # change the users email address
-    $ref: "v1/auth/chgemail.yml#/paths/~1auth~1chgemail"
+    $ref: "v1/auth/chgemail.oas3.yml#/paths/~1auth~1chgemail"
 
   /v1/auth/delcustomer: # delete the customer
     $ref: "v1/auth/delcustomer.yml#/paths/~1auth~1delcustomer"
