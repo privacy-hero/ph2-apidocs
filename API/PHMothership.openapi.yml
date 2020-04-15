@@ -71,7 +71,6 @@ paths:
   /v1/auth/newcustomer: # Causes a new customer email to be sent
     $ref: "v1/auth/newcustomer.yml#/paths/~1auth~1newcustomer"
 
-
   /{callbackpath}: # Called when the customer clicks the link in the new customer email.
     $ref: "v1/auth/emailcallback.yml#/paths/~1{callbackpath}"
 
