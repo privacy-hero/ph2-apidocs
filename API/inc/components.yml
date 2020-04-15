@@ -52,7 +52,6 @@ components:
       properties:
         bearer:
           type: string
-          format: byte
           example: kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf
           description: |-
             The Client Authorization Bearer token required to be sent in the
