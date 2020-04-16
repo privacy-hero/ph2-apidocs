@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.4"
+  version: "0.0.5"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -68,6 +68,8 @@ tags:
     description: Operations related to Account Creation and Management
   - name: Adapter Management
     description: Operations related to Adapter Management
+  - name: Profile Management
+    description: Operations related to Profile Management
 
 paths:
 
@@ -114,8 +116,8 @@ paths:
 
   ######### PROFILE  MANAGEMENT API CALLS ######################
 
-  #/v1/profile/list:
-  #  $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
+  /v1/profile/list:
+    $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
 
   ######### DEVICE  MANAGEMENT API CALLS ######################
 

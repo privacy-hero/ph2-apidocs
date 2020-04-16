@@ -34,6 +34,10 @@ paths:
                     - $ref: "#/components/schemas/Devices"
                     - $ref: "#/components/schemas/AdapterDevices"
                     - $ref: "#/components/schemas/AdaptersDevices"
+                    - $ref: "#/components/schemas/Profile"
+                    - $ref: "#/components/schemas/Profiles"
+                    - $ref: "#/components/schemas/ProfileDevices"
+                    - $ref: "#/components/schemas/ProfilesDevices"
                     - $ref: "#/components/schemas/Ack"
                     - $ref: "#/components/schemas/Nack"
                     - $ref: "#/components/schemas/GW_NegAuth"
@@ -152,6 +156,33 @@ components:
       items:
         $ref: "#/components/schemas/AdapterDevices"
 
+    Profile:
+      description: A device setting profile
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name given to the profile.
+
+    Profiles:
+      description: An array of known profiles
+      type: array
+      items:
+        $ref: "#/components/schemas/Profile"
+
+    ProfileDevices:
+      description: |-
+        A profiles, and the devices associated with it.
+      allOf:
+        - $ref: "#/components/schemas/Profile"
+        - $ref: "#/components/schemas/Devices"
+
+    ProfilesDevices:
+      description: |-
+        All profiles, and all devices in those profiles.
+      type: array
+      items:
+        $ref: "#/components/schemas/ProfileDevices"
 
     Ack:
       type: object
