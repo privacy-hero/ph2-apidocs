@@ -81,13 +81,13 @@ paths:
     $ref: "v1/auth/login.oas3.yml#/paths/~1auth~1login"
 
   /v1/auth/renew: # Renews an expired token, which is still in time for renewal
-    $ref: "v1/auth/renew.yml#/paths/~1auth~1renew"
+    $ref: "v1/auth/renew.oas3.yml#/paths/~1auth~1renew"
 
   /v1/auth/chgpwd: # Change the users password
-    $ref: "v1/auth/chgpwd.yml#/paths/~1auth~1chgpwd"
+    $ref: "v1/auth/chgpwd.oas3.yml#/paths/~1auth~1chgpwd"
 
   /v1/auth/chgemail: # change the users email address
     $ref: "v1/auth/chgemail.oas3.yml#/paths/~1auth~1chgemail"
 
   /v1/auth/delcustomer: # delete the customer
-    $ref: "v1/auth/delcustomer.yml#/paths/~1auth~1delcustomer"
+    $ref: "v1/auth/delcustomer.oas3.yml#/paths/~1auth~1delcustomer"
