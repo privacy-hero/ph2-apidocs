@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.3"
+  version: "0.0.4"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
