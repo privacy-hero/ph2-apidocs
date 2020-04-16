@@ -78,7 +78,7 @@ paths:
     $ref: "v1/auth/confirmcustomer.oas3.yml#/paths/~1auth~1confirmcustomer"
 
   /v1/auth/login: # Logs in with a password
-    $ref: "v1/auth/login.yml#/paths/~1auth~1login"
+    $ref: "v1/auth/login.oas3.yml#/paths/~1auth~1login"
 
   /v1/auth/renew: # Renews an expired token, which is still in time for renewal
     $ref: "v1/auth/renew.yml#/paths/~1auth~1renew"
