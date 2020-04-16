@@ -1,0 +1,115 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/find"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Find an unassociated adapter.
+
+    **_EARLY DRAFT_**
+
+    `/adapter/find`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/find:
+    get:
+      operationId: adapterFind
+      tags:
+        - Adapter Management
+      summary: Find Unassociated adapters we can bind the client account to.
+      description: |-
+        When an adapter is first installed, it is not linked to an account.
+        The client must add the adapter to their account, this function will
+        return a list of adapters which are available to be associated.
+
+        It will either find all adapters on the same local network as the client
+        connection.  Or if that does not work, a list of all adapters which are
+        currently unassociated and have the same two last digits of the MAC
+        address as optionally provided in this call.
+
+        **_EARLY DRAFT_**
+      externalDocs:
+        url: "./API/flows/AdapterAccountAssociation-Flow.html"
+        description: Adapter/Account Association message flow diagram.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: mac
+          schema:
+            type: string
+          example: "A9"
+          description: |-
+            If not set, the function will look for all unassociated adapters
+            that share the internet connection of the client making the call.
+
+            However, IF that fails, this can be set to the last two digits of
+            the MAC address, which will return a global list of all connected
+            adapters which are not currently associated with an account, and
+            share the two last characters specified.
+
+      responses:
+        "200":
+          description: |-
+            The list of all unclaimed adapters.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  adapters:
+                    type: array
+                    items:
+                      $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter"
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Some Error."
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"

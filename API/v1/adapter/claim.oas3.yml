@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/claim"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Claim an Adapter for a client account.
+
+    **_EARLY DRAFT_**
+
+    `/adapter/claim`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/claim:
+    post:
+      operationId: adapterClaim
+      tags:
+        - Adapter Management
+      summary: Find Unassociated adapters we can bind the client account to.
+      description: |-
+        Claims the specified adapter and associates it with the clients account.
+
+        **_EARLY DRAFT_**
+      externalDocs:
+        url: "./API/flows/AdapterAccountAssociation-Flow.html"
+        description: Adapter/Account Association message flow diagram.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: mac
+          schema:
+            type: string
+          example: "00-00-5E-XX-XX-XX"
+          description: |-
+            The mac address of the adapter to associate with the account.
+            Must not already be associated with another account.
+
+      responses:
+        "200":
+          description: |-
+            Success, The claimed adapters details.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/AdapterDevices"
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not claim the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"

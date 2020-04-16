@@ -1,0 +1,100 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/name"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Give the adapter a name.
+
+    **_EARLY DRAFT_**
+
+    `/adapter/name`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/name:
+    post:
+      operationId: adapterName
+      tags:
+        - Adapter Management
+      summary: Give an adapter a descriptive name.
+      description: |-
+        Provides a descriptive name to an adapter that helps identify it.
+
+        **_EARLY DRAFT_**
+      externalDocs:
+        url: "./API/flows/AdapterAccountAssociation-Flow.html"
+        description: Adapter/Account Association message flow diagram.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: mac
+          schema:
+            type: string
+          example: "00-00-5E-XX-XX-XX"
+          description: |-
+            The mac address of the adapter to name.
+        - in: query
+          name: name
+          schema:
+            type: string
+          example: "Home Office Adapter"
+          description: |-
+            The name to apply to the adapter.
+
+      responses:
+        "200":
+          description: |-
+            Success, Adapter named.
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not claim the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"

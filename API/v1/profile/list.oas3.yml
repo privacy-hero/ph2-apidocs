@@ -1,0 +1,148 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /auth/newcustomer"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    `/auth/newcustomer`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Account Management
+    description: Operations related to Account Creation and Management
+
+paths:
+  /auth/newcustomer:
+    post:
+      operationId: authNewCustomer
+      tags:
+        - Account Management
+      summary: Request New Customer/Forgotten Password
+      description: |-
+        If the email address supplied in the message is not registered in the
+        system.  Then this message is processed as a "New Customer
+        Registration".  IF the email does exist, then this messages is processed
+        as a "Existing Customer forgot password".
+
+        The ONLY difference in the processing is the form of the email which is
+        sent to the customer.  Either acknowledging their request for a new
+        account, OR acknowledging their request to change their password.
+
+        Upon receipt of this message, an email will be sent to the supplied
+        email address.  It will contain instructions to click a provided link in
+        the message which will act as a callback to the initiating application.
+
+        The URL passed as the callback must be able to accept three parameter in
+        the url of the form:
+          - verify=\<verification token\>
+          - pw=false/true
+          - exp=\<time>\
+
+        `verify` is the verification token to be sent back to the API server by
+        the app on the `confirmcustomer` call.
+
+        `pw` specifies is an initial password must be prompted from the Client,
+        and supplied to the API in the `confirmcustomer` call.
+
+        `exp` specifies when the verification token will expire.  Any call to
+        `confirmcustomer` after this time will fail.
+
+        Must have a valid appToken for the request to be processed.
+      externalDocs:
+        url: "./API/flows/NewCustomer-Flow.html"
+        description: New Customer Message Flow
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - email
+                - callback
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: |-
+                    The email address the customer wants the Account email to be
+                    directed to.
+                callback:
+                  type: string
+                  format: url
+                  example: "https://www.myapp.url/callback"
+                  description: |-
+                    The complete URL, minus parameters, which is embedded in the
+                    email sent to the customer to confirm their account
+                    creation. It must point to the app which instigated this
+                    request.
+      security:
+        - appKey: []
+
+      responses:
+        "200":
+          description: |-
+            The message was accepted, and an email was sent to the
+            users provided email address.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "Email sent to user, OK."
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          description: |-
+            The APP Key is invalid or not recognized.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Invalid App Key."
+
+        "403":
+          description: |-
+            Invalid App Key, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"

@@ -25,7 +25,7 @@ info:
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
   - url: https://api2.privacyhero.com/{stage} # what is our URL???
-    description: What is our actual base URL??
+    description: The API deployment URL.
     variables:
       stage:
         enum:
@@ -66,8 +66,13 @@ components:
 tags:
   - name: Account Management
     description: Operations related to Account Creation and Management
+  - name: Adapter Management
+    description: Operations related to Adapter Management
 
 paths:
+
+  ######### AUTHORIZATION API CALLS #########################
+
   /v1/auth/newcustomer: # Causes a new customer email to be sent
     $ref: "v1/auth/newcustomer.oas3.yml#/paths/~1auth~1newcustomer"
 
@@ -91,3 +96,32 @@ paths:
 
   /v1/auth/delcustomer: # delete the customer
     $ref: "v1/auth/delcustomer.oas3.yml#/paths/~1auth~1delcustomer"
+
+
+  ######### ADAPTER  MANAGEMENT API CALLS ######################
+
+  /v1/adapter/find:
+    $ref: "v1/adapter/find.oas3.yml#/paths/~1adapter~1find"
+
+  /v1/adapter/claim:
+    $ref: "v1/adapter/claim.oas3.yml#/paths/~1adapter~1claim"
+
+  /v1/adapter/name:
+    $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"
+
+  /v1/adapter/list:
+    $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
+
+  ######### PROFILE  MANAGEMENT API CALLS ######################
+
+  #/v1/profile/list:
+  #  $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
+
+  ######### DEVICE  MANAGEMENT API CALLS ######################
+
+  #/v1/device/list:
+  #  $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
+
+  #/v1/device/assign:
+  #  $ref: "v1/device/assign.oas3.yml#/paths/~1device~1assign"
+
