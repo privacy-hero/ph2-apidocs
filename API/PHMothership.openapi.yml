@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.5"
+  version: "0.0.6"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -70,6 +70,8 @@ tags:
     description: Operations related to Adapter Management
   - name: Profile Management
     description: Operations related to Profile Management
+  - name: Device Management
+    description: Operations related to Device Management
 
 paths:
 
@@ -121,8 +123,8 @@ paths:
 
   ######### DEVICE  MANAGEMENT API CALLS ######################
 
-  #/v1/device/list:
-  #  $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
+  /v1/device/list:
+    $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
 
   #/v1/device/assign:
   #  $ref: "v1/device/assign.oas3.yml#/paths/~1device~1assign"
