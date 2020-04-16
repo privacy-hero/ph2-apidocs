@@ -33,6 +33,7 @@ paths:
                     - $ref: "#/components/schemas/GW_NegAuth"
                     - $ref: "#/components/schemas/BadAppToken"
                     - $ref: "#/components/schemas/Authorized"
+                    - $ref: "#/components/schemas/GW_InternalError"
 
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
@@ -78,6 +79,16 @@ components:
         message:
           type: string
           example: "User is not authorized to access this resource"
+
+    GW_InternalError: # Internal gateway Server Error
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          nullable: true
+          example: null
 
     #WWW-Authenticate: Bearer realm="example",
     #                       error="invalid_token",
