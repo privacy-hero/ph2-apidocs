@@ -3,7 +3,7 @@
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
     "version": "0.0.6",
-    "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - **[PrivacyHero2 API - RapiDoc/Pdf](https://privacy-hero.github.io/ph2-apidocs/)**\n  - [PrivacyHero2 API - Swagger UI](https://privacy-hero.github.io/ph2-apidocs/index-swui.html)\n  - [PrivacyHero2 API - Redocly](https://privacy-hero.github.io/ph2-apidocs/index-redocly.html)\n  - [Download API JSON](https://privacy-hero.github.io/ph2-apidocs/API/PHMothership.openapi.yml)",
+    "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - **[PrivacyHero2 API - RapiDoc/Pdf](https://privacy-hero.github.io/ph2-apidocs/)**\n  - [PrivacyHero2 API - Swagger UI](https://privacy-hero.github.io/ph2-apidocs/index-swui.html)\n  - [PrivacyHero2 API - Redocly](https://privacy-hero.github.io/ph2-apidocs/index-redocly.html)\n  - [Download API JSON](https://privacy-hero.github.io/ph2-apidocs/API/openapi.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
       "url": "./LICENSE.md"
