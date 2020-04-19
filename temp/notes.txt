@@ -32,7 +32,6 @@ Adapter Data
     first time it was registered
     customer given name
     subscription id
-    last known IP
     activation code
     geolocation Country
 
