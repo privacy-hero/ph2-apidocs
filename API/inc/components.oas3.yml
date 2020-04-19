@@ -209,6 +209,7 @@ components:
               type: string
               nullable: true
               default: null
+              example: "Home Office Router"
               description: |-
                 The Name assigned to the Adapter/Router by the Client.
             location:
@@ -216,6 +217,7 @@ components:
             timezone:
               type: integer
               description: Local Timezone, number of minutes offset from UTC
+              example: -300
 
             ip:
               type: object
