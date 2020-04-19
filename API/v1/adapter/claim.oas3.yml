@@ -42,7 +42,13 @@ paths:
       summary: Claim the specified adapter for the clients account.
       description: |-
         Claims the specified adapter and associates it with the clients account.
-        The Claim can only succeed if the Adapter is not associated with an account.
+        The Claim can only succeed if the Adapter is not associated with an
+        account.
+
+        This API Call may also be used to replace an existing adapter, by
+        specifying the existing adapters AdapterID.  In which case, the existing
+        adapter will be unassociated from the clients account and the newly
+        claimed adapter will replace it in its entirety.
 
       externalDocs:
         url: "./API/flows/AdapterAccountAssociation-Flow.html"
