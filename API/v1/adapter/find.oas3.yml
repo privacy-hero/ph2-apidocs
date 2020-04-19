@@ -7,8 +7,6 @@ info:
 
     Find an unassociated adapter.
 
-    **_EARLY DRAFT_**
-
     `/adapter/find`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
@@ -48,31 +46,30 @@ paths:
         return a list of adapters which are available to be associated.
 
         It will either find all adapters on the same local network as the client
-        connection.  Or if that does not work, a list of all adapters which are
-        currently unassociated and have the same two last digits of the MAC
-        address as optionally provided in this call.
+        connection.  Or if that does not work, an adapter with a specific
+        activation code.
 
-        **_EARLY DRAFT_**
       externalDocs:
         url: "./API/flows/AdapterAccountAssociation-Flow.html"
         description: Adapter/Account Association message flow diagram.
       security:
         - clientToken: []
-
       parameters:
         - in: query
-          name: mac
+          name: code
           schema:
-            type: string
-          example: "A9"
+            allOf:
+              - $ref: "../../inc/components.oas3.yml#/components/schemas/CustomProperties/properties/activation-code"
+              - nullable: true
           description: |-
             If not set, the function will look for all unassociated adapters
             that share the internet connection of the client making the call.
 
-            However, IF that fails, this can be set to the last two digits of
-            the MAC address, which will return a global list of all connected
-            adapters which are not currently associated with an account, and
-            share the two last characters specified.
+            However, IF that fails, this can be set to a known activation code
+            which will cause any adapter with the activation code which is not
+            currently associated with an account to be returned.  Typically
+            this would be a single Adapter.  If no adapters are found, a "200"
+            response will be generated, but the list of adapters will be empty.
 
       responses:
         "200":
@@ -86,7 +83,7 @@ paths:
                   adapters:
                     type: array
                     items:
-                      $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter"
+                      $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Unassociated-Array"
 
         "400":
           description: |-

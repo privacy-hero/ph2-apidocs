@@ -1,0 +1,130 @@
+Clients Account
+    Account ID - GUID
+    email address
+    Chargebee User id
+
+subscription:
+    subscription id
+    status
+
+
+
+Adapter Data
+    Client ID - GUID
+
+    Adapter ID - GUID
+    Mac Address
+
+    Shared Secret - Varies with hardware type, used as a password on connection.
+
+    ip4 lan address (last known/current)
+    ip6 lan address (last known/current)
+
+    ip4 wan address (if wan not connected, it is the last known)
+    ip6 wan address (if wan not connected, it is the last known)
+
+    ip4 vpn address  (if vpn not connected, it is the last known)
+    ip6 vpn address  (if vpn not connected, it is the last known)
+
+    type
+    description
+    last time it came online
+    first time it was registered
+    customer given name
+    subscription id
+    last known IP
+    activation code
+    geolocation Country
+
+    VPN Connection State
+    VPN last State change time
+
+    Adapter WAN State
+    Adapter WAN State last change time
+
+    adapter level settings:
+        VPN ON/off + when
+        Ad blocking ON/off + when
+        Streaming Relocation on/OFF + when
+            IN USA default is OFF
+            Outside USA default is ON
+        Malware/Phising ON/off + when
+
+        data cap - int64 bytes
+
+        last speed test result - int64 bits per second
+        last speed test time - datetime - int64 unix time
+
+        best speed test result - int64 bits per second
+        best speed test time - datetime - int64 unix time
+
+        last ping test result - int64 - time in milliseconds
+        last ping test time - datetime - int64 unix time
+
+        best ping test result - int64 - time in milliseconds
+        best ping test time - datetime - int64 unix time
+
+
+Profile
+    id - guid
+    adapter id
+    default profile true/false (Default AKA "Shared")
+    name - set by user if not default
+    icon - set by user if not default
+
+    Restrict Youtube - on/OFF
+    Safe Search - ON/off
+
+    bedtime delay - current delay in minutes
+
+    internet paused (time) - 0 is off, -1 is indefinite, +ve is paused
+
+    vpn on/off + when
+
+    ad blocking on/off
+    protection on/off
+
+    For each day:
+        bedtime start
+        bedtime end
+
+
+device
+    id - guid
+    mac address
+
+    manufacturer - string
+    ip4 address - string
+    ip6 address - string
+
+    adapter id
+    profile id
+    system name - name given by the system automatically
+    user name - name assigned by the user
+        device name is system name if user name is not set.
+    system type - system identified type of the device
+    user type - user assigned type of the device.
+        device type is system type if user type is not set.
+    Current State (Online/offline)
+        + State time (int64 unix time of when state changed)
+    First seen (First time it was discovered - unix64 time)
+
+
+    device level settings:
+        Ad Blocking Pause (time)
+        Internet Pause (time)
+        VPN Pause (time) ??
+
+        VPN On/Off (persistent)
+        Ad Blocking On/Off (persistent)
+        Device Protection On/Off (persistent)
+
+    device level records: (read only by client)
+        Internet Usage:
+            90 x 24 usage records:
+                each record is:
+                    datetime of record (int64 unix time)
+                    UL usage in that hour (int64 bytes)
+                    DL usage in that hour (int64 bytes)
+
+

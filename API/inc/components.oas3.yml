@@ -28,7 +28,12 @@ paths:
               application/json:
                 schema:
                   oneOf:
+                    - $ref: "#/components/schemas/CustomProperties"
+                    - $ref: "#/components/schemas/Adapter-Base"
+                    - $ref: "#/components/schemas/Adapter-Unassociated"
+                    - $ref: "#/components/schemas/Adapter-Unassociated-Array"
                     - $ref: "#/components/schemas/Adapter"
+
                     - $ref: "#/components/schemas/Adapters"
                     - $ref: "#/components/schemas/Device"
                     - $ref: "#/components/schemas/Devices"
@@ -65,31 +70,118 @@ tags:
 components:
 
   schemas:
+
+    CustomProperties:
+      # Define custom properties here, which we reuse in other schemas.
+      # ONLY put properties here which are used in multiple schemas.
+      type: object
+      properties:
+        # IP4 IP Address
+        ip4:
+          type: string
+          format: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+          minLength: 7
+          maxLength: 15
+          description: |-
+            An IP4 formatted IP Address
+          example: "192.168.0.55"
+
+        ip6:
+          type: string
+          format: "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
+          minLength: 3
+          maxLength: 45
+          description: |-
+            An IP6 formatted IP Address
+          example: "2001:db8:85a3::8a2e:370:7334"
+
+        # EUI-48 MAC Address
+        mac:
+          type: string
+          format: "^(?:[[:xdigit:]]{2}([-:]))(?:[[:xdigit:]]{2}\\1){4}[[:xdigit:]]{2}$"
+          maxLength: 17
+          minLength: 17
+          description: |-
+            An EUI-48 formatted mac address.
+          example: "00-00-5E-DF-98-EB"
+
+        # Globally Unique ID
+        guid:
+          type: string
+          format: "^[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}$"
+          maxLength: 36
+          minLength: 36
+          description: |-
+            Unique Identifier
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+
+        # Adapter Activation Code
+        activation-code:
+          type: string
+          # format: "^...$"
+          minLength: 9
+          maxLength: 9
+          description: |-
+            Adapter/Router activation code.
+          example: "????-????"
+
+        # Type of Adapter
+        adapter-type:
+          type: string
+          enum:
+            - "Router-V1"
+          description: |-
+            The hardware type of the adapter/router.
+
+
+    # All Adapter records have these basic properties.
+    Adapter-Base:
+      type: object
+      required:
+        - mac
+        - type
+        - desc
+      properties:
+        mac:
+          $ref: "#/components/schemas/CustomProperties/properties/mac"
+        type:
+          $ref: "#/components/schemas/CustomProperties/properties/adapter-type"
+        desc:
+          type: string
+          description: |-
+            A description of the hardware of the adapter/router.
+          example: "Privacy Hero 2 - Router V1"
+
+    Adapter-Unassociated:
+      allOf:
+        - $ref: "#/components/schemas/Adapter-Base"
+        - type: object
+          properties:
+            since:
+              type: integer
+              description:
+                The time this adapter last came online. (Unix Time)
+              example: 1587284379
+
+    Adapter-Unassociated-Array:
+      type: array
+      items:
+        $ref: "#/components/schemas/Adapter-Unassociated"
+
     Adapter:
       type: object
       required:
         - mac
         - desc
-      properties:
-        mac:
-          type: string
-          format: MAC Address
-          example: "00-00-5E-78-9A-F0"
-          description: Adapters EUI-48 Formatted MAC Address
-        desc:
-          type: string
-          example: "Privacy Hero 2 - Router V1"
-          description: The description of the adapters hardware.
-        name:
-          type: string
-          example: "Main House Adapter"
-          description: "The descriptive name the client has given the adapter"
-          nullable: true
-        since:
-          type: string
-          format: date-time
-          example: "2023-04-12T23:20:50.52Z"
-          description: The last time this device came online.
+      allOf:
+        - $ref: "#/components/schemas/Adapter-Base"
+        - type: object
+          properties:
+            since:
+              type: string
+              format: date-time
+              example: "2023-04-12T23:20:50.52Z"
+              description: The last time this device came online.
 
     Adapters:
       type: array
@@ -136,19 +228,19 @@ components:
 
     AdapterDevices:
       description: An Adapter/Router and all it's known devices.
-      type: object
-      required:
-        - mac
-        - desc
-      properties:
-        mac:
-          $ref: "#/components/schemas/Adapter/properties/mac"
-        desc:
-          $ref: "#/components/schemas/Adapter/properties/desc"
-        name:
-          $ref: "#/components/schemas/Adapter/properties/name"
-        devices:
-          $ref: "#/components/schemas/Devices"
+      #type: object
+      #required:
+      #  - mac
+      #  - desc
+      #properties:
+        #mac:
+        #  $ref: "#/components/schemas/Adapter/properties/mac"
+        #desc:
+        #  $ref: "#/components/schemas/Adapter/properties/desc"
+        #name:
+        #  $ref: "#/components/schemas/Adapter/properties/name"
+        #devices:
+        #  $ref: "#/components/schemas/Devices"
 
     AdaptersDevices:
       description: An array of adapters, and their devices.

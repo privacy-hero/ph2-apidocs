@@ -110,21 +110,21 @@ paths:
   /v1/adapter/claim:
     $ref: "v1/adapter/claim.oas3.yml#/paths/~1adapter~1claim"
 
-  /v1/adapter/name:
-    $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"
+  #/v1/adapter/name:
+  #  $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"
 
-  /v1/adapter/list:
-    $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
+  #/v1/adapter/list:
+  #  $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
 
   ######### PROFILE  MANAGEMENT API CALLS ######################
 
-  /v1/profile/list:
-    $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
+  #/v1/profile/list:
+  #  $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
 
   ######### DEVICE  MANAGEMENT API CALLS ######################
 
-  /v1/device/list:
-    $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
+  #/v1/device/list:
+  #  $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
 
   #/v1/device/assign:
   #  $ref: "v1/device/assign.oas3.yml#/paths/~1device~1assign"

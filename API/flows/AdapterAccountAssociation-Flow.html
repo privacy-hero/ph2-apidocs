@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="mermaid">
+        sequenceDiagram
+            autonumber
+            participant C as Customer
+            participant A as App
+            participant M as PrivacyHero2 API
+            participant R as Adapter/Router
+
+            R ->> M: 1st Login
+            note over M: Record<br/> unassociated Adapter<br/>Activation Code
+            C --X A: UI: Add Adapter
+            A ->> M: /adapter/find
+
+            alt if Adapter found on network
+                M ->> A: 200 OK
+                note over A,M: List of Found Adapters
+            else
+                M ->> A: 200 OK
+                note over A,M: Return Empty List
+
+                A --X C: UI: Prompt for Activation Code
+                C --X A: UI: Enter Activation Code
+
+                A ->> M: /adapter/find?code=1234-5678
+
+                alt if Adapter found by code
+                    M ->> A: 200 OK
+                    note over A,M: List of Found Adapters
+                else
+                    M ->> A: 200 OK
+                    note over A,M: List Empty
+                end
+            end
+
+            alt Adapter Found
+                A --X C: UI: Report no Adapter Found.
+            else
+                A --X C: UI: Report Found Adapters.
+
+                C --X A: Adapter Selected to Add.
+
+                A ->> M: /adapter/claim
+
+            end
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.5/dist/mermaid.min.js"></script>
+    <script>
+        var config = {
+            theme: "forest",
+            startOnLoad: true,
+            securityLevel: 'loose',
+            logLevel: 'debug',
+            sequence: {
+                diagramMarginX: 150,
+                diagramMarginY: 25,
+                actorMargin: 90,
+                width: 250,
+                height: 65,
+                boxMargin: 25,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: true,
+                bottomMarginAdj: 10,
+                useMaxWidth: true,
+                rightAngles: false,
+                showSequenceNumbers: false,
+            },
+        };
+        mermaid.initialize( config );</script>
+</body>
+
+</html>

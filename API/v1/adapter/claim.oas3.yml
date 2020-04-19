@@ -7,8 +7,6 @@ info:
 
     Claim an Adapter for a client account.
 
-    **_EARLY DRAFT_**
-
     `/adapter/claim`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
@@ -41,11 +39,11 @@ paths:
       operationId: adapterClaim
       tags:
         - Adapter Management
-      summary: Find Unassociated adapters we can bind the client account to.
+      summary: Claim the specified adapter for the clients account.
       description: |-
         Claims the specified adapter and associates it with the clients account.
+        The Claim can only succeed if the Adapter is not associated with an account.
 
-        **_EARLY DRAFT_**
       externalDocs:
         url: "./API/flows/AdapterAccountAssociation-Flow.html"
         description: Adapter/Account Association message flow diagram.
@@ -56,8 +54,8 @@ paths:
         - in: query
           name: mac
           schema:
-            type: string
-          example: "00-00-5E-XX-XX-XX"
+            $ref: "../../inc/components.oas3.yml#/components/schemas/CustomProperties/properties/mac"
+          example: "00-00-5E-DF-98-EB"
           description: |-
             The mac address of the adapter to associate with the account.
             Must not already be associated with another account.
