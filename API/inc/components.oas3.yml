@@ -221,9 +221,12 @@ components:
 
             ip:
               type: object
+              description: |-
+                The current or last known IP addresses of the adapter/router.
               properties:
                 lan:
                   type: object
+                  description: The Local network IP addresses.
                   properties:
                     ip4:
                       $ref: "#/components/schemas/CustomProperties/properties/ip4"
@@ -231,6 +234,7 @@ components:
                       $ref: "#/components/schemas/CustomProperties/properties/ip6"
                 wan:
                   type: object
+                  description: The ISP Native IP addresses.
                   properties:
                     ip4:
                       $ref: "#/components/schemas/CustomProperties/properties/ip4"
@@ -238,6 +242,7 @@ components:
                       $ref: "#/components/schemas/CustomProperties/properties/ip6"
                 vpn:
                   type: object
+                  description: The VPN endpoint IP addresses.
                   properties:
                     ip4:
                       $ref: "#/components/schemas/CustomProperties/properties/ip4"
@@ -249,6 +254,7 @@ components:
 
             state:
               type: object
+              description: The current state of the Adapter/Router.
               properties:
                 online:
                   type: boolean
@@ -269,60 +275,83 @@ components:
 
             settings:
               type: object
+              description: The settings of the Adapter/Router.
               properties:
-                data-cap:
-                  type: integer
-                  description: Data cap in bytes per month.
-                vpn:
-                  type: boolean
-                  description: |-
-                    * true - Client wants the VPN enabled at the Adapter level
-                    * false - Client want the VPN disabled at the Adapter level
-                vpn-changed:
-                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                current:
+                  type: object
+                  description: The current settings.
+                  properties:
+                    data-cap:
+                      type: integer
+                      description: Data cap in bytes per month.
+                    vpn:
+                      type: boolean
+                      description: |-
+                        * true - Client wants the VPN enabled at the Adapter level
+                        * false - Client want the VPN disabled at the Adapter level
+                    vpn-changed:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
 
-                adblock:
-                  type: boolean
-                  description: |-
-                    * true - Client wants the Ad blocking enabled at the Adapter level
-                    * false - Client want the Ad blocking disabled at the Adapter level
-                adblock-changed:
-                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    adblock:
+                      type: boolean
+                      description: |-
+                        * true - Client wants the Ad blocking enabled at the Adapter level
+                        * false - Client want the Ad blocking disabled at the Adapter level
+                    adblock-changed:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
 
-                streaming:
-                  type: boolean
-                  description: |-
-                    * true - Client wants Streaming Relocation enabled at the Adapter level
-                    * false - Client want Streaming Relocation disabled at the Adapter level
-                streaming-changed:
-                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    streaming:
+                      type: boolean
+                      description: |-
+                        * true - Client wants Streaming Relocation enabled at the Adapter level
+                        * false - Client want Streaming Relocation disabled at the Adapter level
+                    streaming-changed:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
 
-                malware:
-                  type: boolean
+                    malware:
+                      type: boolean
+                      description: |-
+                        * true - Client wants Malware/Phishing protection enabled at the Adapter level
+                        * false - Client wants Malware/Phishing protection disabled at the Adapter level
+                    malware-changed:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                pending:
+                  type: object
                   description: |-
-                    * true - Client wants Malware/Phishing protection enabled at the Adapter level
-                    * false - Client wants Malware/Phishing protection disabled at the Adapter level
-                malware-changed:
-                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    The state we are attempting to set on the adapter.
+                  properties: {}
 
             diags:
               type: object
+              description: Results from the last and best diagnostic tests
               properties:
                 speed_test:
                   type: object
+                  description: Network Speed test results
                   properties:
-                    last:
+                    tx-last:
                       type: integer
                       description: bits per second
-                    last-when:
+                    tx-last-when:
                       $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-                    best:
+                    rx-last:
                       type: integer
                       description: bits per second
-                    best-when:
+                    rx-last-when:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    tx-best:
+                      type: integer
+                      description: bits per second
+                    tx-best-when:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    rx-best:
+                      type: integer
+                      description: bits per second
+                    rx-best-when:
                       $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
                 ping_test:
                   type: object
+                  description: ping test latency results
                   properties:
                     last:
                       type: integer
