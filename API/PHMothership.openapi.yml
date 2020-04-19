@@ -9,10 +9,10 @@ info:
     The backend server infrastructure is known as the *"Mothership"*
 
     This API Documentation may be viewed at:
-      - **[PrivacyHero2 API - RapiDoc/Pdf](https://privacy-hero.github.io/ph2-apidocs/)**
-      - [PrivacyHero2 API - Swagger UI](https://privacy-hero.github.io/ph2-apidocs/index-swui.html)
-      - [PrivacyHero2 API - Redocly](https://privacy-hero.github.io/ph2-apidocs/index-redocly.html)
-      - [Download API JSON](https://privacy-hero.github.io/ph2-apidocs/API/openapi.json)
+      - **[PrivacyHero2 API - RapiDoc/Pdf](.)**
+      - [PrivacyHero2 API - Swagger UI](./index-swui.html)
+      - [PrivacyHero2 API - Redocly](./index-redocly.html)
+      - [Download API JSON](./API/openapi.json)
 
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved

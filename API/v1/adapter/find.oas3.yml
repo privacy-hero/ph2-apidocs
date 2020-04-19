@@ -78,12 +78,7 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  adapters:
-                    type: array
-                    items:
-                      $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Unassociated-Array"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Unassociated-Array"
 
         "400":
           description: |-

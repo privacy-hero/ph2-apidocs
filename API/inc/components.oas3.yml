@@ -133,6 +133,23 @@ components:
           description: |-
             The hardware type of the adapter/router.
 
+        # Epoch Timestamp
+        epoch-timestamp:
+          type: integer
+          description: |-
+            A Time, expressed as seconds since Jan 01 1970. (UTC)
+          example: 1587284382
+
+        # ISO 3166 Country Codes
+        iso3166-country:
+          type: string
+          format: "^[A-Z][A-Z]$"
+          example: "US"
+          minLength: 2
+          maxLength: 2
+          description: |-
+            an ISO3166 country code
+
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -156,12 +173,14 @@ components:
       allOf:
         - $ref: "#/components/schemas/Adapter-Base"
         - type: object
+          required:
+            - since
           properties:
             since:
-              type: integer
-              description:
-                The time this adapter last came online. (Unix Time)
-              example: 1587284379
+              $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+      description: |-
+        * since - The time this adapter last came online.
+
 
     Adapter-Unassociated-Array:
       type: array
@@ -174,14 +193,144 @@ components:
         - mac
         - desc
       allOf:
+        - type: object
+          required:
+            - AdapterID
+          properties:
+            AdapterID:
+              $ref: "#/components/schemas/CustomProperties/properties/guid"
+
         - $ref: "#/components/schemas/Adapter-Base"
+
         - type: object
           properties:
-            since:
+            name:
               type: string
-              format: date-time
-              example: "2023-04-12T23:20:50.52Z"
-              description: The last time this device came online.
+              nullable: true
+              default: null
+              description: |-
+                The Name assigned to the Adapter/Router by the Client.
+            location:
+              $ref: "#/components/schemas/CustomProperties/properties/iso3166-country"
+            timezone:
+              type: integer
+              description: Local Timezone, number of minutes offset from UTC
+
+            ip:
+              type: object
+              properties:
+                lan:
+                  type: object
+                  properties:
+                    ip4:
+                      $ref: "#/components/schemas/CustomProperties/properties/ip4"
+                    ip6:
+                      $ref: "#/components/schemas/CustomProperties/properties/ip6"
+                wan:
+                  type: object
+                  properties:
+                    ip4:
+                      $ref: "#/components/schemas/CustomProperties/properties/ip4"
+                    ip6:
+                      $ref: "#/components/schemas/CustomProperties/properties/ip6"
+                vpn:
+                  type: object
+                  properties:
+                    ip4:
+                      $ref: "#/components/schemas/CustomProperties/properties/ip4"
+                    ip6:
+                      $ref: "#/components/schemas/CustomProperties/properties/ip6"
+
+            registered:
+              $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+
+            state:
+              type: object
+              properties:
+                online:
+                  type: boolean
+                  description: |-
+                    The state of the adapter/router.
+                    * true - Online
+                    * false - Offline
+                since:
+                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                vpn:
+                  type: boolean
+                  description: |-
+                    The state of VPN.
+                    * true - VPN Active
+                    * false - VPN In-active
+                vpn-since:
+                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+
+            settings:
+              type: object
+              properties:
+                data-cap:
+                  type: integer
+                  description: Data cap in bytes per month.
+                vpn:
+                  type: boolean
+                  description: |-
+                    * true - Client wants the VPN enabled at the Adapter level
+                    * false - Client want the VPN disabled at the Adapter level
+                vpn-changed:
+                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+
+                adblock:
+                  type: boolean
+                  description: |-
+                    * true - Client wants the Ad blocking enabled at the Adapter level
+                    * false - Client want the Ad blocking disabled at the Adapter level
+                adblock-changed:
+                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+
+                streaming:
+                  type: boolean
+                  description: |-
+                    * true - Client wants Streaming Relocation enabled at the Adapter level
+                    * false - Client want Streaming Relocation disabled at the Adapter level
+                streaming-changed:
+                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+
+                malware:
+                  type: boolean
+                  description: |-
+                    * true - Client wants Malware/Phishing protection enabled at the Adapter level
+                    * false - Client wants Malware/Phishing protection disabled at the Adapter level
+                malware-changed:
+                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+
+            diags:
+              type: object
+              properties:
+                speed_test:
+                  type: object
+                  properties:
+                    last:
+                      type: integer
+                      description: bits per second
+                    last-when:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    best:
+                      type: integer
+                      description: bits per second
+                    best-when:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                ping_test:
+                  type: object
+                  properties:
+                    last:
+                      type: integer
+                      description: milliseconds
+                    last-when:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    best:
+                      type: integer
+                      description: milliseconds
+                    best-when:
+                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
 
     Adapters:
       type: array
