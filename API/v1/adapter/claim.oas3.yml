@@ -60,7 +60,7 @@ paths:
         - in: query
           name: mac
           schema:
-            $ref: "../../inc/components.oas3.yml#/components/schemas/CustomProperties/properties/mac"
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/mac"
           example: "00-00-5E-DF-98-EB"
           description: |-
             The mac address of the adapter to associate with the account.
@@ -68,7 +68,7 @@ paths:
         - in: query
           name: AdapterID
           schema:
-            $ref: "../../inc/components.oas3.yml#/components/schemas/CustomProperties/properties/guid"
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
             IF the adapter is replacing an existing adapter, include the
