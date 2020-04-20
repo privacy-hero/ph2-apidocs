@@ -110,8 +110,8 @@ paths:
   /v1/adapter/claim:
     $ref: "v1/adapter/claim.oas3.yml#/paths/~1adapter~1claim"
 
-  #/v1/adapter/list:
-  #  $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
+  /v1/adapter/list:
+    $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
 
   #/v1/adapter/name:
   #  $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"

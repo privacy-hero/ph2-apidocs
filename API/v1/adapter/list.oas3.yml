@@ -5,9 +5,7 @@ info:
   description: |-
     Privacy Hero 2 API.
 
-    List all adapters on an account.
-
-    **_EARLY DRAFT_**
+    List one or all adapters on an account.
 
     `/adapter/list`
   license:
@@ -41,39 +39,33 @@ paths:
       operationId: adapterList
       tags:
         - Adapter Management
-      summary: Lists all adapters associated with the clients account.
+      summary: Lists one or all adapters associated with the clients account.
       description: |-
-        Generates a list of all adapters associated with the clients account.
+        Generates a list of adapters associated with the clients account.
 
-        **_EARLY DRAFT_**
       externalDocs:
-        url: "./API/flows/AdapterAccountAssociation-Flow.html"
-        description: Adapter/Account Association message flow diagram.
+        url: "./API/flows/AdapterList-Flow.html"
+        description: Adapter List message flow diagram.
       security:
         - clientToken: []
 
       parameters:
         - in: query
-          name: devices
+          name: adapter
           schema:
-            type: boolean
-            default: false
-          example: true
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
           description: |-
-            If devices is not present, or false, then the response will just
-            list the known adapters.  If it is true, the list will include every
-            device known to those adapters.
+            The Adapter ID to list.  IF not present, will return ALL Adapters
+            associated with the Clients account.
 
       responses:
         "200":
           description: |-
-            Success, The claimed adapters details.
+            Success, The adapters details.
           content:
             application/json:
               schema:
-                oneOf:
-                  - $ref: "../../inc/components.oas3.yml#/components/schemas/Adapters"
-                  - $ref: "../../inc/components.oas3.yml#/components/schemas/AdaptersDevices"
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Adapters"
 
         "400":
           description: |-
@@ -83,7 +75,7 @@ paths:
               schema:
                 $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not claim the adapter!"
+                error: "Could not find the adapter!"
 
         "403":
           description: |-

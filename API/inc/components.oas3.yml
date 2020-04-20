@@ -463,6 +463,7 @@ components:
 
     Adapters:
       type: array
+      description: An Array of Adapter Records.
       items:
         $ref: "#/components/schemas/Adapter"
 
