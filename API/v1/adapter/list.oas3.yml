@@ -51,9 +51,10 @@ paths:
 
       parameters:
         - in: query
-          name: adapter
+          name: id
           schema:
             $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
             The Adapter ID to list.  IF not present, will return ALL Adapters
             associated with the Clients account.

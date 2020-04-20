@@ -7,8 +7,6 @@ info:
 
     Give the adapter a name.
 
-    **_EARLY DRAFT_**
-
     `/adapter/name`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
@@ -44,8 +42,6 @@ paths:
       summary: Give an adapter a descriptive name.
       description: |-
         Provides a descriptive name to an adapter that helps identify it.
-
-        **_EARLY DRAFT_**
       externalDocs:
         url: "./API/flows/AdapterAccountAssociation-Flow.html"
         description: Adapter/Account Association message flow diagram.
@@ -54,16 +50,20 @@ paths:
 
       parameters:
         - in: query
-          name: mac
+          name: id
+          required: true
           schema:
-            type: string
-          example: "00-00-5E-XX-XX-XX"
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
-            The mac address of the adapter to name.
+            The Adapter ID to Name.
+
         - in: query
           name: name
+          required: true
           schema:
             type: string
+            nullable: true
           example: "Home Office Adapter"
           description: |-
             The name to apply to the adapter.
@@ -81,7 +81,7 @@ paths:
               schema:
                 $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not claim the adapter!"
+                error: "Could not name the adapter!"
 
         "403":
           description: |-

@@ -113,8 +113,19 @@ paths:
   /v1/adapter/list:
     $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
 
-  #/v1/adapter/name:
-  #  $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"
+  /v1/adapter/name:
+    $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"
+
+  # /v1/adapter/cfg -  post = item, set state, get=item,query
+  # Commands: VPN - Enable/Disable/Query State
+  # Ad Blocking
+  # Streaming
+  # Malware
+  # Wan Speed Test - Start/Query State
+  # VPN Speed Test - Start/Query State
+  # Wan Ping (Latency) Test - Start/Query
+  # VPN Pint (Latenct) Test - Start/Query
+
 
 
   ######### PROFILE  MANAGEMENT API CALLS ######################
