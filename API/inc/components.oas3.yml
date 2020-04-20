@@ -28,7 +28,7 @@ paths:
               application/json:
                 schema:
                   oneOf:
-                    - $ref: "#/components/schemas/CustomProperties"
+                    - $ref: "#/components/schemas/Custom"
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
                     - $ref: "#/components/schemas/Adapter-Unassociated-Array"
@@ -71,7 +71,7 @@ components:
 
   schemas:
 
-    CustomProperties:
+    Custom:
       # Define custom properties here, which we reuse in other schemas.
       # ONLY put properties here which are used in multiple schemas.
       type: object
@@ -79,16 +79,19 @@ components:
         # IP4 IP Address
         ip4:
           type: string
-          format: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+          format: IPv4 Address
+          pattern: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
           minLength: 7
           maxLength: 15
           description: |-
             An IP4 formatted IP Address
           example: "192.168.0.55"
 
+        # IP6 IP Address
         ip6:
           type: string
-          format: "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
+          format: IPv6 Address
+          pattern: "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
           minLength: 3
           maxLength: 45
           description: |-
@@ -98,7 +101,8 @@ components:
         # EUI-48 MAC Address
         mac:
           type: string
-          format: "^(?:[[:xdigit:]]{2}([-:]))(?:[[:xdigit:]]{2}\\1){4}[[:xdigit:]]{2}$"
+          format: EUI-48
+          pattern: "^(?:[0-9a-fA-F]{2}([-:]))(?:[0-9a-fA-F]{2}\\1){4}[0-9a-fA-F]{2}$"
           maxLength: 17
           minLength: 17
           description: |-
@@ -108,17 +112,18 @@ components:
         # Globally Unique ID
         guid:
           type: string
-          format: "^[[:xdigit:]]{8}(-[[:xdigit:]]{4}){3}-[[:xdigit:]]{12}$"
-          maxLength: 36
-          minLength: 36
+          format: UUID
           description: |-
             Unique Identifier
+          maxLength: 36
+          minLength: 36
+          pattern: "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
 
         # Adapter Activation Code
         activation-code:
           type: string
-          # format: "^...$"
+          # pattern: "^...$"
           minLength: 9
           maxLength: 9
           description: |-
@@ -137,19 +142,94 @@ components:
         epoch-timestamp:
           type: integer
           format: int64
+          nullable: true
           description: |-
-            A Time, expressed as seconds since Jan 01 1970. (UTC)
+            A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
           example: 1587284382
 
         # ISO 3166 Country Codes
         iso3166-country:
           type: string
-          format: "^[A-Z][A-Z]$"
+          format: ISO3166 Code
+          pattern: "^[A-Z][A-Z]$"
           example: "US"
           minLength: 2
           maxLength: 2
           description: |-
             an ISO3166 country code
+
+        state:
+          type: object
+          required:
+            - state
+            - since
+          properties:
+            state:
+              type: boolean
+              nullable: true
+              description: |-
+                **true**=Active, **false**=Inactive, **null**=Unknown
+            since:
+              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+          description: |-
+            The current known value of the state, and the time that it changed.
+
+        speed-diag:
+          type: object
+          description: |-
+            Speed Diagnostic Results. Negative values are estimated run time in seconds.
+          required:
+            - speed
+            - when
+          properties:
+            speed:
+              type: integer
+              format: int32
+              nullable: true
+              description: |-
+                **+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running.
+            when:
+              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+
+        wan-vpn-speed-diag:
+          type: object
+          description: Speed Diagnostic result for WAN and VPN Network
+          required:
+            - wan
+            - vpn
+          properties:
+            wan:
+              $ref: "#/components/schemas/Custom/properties/speed-diag"
+            vpn:
+              $ref: "#/components/schemas/Custom/properties/speed-diag"
+
+        latency-diag:
+          type: object
+          description: latency diagnostic result
+          required:
+            - latency
+            - when
+          properties:
+            latency:
+              type: integer
+              format: int32
+              nullable: true
+              description: |-
+                **+VE** = millisecond latency result. **NULL** = Unknown. **-VE** = Test running.
+            when:
+              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+
+        wan-vpn-latency-diag:
+          type: object
+          description: Latency Diagnostic results for the WAN and VPN Networks
+          required:
+            - wan
+            - vpn
+          properties:
+            wan:
+              $ref: "#/components/schemas/Custom/properties/latency-diag"
+            vpn:
+              $ref: "#/components/schemas/Custom/properties/latency-diag"
 
 
     # All Adapter records have these basic properties.
@@ -161,9 +241,9 @@ components:
         - desc
       properties:
         mac:
-          $ref: "#/components/schemas/CustomProperties/properties/mac"
+          $ref: "#/components/schemas/Custom/properties/mac"
         type:
-          $ref: "#/components/schemas/CustomProperties/properties/adapter-type"
+          $ref: "#/components/schemas/Custom/properties/adapter-type"
         desc:
           type: string
           description: |-
@@ -178,7 +258,7 @@ components:
             - since
           properties:
             since:
-              $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
       description: |-
         * since - The time this adapter last came online.
 
@@ -199,11 +279,18 @@ components:
             - AdapterID
           properties:
             AdapterID:
-              $ref: "#/components/schemas/CustomProperties/properties/guid"
+              $ref: "#/components/schemas/Custom/properties/guid"
 
         - $ref: "#/components/schemas/Adapter-Base"
 
         - type: object
+          required:
+            - location
+            - timezone
+            - ip
+            - registered
+            - state
+            - settings
           properties:
             name:
               type: string
@@ -213,7 +300,7 @@ components:
               description: |-
                 The Name assigned to the Adapter/Router by the Client.
             location:
-              $ref: "#/components/schemas/CustomProperties/properties/iso3166-country"
+              $ref: "#/components/schemas/Custom/properties/iso3166-country"
             timezone:
               type: integer
               description: Local Timezone, number of minutes offset from UTC
@@ -221,57 +308,67 @@ components:
 
             ip:
               type: object
+              required:
+                - lan
+                - wan
+                - vpn
               description: |-
                 The current or last known IP addresses of the adapter/router.
               properties:
                 lan:
                   type: object
+                  required:
+                    - ip4
                   description: The Local network IP addresses.
                   properties:
                     ip4:
-                      $ref: "#/components/schemas/CustomProperties/properties/ip4"
+                      $ref: "#/components/schemas/Custom/properties/ip4"
                     ip6:
-                      $ref: "#/components/schemas/CustomProperties/properties/ip6"
+                      $ref: "#/components/schemas/Custom/properties/ip6"
                 wan:
                   type: object
+                  required:
+                    - ip4
                   description: The ISP Native IP addresses.
                   properties:
                     ip4:
-                      $ref: "#/components/schemas/CustomProperties/properties/ip4"
+                      $ref: "#/components/schemas/Custom/properties/ip4"
                     ip6:
-                      $ref: "#/components/schemas/CustomProperties/properties/ip6"
+                      $ref: "#/components/schemas/Custom/properties/ip6"
                 vpn:
                   type: object
+                  required:
+                    - ip4
                   description: The VPN endpoint IP addresses.
                   properties:
                     ip4:
-                      $ref: "#/components/schemas/CustomProperties/properties/ip4"
+                      $ref: "#/components/schemas/Custom/properties/ip4"
                     ip6:
-                      $ref: "#/components/schemas/CustomProperties/properties/ip6"
+                      $ref: "#/components/schemas/Custom/properties/ip6"
 
             registered:
-              $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
 
             state:
               type: object
               description: The current state of the Adapter/Router.
+              required:
+                - online
+                - vpn
+                - ad-blocking
+                - stream-relocation
+                - malware-phising
               properties:
                 online:
-                  type: boolean
-                  description: |-
-                    The state of the adapter/router.
-                    * true - Online
-                    * false - Offline
-                since:
-                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                  $ref: "#/components/schemas/Custom/properties/state"
                 vpn:
-                  type: boolean
-                  description: |-
-                    The state of VPN.
-                    * true - VPN Active
-                    * false - VPN In-active
-                vpn-since:
-                  $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                  $ref: "#/components/schemas/Custom/properties/state"
+                ad-blocking:
+                  $ref: "#/components/schemas/Custom/properties/state"
+                stream-relocation:
+                  $ref: "#/components/schemas/Custom/properties/state"
+                malware-phising:
+                  $ref: "#/components/schemas/Custom/properties/state"
 
             settings:
               type: object
@@ -283,43 +380,51 @@ components:
                   properties:
                     data-cap:
                       type: integer
-                      description: Data cap in bytes per month.
+                      format: int64
+                      nullable: true
+                      description: Data cap in bytes per month. **null**=Not Set.
                     vpn:
                       type: boolean
                       description: |-
-                        * true - Client wants the VPN enabled at the Adapter level
-                        * false - Client want the VPN disabled at the Adapter level
-                    vpn-changed:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-
+                        VPN: **true**=Enabled, **false**=Disabled.
                     adblock:
                       type: boolean
                       description: |-
-                        * true - Client wants the Ad blocking enabled at the Adapter level
-                        * false - Client want the Ad blocking disabled at the Adapter level
-                    adblock-changed:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-
+                        Ad Blocking: **true**=Enabled, **false**=Disabled.
                     streaming:
                       type: boolean
                       description: |-
-                        * true - Client wants Streaming Relocation enabled at the Adapter level
-                        * false - Client want Streaming Relocation disabled at the Adapter level
-                    streaming-changed:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-
+                        Streaming Relocation: **true**=Enabled, **false**=Disabled
                     malware:
                       type: boolean
                       description: |-
-                        * true - Client wants Malware/Phishing protection enabled at the Adapter level
-                        * false - Client wants Malware/Phishing protection disabled at the Adapter level
-                    malware-changed:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                        Malware/Phishing protection: **true**=Enabled, **false**=Disabled
                 pending:
                   type: object
                   description: |-
-                    The state we are attempting to set on the adapter.
-                  properties: {}
+                    The settings we are attempting to set on the adapter.
+                  properties:
+                    data-cap:
+                      type: integer
+                      format: int64
+                      nullable: true
+                      description: Data cap in bytes per month. **null** = not set.
+                    vpn:
+                      type: boolean
+                      description: |-
+                        VPN: **true**=enabling. **false**=disabling.
+                    adblock:
+                      type: boolean
+                      description: |-
+                        Ad Blocking: **true**=enabling. **false**=disabling.
+                    streaming:
+                      type: boolean
+                      description: |-
+                        Streaming Relocation: **true**=enabling. **false**=disabling.
+                    malware:
+                      type: boolean
+                      description: |-
+                        Malware/Phishing protection: **true**=enabling, **false**=disabling.
 
             diags:
               type: object
@@ -329,40 +434,32 @@ components:
                   type: object
                   description: Network Speed test results
                   properties:
-                    tx-last:
-                      type: integer
-                      description: bits per second
-                    tx-last-when:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-                    rx-last:
-                      type: integer
-                      description: bits per second
-                    rx-last-when:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-                    tx-best:
-                      type: integer
-                      description: bits per second
-                    tx-best-when:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
-                    rx-best:
-                      type: integer
-                      description: bits per second
-                    rx-best-when:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                    tx:
+                      type: object
+                      description: Transmit Speed Diagnostics
+                      properties:
+                        last:
+                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+                        best:
+                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+
+                    rx:
+                      type: object
+                      description: Receive Speed Diagnostics
+                      properties:
+                        last:
+                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+                        best:
+                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+
                 ping_test:
                   type: object
                   description: ping test latency results
                   properties:
                     last:
-                      type: integer
-                      description: milliseconds
-                    last-when:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                      $ref: "#/components/schemas/Custom/properties/wan-vpn-latency-diag"
                     best:
-                      type: integer
-                      description: milliseconds
-                    best-when:
-                      $ref: "#/components/schemas/CustomProperties/properties/epoch-timestamp"
+                      $ref: "#/components/schemas/Custom/properties/wan-vpn-latency-diag"
 
     Adapters:
       type: array
