@@ -116,6 +116,9 @@ paths:
   /v1/adapter/name:
     $ref: "v1/adapter/name.oas3.yml#/paths/~1adapter~1name"
 
+  /v1/adapter/cfg:
+    $ref: "v1/adapter/cfg.oas3.yml#/paths/~1adapter~1cfg"
+
   # /v1/adapter/cfg -  post = item, set state, get=item,query
   # Commands: VPN - Enable/Disable/Query State
   # Ad Blocking
@@ -124,7 +127,7 @@ paths:
   # Wan Speed Test - Start/Query State
   # VPN Speed Test - Start/Query State
   # Wan Ping (Latency) Test - Start/Query
-  # VPN Pint (Latenct) Test - Start/Query
+  # VPN Pint (Latency) Test - Start/Query
 
 
 

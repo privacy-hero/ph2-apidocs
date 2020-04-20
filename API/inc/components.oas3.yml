@@ -32,6 +32,7 @@ paths:
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
                     - $ref: "#/components/schemas/Adapter-Unassociated-Array"
+                    - $ref: "#/components/schemas/Adapter-Settings"
                     - $ref: "#/components/schemas/Adapter"
 
                     - $ref: "#/components/schemas/Adapters"
@@ -231,6 +232,15 @@ components:
             vpn:
               $ref: "#/components/schemas/Custom/properties/latency-diag"
 
+        datacap:
+          type: object
+          description: An Adapters Data Cap.
+          properties:
+            tx:
+              type: integer
+              format: int64
+              description: |-
+                Transmit Data Cap in Bytes per month.
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -268,6 +278,67 @@ components:
       items:
         $ref: "#/components/schemas/Adapter-Unassociated"
 
+    Adapter-Settings:
+      type: object
+      properties:
+
+        settings:
+          type: object
+          description: The settings of the Adapter/Router.
+          properties:
+            current:
+              type: object
+              description: The current settings.
+              properties:
+                data-cap:
+                  type: integer
+                  format: int64
+                  nullable: true
+                  description: Data cap in bytes per month. **null**=Not Set.
+                vpn:
+                  type: boolean
+                  description: |-
+                    VPN: **true**=Enabled, **false**=Disabled.
+                adblock:
+                  type: boolean
+                  description: |-
+                    Ad Blocking: **true**=Enabled, **false**=Disabled.
+                streaming:
+                  type: boolean
+                  description: |-
+                    Streaming Relocation: **true**=Enabled, **false**=Disabled
+                malware:
+                  type: boolean
+                  description: |-
+                    Malware/Phishing protection: **true**=Enabled, **false**=Disabled
+            pending:
+              type: object
+              description: |-
+                The settings we are attempting to set on the adapter.
+              properties:
+                data-cap:
+                  type: integer
+                  format: int64
+                  nullable: true
+                  description: Data cap in bytes per month. **null** = not set.
+                vpn:
+                  type: boolean
+                  description: |-
+                    VPN: **true**=enabling. **false**=disabling.
+                adblock:
+                  type: boolean
+                  description: |-
+                    Ad Blocking: **true**=enabling. **false**=disabling.
+                streaming:
+                  type: boolean
+                  description: |-
+                    Streaming Relocation: **true**=enabling. **false**=disabling.
+                malware:
+                  type: boolean
+                  description: |-
+                    Malware/Phishing protection: **true**=enabling, **false**=disabling.
+
+
     Adapter:
       type: object
       required:
@@ -290,7 +361,6 @@ components:
             - ip
             - registered
             - state
-            - settings
           properties:
             name:
               type: string
@@ -370,62 +440,10 @@ components:
                 malware-phising:
                   $ref: "#/components/schemas/Custom/properties/state"
 
-            settings:
-              type: object
-              description: The settings of the Adapter/Router.
-              properties:
-                current:
-                  type: object
-                  description: The current settings.
-                  properties:
-                    data-cap:
-                      type: integer
-                      format: int64
-                      nullable: true
-                      description: Data cap in bytes per month. **null**=Not Set.
-                    vpn:
-                      type: boolean
-                      description: |-
-                        VPN: **true**=Enabled, **false**=Disabled.
-                    adblock:
-                      type: boolean
-                      description: |-
-                        Ad Blocking: **true**=Enabled, **false**=Disabled.
-                    streaming:
-                      type: boolean
-                      description: |-
-                        Streaming Relocation: **true**=Enabled, **false**=Disabled
-                    malware:
-                      type: boolean
-                      description: |-
-                        Malware/Phishing protection: **true**=Enabled, **false**=Disabled
-                pending:
-                  type: object
-                  description: |-
-                    The settings we are attempting to set on the adapter.
-                  properties:
-                    data-cap:
-                      type: integer
-                      format: int64
-                      nullable: true
-                      description: Data cap in bytes per month. **null** = not set.
-                    vpn:
-                      type: boolean
-                      description: |-
-                        VPN: **true**=enabling. **false**=disabling.
-                    adblock:
-                      type: boolean
-                      description: |-
-                        Ad Blocking: **true**=enabling. **false**=disabling.
-                    streaming:
-                      type: boolean
-                      description: |-
-                        Streaming Relocation: **true**=enabling. **false**=disabling.
-                    malware:
-                      type: boolean
-                      description: |-
-                        Malware/Phishing protection: **true**=enabling, **false**=disabling.
+        - $ref: "#/components/schemas/Adapter-Settings"
 
+        - type: object
+          properties:
             diags:
               type: object
               description: Results from the last and best diagnostic tests

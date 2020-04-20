@@ -1,0 +1,170 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/cfg"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Query/Change the Adapter Configuration.
+
+    `/adapter/name`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/cfg:
+    get:
+      operationId: adapterCfgQuery
+      tags:
+        - Adapter Management
+      summary: Query the state of configuration for an adapter.
+      description:
+        For a particular Adapter, return the current and pending configuration.
+      security:
+        - clientToken: []
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            The Adapter ID to Query.
+      responses:
+        "200":
+          description: |-
+            Success, Adapter Query Result returned.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Settings"
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not query the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"
+
+    post:
+      operationId: adapterCfg
+      tags:
+        - Adapter Management
+      summary: Change the Adapter Configuration.
+      description: |-
+        Change the Adapter Configuration.
+      externalDocs:
+        url: "./API/flows/AdapterAccountAssociation-Flow.html"
+        description: Adapter/Account Association message flow diagram.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            The Adapter ID to Name.
+
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+            enum:
+              - "VPN"
+              - "AdBlocking"
+              - "SRelocation"
+              - "Malware"
+          example: "VPN"
+          description: |-
+            The service to configure.
+
+        - in: query
+          name: state
+          required: true
+          schema:
+            type: boolean
+          example: true
+          description: |-
+            **true**=Enable the Service. **false**=Disable the Service.
+
+      responses:
+        "200":
+          description: |-
+            Success, Adapter Config Change queued.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Settings"
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not name the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"
