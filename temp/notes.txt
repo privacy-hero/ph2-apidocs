@@ -126,4 +126,58 @@ device
                     UL usage in that hour (int64 bytes)
                     DL usage in that hour (int64 bytes)
 
+```
+Current:
+    Adapter:
+        VPN ON/off
+        Ad blocking ON/off
+        Streaming Relocation on/OFF
+        Malware/Phising ON/off
 
+    Profile:
+        vpn on/off
+        ad blocking on/off
+        protection on/off
+
+        Restrict Youtube - on/OFF
+        Safe Search - ON/off
+        internet paused (time)
+
+        For each day:
+            bedtime start
+            bedtime end
+        bedtime start delay - current delay in minutes
+
+    Device:
+        VPN On/Off
+        Ad Blocking On/Off
+        Device Protection On/Off
+
+        Ad Blocking Pause (time)
+        Internet Pause (time)
+        VPN Pause (time)```
+
+```
+Proposed:
+
+    Adapter:
+        VPN ON/off
+        Ad blocking ON/off
+        Streaming Relocation on/OFF
+        Malware/Phising ON/off
+
+    Profile:
+        Restrict Youtube - on/OFF
+        Safe Search - ON/off
+        internet paused (time)
+
+        For each day:
+            bedtime start
+            bedtime end
+        bedtime start delay - current delay in minutes
+
+    Device:
+        VPN Bypass (Permanent/Timed)
+        Ad Blocking Bypass (Permanent/Timed)
+        Device Protection Bypass (Permanent/Timed)
+```
