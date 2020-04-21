@@ -121,6 +121,29 @@ components:
           pattern: "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
 
+        url:
+          type: string
+          format: "URL"
+          minLength: 1
+          maxLength: 2000
+          nullable: true
+          pattern: "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+          description: |-
+            A URL, including relative references.  Will only accept https
+            non relative urls.
+          example: "./relative.url"
+
+        url-absolute:
+          type: string
+          format: "URL"
+          minLength: 1
+          maxLength: 2000
+          nullable: true
+          pattern: "^(?:https:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+          description: |-
+            A, Absolute URL.  Will only accept https as protocol.
+          example: "https://absolute.url"
+
         # Adapter Activation Code
         activation-code:
           type: string
@@ -313,10 +336,10 @@ components:
 
         streams:
           type: array
-          description: List of portable streaming services
+          description: List of streaming services
           items:
             type: object
-            description: Portable service
+            description: Streaming Services
             required:
               - id
               - name
@@ -332,16 +355,35 @@ components:
                 description: |-
                   Name of the streaming service
                 example: "Netflix"
+              icon:
+                $ref: "#/components/schemas/Custom/properties/url"
               portable:
                 type: boolean
                 description: |-
                   Is the service able to be used in multiple countries?
                 default: true
               countries:
-                type: array
-                description: List of all countries streaming service is available in.
-                items:
-                  $ref: "#/components/schemas/Custom/properties/iso3166-country"
+                type: object
+                description: |-
+                  List of all countries streaming service is available in.
+
+                  **proxy** countries may be used to proxy a stream to appear as if
+                  the stream is being watched in that country.
+
+                  **non-proxy** are countries where the streaming service is
+                  available but for which no proxy exists.  These can only be
+                  used if the Adapter is located in that country.
+                properties:
+                  proxy:
+                    type: array
+                    description: List of countries which can be proxied.
+                    items:
+                      $ref: "#/components/schemas/Custom/properties/iso3166-country"
+                  non-proxy:
+                    type: array
+                    description: List of countries which can not be proxied.
+                    items:
+                      $ref: "#/components/schemas/Custom/properties/iso3166-country"
               settings:
                 type: object
                 description: Settings for the service
@@ -352,11 +394,6 @@ components:
                     $ref: "#/components/schemas/Custom/properties/stream-setting"
                   pending:
                     $ref: "#/components/schemas/Custom/properties/stream-setting"
-
-
-
-
-
 
     # All Adapter records have these basic properties.
     Adapter-Base:
