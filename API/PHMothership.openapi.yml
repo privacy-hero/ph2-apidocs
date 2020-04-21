@@ -16,7 +16,7 @@ info:
 
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
-    url: ./LICENSE.md
+    url: "http://privacy-hero.github.io/ph2-apidocs/LICENSE.html"
   contact:
     name: API Support
     url: http://www.example.com/support
@@ -118,6 +118,9 @@ paths:
 
   /v1/adapter/cfg:
     $ref: "v1/adapter/cfg.oas3.yml#/paths/~1adapter~1cfg"
+
+  /v1/adapter/datacap:
+    $ref: "v1/adapter/datacap.oas3.yml#/paths/~1adapter~1datacap"
 
   # /v1/adapter/cfg -  post = item, set state, get=item,query
   # Commands: VPN - Enable/Disable/Query State
