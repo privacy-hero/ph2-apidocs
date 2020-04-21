@@ -297,6 +297,66 @@ components:
             5ghz:
               $ref: "#/components/schemas/Custom/properties/wifi-settings"
 
+        stream-setting:
+          type: object
+          description: Settings for an individual relocatable stream
+          required:
+            - country
+          properties:
+            enabled:
+              type: boolean
+              default: true
+              description: |-
+                If the stream relocation is enabled for this service or not.
+            country:
+              $ref: "#/components/schemas/Custom/properties/iso3166-country"
+
+        streams:
+          type: array
+          description: List of portable streaming services
+          items:
+            type: object
+            description: Portable service
+            required:
+              - id
+              - name
+              - countries
+              - portable
+            properties:
+              id:
+                $ref: "#/components/schemas/Custom/properties/guid"
+              name:
+                type: string
+                minLength: 1
+                maxLength: 64
+                description: |-
+                  Name of the streaming service
+                example: "Netflix"
+              portable:
+                type: boolean
+                description: |-
+                  Is the service able to be used in multiple countries?
+                default: true
+              countries:
+                type: array
+                description: List of all countries streaming service is available in.
+                items:
+                  $ref: "#/components/schemas/Custom/properties/iso3166-country"
+              settings:
+                type: object
+                description: Settings for the service
+                required:
+                  - current
+                properties:
+                  current:
+                    $ref: "#/components/schemas/Custom/properties/stream-setting"
+                  pending:
+                    $ref: "#/components/schemas/Custom/properties/stream-setting"
+
+
+
+
+
 
     # All Adapter records have these basic properties.
     Adapter-Base:
