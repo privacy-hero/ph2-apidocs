@@ -105,14 +105,31 @@ Extra Adapter Configuration:
         }
 
 
+Settings for streaming.
+
+    Portable Streams are ones where the streaming account can work anywhere (like
+        netflix)
+    Non portable ones are ones where you have a subscription in a country, and it
+        only works in that country.
+
+    Command to (for a non-portable service) set the country it uses.
+    Command to (for a portable service) set the country it uses (including home
+        country if there are no proxys)
+
+    List of all non-portable services, and available countries.
+    selected country. (defaults to adapters country)
+
+    List of portable services, and available countries.
+    Defaults, adapter country, USA, first on list.
+
 
 
 Profile
     id - guid
     adapter id
-    default profile true/false (Default AKA "Shared")
+    system profile true/false (System Profile, eg "Shared")
     name - set by user if not default
-    icon - set by user if not default
+    icon - set by user if not default (Text string)
 
     Restrict Youtube - on/OFF
     Safe Search - ON/off
@@ -120,6 +137,9 @@ Profile
     bedtime delay - current delay in minutes
 
     internet paused (time) - 0 is off, -1 is indefinite, +ve is paused
+      This is a macro function, which causes the pause time to be
+      added/subtracted to the devices in the profile.
+      Not a profile setting per se.
 
     vpn on/off + when
 
