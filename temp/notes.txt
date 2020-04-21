@@ -63,6 +63,49 @@ Adapter Data
         best ping test result - int64 - time in milliseconds
         best ping test time - datetime - int64 unix time
 
+Extra Adapter Configuration:
+    telemetry:
+        rlog: true/false ??
+    actions:
+        reset: true/false ??
+        reauth: tru/false ??
+    support:
+        remote: "" ??
+
+    wifi:
+        ssid: string  .. We will need multiple ssid, because we have 2.4G and
+                         maybe in the future could have multiple 5ghz like
+                         routers do now.
+        key: string    .. could use the same key for different bands. But that
+                          should be a UI decision.
+
+    proxy:
+        proxy_domains: array
+            id: <service id>
+            name: string "nbc_sports"
+            match:
+                positive: array
+                    regex string
+                negative: array
+                    regex string
+            servers: array
+                server ip address string
+            proxy_ips: an object of some kind, not sure what.
+
+    firmware: "number string"  ??  I guess a firmware ID/checksum
+
+    dns_forwarding:
+        default: {
+            policy: "policy string" eg "sequential"  todo, get all policies.
+            server_name: "server host name" eg "cloudflare-dns.com"
+            endpoints: [ array of protocol//host address
+                tls://1.1.1.1
+                tls://9.9.9.9
+            ]
+        }
+
+
+
 
 Profile
     id - guid
