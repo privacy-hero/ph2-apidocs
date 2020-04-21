@@ -254,6 +254,47 @@ components:
               description: |-
                 IF **true** then the tx data cap is the combined tx+rx data cap.
 
+        wifi-settings:
+          type: object
+          description: Settings for an individual wifi network
+          required:
+            - active
+            - ssid
+            - key
+          properties:
+            active:
+              type: boolean
+              description: is the wifi network active.
+              default: true
+            ssid:
+              type: string
+              format: ssid
+              minLength: 1
+              maxLength: 32
+              pattern: '^[^!#;+\]\/"\t][^+\]\/"\t]{0,30}[^ !#;+\]\/"\t]$|^[^ !#;+\]\/"\t]$'
+              description: The SSID of the wifi network
+              default: "PrivacyHero2"
+            key:
+              type: string
+              format: WPA-PSK passphrase
+              minLength: 8
+              maxLength: 63
+              pattern: "^[\u0020-\u007e]*$"
+              nullable: true
+              default: "r4nd0m k3y"
+              description: |-
+                The WPA-PSK passphrase to secure the network. **null**=Open Wifi
+                Network
+
+        wlan-settings:
+          type: object
+          description: Settings for the Wireless Lan
+          properties:
+            2.4ghz:
+              $ref: "#/components/schemas/Custom/properties/wifi-settings"
+            5ghz:
+              $ref: "#/components/schemas/Custom/properties/wifi-settings"
+
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -303,6 +344,8 @@ components:
               type: object
               description: The current settings.
               properties:
+                wifi:
+                  $ref: "#/components/schemas/Custom/properties/wlan-settings"
                 data-cap:
                   $ref: "#/components/schemas/Custom/properties/datacap"
                 vpn:
@@ -326,6 +369,8 @@ components:
               description: |-
                 The settings we are attempting to set on the adapter.
               properties:
+                wifi:
+                  $ref: "#/components/schemas/Custom/properties/wlan-settings"
                 data-cap:
                   $ref: "#/components/schemas/Custom/properties/datacap"
                 vpn:
