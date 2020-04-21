@@ -1,6 +1,6 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /adapter/name"
+  title: "Privacy Hero 2 - Mothership API - /adapter/datacap"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
@@ -34,14 +34,14 @@ tags:
     description: Operations related to Adapter Management
 
 paths:
-  /adapter/name:
+  /adapter/datacap:
     post:
-      operationId: adapterName
+      operationId: adapterDataCap
       tags:
         - Adapter Management
-      summary: Give an adapter a descriptive name.
+      summary: Set the datacap for a particular adapter.
       description: |-
-        Provides a descriptive name to an adapter that helps identify it.
+        Sets the data caps for the identified adapter.
       externalDocs:
         url: "./API/flows/AdapterAccountAssociation-Flow.html"
         description: Adapter/Account Association message flow diagram.
@@ -56,22 +56,19 @@ paths:
             $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
-            The Adapter ID to Name.
-
-        - in: query
-          name: name
-          required: true
-          schema:
-            type: string
-            nullable: true
-          example: "Home Office Adapter"
-          description: |-
-            The name to apply to the adapter.
+            The Adapter ID to Set DataCap of.
+      requestBody:
+        required: true
+        description: "The DataCap settings to apply."
+        content:
+          application/json:
+            schema:
+              $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/datacap"
 
       responses:
         "200":
           description: |-
-            Success, Adapter named.
+            Success, Adapter datacap set.
 
         "400":
           description: |-

@@ -234,13 +234,26 @@ components:
 
         datacap:
           type: object
-          description: An Adapters Data Cap.
+          description: A per-month Data Cap.
           properties:
             tx:
               type: integer
-              format: int64
+              format: uint64
+              nullable: true
               description: |-
-                Transmit Data Cap in Bytes per month.
+                Transmit Data Cap in Bytes per month. **null** = no tx data cap
+            rx:
+              type: integer
+              format: uint64
+              nullable: true
+              description: |-
+                Receive Data Cap in Bytes per month. **null** = no rx data cap
+            combined:
+              type: boolean
+              default: false
+              description: |-
+                IF **true** then the tx data cap is the combined tx+rx data cap.
+
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -291,10 +304,7 @@ components:
               description: The current settings.
               properties:
                 data-cap:
-                  type: integer
-                  format: int64
-                  nullable: true
-                  description: Data cap in bytes per month. **null**=Not Set.
+                  $ref: "#/components/schemas/Custom/properties/datacap"
                 vpn:
                   type: boolean
                   description: |-
@@ -317,10 +327,7 @@ components:
                 The settings we are attempting to set on the adapter.
               properties:
                 data-cap:
-                  type: integer
-                  format: int64
-                  nullable: true
-                  description: Data cap in bytes per month. **null** = not set.
+                  $ref: "#/components/schemas/Custom/properties/datacap"
                 vpn:
                   type: boolean
                   description: |-
