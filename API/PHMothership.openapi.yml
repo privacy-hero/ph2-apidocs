@@ -122,6 +122,9 @@ paths:
   /v1/adapter/datacap:
     $ref: "v1/adapter/datacap.oas3.yml#/paths/~1adapter~1datacap"
 
+  /v1/adapter/wifi:
+    $ref: "v1/adapter/wifi.oas3.yml#/paths/~1adapter~1wifi"
+
   # /v1/adapter/cfg -  post = item, set state, get=item,query
   # Commands: VPN - Enable/Disable/Query State
   # Ad Blocking

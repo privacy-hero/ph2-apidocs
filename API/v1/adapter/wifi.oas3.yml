@@ -1,0 +1,99 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/wifi"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Set the WiFi settings for a particular Adapter.
+
+    `/adapter/wifi`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/wifi:
+    post:
+      operationId: adapterWiFi
+      tags:
+        - Adapter Management
+      summary: Set the WiFi settings for a particular adapter.
+      description: |-
+        Sets the Wifi settings for the 2.4Ghz and 5Ghz Network.
+        Any setting excluded or set to **null** will not be changed.
+      externalDocs:
+        url: "./API/flows/AdapterAccountAssociation-Flow.html"
+        description: Adapter/Account Association message flow diagram.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            The Adapter ID to Set Wifi Setting of.
+      requestBody:
+        required: true
+        description: |-
+          "The Wifi Settings to apply. Set to null anything that shouldn't change."
+        content:
+          application/json:
+            schema:
+              $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/wlan-settings"
+
+      responses:
+        "200":
+          description: |-
+            Success, WiFi settings set.
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not name the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"

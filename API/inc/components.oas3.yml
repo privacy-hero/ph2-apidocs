@@ -274,6 +274,7 @@ components:
               pattern: '^[^!#;+\]\/"\t][^+\]\/"\t]{0,30}[^ !#;+\]\/"\t]$|^[^ !#;+\]\/"\t]$'
               description: The SSID of the wifi network
               default: "PrivacyHero2"
+              example: "PrivacyHero2"
             key:
               type: string
               format: WPA-PSK passphrase
@@ -282,6 +283,7 @@ components:
               pattern: "^[\u0020-\u007e]*$"
               nullable: true
               default: "r4nd0m k3y"
+              example: "r4nd0m k3y"
               description: |-
                 The WPA-PSK passphrase to secure the network. **null**=Open Wifi
                 Network
