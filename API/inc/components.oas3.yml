@@ -347,8 +347,6 @@ components:
     stream-setting:
       type: object
       description: Settings for an individual relocatable stream
-      required:
-        - country
       properties:
         enabled:
           type: boolean
@@ -384,7 +382,7 @@ components:
           portable:
             type: boolean
             description: |-
-              Is the service able to be used in multiple countries?
+              Is the service subscription able to be used in multiple countries?
             default: true
           countries:
             type: object

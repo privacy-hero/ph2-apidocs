@@ -1,0 +1,159 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /streaming/services"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    List one or all streaming services supported by the system.
+
+    `/streaming/services`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Streaming Relocation Management
+    description: Operations related to Streaming Services and Relocation
+
+paths:
+  /streaming/services:
+    get:
+      operationId: streamingServices
+      tags:
+        - Streaming Relocation Management
+      summary: Lists streaming services, either ALL, or according to classification.
+      description: |-
+        Generates a list of streaming services currently supported by the system.
+
+      externalDocs:
+        url: "./API/flows/StreamingServiceList-Flow.html"
+        description: Streaming Service List message flow diagram.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum:
+              - "All"
+              - "Portable"
+              - "Non-Portable"
+            nullable: true
+          example: "All"
+          description: |-
+            The filter to apply to the service list, the list can contain ALL
+            services, or only Portable or Non-Portable services.
+            If the parameter is missing, or is **null** the call will return ALL
+            services.
+
+            A **Portable** Service is one where the one subscription may be used
+            in multiple countries.
+
+            A **Non-Portable** Service is region locked to the subscription.
+            For example, a US Non-Portable Service can only view US content, and
+            can not be relocated to view UK content.
+
+      responses:
+        "200":
+          description: |-
+            Success, The streaming service list.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/streams"
+              example: [
+                  {
+                    "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                    "name": "Netflix",
+                    "icon": "netflix.ico",
+                    "portable": true,
+                    "countries": {
+                      "proxy": [
+                        "US", "UK", "AU", "TH"
+                      ],
+                      "non-proxy": [
+                        "IL","ID"
+                      ]
+                    },
+                    "settings": {
+                      "current": {
+                        "enabled": true,
+                        "country": "US"
+                      },
+                      "pending": {
+                        "country": "UK"
+                      }
+                    }
+                  },
+                  {
+                    "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
+                    "name": "Disney+",
+                    "icon": "disneyplus.ico",
+                    "portable": false,
+                    "countries": {
+                      "proxy": [
+                        "US", "UK", "IL",
+                      ],
+                      "non-proxy": [
+                        "TH","ID"
+                      ]
+                    },
+                    "settings": {
+                      "current": {
+                        "enabled": true,
+                        "country": "UK"
+                      },
+                      "pending": {
+                        "enabled": false
+                      }
+                    }
+                  }
+                ]
+
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not find the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"

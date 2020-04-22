@@ -72,6 +72,8 @@ tags:
     description: Operations related to Profile Management
   - name: Device Management
     description: Operations related to Device Management
+  - name: Streaming Relocation Management
+    description: Operations related to Streaming Services and Relocation
 
 paths:
 
@@ -137,8 +139,8 @@ paths:
 
   ######### STREAMING MANAGEMENT API CALLS ######################
 
-  #/v1/streaming/services:
-  #  $ref: "v1/streaming/services.oas3.yml#/paths/~1streaming~1services"
+  /v1/streaming/services:
+    $ref: "v1/streaming/services.oas3.yml#/paths/~1streaming~1services"
 
   #/v1/streaming/cfg:
   #  $ref: "v1/streaming/cfg.oas3.yml#/paths/~1streaming~1cfg"
