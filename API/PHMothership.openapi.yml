@@ -142,8 +142,8 @@ paths:
   /v1/streaming/services:
     $ref: "v1/streaming/services.oas3.yml#/paths/~1streaming~1services"
 
-  #/v1/streaming/cfg:
-  #  $ref: "v1/streaming/cfg.oas3.yml#/paths/~1streaming~1cfg"
+  /v1/streaming/cfg:
+    $ref: "v1/streaming/cfg.oas3.yml#/paths/~1streaming~1cfg"
 
 
   ######### PROFILE  MANAGEMENT API CALLS ######################
