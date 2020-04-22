@@ -2,16 +2,16 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.6",
-    "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - **[PrivacyHero2 API - RapiDoc/Pdf](https://privacy-hero.github.io/ph2-apidocs/)**\n  - [PrivacyHero2 API - Swagger UI](https://privacy-hero.github.io/ph2-apidocs/index-swui.html)\n  - [PrivacyHero2 API - Redocly](https://privacy-hero.github.io/ph2-apidocs/index-redocly.html)\n  - [Download API JSON](https://privacy-hero.github.io/ph2-apidocs/API/openapi.json)",
+    "version": "0.0.7",
+    "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - **[PrivacyHero2 API - RapiDoc/Pdf](.)**\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - Redocly](./index-redocly.html)\n  - [Download API JSON](./API/openapi.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
-      "url": "./LICENSE.md"
+      "url": "http://privacy-hero.github.io/ph2-apidocs/LICENSE.html"
     },
     "contact": {
-      "name": "API Support",
+      "name": "API Support (Steven Johnson)",
       "url": "http://www.example.com/support",
-      "email": "support@example.com"
+      "email": "sakurainds@gmail.com"
     }
   },
   "servers": [
@@ -42,7 +42,714 @@
     }
   ],
   "components": {
-    "schemas": {},
+    "schemas": {
+      "Ack": {
+        "type": "object",
+        "required": [
+          "msg"
+        ],
+        "properties": {
+          "msg": {
+            "type": "string",
+            "example": "OK."
+          }
+        }
+      },
+      "Nack": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "GW_NegAuth": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "User is not authorized to access this resource"
+          }
+        }
+      },
+      "GW_InternalError": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "message": {
+            "type": "string",
+            "nullable": true,
+            "example": null
+          }
+        }
+      },
+      "Authorized": {
+        "type": "object",
+        "required": [
+          "bearer",
+          "renew",
+          "exp"
+        ],
+        "properties": {
+          "bearer": {
+            "type": "string",
+            "example": "kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf",
+            "description": "The Client Authorization Bearer token required to be sent in the\n`Authorization: Bearer` header of all API calls that are called on\nbehalf of the Client."
+          },
+          "renew": {
+            "type": "integer",
+            "example": 234523454,
+            "description": "The Epoch Time, at which user access will expire with this token.\nRenew before this time, for uninterrupted access.  Renewal may occur\nup until `exp` time."
+          },
+          "exp": {
+            "type": "integer",
+            "example": 234523454,
+            "description": "The Epoch Time, at which the token will completely expire and may\nnot be used for renewal.  After this time the user must\nre-authenticate to get a new bearer token."
+          }
+        }
+      },
+      "activation-code": {
+        "type": "string",
+        "minLength": 9,
+        "maxLength": 9,
+        "description": "Adapter/Router activation code.",
+        "example": "????-????"
+      },
+      "mac": {
+        "type": "string",
+        "format": "EUI-48",
+        "pattern": "^(?:[0-9a-fA-F]{2}([-:]))(?:[0-9a-fA-F]{2}\\1){4}[0-9a-fA-F]{2}$",
+        "maxLength": 17,
+        "minLength": 17,
+        "description": "An EUI-48 formatted mac address.",
+        "example": "00-00-5E-DF-98-EB"
+      },
+      "adapter-type": {
+        "type": "string",
+        "enum": [
+          "Router-V1"
+        ],
+        "description": "The hardware type of the adapter/router."
+      },
+      "Adapter-Base": {
+        "type": "object",
+        "required": [
+          "mac",
+          "type",
+          "desc"
+        ],
+        "properties": {
+          "mac": {
+            "$ref": "#/components/schemas/mac"
+          },
+          "type": {
+            "$ref": "#/components/schemas/adapter-type"
+          },
+          "desc": {
+            "type": "string",
+            "description": "A description of the hardware of the adapter/router.",
+            "example": "Privacy Hero 2 - Router V1"
+          }
+        }
+      },
+      "epoch-timestamp": {
+        "type": "integer",
+        "format": "int64",
+        "nullable": true,
+        "description": "A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown",
+        "example": 1587284382
+      },
+      "Adapter-Unassociated": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Adapter-Base"
+          },
+          {
+            "type": "object",
+            "required": [
+              "since"
+            ],
+            "properties": {
+              "since": {
+                "$ref": "#/components/schemas/epoch-timestamp"
+              }
+            }
+          }
+        ],
+        "description": "* since - The time this adapter last came online."
+      },
+      "Adapter-Unassociated-Array": {
+        "type": "array",
+        "items": {
+          "$ref": "#/components/schemas/Adapter-Unassociated"
+        }
+      },
+      "guid": {
+        "type": "string",
+        "format": "UUID",
+        "description": "Unique Identifier",
+        "maxLength": 36,
+        "minLength": 36,
+        "pattern": "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$",
+        "example": "cd73b915-89a4-4971-9d86-bce91786b12a"
+      },
+      "iso3166-country": {
+        "type": "string",
+        "format": "ISO3166 Code",
+        "pattern": "^[A-Z][A-Z]$",
+        "example": "US",
+        "minLength": 2,
+        "maxLength": 2,
+        "description": "an ISO3166 country code"
+      },
+      "ip4": {
+        "type": "string",
+        "format": "IPv4 Address",
+        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        "minLength": 7,
+        "maxLength": 15,
+        "description": "An IP4 formatted IP Address",
+        "example": "192.168.0.55"
+      },
+      "ip6": {
+        "type": "string",
+        "format": "IPv6 Address",
+        "pattern": "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$",
+        "minLength": 3,
+        "maxLength": 45,
+        "description": "An IP6 formatted IP Address",
+        "example": "2001:db8:85a3::8a2e:370:7334"
+      },
+      "state": {
+        "type": "object",
+        "required": [
+          "state",
+          "since"
+        ],
+        "properties": {
+          "state": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "**true**=Active, **false**=Inactive, **null**=Unknown"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        },
+        "description": "The current known value of the state, and the time that it changed."
+      },
+      "wifi-settings": {
+        "type": "object",
+        "description": "Settings for an individual wifi network",
+        "required": [
+          "active",
+          "ssid",
+          "key"
+        ],
+        "properties": {
+          "active": {
+            "type": "boolean",
+            "description": "is the wifi network active.",
+            "default": true
+          },
+          "ssid": {
+            "type": "string",
+            "format": "ssid",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[^!#;+\\]\\/\"\\t][^+\\]\\/\"\\t]{0,30}[^ !#;+\\]\\/\"\\t]$|^[^ !#;+\\]\\/\"\\t]$",
+            "description": "The SSID of the wifi network",
+            "default": "PrivacyHero2",
+            "example": "PrivacyHero2"
+          },
+          "key": {
+            "type": "string",
+            "format": "WPA-PSK passphrase",
+            "minLength": 8,
+            "maxLength": 63,
+            "pattern": "^[ -~]*$",
+            "nullable": true,
+            "default": "r4nd0m k3y",
+            "example": "r4nd0m k3y",
+            "description": "The WPA-PSK passphrase to secure the network. **null**=Open Wifi\nNetwork"
+          }
+        }
+      },
+      "wlan-settings": {
+        "type": "object",
+        "description": "Settings for the Wireless Lan",
+        "properties": {
+          "2.4ghz": {
+            "$ref": "#/components/schemas/wifi-settings"
+          },
+          "5ghz": {
+            "$ref": "#/components/schemas/wifi-settings"
+          }
+        }
+      },
+      "datacap": {
+        "type": "object",
+        "description": "A per-month Data Cap.",
+        "properties": {
+          "tx": {
+            "type": "integer",
+            "format": "uint64",
+            "nullable": true,
+            "description": "Transmit Data Cap in Bytes per month. **null** = no tx data cap"
+          },
+          "rx": {
+            "type": "integer",
+            "format": "uint64",
+            "nullable": true,
+            "description": "Receive Data Cap in Bytes per month. **null** = no rx data cap"
+          },
+          "combined": {
+            "type": "boolean",
+            "default": false,
+            "description": "IF **true** then the tx data cap is the combined tx+rx data cap."
+          }
+        }
+      },
+      "Adapter-Settings": {
+        "type": "object",
+        "properties": {
+          "settings": {
+            "type": "object",
+            "description": "The settings of the Adapter/Router.",
+            "properties": {
+              "current": {
+                "type": "object",
+                "description": "The current settings.",
+                "properties": {
+                  "wifi": {
+                    "$ref": "#/components/schemas/wlan-settings"
+                  },
+                  "data-cap": {
+                    "$ref": "#/components/schemas/datacap"
+                  },
+                  "vpn": {
+                    "type": "boolean",
+                    "description": "VPN: **true**=Enabled, **false**=Disabled."
+                  },
+                  "adblock": {
+                    "type": "boolean",
+                    "description": "Ad Blocking: **true**=Enabled, **false**=Disabled."
+                  },
+                  "streaming": {
+                    "type": "boolean",
+                    "description": "Streaming Relocation: **true**=Enabled, **false**=Disabled"
+                  },
+                  "malware": {
+                    "type": "boolean",
+                    "description": "Malware/Phishing protection: **true**=Enabled, **false**=Disabled"
+                  }
+                }
+              },
+              "pending": {
+                "type": "object",
+                "description": "The settings we are attempting to set on the adapter.",
+                "properties": {
+                  "wifi": {
+                    "$ref": "#/components/schemas/wlan-settings"
+                  },
+                  "data-cap": {
+                    "$ref": "#/components/schemas/datacap"
+                  },
+                  "vpn": {
+                    "type": "boolean",
+                    "description": "VPN: **true**=enabling. **false**=disabling."
+                  },
+                  "adblock": {
+                    "type": "boolean",
+                    "description": "Ad Blocking: **true**=enabling. **false**=disabling."
+                  },
+                  "streaming": {
+                    "type": "boolean",
+                    "description": "Streaming Relocation: **true**=enabling. **false**=disabling."
+                  },
+                  "malware": {
+                    "type": "boolean",
+                    "description": "Malware/Phishing protection: **true**=enabling, **false**=disabling."
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "speed-diag": {
+        "type": "object",
+        "description": "Speed Diagnostic Results. Negative values are estimated run time in seconds.",
+        "required": [
+          "speed",
+          "when"
+        ],
+        "properties": {
+          "speed": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "description": "**+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running."
+          },
+          "when": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
+      },
+      "wan-vpn-speed-diag": {
+        "type": "object",
+        "description": "Speed Diagnostic result for WAN and VPN Network",
+        "required": [
+          "wan",
+          "vpn"
+        ],
+        "properties": {
+          "wan": {
+            "$ref": "#/components/schemas/speed-diag"
+          },
+          "vpn": {
+            "$ref": "#/components/schemas/speed-diag"
+          }
+        }
+      },
+      "latency-diag": {
+        "type": "object",
+        "description": "latency diagnostic result",
+        "required": [
+          "latency",
+          "when"
+        ],
+        "properties": {
+          "latency": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true,
+            "description": "**+VE** = millisecond latency result. **NULL** = Unknown. **-VE** = Test running."
+          },
+          "when": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
+      },
+      "wan-vpn-latency-diag": {
+        "type": "object",
+        "description": "Latency Diagnostic results for the WAN and VPN Networks",
+        "required": [
+          "wan",
+          "vpn"
+        ],
+        "properties": {
+          "wan": {
+            "$ref": "#/components/schemas/latency-diag"
+          },
+          "vpn": {
+            "$ref": "#/components/schemas/latency-diag"
+          }
+        }
+      },
+      "Adapter": {
+        "type": "object",
+        "required": [
+          "mac",
+          "desc"
+        ],
+        "allOf": [
+          {
+            "type": "object",
+            "required": [
+              "AdapterID"
+            ],
+            "properties": {
+              "AdapterID": {
+                "$ref": "#/components/schemas/guid"
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/Adapter-Base"
+          },
+          {
+            "type": "object",
+            "required": [
+              "location",
+              "timezone",
+              "ip",
+              "registered",
+              "state"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "nullable": true,
+                "default": null,
+                "example": "Home Office Router",
+                "description": "The Name assigned to the Adapter/Router by the Client."
+              },
+              "location": {
+                "$ref": "#/components/schemas/iso3166-country"
+              },
+              "timezone": {
+                "type": "integer",
+                "description": "Local Timezone, number of minutes offset from UTC",
+                "example": -300
+              },
+              "ip": {
+                "type": "object",
+                "required": [
+                  "lan",
+                  "wan",
+                  "vpn"
+                ],
+                "description": "The current or last known IP addresses of the adapter/router.",
+                "properties": {
+                  "lan": {
+                    "type": "object",
+                    "required": [
+                      "ip4"
+                    ],
+                    "description": "The Local network IP addresses.",
+                    "properties": {
+                      "ip4": {
+                        "$ref": "#/components/schemas/ip4"
+                      },
+                      "ip6": {
+                        "$ref": "#/components/schemas/ip6"
+                      }
+                    }
+                  },
+                  "wan": {
+                    "type": "object",
+                    "required": [
+                      "ip4"
+                    ],
+                    "description": "The ISP Native IP addresses.",
+                    "properties": {
+                      "ip4": {
+                        "$ref": "#/components/schemas/ip4"
+                      },
+                      "ip6": {
+                        "$ref": "#/components/schemas/ip6"
+                      }
+                    }
+                  },
+                  "vpn": {
+                    "type": "object",
+                    "required": [
+                      "ip4"
+                    ],
+                    "description": "The VPN endpoint IP addresses.",
+                    "properties": {
+                      "ip4": {
+                        "$ref": "#/components/schemas/ip4"
+                      },
+                      "ip6": {
+                        "$ref": "#/components/schemas/ip6"
+                      }
+                    }
+                  }
+                }
+              },
+              "registered": {
+                "$ref": "#/components/schemas/epoch-timestamp"
+              },
+              "state": {
+                "type": "object",
+                "description": "The current state of the Adapter/Router.",
+                "required": [
+                  "online",
+                  "vpn",
+                  "ad-blocking",
+                  "stream-relocation",
+                  "malware-phising"
+                ],
+                "properties": {
+                  "online": {
+                    "$ref": "#/components/schemas/state"
+                  },
+                  "vpn": {
+                    "$ref": "#/components/schemas/state"
+                  },
+                  "ad-blocking": {
+                    "$ref": "#/components/schemas/state"
+                  },
+                  "stream-relocation": {
+                    "$ref": "#/components/schemas/state"
+                  },
+                  "malware-phising": {
+                    "$ref": "#/components/schemas/state"
+                  }
+                }
+              }
+            }
+          },
+          {
+            "$ref": "#/components/schemas/Adapter-Settings"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "diags": {
+                "type": "object",
+                "description": "Results from the last and best diagnostic tests",
+                "properties": {
+                  "speed_test": {
+                    "type": "object",
+                    "description": "Network Speed test results",
+                    "properties": {
+                      "tx": {
+                        "type": "object",
+                        "description": "Transmit Speed Diagnostics",
+                        "properties": {
+                          "last": {
+                            "$ref": "#/components/schemas/wan-vpn-speed-diag"
+                          },
+                          "best": {
+                            "$ref": "#/components/schemas/wan-vpn-speed-diag"
+                          }
+                        }
+                      },
+                      "rx": {
+                        "type": "object",
+                        "description": "Receive Speed Diagnostics",
+                        "properties": {
+                          "last": {
+                            "$ref": "#/components/schemas/wan-vpn-speed-diag"
+                          },
+                          "best": {
+                            "$ref": "#/components/schemas/wan-vpn-speed-diag"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "ping_test": {
+                    "type": "object",
+                    "description": "ping test latency results",
+                    "properties": {
+                      "last": {
+                        "$ref": "#/components/schemas/wan-vpn-latency-diag"
+                      },
+                      "best": {
+                        "$ref": "#/components/schemas/wan-vpn-latency-diag"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "Adapters": {
+        "type": "array",
+        "description": "An Array of Adapter Records.",
+        "items": {
+          "$ref": "#/components/schemas/Adapter"
+        }
+      },
+      "url": {
+        "type": "string",
+        "format": "URL",
+        "minLength": 1,
+        "maxLength": 2000,
+        "nullable": true,
+        "pattern": "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+        "description": "A URL, including relative references.  Will only accept https\nnon relative urls.",
+        "example": "./relative.url"
+      },
+      "stream-setting": {
+        "type": "object",
+        "description": "Settings for an individual relocatable stream",
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "default": true,
+            "description": "If the stream relocation is enabled for this service or not."
+          },
+          "country": {
+            "$ref": "#/components/schemas/iso3166-country"
+          }
+        }
+      },
+      "streams": {
+        "type": "array",
+        "description": "List of streaming services",
+        "items": {
+          "type": "object",
+          "description": "Streaming Services",
+          "required": [
+            "id",
+            "name",
+            "countries",
+            "portable"
+          ],
+          "properties": {
+            "id": {
+              "$ref": "#/components/schemas/guid"
+            },
+            "name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "description": "Name of the streaming service",
+              "example": "Netflix"
+            },
+            "icon": {
+              "$ref": "#/components/schemas/url"
+            },
+            "portable": {
+              "type": "boolean",
+              "description": "Is the service subscription able to be used in multiple countries?",
+              "default": true
+            },
+            "countries": {
+              "type": "object",
+              "description": "List of all countries streaming service is available in.\n\n**proxy** countries may be used to proxy a stream to appear as if\nthe stream is being watched in that country.\n\n**non-proxy** are countries where the streaming service is\navailable but for which no proxy exists.  These can only be\nused if the Adapter is located in that country.",
+              "properties": {
+                "proxy": {
+                  "type": "array",
+                  "description": "List of countries which can be proxied.",
+                  "items": {
+                    "$ref": "#/components/schemas/iso3166-country"
+                  }
+                },
+                "non-proxy": {
+                  "type": "array",
+                  "description": "List of countries which can not be proxied.",
+                  "items": {
+                    "$ref": "#/components/schemas/iso3166-country"
+                  }
+                }
+              }
+            },
+            "settings": {
+              "type": "object",
+              "description": "Settings for the service",
+              "required": [
+                "current"
+              ],
+              "properties": {
+                "current": {
+                  "$ref": "#/components/schemas/stream-setting"
+                },
+                "pending": {
+                  "$ref": "#/components/schemas/stream-setting"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "securitySchemes": {
       "clientToken": {
         "type": "http",
@@ -74,6 +781,10 @@
     {
       "name": "Device Management",
       "description": "Operations related to Device Management"
+    },
+    {
+      "name": "Streaming Relocation Management",
+      "description": "Operations related to Streaming Services and Relocation"
     }
   ],
   "paths": {
@@ -127,16 +838,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "msg"
-                  ],
-                  "properties": {
-                    "msg": {
-                      "type": "string",
-                      "example": "OK."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Ack"
                 },
                 "example": {
                   "msg": "Email sent to user, OK."
@@ -149,16 +851,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Internal Server Error."
@@ -171,16 +864,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Invalid App Key."
@@ -193,16 +877,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -212,17 +887,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
@@ -341,29 +1006,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "bearer",
-                    "renew",
-                    "exp"
-                  ],
-                  "properties": {
-                    "bearer": {
-                      "type": "string",
-                      "example": "kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf",
-                      "description": "The Client Authorization Bearer token required to be sent in the\n`Authorization: Bearer` header of all API calls that are called on\nbehalf of the Client."
-                    },
-                    "renew": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which user access will expire with this token.\nRenew before this time, for uninterrupted access.  Renewal may occur\nup until `exp` time."
-                    },
-                    "exp": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which the token will completely expire and may\nnot be used for renewal.  After this time the user must\nre-authenticate to get a new bearer token."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Authorized"
                 }
               }
             }
@@ -385,16 +1028,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Link Expired"
@@ -450,29 +1084,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "bearer",
-                    "renew",
-                    "exp"
-                  ],
-                  "properties": {
-                    "bearer": {
-                      "type": "string",
-                      "example": "kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf",
-                      "description": "The Client Authorization Bearer token required to be sent in the\n`Authorization: Bearer` header of all API calls that are called on\nbehalf of the Client."
-                    },
-                    "renew": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which user access will expire with this token.\nRenew before this time, for uninterrupted access.  Renewal may occur\nup until `exp` time."
-                    },
-                    "exp": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which the token will completely expire and may\nnot be used for renewal.  After this time the user must\nre-authenticate to get a new bearer token."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Authorized"
                 }
               }
             }
@@ -494,16 +1106,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Password Invalid"
@@ -533,29 +1136,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "bearer",
-                    "renew",
-                    "exp"
-                  ],
-                  "properties": {
-                    "bearer": {
-                      "type": "string",
-                      "example": "kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf",
-                      "description": "The Client Authorization Bearer token required to be sent in the\n`Authorization: Bearer` header of all API calls that are called on\nbehalf of the Client."
-                    },
-                    "renew": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which user access will expire with this token.\nRenew before this time, for uninterrupted access.  Renewal may occur\nup until `exp` time."
-                    },
-                    "exp": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which the token will completely expire and may\nnot be used for renewal.  After this time the user must\nre-authenticate to get a new bearer token."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Authorized"
                 }
               }
             }
@@ -577,16 +1158,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "API Token has expired."
@@ -642,29 +1214,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "bearer",
-                    "renew",
-                    "exp"
-                  ],
-                  "properties": {
-                    "bearer": {
-                      "type": "string",
-                      "example": "kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf",
-                      "description": "The Client Authorization Bearer token required to be sent in the\n`Authorization: Bearer` header of all API calls that are called on\nbehalf of the Client."
-                    },
-                    "renew": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which user access will expire with this token.\nRenew before this time, for uninterrupted access.  Renewal may occur\nup until `exp` time."
-                    },
-                    "exp": {
-                      "type": "integer",
-                      "example": 234523454,
-                      "description": "The Epoch Time, at which the token will completely expire and may\nnot be used for renewal.  After this time the user must\nre-authenticate to get a new bearer token."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Authorized"
                 }
               }
             }
@@ -674,16 +1224,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Password must contain at least One UpperCase character, One\nLowerCase character, One Number and be at least 8 characters\nlong."
@@ -708,16 +1249,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "OLD Password Invalid."
@@ -775,16 +1307,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "msg"
-                  ],
-                  "properties": {
-                    "msg": {
-                      "type": "string",
-                      "example": "OK."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Ack"
                 },
                 "example": {
                   "msg": "Emails sent to user, OK."
@@ -797,16 +1320,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Email address already used by another account."
@@ -831,16 +1345,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Application Token Invalid."
@@ -894,16 +1399,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "msg"
-                  ],
-                  "properties": {
-                    "msg": {
-                      "type": "string",
-                      "example": "OK."
-                    }
-                  }
+                  "$ref": "#/components/schemas/Ack"
                 },
                 "example": {
                   "msg": "Email sent to user, OK."
@@ -916,16 +1412,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Invalid Password."
@@ -950,16 +1437,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Application Token Invalid."
@@ -977,7 +1455,7 @@
           "Adapter Management"
         ],
         "summary": "Find Unassociated adapters we can bind the client account to.",
-        "description": "When an adapter is first installed, it is not linked to an account.\nThe client must add the adapter to their account, this function will\nreturn a list of adapters which are available to be associated.\n\nIt will either find all adapters on the same local network as the client\nconnection.  Or if that does not work, a list of all adapters which are\ncurrently unassociated and have the same two last digits of the MAC\naddress as optionally provided in this call.\n\n**_EARLY DRAFT_**",
+        "description": "When an adapter is first installed, it is not linked to an account.\nThe client must add the adapter to their account, this function will\nreturn a list of adapters which are available to be associated.\n\nIt will either find all adapters on the same local network as the client\nconnection.  Or if that does not work, an adapter with a specific\nactivation code.",
         "externalDocs": {
           "url": "./API/flows/AdapterAccountAssociation-Flow.html",
           "description": "Adapter/Account Association message flow diagram."
@@ -990,12 +1468,18 @@
         "parameters": [
           {
             "in": "query",
-            "name": "mac",
+            "name": "code",
             "schema": {
-              "type": "string"
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/activation-code"
+                },
+                {
+                  "nullable": true
+                }
+              ]
             },
-            "example": "A9",
-            "description": "If not set, the function will look for all unassociated adapters\nthat share the internet connection of the client making the call.\n\nHowever, IF that fails, this can be set to the last two digits of\nthe MAC address, which will return a global list of all connected\nadapters which are not currently associated with an account, and\nshare the two last characters specified."
+            "description": "If not set, the function will look for all unassociated adapters\nthat share the internet connection of the client making the call.\n\nHowever, IF that fails, this can be set to a known activation code\nwhich will cause any adapter with the activation code which is not\ncurrently associated with an account to be returned.  Typically\nthis would be a single Adapter.  If no adapters are found, a \"200\"\nresponse will be generated, but the list of adapters will be empty."
           }
         ],
         "responses": {
@@ -1004,44 +1488,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "adapters": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "mac",
-                          "desc"
-                        ],
-                        "properties": {
-                          "mac": {
-                            "type": "string",
-                            "format": "MAC Address",
-                            "example": "00-00-5E-78-9A-F0",
-                            "description": "Adapters EUI-48 Formatted MAC Address"
-                          },
-                          "desc": {
-                            "type": "string",
-                            "example": "Privacy Hero 2 - Router V1",
-                            "description": "The description of the adapters hardware."
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "Main House Adapter",
-                            "description": "The descriptive name the client has given the adapter",
-                            "nullable": true
-                          },
-                          "since": {
-                            "type": "string",
-                            "format": "date-time",
-                            "example": "2023-04-12T23:20:50.52Z",
-                            "description": "The last time this device came online."
-                          }
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/Adapter-Unassociated-Array"
                 }
               }
             }
@@ -1051,16 +1498,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Some Error."
@@ -1073,16 +1511,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -1092,17 +1521,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
@@ -1116,8 +1535,8 @@
         "tags": [
           "Adapter Management"
         ],
-        "summary": "Find Unassociated adapters we can bind the client account to.",
-        "description": "Claims the specified adapter and associates it with the clients account.\n\n**_EARLY DRAFT_**",
+        "summary": "Claim the specified adapter for the clients account.",
+        "description": "Claims the specified adapter and associates it with the clients account.\nThe Claim can only succeed if the Adapter is not associated with an\naccount.\n\nThis API Call may also be used to replace an existing adapter, by\nspecifying the existing adapters AdapterID.  In which case, the existing\nadapter will be unassociated from the clients account and the newly\nclaimed adapter will replace it in its entirety.",
         "externalDocs": {
           "url": "./API/flows/AdapterAccountAssociation-Flow.html",
           "description": "Adapter/Account Association message flow diagram."
@@ -1132,85 +1551,28 @@
             "in": "query",
             "name": "mac",
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/mac"
             },
-            "example": "00-00-5E-XX-XX-XX",
+            "example": "00-00-5E-DF-98-EB",
             "description": "The mac address of the adapter to associate with the account.\nMust not already be associated with another account."
+          },
+          {
+            "in": "query",
+            "name": "AdapterID",
+            "schema": {
+              "$ref": "#/components/schemas/guid"
+            },
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "IF the adapter is replacing an existing adapter, include the\nAdapterID of the Adapter to replace.  The AdapterID will not change\nbut the Adapter will replace the existing adapter known by that ID.\nThe old Adapter will then become unassociated from the client."
           }
         ],
         "responses": {
           "200": {
-            "description": "Success, The claimed adapters details.",
+            "description": "Success, The claimed adapters details.\n\n- **AdapterID** - is the Unique ID of this Adapter.\n- **mac** - The Adapters mac address.\n- **ip** - list of ip addresses, either current, or last known.\n- **registered** - the time the adapter was first claimed by the\ncustomer.\n- **state** - the current state of the listed services.\n- **settings** - the current adapter level settings.\n- **diags** - the last and best result from diagnostic tests.",
             "content": {
               "application/json": {
                 "schema": {
-                  "description": "An Adapter/Router and all it's known devices.",
-                  "type": "object",
-                  "required": [
-                    "mac",
-                    "desc"
-                  ],
-                  "properties": {
-                    "mac": {
-                      "type": "string",
-                      "format": "MAC Address",
-                      "example": "00-00-5E-78-9A-F0",
-                      "description": "Adapters EUI-48 Formatted MAC Address"
-                    },
-                    "desc": {
-                      "type": "string",
-                      "example": "Privacy Hero 2 - Router V1",
-                      "description": "The description of the adapters hardware."
-                    },
-                    "name": {
-                      "type": "string",
-                      "example": "Main House Adapter",
-                      "description": "The descriptive name the client has given the adapter",
-                      "nullable": true
-                    },
-                    "devices": {
-                      "description": "An array of known devices",
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "mac",
-                          "name",
-                          "type"
-                        ],
-                        "properties": {
-                          "mac": {
-                            "type": "string",
-                            "format": "MAC Address",
-                            "example": "00-00-5E-32-5C-DE",
-                            "description": "Devices EUI-48 Formatted MAC Address"
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "android-e960b7e925b22464",
-                            "description": "The default name of the device"
-                          },
-                          "type": {
-                            "type": "string",
-                            "example": "Android Smart Phone",
-                            "description": "Automatically detected device type, used as `desc` if desc is null."
-                          },
-                          "given_name": {
-                            "type": "string",
-                            "example": null,
-                            "description": "If NOT null, this is the name the Client gave the device.",
-                            "nullable": true
-                          },
-                          "desc": {
-                            "type": "string",
-                            "example": "Mums Samsung S12+",
-                            "description": "If not null, the Name given to the device by the user.",
-                            "nullable": true
-                          }
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/Adapter"
                 }
               }
             }
@@ -1220,16 +1582,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
                   "error": "Could not claim the adapter!"
@@ -1242,16 +1595,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -1261,17 +1605,82 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_InternalError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/adapter/list": {
+      "get": {
+        "operationId": "adapterList",
+        "tags": [
+          "Adapter Management"
+        ],
+        "summary": "Lists one or all adapters associated with the clients account.",
+        "description": "Generates a list of adapters associated with the clients account.",
+        "externalDocs": {
+          "url": "./API/flows/AdapterList-Flow.html",
+          "description": "Adapter List message flow diagram."
+        },
+        "security": [
+          {
+            "clientToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "$ref": "#/components/schemas/guid"
+            },
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to list.  IF not present, will return ALL Adapters\nassociated with the Clients account."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, The adapters details.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Adapters"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Could not find the adapter!"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid Client Token, could not authorize api access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_NegAuth"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An Internal server error occurred.  Operation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
@@ -1286,7 +1695,7 @@
           "Adapter Management"
         ],
         "summary": "Give an adapter a descriptive name.",
-        "description": "Provides a descriptive name to an adapter that helps identify it.\n\n**_EARLY DRAFT_**",
+        "description": "Provides a descriptive name to an adapter that helps identify it.",
         "externalDocs": {
           "url": "./API/flows/AdapterAccountAssociation-Flow.html",
           "description": "Adapter/Account Association message flow diagram."
@@ -1299,18 +1708,21 @@
         "parameters": [
           {
             "in": "query",
-            "name": "mac",
+            "name": "id",
+            "required": true,
             "schema": {
-              "type": "string"
+              "$ref": "#/components/schemas/guid"
             },
-            "example": "00-00-5E-XX-XX-XX",
-            "description": "The mac address of the adapter to name."
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to Name."
           },
           {
             "in": "query",
             "name": "name",
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "nullable": true
             },
             "example": "Home Office Adapter",
             "description": "The name to apply to the adapter."
@@ -1325,19 +1737,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
-                  "error": "Could not claim the adapter!"
+                  "error": "Could not name the adapter!"
                 }
               }
             }
@@ -1347,16 +1750,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -1366,17 +1760,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
@@ -1384,14 +1768,84 @@
         }
       }
     },
-    "/v1/adapter/list": {
+    "/v1/adapter/cfg": {
       "get": {
-        "operationId": "adapterList",
+        "operationId": "adapterCfgQuery",
         "tags": [
           "Adapter Management"
         ],
-        "summary": "Lists all adapters associated with the clients account.",
-        "description": "Generates a list of all adapters associated with the clients account.\n\n**_EARLY DRAFT_**",
+        "summary": "Query the state of configuration for an adapter.",
+        "description": "For a particular Adapter, return the current and pending configuration.",
+        "security": [
+          {
+            "clientToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/guid"
+            },
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to Query."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, Adapter Query Result returned.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Adapter-Settings"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Could not query the adapter!"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid Client Token, could not authorize api access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_NegAuth"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An Internal server error occurred.  Operation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_InternalError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "adapterCfg",
+        "tags": [
+          "Adapter Management"
+        ],
+        "summary": "Change the Adapter Configuration.",
+        "description": "Change the Adapter Configuration.",
         "externalDocs": {
           "url": "./API/flows/AdapterAccountAssociation-Flow.html",
           "description": "Adapter/Account Association message flow diagram."
@@ -1404,131 +1858,48 @@
         "parameters": [
           {
             "in": "query",
-            "name": "devices",
+            "name": "id",
+            "required": true,
             "schema": {
-              "type": "boolean",
-              "default": false
+              "$ref": "#/components/schemas/guid"
+            },
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to Name."
+          },
+          {
+            "in": "query",
+            "name": "service",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "VPN",
+                "AdBlocking",
+                "SRelocation",
+                "Malware"
+              ]
+            },
+            "example": "VPN",
+            "description": "The service to configure."
+          },
+          {
+            "in": "query",
+            "name": "state",
+            "required": true,
+            "schema": {
+              "type": "boolean"
             },
             "example": true,
-            "description": "If devices is not present, or false, then the response will just\nlist the known adapters.  If it is true, the list will include every\ndevice known to those adapters."
+            "description": "**true**=Enable the Service. **false**=Disable the Service.\n**null**=No Change"
           }
         ],
         "responses": {
           "200": {
-            "description": "Success, The claimed adapters details.",
+            "description": "Success, Adapter Config Change queued.",
             "content": {
               "application/json": {
                 "schema": {
-                  "oneOf": [
-                    {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "required": [
-                          "mac",
-                          "desc"
-                        ],
-                        "properties": {
-                          "mac": {
-                            "type": "string",
-                            "format": "MAC Address",
-                            "example": "00-00-5E-78-9A-F0",
-                            "description": "Adapters EUI-48 Formatted MAC Address"
-                          },
-                          "desc": {
-                            "type": "string",
-                            "example": "Privacy Hero 2 - Router V1",
-                            "description": "The description of the adapters hardware."
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "Main House Adapter",
-                            "description": "The descriptive name the client has given the adapter",
-                            "nullable": true
-                          },
-                          "since": {
-                            "type": "string",
-                            "format": "date-time",
-                            "example": "2023-04-12T23:20:50.52Z",
-                            "description": "The last time this device came online."
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "description": "An array of adapters, and their devices.",
-                      "type": "array",
-                      "items": {
-                        "description": "An Adapter/Router and all it's known devices.",
-                        "type": "object",
-                        "required": [
-                          "mac",
-                          "desc"
-                        ],
-                        "properties": {
-                          "mac": {
-                            "type": "string",
-                            "format": "MAC Address",
-                            "example": "00-00-5E-78-9A-F0",
-                            "description": "Adapters EUI-48 Formatted MAC Address"
-                          },
-                          "desc": {
-                            "type": "string",
-                            "example": "Privacy Hero 2 - Router V1",
-                            "description": "The description of the adapters hardware."
-                          },
-                          "name": {
-                            "type": "string",
-                            "example": "Main House Adapter",
-                            "description": "The descriptive name the client has given the adapter",
-                            "nullable": true
-                          },
-                          "devices": {
-                            "description": "An array of known devices",
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "required": [
-                                "mac",
-                                "name",
-                                "type"
-                              ],
-                              "properties": {
-                                "mac": {
-                                  "type": "string",
-                                  "format": "MAC Address",
-                                  "example": "00-00-5E-32-5C-DE",
-                                  "description": "Devices EUI-48 Formatted MAC Address"
-                                },
-                                "name": {
-                                  "type": "string",
-                                  "example": "android-e960b7e925b22464",
-                                  "description": "The default name of the device"
-                                },
-                                "type": {
-                                  "type": "string",
-                                  "example": "Android Smart Phone",
-                                  "description": "Automatically detected device type, used as `desc` if desc is null."
-                                },
-                                "given_name": {
-                                  "type": "string",
-                                  "example": null,
-                                  "description": "If NOT null, this is the name the Client gave the device.",
-                                  "nullable": true
-                                },
-                                "desc": {
-                                  "type": "string",
-                                  "example": "Mums Samsung S12+",
-                                  "description": "If not null, the Name given to the device by the user.",
-                                  "nullable": true
-                                }
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  ]
+                  "$ref": "#/components/schemas/Adapter-Settings"
                 }
               }
             }
@@ -1538,19 +1909,10 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
-                  "error": "Could not claim the adapter!"
+                  "error": "Could not name the adapter!"
                 }
               }
             }
@@ -1560,16 +1922,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -1579,17 +1932,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
@@ -1597,14 +1940,14 @@
         }
       }
     },
-    "/v1/profile/list": {
-      "get": {
-        "operationId": "profileList",
+    "/v1/adapter/datacap": {
+      "post": {
+        "operationId": "adapterDataCap",
         "tags": [
-          "Profile Management"
+          "Adapter Management"
         ],
-        "summary": "Lists all/selected profiles created by the client on their account.",
-        "description": "Generates a list of all profiles associated with the clients account.\n\n**_EARLY DRAFT_**",
+        "summary": "Set the datacap for a particular adapter.",
+        "description": "Sets the data caps for the identified adapter.",
         "externalDocs": {
           "url": "./API/flows/AdapterAccountAssociation-Flow.html",
           "description": "Adapter/Account Association message flow diagram."
@@ -1617,131 +1960,39 @@
         "parameters": [
           {
             "in": "query",
-            "name": "profile",
+            "name": "id",
+            "required": true,
             "schema": {
-              "type": "string",
-              "default": null,
-              "nullable": true
+              "$ref": "#/components/schemas/guid"
             },
-            "example": "shared",
-            "description": "If specified, the profile list returned in the response will be\nrestricted to this single profile."
-          },
-          {
-            "in": "query",
-            "name": "devices",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            },
-            "example": true,
-            "description": "If devices is not present, or false, then the response will just\nlist the known profiles.  If it is true, the list will include every\ndevice linked to the profiles."
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to Set DataCap of."
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Success, The claimed adapters details.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "oneOf": [
-                    {
-                      "description": "An array of known profiles",
-                      "type": "array",
-                      "items": {
-                        "description": "A device setting profile",
-                        "type": "object",
-                        "properties": {
-                          "name": {
-                            "type": "string",
-                            "description": "The name given to the profile."
-                          }
-                        }
-                      }
-                    },
-                    {
-                      "description": "All profiles, and all devices in those profiles.",
-                      "type": "array",
-                      "items": {
-                        "description": "A profiles, and the devices associated with it.",
-                        "allOf": [
-                          {
-                            "description": "A device setting profile",
-                            "type": "object",
-                            "properties": {
-                              "name": {
-                                "type": "string",
-                                "description": "The name given to the profile."
-                              }
-                            }
-                          },
-                          {
-                            "description": "An array of known devices",
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "required": [
-                                "mac",
-                                "name",
-                                "type"
-                              ],
-                              "properties": {
-                                "mac": {
-                                  "type": "string",
-                                  "format": "MAC Address",
-                                  "example": "00-00-5E-32-5C-DE",
-                                  "description": "Devices EUI-48 Formatted MAC Address"
-                                },
-                                "name": {
-                                  "type": "string",
-                                  "example": "android-e960b7e925b22464",
-                                  "description": "The default name of the device"
-                                },
-                                "type": {
-                                  "type": "string",
-                                  "example": "Android Smart Phone",
-                                  "description": "Automatically detected device type, used as `desc` if desc is null."
-                                },
-                                "given_name": {
-                                  "type": "string",
-                                  "example": null,
-                                  "description": "If NOT null, this is the name the Client gave the device.",
-                                  "nullable": true
-                                },
-                                "desc": {
-                                  "type": "string",
-                                  "example": "Mums Samsung S12+",
-                                  "description": "If not null, the Name given to the device by the user.",
-                                  "nullable": true
-                                }
-                              }
-                            }
-                          }
-                        ]
-                      }
-                    }
-                  ]
-                }
+        "requestBody": {
+          "required": true,
+          "description": "The DataCap settings to apply.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/datacap"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success, Adapter datacap set."
           },
           "400": {
             "description": "General Request processing error.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
-                  "error": "Could not claim the adapter!"
+                  "error": "Could not name the adapter!"
                 }
               }
             }
@@ -1751,16 +2002,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -1770,17 +2012,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
@@ -1788,14 +2020,14 @@
         }
       }
     },
-    "/v1/device/list": {
-      "get": {
-        "operationId": "deviceList",
+    "/v1/adapter/wifi": {
+      "post": {
+        "operationId": "adapterWiFi",
         "tags": [
-          "Device Management"
+          "Adapter Management"
         ],
-        "summary": "Lists all devices and their associated Adapter/Profile.",
-        "description": "Generates a list of all devices.\n\n**_EARLY DRAFT_**",
+        "summary": "Set the WiFi settings for a particular adapter.",
+        "description": "Sets the Wifi settings for the 2.4Ghz and 5Ghz Network.\nAny setting excluded or set to **null** will not be changed.",
         "externalDocs": {
           "url": "./API/flows/AdapterAccountAssociation-Flow.html",
           "description": "Adapter/Account Association message flow diagram."
@@ -1808,83 +2040,39 @@
         "parameters": [
           {
             "in": "query",
-            "name": "mac",
+            "name": "id",
+            "required": true,
             "schema": {
-              "type": "string",
-              "nullable": true
+              "$ref": "#/components/schemas/guid"
             },
-            "example": "00-00-5E-32-5C-DE",
-            "description": "If specified will only return details of the listed device mac address."
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to Set Wifi Setting of."
           }
         ],
-        "responses": {
-          "200": {
-            "description": "Success, The claimed adapters details.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "description": "An array of known devices",
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "required": [
-                      "mac",
-                      "name",
-                      "type"
-                    ],
-                    "properties": {
-                      "mac": {
-                        "type": "string",
-                        "format": "MAC Address",
-                        "example": "00-00-5E-32-5C-DE",
-                        "description": "Devices EUI-48 Formatted MAC Address"
-                      },
-                      "name": {
-                        "type": "string",
-                        "example": "android-e960b7e925b22464",
-                        "description": "The default name of the device"
-                      },
-                      "type": {
-                        "type": "string",
-                        "example": "Android Smart Phone",
-                        "description": "Automatically detected device type, used as `desc` if desc is null."
-                      },
-                      "given_name": {
-                        "type": "string",
-                        "example": null,
-                        "description": "If NOT null, this is the name the Client gave the device.",
-                        "nullable": true
-                      },
-                      "desc": {
-                        "type": "string",
-                        "example": "Mums Samsung S12+",
-                        "description": "If not null, the Name given to the device by the user.",
-                        "nullable": true
-                      }
-                    }
-                  }
-                }
+        "requestBody": {
+          "required": true,
+          "description": "\"The Wifi Settings to apply. Set to null anything that shouldn't change.\"",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/wlan-settings"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success, WiFi settings set."
           },
           "400": {
             "description": "General Request processing error.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "error"
-                  ],
-                  "properties": {
-                    "error": {
-                      "type": "string",
-                      "example": "Unauthorized"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Nack"
                 },
                 "example": {
-                  "error": "Could not claim the adapter!"
+                  "error": "Could not name the adapter!"
                 }
               }
             }
@@ -1894,16 +2082,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "example": "User is not authorized to access this resource"
-                    }
-                  }
+                  "$ref": "#/components/schemas/GW_NegAuth"
                 }
               }
             }
@@ -1913,17 +2092,242 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": [
-                    "message"
-                  ],
-                  "properties": {
-                    "message": {
-                      "type": "string",
-                      "nullable": true,
-                      "example": null
+                  "$ref": "#/components/schemas/GW_InternalError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/streaming/services": {
+      "get": {
+        "operationId": "streamingServices",
+        "tags": [
+          "Streaming Relocation Management"
+        ],
+        "summary": "Lists streaming services, either ALL, or according to classification.",
+        "description": "Generates a list of streaming services currently supported by the system.",
+        "externalDocs": {
+          "url": "./API/flows/StreamingServiceList-Flow.html",
+          "description": "Streaming Service List message flow diagram."
+        },
+        "security": [
+          {
+            "clientToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "All",
+                "Portable",
+                "Non-Portable"
+              ],
+              "nullable": true
+            },
+            "example": "All",
+            "description": "The filter to apply to the service list, the list can contain ALL\nservices, or only Portable or Non-Portable services.\nIf the parameter is missing, or is **null** the call will return ALL\nservices.\n\nA **Portable** Service is one where the one subscription may be used\nin multiple countries.\n\nA **Non-Portable** Service is region locked to the subscription.\nFor example, a US Non-Portable Service can only view US content, and\ncan not be relocated to view UK content."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, The streaming service list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/streams"
+                },
+                "example": [
+                  {
+                    "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                    "name": "Netflix",
+                    "icon": "netflix.ico",
+                    "portable": true,
+                    "countries": {
+                      "proxy": [
+                        "US",
+                        "UK",
+                        "AU",
+                        "TH"
+                      ],
+                      "non-proxy": [
+                        "IL",
+                        "ID"
+                      ]
+                    },
+                    "settings": {
+                      "current": {
+                        "enabled": true,
+                        "country": "US"
+                      },
+                      "pending": {
+                        "country": "UK"
+                      }
+                    }
+                  },
+                  {
+                    "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
+                    "name": "Disney+",
+                    "icon": "disneyplus.ico",
+                    "portable": false,
+                    "countries": {
+                      "proxy": [
+                        "US",
+                        "UK",
+                        "IL"
+                      ],
+                      "non-proxy": [
+                        "TH",
+                        "ID"
+                      ]
+                    },
+                    "settings": {
+                      "current": {
+                        "enabled": true,
+                        "country": "UK"
+                      },
+                      "pending": {
+                        "enabled": false
+                      }
                     }
                   }
+                ]
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Could not find the adapter!"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid Client Token, could not authorize api access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_NegAuth"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An Internal server error occurred.  Operation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_InternalError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/v1/streaming/cfg": {
+      "post": {
+        "operationId": "streamingCfgQuery",
+        "tags": [
+          "Streaming Relocation Management"
+        ],
+        "summary": "Set the streaming cfg for an adapter.",
+        "description": "For a particular Adapter, set its streaming configuration.",
+        "security": [
+          {
+            "clientToken": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/guid"
+            },
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to set."
+          },
+          {
+            "in": "query",
+            "name": "streamId",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/guid"
+            },
+            "example": "29a16e31-bb4d-4407-8244-8e68b820b854",
+            "description": "The ID of the service, as obtained from the /streaming/services api\ncall."
+          },
+          {
+            "in": "query",
+            "name": "enabled",
+            "schema": {
+              "type": "boolean",
+              "nullable": true,
+              "example": null
+            },
+            "description": "Optional: If set, can change if the relocation is enabled on the\nadapter for the service, or not.  If not set or null, the service\nenabled setting does not change."
+          },
+          {
+            "in": "query",
+            "name": "country",
+            "schema": {
+              "$ref": "#/components/schemas/iso3166-country"
+            },
+            "example": "UK",
+            "description": "Optional: If set, can change the country the service is relocated\nto. If not set, the country is not changed.  Must be one of the\navailable countries listed in the /streaming/services api call."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success, Streaming Service Configuration Queued.",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Could not query the adapter!"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Invalid Client Token, could not authorize api access.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_NegAuth"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "An Internal server error occurred.  Operation failed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GW_InternalError"
                 }
               }
             }
