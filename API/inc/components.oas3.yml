@@ -29,6 +29,7 @@ paths:
                 schema:
                   oneOf:
                     - $ref: "#/components/schemas/Custom"
+                    - $ref: "#/components/schemas/streams"
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
                     - $ref: "#/components/schemas/Adapter-Unassociated-Array"
@@ -75,6 +76,7 @@ components:
     Custom:
       # Define custom properties here, which we reuse in other schemas.
       # ONLY put properties here which are used in multiple schemas.
+      # ALSO, Only put simple types here, objects or arrays deserve their own schemas
       type: object
       properties:
         # IP4 IP Address
@@ -98,6 +100,28 @@ components:
           description: |-
             An IP6 formatted IP Address
           example: "2001:db8:85a3::8a2e:370:7334"
+
+        # IP4 CIDR
+        cidr4:
+          type: string
+          format: IPv4 CIDR
+          pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
+          minLength: 9
+          maxLength: 18
+          description: |-
+            An IP4 CIDR
+          example: "192.168.0.0/24"
+
+        # IP6 CIDR
+        cidr6:
+          type: string
+          format: IPv6 CIDR
+          pattern: "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$"
+          minLength: 4
+          maxLength: 43
+          description: |-
+            An IP6 CIDR
+          example: "fe80::0204:61ff:fe9d:f156/127"
 
         # EUI-48 MAC Address
         mac:
@@ -182,218 +206,218 @@ components:
           description: |-
             an ISO3166 country code
 
+    state:
+      type: object
+      required:
+        - state
+        - since
+      properties:
         state:
-          type: object
-          required:
-            - state
-            - since
-          properties:
-            state:
-              type: boolean
-              nullable: true
-              description: |-
-                **true**=Active, **false**=Inactive, **null**=Unknown
-            since:
-              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+          type: boolean
+          nullable: true
           description: |-
-            The current known value of the state, and the time that it changed.
+            **true**=Active, **false**=Inactive, **null**=Unknown
+        since:
+          $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+      description: |-
+        The current known value of the state, and the time that it changed.
 
-        speed-diag:
-          type: object
+    speed-diag:
+      type: object
+      description: |-
+        Speed Diagnostic Results. Negative values are estimated run time in seconds.
+      required:
+        - speed
+        - when
+      properties:
+        speed:
+          type: integer
+          format: int32
+          nullable: true
           description: |-
-            Speed Diagnostic Results. Negative values are estimated run time in seconds.
-          required:
-            - speed
-            - when
-          properties:
-            speed:
-              type: integer
-              format: int32
-              nullable: true
-              description: |-
-                **+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running.
-            when:
-              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+            **+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running.
+        when:
+          $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
 
-        wan-vpn-speed-diag:
-          type: object
-          description: Speed Diagnostic result for WAN and VPN Network
-          required:
-            - wan
-            - vpn
-          properties:
-            wan:
-              $ref: "#/components/schemas/Custom/properties/speed-diag"
-            vpn:
-              $ref: "#/components/schemas/Custom/properties/speed-diag"
+    wan-vpn-speed-diag:
+      type: object
+      description: Speed Diagnostic result for WAN and VPN Network
+      required:
+        - wan
+        - vpn
+      properties:
+        wan:
+          $ref: "#/components/schemas/speed-diag"
+        vpn:
+          $ref: "#/components/schemas/speed-diag"
 
-        latency-diag:
-          type: object
-          description: latency diagnostic result
-          required:
-            - latency
-            - when
-          properties:
-            latency:
-              type: integer
-              format: int32
-              nullable: true
-              description: |-
-                **+VE** = millisecond latency result. **NULL** = Unknown. **-VE** = Test running.
-            when:
-              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+    latency-diag:
+      type: object
+      description: latency diagnostic result
+      required:
+        - latency
+        - when
+      properties:
+        latency:
+          type: integer
+          format: int32
+          nullable: true
+          description: |-
+            **+VE** = millisecond latency result. **NULL** = Unknown. **-VE** = Test running.
+        when:
+          $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
 
-        wan-vpn-latency-diag:
-          type: object
-          description: Latency Diagnostic results for the WAN and VPN Networks
-          required:
-            - wan
-            - vpn
-          properties:
-            wan:
-              $ref: "#/components/schemas/Custom/properties/latency-diag"
-            vpn:
-              $ref: "#/components/schemas/Custom/properties/latency-diag"
+    wan-vpn-latency-diag:
+      type: object
+      description: Latency Diagnostic results for the WAN and VPN Networks
+      required:
+        - wan
+        - vpn
+      properties:
+        wan:
+          $ref: "#/components/schemas/latency-diag"
+        vpn:
+          $ref: "#/components/schemas/latency-diag"
 
-        datacap:
-          type: object
-          description: A per-month Data Cap.
-          properties:
-            tx:
-              type: integer
-              format: uint64
-              nullable: true
-              description: |-
-                Transmit Data Cap in Bytes per month. **null** = no tx data cap
-            rx:
-              type: integer
-              format: uint64
-              nullable: true
-              description: |-
-                Receive Data Cap in Bytes per month. **null** = no rx data cap
-            combined:
-              type: boolean
-              default: false
-              description: |-
-                IF **true** then the tx data cap is the combined tx+rx data cap.
+    datacap:
+      type: object
+      description: A per-month Data Cap.
+      properties:
+        tx:
+          type: integer
+          format: uint64
+          nullable: true
+          description: |-
+            Transmit Data Cap in Bytes per month. **null** = no tx data cap
+        rx:
+          type: integer
+          format: uint64
+          nullable: true
+          description: |-
+            Receive Data Cap in Bytes per month. **null** = no rx data cap
+        combined:
+          type: boolean
+          default: false
+          description: |-
+            IF **true** then the tx data cap is the combined tx+rx data cap.
 
-        wifi-settings:
-          type: object
-          description: Settings for an individual wifi network
-          required:
-            - active
-            - ssid
-            - key
-          properties:
-            active:
-              type: boolean
-              description: is the wifi network active.
-              default: true
-            ssid:
-              type: string
-              format: ssid
-              minLength: 1
-              maxLength: 32
-              pattern: '^[^!#;+\]\/"\t][^+\]\/"\t]{0,30}[^ !#;+\]\/"\t]$|^[^ !#;+\]\/"\t]$'
-              description: The SSID of the wifi network
-              default: "PrivacyHero2"
-              example: "PrivacyHero2"
-            key:
-              type: string
-              format: WPA-PSK passphrase
-              minLength: 8
-              maxLength: 63
-              pattern: "^[\u0020-\u007e]*$"
-              nullable: true
-              default: "r4nd0m k3y"
-              example: "r4nd0m k3y"
-              description: |-
-                The WPA-PSK passphrase to secure the network. **null**=Open Wifi
-                Network
+    wifi-settings:
+      type: object
+      description: Settings for an individual wifi network
+      required:
+        - active
+        - ssid
+        - key
+      properties:
+        active:
+          type: boolean
+          description: is the wifi network active.
+          default: true
+        ssid:
+          type: string
+          format: ssid
+          minLength: 1
+          maxLength: 32
+          pattern: '^[^!#;+\]\/"\t][^+\]\/"\t]{0,30}[^ !#;+\]\/"\t]$|^[^ !#;+\]\/"\t]$'
+          description: The SSID of the wifi network
+          default: "PrivacyHero2"
+          example: "PrivacyHero2"
+        key:
+          type: string
+          format: WPA-PSK passphrase
+          minLength: 8
+          maxLength: 63
+          pattern: "^[\u0020-\u007e]*$"
+          nullable: true
+          default: "r4nd0m k3y"
+          example: "r4nd0m k3y"
+          description: |-
+            The WPA-PSK passphrase to secure the network. **null**=Open Wifi
+            Network
 
-        wlan-settings:
-          type: object
-          description: Settings for the Wireless Lan
-          properties:
-            2.4ghz:
-              $ref: "#/components/schemas/Custom/properties/wifi-settings"
-            5ghz:
-              $ref: "#/components/schemas/Custom/properties/wifi-settings"
+    wlan-settings:
+      type: object
+      description: Settings for the Wireless Lan
+      properties:
+        2.4ghz:
+          $ref: "#/components/schemas/wifi-settings"
+        5ghz:
+          $ref: "#/components/schemas/wifi-settings"
 
-        stream-setting:
-          type: object
-          description: Settings for an individual relocatable stream
-          required:
-            - country
-          properties:
-            enabled:
-              type: boolean
-              default: true
-              description: |-
-                If the stream relocation is enabled for this service or not.
-            country:
-              $ref: "#/components/schemas/Custom/properties/iso3166-country"
+    stream-setting:
+      type: object
+      description: Settings for an individual relocatable stream
+      required:
+        - country
+      properties:
+        enabled:
+          type: boolean
+          default: true
+          description: |-
+            If the stream relocation is enabled for this service or not.
+        country:
+          $ref: "#/components/schemas/Custom/properties/iso3166-country"
 
-        streams:
-          type: array
-          description: List of streaming services
-          items:
+    streams:
+      type: array
+      description: List of streaming services
+      items:
+        type: object
+        description: Streaming Services
+        required:
+          - id
+          - name
+          - countries
+          - portable
+        properties:
+          id:
+            $ref: "#/components/schemas/Custom/properties/guid"
+          name:
+            type: string
+            minLength: 1
+            maxLength: 64
+            description: |-
+              Name of the streaming service
+            example: "Netflix"
+          icon:
+            $ref: "#/components/schemas/Custom/properties/url"
+          portable:
+            type: boolean
+            description: |-
+              Is the service able to be used in multiple countries?
+            default: true
+          countries:
             type: object
-            description: Streaming Services
-            required:
-              - id
-              - name
-              - countries
-              - portable
+            description: |-
+              List of all countries streaming service is available in.
+
+              **proxy** countries may be used to proxy a stream to appear as if
+              the stream is being watched in that country.
+
+              **non-proxy** are countries where the streaming service is
+              available but for which no proxy exists.  These can only be
+              used if the Adapter is located in that country.
             properties:
-              id:
-                $ref: "#/components/schemas/Custom/properties/guid"
-              name:
-                type: string
-                minLength: 1
-                maxLength: 64
-                description: |-
-                  Name of the streaming service
-                example: "Netflix"
-              icon:
-                $ref: "#/components/schemas/Custom/properties/url"
-              portable:
-                type: boolean
-                description: |-
-                  Is the service able to be used in multiple countries?
-                default: true
-              countries:
-                type: object
-                description: |-
-                  List of all countries streaming service is available in.
-
-                  **proxy** countries may be used to proxy a stream to appear as if
-                  the stream is being watched in that country.
-
-                  **non-proxy** are countries where the streaming service is
-                  available but for which no proxy exists.  These can only be
-                  used if the Adapter is located in that country.
-                properties:
-                  proxy:
-                    type: array
-                    description: List of countries which can be proxied.
-                    items:
-                      $ref: "#/components/schemas/Custom/properties/iso3166-country"
-                  non-proxy:
-                    type: array
-                    description: List of countries which can not be proxied.
-                    items:
-                      $ref: "#/components/schemas/Custom/properties/iso3166-country"
-              settings:
-                type: object
-                description: Settings for the service
-                required:
-                  - current
-                properties:
-                  current:
-                    $ref: "#/components/schemas/Custom/properties/stream-setting"
-                  pending:
-                    $ref: "#/components/schemas/Custom/properties/stream-setting"
+              proxy:
+                type: array
+                description: List of countries which can be proxied.
+                items:
+                  $ref: "#/components/schemas/Custom/properties/iso3166-country"
+              non-proxy:
+                type: array
+                description: List of countries which can not be proxied.
+                items:
+                  $ref: "#/components/schemas/Custom/properties/iso3166-country"
+          settings:
+            type: object
+            description: Settings for the service
+            required:
+              - current
+            properties:
+              current:
+                $ref: "#/components/schemas/stream-setting"
+              pending:
+                $ref: "#/components/schemas/stream-setting"
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -444,9 +468,9 @@ components:
               description: The current settings.
               properties:
                 wifi:
-                  $ref: "#/components/schemas/Custom/properties/wlan-settings"
+                  $ref: "#/components/schemas/wlan-settings"
                 data-cap:
-                  $ref: "#/components/schemas/Custom/properties/datacap"
+                  $ref: "#/components/schemas/datacap"
                 vpn:
                   type: boolean
                   description: |-
@@ -469,9 +493,9 @@ components:
                 The settings we are attempting to set on the adapter.
               properties:
                 wifi:
-                  $ref: "#/components/schemas/Custom/properties/wlan-settings"
+                  $ref: "#/components/schemas/wlan-settings"
                 data-cap:
-                  $ref: "#/components/schemas/Custom/properties/datacap"
+                  $ref: "#/components/schemas/datacap"
                 vpn:
                   type: boolean
                   description: |-
@@ -581,15 +605,15 @@ components:
                 - malware-phising
               properties:
                 online:
-                  $ref: "#/components/schemas/Custom/properties/state"
+                  $ref: "#/components/schemas/state"
                 vpn:
-                  $ref: "#/components/schemas/Custom/properties/state"
+                  $ref: "#/components/schemas/state"
                 ad-blocking:
-                  $ref: "#/components/schemas/Custom/properties/state"
+                  $ref: "#/components/schemas/state"
                 stream-relocation:
-                  $ref: "#/components/schemas/Custom/properties/state"
+                  $ref: "#/components/schemas/state"
                 malware-phising:
-                  $ref: "#/components/schemas/Custom/properties/state"
+                  $ref: "#/components/schemas/state"
 
         - $ref: "#/components/schemas/Adapter-Settings"
 
@@ -608,27 +632,27 @@ components:
                       description: Transmit Speed Diagnostics
                       properties:
                         last:
-                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+                          $ref: "#/components/schemas/wan-vpn-speed-diag"
                         best:
-                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+                          $ref: "#/components/schemas/wan-vpn-speed-diag"
 
                     rx:
                       type: object
                       description: Receive Speed Diagnostics
                       properties:
                         last:
-                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+                          $ref: "#/components/schemas/wan-vpn-speed-diag"
                         best:
-                          $ref: "#/components/schemas/Custom/properties/wan-vpn-speed-diag"
+                          $ref: "#/components/schemas/wan-vpn-speed-diag"
 
                 ping_test:
                   type: object
                   description: ping test latency results
                   properties:
                     last:
-                      $ref: "#/components/schemas/Custom/properties/wan-vpn-latency-diag"
+                      $ref: "#/components/schemas/wan-vpn-latency-diag"
                     best:
-                      $ref: "#/components/schemas/Custom/properties/wan-vpn-latency-diag"
+                      $ref: "#/components/schemas/wan-vpn-latency-diag"
 
     Adapters:
       type: array

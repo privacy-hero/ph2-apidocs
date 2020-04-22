@@ -90,7 +90,7 @@ Extra Adapter Configuration:
                     regex string
             servers: array
                 server ip address string
-            proxy_ips: an object of some kind, not sure what.
+            proxy_ips: a list of ip ranges, instead of regex
 
     firmware: "number string"  ??  I guess a firmware ID/checksum
 

@@ -65,7 +65,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/wlan-settings"
+              $ref: "../../inc/components.oas3.yml#/components/schemas/wlan-settings"
 
       responses:
         "200":
