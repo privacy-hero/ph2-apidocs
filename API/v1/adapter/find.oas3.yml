@@ -59,7 +59,7 @@ paths:
           name: code
           schema:
             allOf:
-              - $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/activation-code"
+              - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
               - nullable: true
           description: |-
             If not set, the function will look for all unassociated adapters

@@ -53,7 +53,7 @@ paths:
         - in: query
           name: id
           schema:
-            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
             The Adapter ID to list.  IF not present, will return ALL Adapters

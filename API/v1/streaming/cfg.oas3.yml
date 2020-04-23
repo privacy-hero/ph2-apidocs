@@ -49,7 +49,7 @@ paths:
           name: id
           required: true
           schema:
-            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
             The Adapter ID to set.
@@ -57,7 +57,7 @@ paths:
           name: streamId
           required: true
           schema:
-            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/guid"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           example: "29a16e31-bb4d-4407-8244-8e68b820b854"
           description: |-
             The ID of the service, as obtained from the /streaming/services api
@@ -75,7 +75,7 @@ paths:
         - in: query
           name: country
           schema:
-            $ref: "../../inc/components.oas3.yml#/components/schemas/Custom/properties/iso3166-country"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iso3166-country"
           example: "UK"
           description: |-
             Optional: If set, can change the country the service is relocated

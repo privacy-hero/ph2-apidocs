@@ -28,7 +28,6 @@ paths:
               application/json:
                 schema:
                   oneOf:
-                    - $ref: "#/components/schemas/Custom"
                     - $ref: "#/components/schemas/streams"
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
@@ -72,140 +71,6 @@ tags:
 components:
 
   schemas:
-
-    Custom:
-      # Define custom properties here, which we reuse in other schemas.
-      # ONLY put properties here which are used in multiple schemas.
-      # ALSO, Only put simple types here, objects or arrays deserve their own schemas
-      type: object
-      properties:
-        # IP4 IP Address
-        ip4:
-          type: string
-          format: IPv4 Address
-          pattern: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
-          minLength: 7
-          maxLength: 15
-          description: |-
-            An IP4 formatted IP Address
-          example: "192.168.0.55"
-
-        # IP6 IP Address
-        ip6:
-          type: string
-          format: IPv6 Address
-          pattern: "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
-          minLength: 3
-          maxLength: 45
-          description: |-
-            An IP6 formatted IP Address
-          example: "2001:db8:85a3::8a2e:370:7334"
-
-        # IP4 CIDR
-        cidr4:
-          type: string
-          format: IPv4 CIDR
-          pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
-          minLength: 9
-          maxLength: 18
-          description: |-
-            An IP4 CIDR
-          example: "192.168.0.0/24"
-
-        # IP6 CIDR
-        cidr6:
-          type: string
-          format: IPv6 CIDR
-          pattern: "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$"
-          minLength: 4
-          maxLength: 43
-          description: |-
-            An IP6 CIDR
-          example: "fe80::0204:61ff:fe9d:f156/127"
-
-        # EUI-48 MAC Address
-        mac:
-          type: string
-          format: EUI-48
-          pattern: "^(?:[0-9a-fA-F]{2}([-:]))(?:[0-9a-fA-F]{2}\\1){4}[0-9a-fA-F]{2}$"
-          maxLength: 17
-          minLength: 17
-          description: |-
-            An EUI-48 formatted mac address.
-          example: "00-00-5E-DF-98-EB"
-
-        # Globally Unique ID
-        guid:
-          type: string
-          format: UUID
-          description: |-
-            Unique Identifier
-          maxLength: 36
-          minLength: 36
-          pattern: "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-
-        url:
-          type: string
-          format: "URL"
-          minLength: 1
-          maxLength: 2000
-          nullable: true
-          pattern: "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
-          description: |-
-            A URL, including relative references.  Will only accept https
-            non relative urls.
-          example: "./relative.url"
-
-        url-absolute:
-          type: string
-          format: "URL"
-          minLength: 1
-          maxLength: 2000
-          nullable: true
-          pattern: "^(?:https:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
-          description: |-
-            A, Absolute URL.  Will only accept https as protocol.
-          example: "https://absolute.url"
-
-        # Adapter Activation Code
-        activation-code:
-          type: string
-          # pattern: "^...$"
-          minLength: 9
-          maxLength: 9
-          description: |-
-            Adapter/Router activation code.
-          example: "????-????"
-
-        # Type of Adapter
-        adapter-type:
-          type: string
-          enum:
-            - "Router-V1"
-          description: |-
-            The hardware type of the adapter/router.
-
-        # Epoch Timestamp
-        epoch-timestamp:
-          type: integer
-          format: int64
-          nullable: true
-          description: |-
-            A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
-          example: 1587284382
-
-        # ISO 3166 Country Codes
-        iso3166-country:
-          type: string
-          format: ISO3166 Code
-          pattern: "^[A-Z][A-Z]$"
-          example: "US"
-          minLength: 2
-          maxLength: 2
-          description: |-
-            an ISO3166 country code
-
     state:
       type: object
       required:
@@ -218,7 +83,7 @@ components:
           description: |-
             **true**=Active, **false**=Inactive, **null**=Unknown
         since:
-          $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         The current known value of the state, and the time that it changed.
 
@@ -237,7 +102,7 @@ components:
           description: |-
             **+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running.
         when:
-          $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
     wan-vpn-speed-diag:
       type: object
@@ -265,7 +130,7 @@ components:
           description: |-
             **+VE** = millisecond latency result. **NULL** = Unknown. **-VE** = Test running.
         when:
-          $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
     wan-vpn-latency-diag:
       type: object
@@ -354,7 +219,7 @@ components:
           description: |-
             If the stream relocation is enabled for this service or not.
         country:
-          $ref: "#/components/schemas/Custom/properties/iso3166-country"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
 
     streams:
       type: array
@@ -369,7 +234,8 @@ components:
           - portable
         properties:
           id:
-            $ref: "#/components/schemas/Custom/properties/guid"
+            $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+
           name:
             type: string
             minLength: 1
@@ -378,7 +244,7 @@ components:
               Name of the streaming service
             example: "Netflix"
           icon:
-            $ref: "#/components/schemas/Custom/properties/url"
+            $ref: "./simpletypes.oas3.yml#/components/schemas/url"
           portable:
             type: boolean
             description: |-
@@ -400,12 +266,12 @@ components:
                 type: array
                 description: List of countries which can be proxied.
                 items:
-                  $ref: "#/components/schemas/Custom/properties/iso3166-country"
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
               non-proxy:
                 type: array
                 description: List of countries which can not be proxied.
                 items:
-                  $ref: "#/components/schemas/Custom/properties/iso3166-country"
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
           settings:
             type: object
             description: Settings for the service
@@ -426,9 +292,9 @@ components:
         - desc
       properties:
         mac:
-          $ref: "#/components/schemas/Custom/properties/mac"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/mac"
         type:
-          $ref: "#/components/schemas/Custom/properties/adapter-type"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/adapter-type"
         desc:
           type: string
           description: |-
@@ -443,7 +309,7 @@ components:
             - since
           properties:
             since:
-              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         * since - The time this adapter last came online.
 
@@ -523,7 +389,7 @@ components:
             - AdapterID
           properties:
             AdapterID:
-              $ref: "#/components/schemas/Custom/properties/guid"
+              $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
 
         - $ref: "#/components/schemas/Adapter-Base"
 
@@ -543,7 +409,7 @@ components:
               description: |-
                 The Name assigned to the Adapter/Router by the Client.
             location:
-              $ref: "#/components/schemas/Custom/properties/iso3166-country"
+              $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
             timezone:
               type: integer
               description: Local Timezone, number of minutes offset from UTC
@@ -565,9 +431,9 @@ components:
                   description: The Local network IP addresses.
                   properties:
                     ip4:
-                      $ref: "#/components/schemas/Custom/properties/ip4"
+                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
                     ip6:
-                      $ref: "#/components/schemas/Custom/properties/ip6"
+                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
                 wan:
                   type: object
                   required:
@@ -575,9 +441,9 @@ components:
                   description: The ISP Native IP addresses.
                   properties:
                     ip4:
-                      $ref: "#/components/schemas/Custom/properties/ip4"
+                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
                     ip6:
-                      $ref: "#/components/schemas/Custom/properties/ip6"
+                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
                 vpn:
                   type: object
                   required:
@@ -585,12 +451,12 @@ components:
                   description: The VPN endpoint IP addresses.
                   properties:
                     ip4:
-                      $ref: "#/components/schemas/Custom/properties/ip4"
+                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
                     ip6:
-                      $ref: "#/components/schemas/Custom/properties/ip6"
+                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
 
             registered:
-              $ref: "#/components/schemas/Custom/properties/epoch-timestamp"
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
             state:
               type: object

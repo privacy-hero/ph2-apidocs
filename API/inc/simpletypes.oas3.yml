@@ -1,0 +1,211 @@
+###### HEADER INFO ##################
+openapi: "3.0.2"
+info:
+  title: "Privacy Hero 2 - Mothership API - Components Specification - Simple Types"
+  version: "1.0"
+  description: |-
+    The complete backend API for the Privacy Hero 2.
+
+    The backend server infrastructure is known as the *"Mothership"*
+
+    This file defines simple types.
+    Simple Types are not objects or arrays, and do not contain references to any
+    other schema.
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+security:
+  - clientToken: []
+
+paths:
+  /silence-lint:
+    get:
+      operationId: silenceLint
+      description: dummy response to silence lint errors in this file
+      tags:
+        - Schema Definitions
+      responses:
+        "200":
+          description: dummy response to silence lint errors in this file
+          content:
+              application/json:
+                schema:
+                  additionalProperties: false
+                  oneOf:
+                    - $ref: "#/components/schemas/ip4"
+                    - $ref: "#/components/schemas/ip6"
+                    - $ref: "#/components/schemas/cidr4"
+                    - $ref: "#/components/schemas/cidr6"
+                    - $ref: "#/components/schemas/mac"
+                    - $ref: "#/components/schemas/uuid"
+                    - $ref: "#/components/schemas/url"
+                    - $ref: "#/components/schemas/url-absolute"
+                    - $ref: "#/components/schemas/activation-code"
+                    - $ref: "#/components/schemas/adapter-type"
+                    - $ref: "#/components/schemas/epoch-timestamp"
+                    - $ref: "#/components/schemas/iso3166-country"
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+tags:
+  - name: Schema Definitions
+    description: These are all schema definitions.
+
+#########################################################
+# Components are preformatted data that can be reused in definitions.
+components:
+
+  securitySchemes:
+    $ref: "../PHMothership.openapi.yml#/components/securitySchemes"
+
+  schemas:
+
+    # IP4 IP Address
+    ip4:
+      type: string
+      additionalProperties: false
+      format: IPv4 Address
+      pattern: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+      minLength: 7
+      maxLength: 15
+      description: |-
+        An IP4 formatted IP Address
+      example: "192.168.0.55"
+
+    # IP6 IP Address
+    ip6:
+      type: string
+      additionalProperties: false
+      format: IPv6 Address
+      pattern: "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
+      minLength: 3
+      maxLength: 45
+      description: |-
+        An IP6 formatted IP Address
+      example: "2001:db8:85a3::8a2e:370:7334"
+
+    # IP4 CIDR
+    cidr4:
+      type: string
+      additionalProperties: false
+      format: IPv4 CIDR
+      pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
+      minLength: 9
+      maxLength: 18
+      description: |-
+        An IP4 CIDR
+      example: "192.168.0.0/24"
+
+    # IP6 CIDR
+    cidr6:
+      type: string
+      additionalProperties: false
+      format: IPv6 CIDR
+      pattern: "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$"
+      minLength: 4
+      maxLength: 43
+      description: |-
+        An IP6 CIDR
+      example: "fe80::0204:61ff:fe9d:f156/127"
+
+    # EUI-48 MAC Address
+    mac:
+      type: string
+      additionalProperties: false
+      format: EUI-48
+      pattern: "^(?:[0-9a-fA-F]{2}([-:]))(?:[0-9a-fA-F]{2}\\1){4}[0-9a-fA-F]{2}$"
+      maxLength: 17
+      minLength: 17
+      description: |-
+        An EUI-48 formatted mac address.
+      example: "00-00-5E-DF-98-EB"
+
+    # Universally Unique ID
+    uuid:
+      type: string
+      additionalProperties: false
+      format: UUID
+      description: |-
+        Unique Identifier
+      maxLength: 36
+      minLength: 36
+      pattern: "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
+      example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+
+    url:
+      type: string
+      additionalProperties: false
+      format: "URL"
+      minLength: 1
+      maxLength: 2000
+      nullable: true
+      pattern: "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+      description: |-
+        A URL, including relative references.  Will only accept https
+        non relative urls.
+      example: "./relative.url"
+
+    url-absolute:
+      type: string
+      additionalProperties: false
+      format: "URL"
+      minLength: 1
+      maxLength: 2000
+      nullable: true
+      pattern: "^(?:https:\\/\\/)?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
+      description: |-
+        A, Absolute URL.  Will only accept https as protocol.
+      example: "https://absolute.url"
+
+    # Adapter Activation Code
+    activation-code:
+      type: string
+      additionalProperties: false
+      # pattern: "^...$"
+      minLength: 9
+      maxLength: 9
+      description: |-
+        Adapter/Router activation code.
+      example: "????-????"
+
+    # Type of Adapter
+    adapter-type:
+      type: string
+      additionalProperties: false
+      enum:
+        - "Router-V1"
+      description: |-
+        The hardware type of the adapter/router.
+
+    # Epoch Timestamp
+    epoch-timestamp:
+      type: integer
+      additionalProperties: false
+      format: int64
+      nullable: true
+      description: |-
+        A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
+      example: 1587284382
+
+    # ISO 3166 Country Codes
+    iso3166-country:
+      type: string
+      additionalProperties: false
+      format: ISO3166 Code
+      pattern: "^[A-Z][A-Z]$"
+      example: "US"
+      minLength: 2
+      maxLength: 2
+      description: |-
+        an ISO3166 country code
