@@ -69,7 +69,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/Devices"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Devices"
 
         "400":
           description: |-

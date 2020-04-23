@@ -60,7 +60,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Settings"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Settings"
 
         "400":
           description: |-
@@ -142,7 +142,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/Adapter-Settings"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Settings"
 
         "400":
           description: |-

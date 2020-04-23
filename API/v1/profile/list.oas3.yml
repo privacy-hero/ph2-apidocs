@@ -82,8 +82,8 @@ paths:
             application/json:
               schema:
                 oneOf:
-                  - $ref: "../../inc/components.oas3.yml#/components/schemas/Profiles"
-                  - $ref: "../../inc/components.oas3.yml#/components/schemas/ProfilesDevices"
+                  - $ref: "../../inc/adapter.oas3.yml#/components/schemas/Profiles"
+                  - $ref: "../../inc/adapter.oas3.yml#/components/schemas/ProfilesDevices"
 
         "400":
           description: |-
