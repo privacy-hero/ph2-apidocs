@@ -20,7 +20,7 @@ paths:
       operationId: silenceLint
       description: dummy response to silence lint errors in this file
       tags:
-        - Account Management
+        - Schema Definitions
       responses:
         "200":
           description: dummy response to silence lint errors in this file
@@ -55,8 +55,8 @@ servers:
         description: The ID for your dev AWS deployment
 
 tags:
-  - name: Account Management
-    description: Operations related to Account Creation and Management
+  - name: Schema Definitions
+    description: These are all schema definitions.
 
 #########################################################
 # Components are preformatted data that can be reused in definitions.
