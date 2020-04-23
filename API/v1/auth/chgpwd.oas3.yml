@@ -70,7 +70,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/Authorized"
+                $ref: "../../inc/auth.oas3.yml#/components/schemas/Authorized"
 
         "400":
           description: |-

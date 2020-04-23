@@ -44,10 +44,6 @@ paths:
                     - $ref: "#/components/schemas/Profiles"
                     - $ref: "#/components/schemas/ProfileDevices"
                     - $ref: "#/components/schemas/ProfilesDevices"
-                    - $ref: "#/components/schemas/BadAppToken"
-                    - $ref: "#/components/schemas/Authorized"
-
-
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -608,37 +604,3 @@ components:
       items:
         $ref: "#/components/schemas/ProfileDevices"
 
-    #WWW-Authenticate: Bearer realm="example",
-    #                       error="invalid_token",
-    #                       error_description="The access token expired"
-    BadAppToken:
-      type: object
-
-    Authorized:
-      type: object
-      required:
-        - bearer
-        - renew
-        - exp
-      properties:
-        bearer:
-          type: string
-          example: kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf
-          description: |-
-            The Client Authorization Bearer token required to be sent in the
-            `Authorization: Bearer` header of all API calls that are called on
-            behalf of the Client.
-        renew:
-          type: integer
-          example: 234523454
-          description: |-
-            The Epoch Time, at which user access will expire with this token.
-            Renew before this time, for uninterrupted access.  Renewal may occur
-            up until `exp` time.
-        exp:
-          type: integer
-          example: 234523454
-          description: |-
-            The Epoch Time, at which the token will completely expire and may
-            not be used for renewal.  After this time the user must
-            re-authenticate to get a new bearer token.

@@ -1,0 +1,90 @@
+###### HEADER INFO ##################
+openapi: "3.0.2"
+info:
+  title: "Privacy Hero 2 - Mothership API - Components Specification"
+  version: "1.0"
+  description: |-
+    The complete backend API for the Privacy Hero 2.
+
+    The backend server infrastructure is known as the *"Mothership"*
+
+    All general Schemas specifically related to authorization are defined here.
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+paths:
+  /silence-lint:
+    get:
+      operationId: silenceLint
+      description: dummy response to silence lint errors in this file
+      tags:
+        - Schema Definitions
+      responses:
+        "200":
+          description: dummy response to silence lint errors in this file
+          content:
+              application/json:
+                schema:
+                  oneOf:
+                    - $ref: "#/components/schemas/BadAppToken"
+                    - $ref: "#/components/schemas/Authorized"
+
+
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+tags:
+  - name: Schema Definitions
+    description: These are all schema definitions.
+
+#########################################################
+# Components are preformatted data that can be reused in definitions.
+components:
+
+  schemas:
+
+    #WWW-Authenticate: Bearer realm="example",
+    #                       error="invalid_token",
+    #                       error_description="The access token expired"
+    BadAppToken:
+      type: object
+
+    Authorized:
+      type: object
+      required:
+        - bearer
+        - renew
+        - exp
+      properties:
+        bearer:
+          type: string
+          example: kjlfhgaklhgkalhgkladhjg.kasdfakjshaksdjhakldjf
+          description: |-
+            The Client Authorization Bearer token required to be sent in the
+            `Authorization: Bearer` header of all API calls that are called on
+            behalf of the Client.
+        renew:
+          type: integer
+          example: 234523454
+          description: |-
+            The Epoch Time, at which user access will expire with this token.
+            Renew before this time, for uninterrupted access.  Renewal may occur
+            up until `exp` time.
+        exp:
+          type: integer
+          example: 234523454
+          description: |-
+            The Epoch Time, at which the token will completely expire and may
+            not be used for renewal.  After this time the user must
+            re-authenticate to get a new bearer token.
