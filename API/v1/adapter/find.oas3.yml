@@ -86,7 +86,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Some Error."
 
@@ -96,7 +96,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_NegAuth"
+                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
 
         "500":
           description: |-
@@ -104,4 +104,4 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/GW_InternalError"
+                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_InternalError"

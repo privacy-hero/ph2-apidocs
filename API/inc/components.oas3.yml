@@ -44,12 +44,8 @@ paths:
                     - $ref: "#/components/schemas/Profiles"
                     - $ref: "#/components/schemas/ProfileDevices"
                     - $ref: "#/components/schemas/ProfilesDevices"
-                    - $ref: "#/components/schemas/Ack"
-                    - $ref: "#/components/schemas/Nack"
-                    - $ref: "#/components/schemas/GW_NegAuth"
                     - $ref: "#/components/schemas/BadAppToken"
                     - $ref: "#/components/schemas/Authorized"
-                    - $ref: "#/components/schemas/GW_InternalError"
 
 
 
@@ -611,43 +607,6 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/ProfileDevices"
-
-    Ack:
-      type: object
-      required:
-        - msg
-      properties:
-        msg:
-          type: string
-          example: "OK."
-
-    Nack:
-      type: object
-      required:
-        - error
-      properties:
-        error:
-          type: string
-          example: "Unauthorized"
-
-    GW_NegAuth: # Negative Authorization from API Gateway
-      type: object
-      required:
-        - message
-      properties:
-        message:
-          type: string
-          example: "User is not authorized to access this resource"
-
-    GW_InternalError: # Internal gateway Server Error
-      type: object
-      required:
-        - message
-      properties:
-        message:
-          type: string
-          nullable: true
-          example: null
 
     #WWW-Authenticate: Bearer realm="example",
     #                       error="invalid_token",

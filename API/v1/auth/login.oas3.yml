@@ -99,6 +99,6 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/components.oas3.yml#/components/schemas/Nack"
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Password Invalid"
