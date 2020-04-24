@@ -43,9 +43,6 @@ paths:
       description: |-
         Generates a list of streaming services currently supported by the system.
 
-      externalDocs:
-        url: "./API/flows/StreamingServiceList-Flow.html"
-        description: Streaming Service List message flow diagram.
       security:
         - clientToken: []
 

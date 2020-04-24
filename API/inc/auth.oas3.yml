@@ -88,3 +88,4 @@ components:
             The Epoch Time, at which the token will completely expire and may
             not be used for renewal.  After this time the user must
             re-authenticate to get a new bearer token.
+      additionalProperties: false

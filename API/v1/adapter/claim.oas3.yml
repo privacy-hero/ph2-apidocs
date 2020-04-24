@@ -50,9 +50,6 @@ paths:
         adapter will be unassociated from the clients account and the newly
         claimed adapter will replace it in its entirety.
 
-      externalDocs:
-        url: "./API/flows/AdapterAccountAssociation-Flow.html"
-        description: Adapter/Account Association message flow diagram.
       security:
         - clientToken: []
 

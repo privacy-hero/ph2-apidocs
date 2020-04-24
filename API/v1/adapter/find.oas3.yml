@@ -49,9 +49,6 @@ paths:
         connection.  Or if that does not work, an adapter with a specific
         activation code.
 
-      externalDocs:
-        url: "./API/flows/AdapterAccountAssociation-Flow.html"
-        description: Adapter/Account Association message flow diagram.
       security:
         - clientToken: []
       parameters:
@@ -61,6 +58,7 @@ paths:
             allOf:
               - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
               - nullable: true
+            additionalProperties: false
           description: |-
             If not set, the function will look for all unassociated adapters
             that share the internet connection of the client making the call.
@@ -89,6 +87,13 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Some Error."
+        "401":
+          description: |-
+            Unauthorized access rejected.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
 
         "403":
           description: |-
@@ -97,10 +102,28 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
-
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
         "500":
           description: |-
             An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_InternalError"
+        "default":
+          description: |-
+            Unexpected Error
           content:
             application/json:
               schema:

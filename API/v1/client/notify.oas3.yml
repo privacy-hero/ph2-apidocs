@@ -1,0 +1,130 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /client/notify"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Set the notification settings for a particular client.
+
+    `/client/notify`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /client/notify:
+    post:
+      operationId: clientNotify
+      tags:
+        - Client Management
+      summary: Subscribe/Unsubscribe to notifications.
+      description: |-
+        Allows the client to subscribe/unsubscribe from push notifications.
+      security:
+        - clientToken: []
+
+      parameters:
+        - in: query
+          name: token
+          required: true
+          schema:
+            type: string
+            minLength: 8
+            maxLength: 256  # TODO: Find out the true range of token sizes.
+            nullable: true
+          example: "124FDSDGSDFG23452345FGsrfgsdf235" # TODO: A proper example
+          description: |-
+            The clients notification token for their service.  Also known as the
+            "Registration Id".  **null** will disable all notifications.
+
+        - in: query
+          name: service
+          required: true
+          schema:
+            type: string
+            format: Notification
+            enum:
+              - "FIREBASE"
+              - "APNS-IOS"
+              - "APNS-WEB"
+          example: "FIREBASE"
+          description: |-
+            The service the client token relates to.
+            **"FIREBASE"** is used for Android and non-safari web push
+            notifications.
+            **"APNS-IOS"** is used for IOS Apps.
+            **"APNS-WEB"** is used for Safari Web Push notifications.
+
+      requestBody:
+        required: false
+        description: "The Backend services to be notified for."
+        content:
+          application/json:
+            schema:
+              type: array
+              description: |-
+                A list of notifications to DISABLE.  If a notification is NOT
+                listed in the request, it is assumed to be enabled.
+              items:
+                type: string
+                enum:
+                  - "New Device"
+                  - "VPN Disconnect"
+                  - "VPN Reconnect"
+                  - "Billing"
+                  - "Adapter Offline"
+                  - "Data Cap"
+              example: ["VPN Disconnect", "Data Cap"]
+
+      responses:
+        "200":
+          description: |-
+            Success, Notification set.
+
+        "400":
+          description: |-
+            General Request processing error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Could not name the adapter!"
+
+        "403":
+          description: |-
+            Invalid Client Token, could not authorize api access.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
+
+        "500":
+          description: |-
+            An Internal server error occurred.  Operation failed.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_InternalError"

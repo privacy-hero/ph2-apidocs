@@ -207,6 +207,7 @@ components:
 
     streams:
       type: array
+      maxItems: 1000
       description: List of streaming services
       items:
         type: object
@@ -249,10 +250,12 @@ components:
               proxy:
                 type: array
                 description: List of countries which can be proxied.
+                maxItems: 256
                 items:
                   $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
               non-proxy:
                 type: array
+                maxItems: 256
                 description: List of countries which can not be proxied.
                 items:
                   $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
@@ -300,6 +303,7 @@ components:
 
     Adapter-Unassociated-Array:
       type: array
+      maxItems: 10
       items:
         $ref: "#/components/schemas/Adapter-Unassociated"
 
@@ -364,9 +368,6 @@ components:
 
     Adapter:
       type: object
-      required:
-        - mac
-        - desc
       allOf:
         - type: object
           required:
@@ -504,6 +505,7 @@ components:
 
     Adapters:
       type: array
+      maxItems: 10
       description: An Array of Adapter Records.
       items:
         $ref: "#/components/schemas/Adapter"

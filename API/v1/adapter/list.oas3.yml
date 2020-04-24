@@ -43,9 +43,6 @@ paths:
       description: |-
         Generates a list of adapters associated with the clients account.
 
-      externalDocs:
-        url: "./API/flows/AdapterList-Flow.html"
-        description: Adapter List message flow diagram.
       security:
         - clientToken: []
 

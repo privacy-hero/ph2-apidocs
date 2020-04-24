@@ -43,9 +43,6 @@ paths:
       description: |-
         Sets the Wifi settings for the 2.4Ghz and 5Ghz Network.
         Any setting excluded or set to **null** will not be changed.
-      externalDocs:
-        url: "./API/flows/AdapterAccountAssociation-Flow.html"
-        description: Adapter/Account Association message flow diagram.
       security:
         - clientToken: []
 
@@ -65,7 +62,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../../inc/adapter.oas3.yml#/components/schemas/wlan-settings"
+              $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings"
 
       responses:
         "200":

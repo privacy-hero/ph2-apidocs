@@ -95,9 +95,6 @@ paths:
       summary: Change the Adapter Configuration.
       description: |-
         Change the Adapter Configuration.
-      externalDocs:
-        url: "./API/flows/AdapterAccountAssociation-Flow.html"
-        description: Adapter/Account Association message flow diagram.
       security:
         - clientToken: []
 

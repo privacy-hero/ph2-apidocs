@@ -42,9 +42,6 @@ paths:
       summary: Give an adapter a descriptive name.
       description: |-
         Provides a descriptive name to an adapter that helps identify it.
-      externalDocs:
-        url: "./API/flows/AdapterAccountAssociation-Flow.html"
-        description: Adapter/Account Association message flow diagram.
       security:
         - clientToken: []
 

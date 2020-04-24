@@ -46,9 +46,7 @@ paths:
           required: true
           name: callbackpath
           schema:
-            type: string
-            format: path
-            example: callback
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url-http-s"
           description: Any path required by the application callback.
             The base URL and callback path are derived from the `callback`
             parameter from the `newcustomer` API Call.
@@ -59,13 +57,15 @@ paths:
           schema:
             type: string
             format: token
+            pattern: "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$"
+            maxLength: 1000
+            example: "abcdefghijklmnopqrstuzwxyz12345.67890ABCDEFGHIJKMLNOPQRSTUVWXYZ"
           description: The New Customer confirmation token.
         - in: query
           name: exp
           required: true
           schema:
-            type: integer
-            format: unix-time
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
           description:
             The Time, being the Epoch Time, after which the verification token
             will become invalid.
@@ -87,6 +87,36 @@ paths:
         "200":
           description: |-
             The message was accepted.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+
         "400":
           description: |-
             The token expired before the link was used.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+        "415":
+          description: |-
+            Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+        "429":
+          description: |-
+            Too Many Requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+        "default":
+          description: |-
+            Error Response
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
