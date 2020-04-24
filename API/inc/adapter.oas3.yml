@@ -71,6 +71,8 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         The current known value of the state, and the time that it changed.
+      additionalProperties: false
+
 
     speed-diag:
       type: object
@@ -83,11 +85,14 @@ components:
         speed:
           type: integer
           format: int32
+          minimum: 0
+          maximum: 0x7fffffff
           nullable: true
           description: |-
             **+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running.
         when:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+      additionalProperties: false
 
     wan-vpn-speed-diag:
       type: object
@@ -100,6 +105,7 @@ components:
           $ref: "#/components/schemas/speed-diag"
         vpn:
           $ref: "#/components/schemas/speed-diag"
+      additionalProperties: false
 
     latency-diag:
       type: object
@@ -111,19 +117,22 @@ components:
       properties:
         latency:
           type: integer
-          format: uint32
+          format: uint16
           nullable: true
+          maximum: 2000
           description: |-
             **+VE** = millisecond latency result. **NULL** = Unknown.
         average:
           type: integer
           format: uint32
           nullable: true
+          maximum: 2000
           description: |-
             **+VE** = millisecond latency result. **NULL** = Unknown.
 
         when:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+      additionalProperties: false
 
     wan-vpn-latency-diag:
       type: object
@@ -136,6 +145,7 @@ components:
           $ref: "#/components/schemas/latency-diag"
         vpn:
           $ref: "#/components/schemas/latency-diag"
+      additionalProperties: false
 
     datacap:
       type: object
@@ -192,6 +202,7 @@ components:
           description: |-
             The WPA-PSK passphrase to secure the network. **null**=Open Wifi
             Network
+      additionalProperties: false
 
     stream-setting:
       type: object
@@ -204,6 +215,7 @@ components:
             If the stream relocation is enabled for this service or not.
         country:
           $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
+      additionalProperties: false
 
     streams:
       type: array
@@ -269,6 +281,7 @@ components:
                 $ref: "#/components/schemas/stream-setting"
               pending:
                 $ref: "#/components/schemas/stream-setting"
+      additionalProperties: false
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -287,6 +300,7 @@ components:
           description: |-
             A description of the hardware of the adapter/router.
           example: "Privacy Hero 2 - Router V1"
+      additionalProperties: false
 
     Adapter-Unassociated:
       allOf:
@@ -299,6 +313,7 @@ components:
               $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         * since - The time this adapter last came online.
+      additionalProperties: false
 
 
     Adapter-Unassociated-Array:

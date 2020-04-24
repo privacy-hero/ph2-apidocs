@@ -86,7 +86,7 @@ paths:
                     "portable": true,
                     "countries": {
                       "proxy": [
-                        "US", "UK", "AU", "TH"
+                        "US", "GB", "AU", "TH"
                       ],
                       "non-proxy": [
                         "IL","ID"
@@ -98,7 +98,7 @@ paths:
                         "country": "US"
                       },
                       "pending": {
-                        "country": "UK"
+                        "country": "GB"
                       }
                     }
                   },
@@ -109,7 +109,7 @@ paths:
                     "portable": false,
                     "countries": {
                       "proxy": [
-                        "US", "UK", "IL",
+                        "US", "GB", "IL",
                       ],
                       "non-proxy": [
                         "TH","ID"
@@ -118,7 +118,7 @@ paths:
                     "settings": {
                       "current": {
                         "enabled": true,
-                        "country": "UK"
+                        "country": "GB"
                       },
                       "pending": {
                         "enabled": false

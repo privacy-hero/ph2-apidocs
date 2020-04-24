@@ -84,6 +84,7 @@ paths:
           application/json:
             schema:
               type: array
+              maxItems: 6
               description: |-
                 A list of notifications to DISABLE.  If a notification is NOT
                 listed in the request, it is assumed to be enabled.

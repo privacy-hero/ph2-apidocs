@@ -76,7 +76,7 @@ paths:
           name: country
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iso3166-country"
-          example: "UK"
+          example: "GB"
           description: |-
             Optional: If set, can change the country the service is relocated
             to. If not set, the country is not changed.  Must be one of the
@@ -88,7 +88,8 @@ paths:
             Success, Streaming Service Configuration Queued.
           content:
             application/json:
-              schema: {}
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
 
         "400":
           description: |-
@@ -100,6 +101,16 @@ paths:
               example:
                 error: "Could not query the adapter!"
 
+        "401":
+          description: |-
+            Authorization error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Not Authorized!"
+
         "403":
           description: |-
             Invalid Client Token, could not authorize api access.
@@ -108,6 +119,22 @@ paths:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
 
+        "415":
+          description: |-
+            Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+
+        "429":
+          description: |-
+            Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+
         "500":
           description: |-
             An Internal server error occurred.  Operation failed.
@@ -115,4 +142,12 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/GW_InternalError"
+
+        "default":
+          description: |-
+            default response
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
 
