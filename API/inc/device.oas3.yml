@@ -28,22 +28,10 @@ paths:
               application/json:
                 schema:
                   oneOf:
-                    - $ref: "#/components/schemas/streams"
-                    - $ref: "#/components/schemas/Adapter-Base"
-                    - $ref: "#/components/schemas/Adapter-Unassociated"
-                    - $ref: "#/components/schemas/Adapter-Unassociated-Array"
-                    - $ref: "#/components/schemas/Adapter-Settings"
-                    - $ref: "#/components/schemas/Adapter"
-
-                    - $ref: "#/components/schemas/Adapters"
                     - $ref: "#/components/schemas/Device"
                     - $ref: "#/components/schemas/Devices"
                     - $ref: "#/components/schemas/AdapterDevices"
                     - $ref: "#/components/schemas/AdaptersDevices"
-                    - $ref: "#/components/schemas/Profile"
-                    - $ref: "#/components/schemas/Profiles"
-                    - $ref: "#/components/schemas/ProfileDevices"
-                    - $ref: "#/components/schemas/ProfilesDevices"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -123,32 +111,4 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/AdapterDevices"
-
-    Profile:
-      description: A device setting profile
-      type: object
-      properties:
-        name:
-          type: string
-          description: The name given to the profile.
-
-    Profiles:
-      description: An array of known profiles
-      type: array
-      items:
-        $ref: "#/components/schemas/Profile"
-
-    ProfileDevices:
-      description: |-
-        A profiles, and the devices associated with it.
-      allOf:
-        - $ref: "#/components/schemas/Profile"
-        - $ref: "#/components/schemas/Devices"
-
-    ProfilesDevices:
-      description: |-
-        All profiles, and all devices in those profiles.
-      type: array
-      items:
-        $ref: "#/components/schemas/ProfileDevices"
 
