@@ -28,14 +28,6 @@ paths:
               application/json:
                 schema:
                   oneOf:
-                    - $ref: "#/components/schemas/streams"
-                    - $ref: "#/components/schemas/Adapter-Base"
-                    - $ref: "#/components/schemas/Adapter-Unassociated"
-                    - $ref: "#/components/schemas/Adapter-Unassociated-Array"
-                    - $ref: "#/components/schemas/Adapter-Settings"
-                    - $ref: "#/components/schemas/Adapter"
-
-                    - $ref: "#/components/schemas/Adapters"
                     - $ref: "#/components/schemas/Device"
                     - $ref: "#/components/schemas/Devices"
                     - $ref: "#/components/schemas/AdapterDevices"
