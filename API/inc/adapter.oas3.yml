@@ -106,14 +106,22 @@ components:
       description: latency diagnostic result
       required:
         - latency
+        - average
         - when
       properties:
         latency:
           type: integer
-          format: int32
+          format: uint32
           nullable: true
           description: |-
-            **+VE** = millisecond latency result. **NULL** = Unknown. **-VE** = Test running.
+            **+VE** = millisecond latency result. **NULL** = Unknown.
+        average:
+          type: integer
+          format: uint32
+          nullable: true
+          description: |-
+            **+VE** = millisecond latency result. **NULL** = Unknown.
+
         when:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
@@ -155,13 +163,13 @@ components:
       type: object
       description: Settings for an individual wifi network
       required:
-        - active
+        - enabled
         - ssid
         - key
       properties:
-        active:
+        enabled:
           type: boolean
-          description: is the wifi network active.
+          description: is the wifi network enabled.
           default: true
         ssid:
           type: string
@@ -184,15 +192,6 @@ components:
           description: |-
             The WPA-PSK passphrase to secure the network. **null**=Open Wifi
             Network
-
-    wlan-settings:
-      type: object
-      description: Settings for the Wireless Lan
-      properties:
-        2.4ghz:
-          $ref: "#/components/schemas/wifi-settings"
-        5ghz:
-          $ref: "#/components/schemas/wifi-settings"
 
     stream-setting:
       type: object
@@ -317,7 +316,7 @@ components:
               description: The current settings.
               properties:
                 wifi:
-                  $ref: "#/components/schemas/wlan-settings"
+                  $ref: "#/components/schemas/wifi-settings"
                 data-cap:
                   $ref: "#/components/schemas/datacap"
                 vpn:
@@ -342,7 +341,7 @@ components:
                 The settings we are attempting to set on the adapter.
               properties:
                 wifi:
-                  $ref: "#/components/schemas/wlan-settings"
+                  $ref: "#/components/schemas/wifi-settings"
                 data-cap:
                   $ref: "#/components/schemas/datacap"
                 vpn:
