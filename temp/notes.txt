@@ -244,3 +244,43 @@ Proposed:
         Ad Blocking Bypass (Permanent/Timed)
         Device Protection Bypass (Permanent/Timed)
 ```
+
+
+Push Notifications, using AWS SNS (Simple Notification Service)
+Need:
+1.1 API Key for Firebase (Android and Web Messaging) (Google)
+         Note: It looks like firebase can be used for Web (except safari) and Android
+1.2 API Certificate for  IOS Push Certificate (Apple APNS) (IOS Apps)
+1.3 API Certificate for Mac Push Certificate (Apple APNS) (Safari Web)
+
+
+Upon subscription to notifications:
+    App/Webpage sends "device token" and "api-type" (Firebase/IOS/Mac) to backend.
+
+    IF no-platform ARN, creater platform ARN using stored credentials. Store ARN for
+        later use.
+
+    Store Device-token and API Type with client record.
+    (We may need to store multiple, in case client uses multiple devices?)
+
+    call get endpoint attributes on the platform endpoint ARN
+
+    if (while getting the attributes a not-found exception is thrown)
+        # the platform endpoint was deleted
+        call create platform endpoint with the latest device token
+        store the returned platform endpoint ARN
+    else
+        if (the device token in the endpoint does not match the latest one) or
+            (get endpoint attributes shows the endpoint as disabled)
+            call set endpoint attributes to set the latest device token and then enable the platform endpoint
+        endif
+    endif
+
+    After this we have a global Notification ARN for a service.
+    A Client Device-token and api type selection
+    The endpoint ARN
+
+    see: https://docs.aws.amazon.com/sns/latest/dg/mobile-platform-endpoint.html
+
+
+
