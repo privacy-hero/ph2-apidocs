@@ -257,7 +257,7 @@ Need:
 Upon subscription to notifications:
     App/Webpage sends "device token" and "api-type" (Firebase/IOS/Mac) to backend.
 
-    IF no-platform ARN, creater platform ARN using stored credentials. Store ARN for
+    IF no-platform ARN, create platform ARN using stored credentials. Store ARN for
         later use.
 
     Store Device-token and API Type with client record.
