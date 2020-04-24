@@ -119,6 +119,7 @@ components:
           type: integer
           format: uint16
           nullable: true
+          minimum: 1
           maximum: 2000
           description: |-
             **+VE** = millisecond latency result. **NULL** = Unknown.
@@ -126,6 +127,7 @@ components:
           type: integer
           format: uint32
           nullable: true
+          minimum: 1
           maximum: 2000
           description: |-
             **+VE** = millisecond latency result. **NULL** = Unknown.
@@ -154,12 +156,16 @@ components:
         tx:
           type: integer
           format: uint64
+          minimum: 0
+          maximum: 9999999999999
           nullable: true
           description: |-
             Transmit Data Cap in Bytes per month. **null** = no tx data cap
         rx:
           type: integer
           format: uint64
+          minimum: 0
+          maximum: 9999999999999
           nullable: true
           description: |-
             Receive Data Cap in Bytes per month. **null** = no rx data cap
@@ -168,6 +174,7 @@ components:
           default: false
           description: |-
             IF **true** then the tx data cap is the combined tx+rx data cap.
+      additionalProperties: false
 
     wifi-settings:
       type: object
@@ -221,6 +228,7 @@ components:
       type: array
       maxItems: 1000
       description: List of streaming services
+      additionalProperties: false
       items:
         type: object
         description: Streaming Services
@@ -229,6 +237,7 @@ components:
           - name
           - countries
           - portable
+        additionalProperties: false
         properties:
           id:
             $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
@@ -237,6 +246,7 @@ components:
             type: string
             minLength: 1
             maxLength: 64
+            pattern: "^[\\S ]+$"
             description: |-
               Name of the streaming service
             example: "Netflix"
@@ -258,6 +268,7 @@ components:
               **non-proxy** are countries where the streaming service is
               available but for which no proxy exists.  These can only be
               used if the Adapter is located in that country.
+            additionalProperties: false
             properties:
               proxy:
                 type: array
@@ -276,12 +287,12 @@ components:
             description: Settings for the service
             required:
               - current
+            additionalProperties: false
             properties:
               current:
                 $ref: "#/components/schemas/stream-setting"
               pending:
                 $ref: "#/components/schemas/stream-setting"
-      additionalProperties: false
 
     # All Adapter records have these basic properties.
     Adapter-Base:
@@ -290,6 +301,7 @@ components:
         - mac
         - type
         - desc
+      additionalProperties: false
       properties:
         mac:
           $ref: "./simpletypes.oas3.yml#/components/schemas/mac"
@@ -297,23 +309,27 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/adapter-type"
         desc:
           type: string
+          minLength: 1
+          maxLength: 64
+          pattern: "^[\\S ]+$"
           description: |-
             A description of the hardware of the adapter/router.
           example: "Privacy Hero 2 - Router V1"
-      additionalProperties: false
+
 
     Adapter-Unassociated:
+      additionalProperties: false
       allOf:
         - $ref: "#/components/schemas/Adapter-Base"
         - type: object
           required:
             - since
+          additionalProperties: false
           properties:
             since:
               $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         * since - The time this adapter last came online.
-      additionalProperties: false
 
 
     Adapter-Unassociated-Array:
@@ -324,15 +340,18 @@ components:
 
     Adapter-Settings:
       type: object
+      additionalProperties: false
       properties:
 
         settings:
           type: object
           description: The settings of the Adapter/Router.
+          additionalProperties: false
           properties:
             current:
               type: object
               description: The current settings.
+              additionalProperties: false
               properties:
                 wifi:
                   $ref: "#/components/schemas/wifi-settings"
@@ -358,6 +377,7 @@ components:
               type: object
               description: |-
                 The settings we are attempting to set on the adapter.
+              additionalProperties: false
               properties:
                 wifi:
                   $ref: "#/components/schemas/wifi-settings"
@@ -387,6 +407,7 @@ components:
         - type: object
           required:
             - AdapterID
+          additionalProperties: false
           properties:
             AdapterID:
               $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
@@ -400,11 +421,15 @@ components:
             - ip
             - registered
             - state
+          additionalProperties: false
           properties:
             name:
               type: string
               nullable: true
               default: null
+              minLength: 0
+              maxLength: 64
+              pattern: "^[\\S ]+$"
               example: "Home Office Router"
               description: |-
                 The Name assigned to the Adapter/Router by the Client.
@@ -412,6 +437,8 @@ components:
               $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
             timezone:
               type: integer
+              minimum: -720
+              maximum: 720
               description: Local Timezone, number of minutes offset from UTC
               example: -300
 
@@ -423,12 +450,14 @@ components:
                 - vpn
               description: |-
                 The current or last known IP addresses of the adapter/router.
+              additionalProperties: false
               properties:
                 lan:
                   type: object
                   required:
                     - ip4
                   description: The Local network IP addresses.
+                  additionalProperties: false
                   properties:
                     ip4:
                       $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
@@ -439,6 +468,7 @@ components:
                   required:
                     - ip4
                   description: The ISP Native IP addresses.
+                  additionalProperties: false
                   properties:
                     ip4:
                       $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
@@ -449,6 +479,7 @@ components:
                   required:
                     - ip4
                   description: The VPN endpoint IP addresses.
+                  additionalProperties: false
                   properties:
                     ip4:
                       $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
@@ -467,6 +498,7 @@ components:
                 - ad-blocking
                 - stream-relocation
                 - malware-phising
+              additionalProperties: false
               properties:
                 online:
                   $ref: "#/components/schemas/state"
@@ -482,18 +514,22 @@ components:
         - $ref: "#/components/schemas/Adapter-Settings"
 
         - type: object
+          additionalProperties: false
           properties:
             diags:
               type: object
               description: Results from the last and best diagnostic tests
+              additionalProperties: false
               properties:
                 speed_test:
                   type: object
                   description: Network Speed test results
+                  additionalProperties: false
                   properties:
                     tx:
                       type: object
                       description: Transmit Speed Diagnostics
+                      additionalProperties: false
                       properties:
                         last:
                           $ref: "#/components/schemas/wan-vpn-speed-diag"
@@ -503,6 +539,7 @@ components:
                     rx:
                       type: object
                       description: Receive Speed Diagnostics
+                      additionalProperties: false
                       properties:
                         last:
                           $ref: "#/components/schemas/wan-vpn-speed-diag"
@@ -512,6 +549,7 @@ components:
                 ping_test:
                   type: object
                   description: ping test latency results
+                  additionalProperties: false
                   properties:
                     last:
                       $ref: "#/components/schemas/wan-vpn-latency-diag"
