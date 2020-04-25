@@ -92,16 +92,7 @@ paths:
                 error: "Invalid Password."
 
         "401":
-          description: |-
-            The Clients Bearer Token is invalid or not recognized.
-          headers:
-            WWW-Authenticate:
-              schema:
-                type: string
-                example: Bearer realm=privacyhero2.api.com
-                description: |-
-                  indicates the authentication scheme(s) and parameters
-                  applicable to the target resource.
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
 
         "403":
           description: |-

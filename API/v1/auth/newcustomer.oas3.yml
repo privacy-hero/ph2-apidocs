@@ -122,14 +122,7 @@ paths:
               example:
                 error: "Internal Server Error."
         "401":
-          description: |-
-            The APP Key is invalid or not recognized.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-              example:
-                error: "Invalid App Key."
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
 
         "403":
           description: |-
