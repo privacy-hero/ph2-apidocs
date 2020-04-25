@@ -284,3 +284,21 @@ Upon subscription to notifications:
 
 
 
+Timezone:
+    Make a common timezone record.
+    Timezone name is a string from the linux tzdata set ie "America/Chicago"
+        AKA IANA Timezone Name
+        Android uses these id's:
+            TimeZone tz = TimeZone.getTimeZone("America/Los_Angeles");
+        Browser javascript:
+            Intl.DateTimeFormat().resolvedOptions().timeZone
+        IOS:
+            NSTimeZone *timeZone = [NSTimeZone localTimeZone];
+            NSString *tzName = [timeZone name];
+    We supply tzdata to the adapter as:
+    GMT Offset, minutes.
+        Optional Daylight Saving Rule
+            Previous Transition DateTime stamp
+            Previous Transition Localtime Offset
+            Next Transition DateTime stamp
+            Next Transition Localtime Offset.
