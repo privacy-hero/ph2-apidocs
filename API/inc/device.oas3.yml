@@ -58,6 +58,7 @@ components:
         - mac
         - name
         - type
+      additionalProperties: false
       properties:
         mac:
           type: string

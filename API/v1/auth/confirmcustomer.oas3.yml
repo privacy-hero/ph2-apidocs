@@ -50,6 +50,7 @@ paths:
               type: object
               required:
                 - verify
+              additionalProperties: false
               properties:
                 verify:
                   type: string
@@ -59,7 +60,6 @@ paths:
                     The token from the callback which invoked this API call.
                 password:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
-              additionalProperties: false
       security:
         - appKey: []
 

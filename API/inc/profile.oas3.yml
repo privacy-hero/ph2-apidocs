@@ -55,6 +55,7 @@ components:
     Profile:
       description: A device setting profile
       type: object
+      additionalProperties: false
       properties:
         name:
           type: string

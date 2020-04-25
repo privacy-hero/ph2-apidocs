@@ -51,6 +51,7 @@ paths:
               required:
                 - old
                 - new
+              additionalProperties: false
               properties:
                 old:
                   type: string

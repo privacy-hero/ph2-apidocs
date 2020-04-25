@@ -62,9 +62,11 @@ paths:
             application/json:
               schema:
                 type: object
+                additionalProperties: false
                 properties:
                   current:
                     type: object
+                    additionalProperties: false
                     properties:
                       last:
                         $ref: "../../inc/adapter.oas3.yml#/components/schemas/wan-vpn-speed-diag"
@@ -72,6 +74,7 @@ paths:
                         $ref: "../../inc/adapter.oas3.yml#/components/schemas/wan-vpn-speed-diag"
                   pending:
                     type: object
+                    additionalProperties: false
                     properties:
                       wan:
                         $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"

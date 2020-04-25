@@ -54,6 +54,7 @@ paths:
               required:
                 - email
                 - callback
+              additionalProperties: false
               properties:
                 email:
                   type: string

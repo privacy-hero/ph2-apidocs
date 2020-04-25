@@ -61,6 +61,7 @@ components:
       type: object
       required:
         - msg
+      additionalProperties: false
       properties:
         msg:
           type: string
@@ -70,6 +71,7 @@ components:
       type: object
       required:
         - error
+      additionalProperties: false
       properties:
         error:
           type: string
@@ -79,6 +81,7 @@ components:
       type: object
       required:
         - message
+      additionalProperties: false
       properties:
         message:
           type: string
@@ -88,6 +91,7 @@ components:
       type: object
       required:
         - message
+      additionalProperties: false
       properties:
         message:
           type: string

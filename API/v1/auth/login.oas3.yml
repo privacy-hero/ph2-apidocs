@@ -51,6 +51,7 @@ paths:
               required:
                 - id
                 - pwd
+              additionalProperties: false
               properties:
                 id:
                   type: string

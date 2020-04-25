@@ -51,6 +51,7 @@ paths:
                     - $ref: "#/components/schemas/epoch-timestamp"
                     - $ref: "#/components/schemas/iso3166-country"
                     - $ref: "#/components/schemas/iana-timezone"
+                    - $ref: "#/components/schemas/ph2-bearer-token"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -257,7 +258,19 @@ components:
     # Timezone as specified by the IANA TZ Database
     iana-timezone:
       type: string
+      format: IANA Timezone
+      description: IANA Timezone name.
       minLength: 3
       maxLength: 44
-      pattern: ^([A-Za-z-_]){1,14}\\/([A-Za-z-_]){1,14}(\\/([A-Za-z-_]){1,14})?$
+      pattern: ^([A-Za-z-_]){1,14}\/([A-Za-z-_]){1,14}(\/([A-Za-z-_]){1,14})?$
       default: "Etc/UTC"
+      example: "America/Chicago"
+
+    ph2-bearer-token:
+      type: string
+      format: JWT
+      description: Privacy Hero 2 API Bearer Token (Based on JWT)
+      minLength: 64
+      maxLength: 1024 # TODO: Calculate true minimum and maximum length
+      pattern: "^([A-Za-z0-9-_])+\\.([A-Za-z0-9-_])+(\\.[A-Za-z0-9-_]+)?$"
+      example: "AeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjJ9AB"
