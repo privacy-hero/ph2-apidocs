@@ -50,6 +50,7 @@ paths:
                     - $ref: "#/components/schemas/adapter-type"
                     - $ref: "#/components/schemas/epoch-timestamp"
                     - $ref: "#/components/schemas/iso3166-country"
+                    - $ref: "#/components/schemas/iana-timezone"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -252,3 +253,11 @@ components:
         "AE","GB","US","UM","UY","UZ","VU","VE","VN","VG","VI","WF","EH","YE","ZM","ZW"]
       description: |-
         an ISO3166 country code
+
+    # Timezone as specified by the IANA TZ Database
+    iana-timezone:
+      type: string
+      minLength: 3
+      maxLength: 44
+      pattern: ^([A-Za-z-_]){1,14}\\/([A-Za-z-_]){1,14}(\\/([A-Za-z-_]){1,14})?$
+      default: "Etc/UTC"
