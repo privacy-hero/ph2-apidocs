@@ -65,6 +65,11 @@ components:
       properties:
         msg:
           type: string
+          format: Text Message
+          nullable: true
+          minLength: 0
+          maxLength: 1024
+          pattern: "^([\\w\\W])*$"
           example: "OK."
 
     Nack:
@@ -75,6 +80,11 @@ components:
       properties:
         error:
           type: string
+          format: Text Message
+          nullable: true
+          minLength: 0
+          maxLength: 1024
+          pattern: "^([\\w\\W])*$"
           example: "Unauthorized"
 
     GW_NegAuth: # Negative Authorization from API Gateway
@@ -85,6 +95,11 @@ components:
       properties:
         message:
           type: string
+          format: Text Message
+          nullable: true
+          minLength: 0
+          maxLength: 1024
+          pattern: "^([\\w\\W])*$"
           example: "User is not authorized to access this resource"
 
     GW_InternalError: # Internal gateway Server Error
@@ -95,6 +110,10 @@ components:
       properties:
         message:
           type: string
+          format: Text Message
           nullable: true
+          minLength: 0
+          maxLength: 1024
+          pattern: "^([\\w\\W])*$"
           example: null
 

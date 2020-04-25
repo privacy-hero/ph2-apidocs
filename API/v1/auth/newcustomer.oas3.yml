@@ -138,6 +138,20 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
+        "415":
+          description: |-
+            Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
 
         "500":
           description: |-

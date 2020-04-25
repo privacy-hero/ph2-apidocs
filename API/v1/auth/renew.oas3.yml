@@ -73,3 +73,16 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "API Token has expired."
+
+        "404":
+          description: Not found
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"

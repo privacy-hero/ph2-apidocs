@@ -103,6 +103,18 @@ paths:
               example:
                 error: "Could not claim the adapter!"
 
+        "401":
+          description: |-
+            The Clients Bearer Token is invalid or not recognized.
+          headers:
+            WWW-Authenticate:
+              schema:
+                type: string
+                example: Bearer realm=privacyhero2.api.com
+                description: |-
+                  indicates the authentication scheme(s) and parameters
+                  applicable to the target resource.
+
         "403":
           description: |-
             Invalid Client Token, could not authorize api access.
@@ -110,6 +122,20 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
+        "415":
+          description: |-
+            Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
 
         "500":
           description: |-

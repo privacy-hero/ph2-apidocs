@@ -112,3 +112,17 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Application Token Invalid."
+        "415":
+          description: |-
+            Unsupported Media Type
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+
+        "429":
+          description: Too many requests
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
