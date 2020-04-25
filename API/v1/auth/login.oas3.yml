@@ -42,6 +42,15 @@ paths:
         and returning a Bearer token for API access.
 
         Must have a valid appToken for the request to be processed.
+
+        **id**: The clients ID,  different clients will present different ID.
+          - Customer: Their email address
+          - Admin: Their email address
+          - Admin as Customer: \<admin email\>:\<customer email\>
+          - Router: MAC Address
+        **pwd**: The shared secret used to identify the client.  Typically this
+        is a password.  It is sent unencrypted/unhashed because the link is
+        protected from eaves dropping with https.
       requestBody:
         required: true
         content:
@@ -54,23 +63,12 @@ paths:
               additionalProperties: false
               properties:
                 id:
-                  type: string
-                  example: someone@somewhere.com
-                  description: |-
-                    The clients ID,  different clients will present different
-                    ID.
-
-                    - Customer: Their email address
-                    - Admin: Their email address
-                    - Admin as Customer: \<admin email\>:\<customer email\>
-                    - Router: MAC Address
+                  oneOf:
+                    - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email-address"
+                    - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/admin-as-email-address"
+                    - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/mac"
                 pwd:
-                  type: string
-                  format: password
-                  description:
-                    The shared secret used to identify the client.  Typically
-                    this is a password.  It is sent unencrypted/unhashed because
-                    the link is protected from eaves dropping with https.
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
       security:
         - appKey: []
 

@@ -42,6 +42,8 @@ paths:
         provided by the email to the customer.
 
         Must have a valid appToken for the request to be processed.
+
+        **verify**: The token from the callback which invoked this API call.
       requestBody:
         required: true
         content:
@@ -53,11 +55,7 @@ paths:
               additionalProperties: false
               properties:
                 verify:
-                  type: string
-                  format: token
-                  example: jE1ODU4NDQxMjEsImp0aSI6InJhbmRvbS11bmlxdWUtc3RyaW5nIiwiaWF0IjoxNTg1ODQxMTIxLCJpc3MiOiJQcml2YWN5SGVybyIsInN1YiI6InN0ZXZlbiIsImlkdCI6IkMifQ.8AlZ8De6ldta_r7IS-hR_6Nr_u8fNGcwsoY9gz6M2sA
-                  description: |-
-                    The token from the callback which invoked this API call.
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/ph2-bearer-token"
                 password:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
       security:
