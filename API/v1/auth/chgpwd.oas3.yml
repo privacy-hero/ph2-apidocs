@@ -39,6 +39,9 @@ paths:
       summary: Change a Clients password.
       description: |-
         Causes the Clients password to be changed.
+
+        **old**: The old password of the Client.
+        **new**: The new password of the Client.
       security:
         - clientToken: []
 
@@ -54,15 +57,12 @@ paths:
               additionalProperties: false
               properties:
                 old:
-                  type: string
-                  format: password
-                  description: |-
-                    The old password of the Client.
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
                 new:
-                  type: string
-                  format: password
-                  description: |-
-                    The new password of the Client.
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
+              example:
+                old: "4n 0ld p455w0rd"
+                new: "my n3w p455w0rd"
 
       responses:
         "200":
