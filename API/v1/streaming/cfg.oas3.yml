@@ -100,47 +100,13 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Could not query the adapter!"
-
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
-
         "403":
-          description: |-
-            Invalid Client Token, could not authorize api access.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "415":
-          description: |-
-            Unsupported Media Type
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
-          description: |-
-            Too many requests
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
-          description: |-
-            An Internal server error occurred.  Operation failed.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_InternalError"
-
-        "default":
-          description: |-
-            default response
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"

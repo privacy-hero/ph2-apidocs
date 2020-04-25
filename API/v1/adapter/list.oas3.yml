@@ -76,31 +76,11 @@ paths:
                 error: "Could not find the adapter!"
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
-
         "403":
-          description: |-
-            Invalid Client Token, could not authorize api access.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_NegAuth"
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "404":
-          description: Not found
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
         "429":
-          description: Too many requests
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
-          description: |-
-            An Internal server error occurred.  Operation failed.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/GW_InternalError"
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"

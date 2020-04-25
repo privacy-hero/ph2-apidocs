@@ -100,23 +100,6 @@ paths:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
         "415":
-          description: |-
-            Unsupported Media Type
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
-          description: |-
-            Too Many Requests
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-        "default":
-          description: |-
-            Error Response
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"

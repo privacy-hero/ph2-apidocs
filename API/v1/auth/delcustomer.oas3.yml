@@ -90,30 +90,13 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Invalid Password."
-
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
-
         "403":
-          description: |-
-            The App Token is invalid.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-              example:
-                error: "Application Token Invalid."
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "415":
-          description: |-
-            Unsupported Media Type
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
-          description: Too many requests
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
