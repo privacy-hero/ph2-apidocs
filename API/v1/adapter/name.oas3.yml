@@ -59,8 +59,7 @@ paths:
           name: name
           required: true
           schema:
-            type: string
-            nullable: true
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/adapter-name"
           example: "Home Office Adapter"
           description: |-
             The name to apply to the adapter.
