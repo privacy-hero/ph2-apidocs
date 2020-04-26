@@ -48,9 +48,6 @@ paths:
         It will either find all adapters on the same local network as the client
         connection.  Or if that does not work, an adapter with a specific
         activation code.
-
-      security:
-        - clientToken: []
       parameters:
         - in: query
           required: false

@@ -31,6 +31,7 @@ paths:
                 schema:
                   oneOf:
                     - $ref: "#/components/schemas/streams"
+                    - $ref: "#/components/schemas/streams-settings"
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
                     - $ref: "#/components/schemas/Adapter-Unassociated-Array"
@@ -223,6 +224,34 @@ components:
         country:
           $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
 
+    stream-settings:
+      type: object
+      description: Streaming Services Settings
+      required:
+        - id
+      additionalProperties: false
+      properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        settings:
+          type: object
+          description: Settings for the service
+          required:
+            - current
+          additionalProperties: false
+          properties:
+            current:
+              $ref: "#/components/schemas/stream-setting"
+            pending:
+              $ref: "#/components/schemas/stream-setting"
+
+    streams-settings:
+      type: array
+      maxItems: 1000
+      description: Settings for streaming services on an Adapter.
+      items:
+        $ref: "#/components/schemas/stream-settings"
+
     streams:
       type: array
       maxItems: 1000
@@ -280,17 +309,6 @@ components:
                 description: List of countries which can not be proxied.
                 items:
                   $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
-          settings:
-            type: object
-            description: Settings for the service
-            required:
-              - current
-            additionalProperties: false
-            properties:
-              current:
-                $ref: "#/components/schemas/stream-setting"
-              pending:
-                $ref: "#/components/schemas/stream-setting"
 
     # All Adapter records have these basic properties.
     Adapter-Base:

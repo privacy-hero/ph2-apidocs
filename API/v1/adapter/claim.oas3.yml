@@ -50,9 +50,6 @@ paths:
         adapter will be unassociated from the clients account and the newly
         claimed adapter will replace it in its entirety.
 
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: mac

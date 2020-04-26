@@ -46,9 +46,6 @@ paths:
         Generates a list of all profiles associated with the clients account.
 
         **_EARLY DRAFT_**
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: profile

@@ -48,9 +48,6 @@ paths:
         ## Parameters
           - **old**: The old password of the Client.  Must be Valid.
           - **new**: The new password of the Client.
-      security:
-        - clientToken: []
-
       requestBody:
         required: true
         content:

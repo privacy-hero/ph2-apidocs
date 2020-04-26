@@ -41,11 +41,35 @@ paths:
         - Streaming Relocation Management
       summary: Lists streaming services, either ALL, or according to classification.
       description: |-
-        Generates a list of streaming services currently supported by the system.
+        # Usage
 
-      security:
-        - clientToken: []
+        Generates a list of streaming services currently supported by the
+        system. The List is used to choose the streaming services to be set by
+        the **/v1/streaming/cfg** api call.
 
+        The call may return all services, or only Portable or Non-Portable
+        services, as required.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **type**: The types of services to return, options are All,
+         Portable and non-portable.
+
+        A **Portable** Service is one where the one subscription may be used
+        in multiple countries.  A client may use relocation to view any
+        available stream where a proxy exists, or the stream from their current
+        location, even if no proxy exists for it.
+
+        A **Non-Portable** Service is region locked to the subscription.
+        For example, a US Non-Portable Service can only view US content, and
+        can not be relocated to view UK content.  For example, Relocation on these accounts
+        allows a client with a US account, to view that content while in the UK.
+        It will not allow a client with a US account to view content on the UK
+        version of the service.
       parameters:
         - in: query
           name: type
@@ -55,20 +79,12 @@ paths:
               - "All"
               - "Portable"
               - "Non-Portable"
-            nullable: true
+            default: "All"
           example: "All"
           description: |-
             The filter to apply to the service list, the list can contain ALL
             services, or only Portable or Non-Portable services.
-            If the parameter is missing, or is **null** the call will return ALL
-            services.
-
-            A **Portable** Service is one where the one subscription may be used
-            in multiple countries.
-
-            A **Non-Portable** Service is region locked to the subscription.
-            For example, a US Non-Portable Service can only view US content, and
-            can not be relocated to view UK content.
+            If the parameter is missing the call will return ALL services.
 
       responses:
         "200":

@@ -71,6 +71,9 @@ components:
         require it.
         - If it is included in any other message, that message **WILL** fail to authenticate.
 
+security:
+  - clientToken: []
+
 tags:
   - name: Account Management
     description: Operations related to Account Creation and Management

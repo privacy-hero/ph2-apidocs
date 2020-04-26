@@ -42,10 +42,6 @@ paths:
       summary: Lists one or all adapters associated with the clients account.
       description: |-
         Generates a list of adapters associated with the clients account.
-
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: id

@@ -64,10 +64,6 @@ paths:
             - **"APNS-IOS"** is used for IOS Apps.
             - **"APNS-WEB"** is used for Safari Web Push notifications.
           - **cancel**: Optional.  Set to True, to cancel notifications for the service.
-
-      security:
-        - clientToken: []
-
       requestBody:
         required: true
         content:

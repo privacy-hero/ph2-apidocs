@@ -35,15 +35,68 @@ tags:
 
 paths:
   /streaming/cfg:
-    post:
+    get:
       operationId: streamingCfgQuery
       tags:
         - Streaming Relocation Management
+      summary: Query the streaming cfg for an adapter.
+      description: |-
+        # Usage
+        For a particular Adapter, query its streaming configuration.  This call
+        will reflect the current applied configuration and any pending but
+        unconfirmed configuration changes.
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            The Adapter ID to query.
+
+      responses:
+        "200":
+          description: |-
+            Success, Streaming Service Configuration Queued.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/streams-settings"
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
+
+
+    post:
+      operationId: streamingCfgSet
+      tags:
+        - Streaming Relocation Management
       summary: Set the streaming cfg for an adapter.
-      description:
+      description: |-
+        # Usage
         For a particular Adapter, set its streaming configuration.
-      security:
-        - clientToken: []
       parameters:
         - in: query
           name: id
@@ -53,34 +106,26 @@ paths:
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
             The Adapter ID to set.
-        - in: query
-          name: streamId
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "29a16e31-bb4d-4407-8244-8e68b820b854"
-          description: |-
-            The ID of the service, as obtained from the /streaming/services api
-            call.
-        - in: query
-          name: enabled
-          schema:
-            type: boolean
-            nullable: true
-            example: null
-          description: |-
-            Optional: If set, can change if the relocation is enabled on the
-            adapter for the service, or not.  If not set or null, the service
-            enabled setting does not change.
-        - in: query
-          name: country
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iso3166-country"
-          example: "GB"
-          description: |-
-            Optional: If set, can change the country the service is relocated
-            to. If not set, the country is not changed.  Must be one of the
-            available countries listed in the /streaming/services api call.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+                - cfg
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                cfg:
+                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/stream-setting"
+              example:
+                id: "29a16e31-bb4d-4407-8244-8e68b820b854"
+                cfg:
+                  enabled: true
+                  country: "JP"
 
       responses:
         "200":
@@ -89,7 +134,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/stream-settings"
 
         "400":
           description: |-

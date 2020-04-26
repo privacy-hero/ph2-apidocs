@@ -42,9 +42,6 @@ paths:
       summary: Give an adapter a descriptive name.
       description: |-
         Provides a descriptive name to an adapter that helps identify it.
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: id

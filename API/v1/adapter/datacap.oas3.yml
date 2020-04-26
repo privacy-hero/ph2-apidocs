@@ -42,9 +42,6 @@ paths:
       summary: Set the datacap for a particular adapter.
       description: |-
         Sets the data caps for the identified adapter.
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: id

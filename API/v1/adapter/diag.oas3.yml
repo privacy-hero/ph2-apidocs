@@ -43,8 +43,6 @@ paths:
       description:
         For a particular Adapter, return the current and pending diagnostic
         result.
-      security:
-        - clientToken: []
       parameters:
         - in: query
           name: id
@@ -101,9 +99,6 @@ paths:
       summary: Change the Adapter Configuration.
       description: |-
         Change the Adapter Configuration.
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: id

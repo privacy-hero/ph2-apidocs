@@ -52,10 +52,6 @@ paths:
         ## Security Requirements
           - **appKey** **MUST NOT** be present in the call.
           - **clientToken** **MUST** be present and **NOT** expired.
-
-      security:
-        - clientToken: []
-
       responses:
         "200":
           description: |-

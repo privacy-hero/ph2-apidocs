@@ -18,9 +18,6 @@ info:
     url: http://www.example.com/support
     email: support@example.com
 
-security:
-  - clientToken: []
-
 paths:
   /silence-lint:
     get:

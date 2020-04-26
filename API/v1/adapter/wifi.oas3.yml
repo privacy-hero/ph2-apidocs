@@ -43,9 +43,6 @@ paths:
       description: |-
         Sets the Wifi settings for the 2.4Ghz and 5Ghz Network.
         Any setting excluded or set to **null** will not be changed.
-      security:
-        - clientToken: []
-
       parameters:
         - in: query
           name: id
