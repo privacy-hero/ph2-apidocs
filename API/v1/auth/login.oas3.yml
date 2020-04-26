@@ -46,6 +46,10 @@ paths:
 
         Must have a valid appKey for the request to be processed.
 
+        This API call is only made for applications that use a password for
+        authorization validation.  Other applications need to do account
+        recovery if the access token is lost or expired.
+
         **id**: The clients ID,  different clients will present different ID.
           - Customer: Their email address
           - Admin: Their email address
@@ -109,30 +113,12 @@ paths:
               schema:
                 $ref: "../../inc/auth.oas3.yml#/components/schemas/Authorized"
         "401":
-          $ref: "../../inc/response.oas3.yml#/components/responses/401"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/401-appKey"
         "403":
-          description: |-
-            The password or id is invalid.
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-              example:
-                error: "Password Invalid"
+          $ref: "../../inc/response.oas3.yml#/components/responses/403-appKey"
         "415":
-          description: |-
-            Unsupported Media Type
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
-          description: Too many requests
-          content:
-            application/json:
-              schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
         default:
           $ref: "../../inc/response.oas3.yml#/components/responses/default"
