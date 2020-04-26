@@ -339,12 +339,12 @@ components:
         - since
       additionalProperties: false
       properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         adapter:
           $ref: "#/components/schemas/Adapter-Base"
         since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-      description: |-
-        * since - The time this adapter last came online.
 
 
     Adapter-Unassociated-Array:

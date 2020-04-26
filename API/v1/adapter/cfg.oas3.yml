@@ -40,7 +40,8 @@ paths:
       tags:
         - Adapter Management
       summary: Query the state of configuration for an adapter.
-      description:
+      description: |-
+        # Usage
         For a particular Adapter, return the current and pending configuration.
       parameters:
         - in: query

@@ -41,6 +41,7 @@ paths:
         - Adapter Management
       summary: Find Unassociated adapters we can bind the client account to.
       description: |-
+        # Usage
         When an adapter is first installed, it is not linked to an account.
         The client must add the adapter to their account, this function will
         return a list of adapters which are available to be associated.
@@ -48,6 +49,22 @@ paths:
         It will either find all adapters on the same local network as the client
         connection.  Or if that does not work, an adapter with a specific
         activation code.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **code**: This is the optional activation code.  If not set, the
+            function will look for all unassociated adapters that share the
+            internet connection of the client making the call.
+
+            However, IF that fails, this can be set to a known activation code
+            which will cause any adapter with the matching activation code which
+            is not currently associated with an account to be returned.
+            Typically this would be a single Adapter.  If no adapters are found,
+            a "404" response will be generated.
+
       parameters:
         - in: query
           required: false
@@ -55,19 +72,20 @@ paths:
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
           description: |-
-            If not set, the function will look for all unassociated adapters
-            that share the internet connection of the client making the call.
-
-            However, IF that fails, this can be set to a known activation code
-            which will cause any adapter with the activation code which is not
-            currently associated with an account to be returned.  Typically
-            this would be a single Adapter.  If no adapters are found, a "200"
-            response will be generated, but the list of adapters will be empty.
+            The optional adapters activation code.
 
       responses:
         "200":
           description: |-
             The list of all unclaimed adapters.
+              - **id**: Unique ID for the adapter (used in other API calls to
+              reference this adapter.)
+              - **adapter**: Identifying information for the adapter.
+                - **mac**: Adapters hardware mac address
+                - **type**: The type of adapter hardware.
+                - **desc**: Long form description of the adapter hardware.
+              - **since**: This is the epoch time when the unassociated adapter
+              last connected with the backend.
           content:
             application/json:
               schema:
@@ -75,13 +93,16 @@ paths:
 
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Some Error."
+                error: "Internal Server Error."
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

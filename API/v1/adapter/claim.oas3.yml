@@ -41,6 +41,8 @@ paths:
         - Adapter Management
       summary: Claim the specified adapter for the clients account.
       description: |-
+        # Usage
+
         Claims the specified adapter and associates it with the clients account.
         The Claim can only succeed if the Adapter is not associated with an
         account.
@@ -50,25 +52,30 @@ paths:
         adapter will be unassociated from the clients account and the newly
         claimed adapter will replace it in its entirety.
 
-      parameters:
-        - in: query
-          name: mac
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/mac"
-          example: "00-00-5E-DF-98-EB"
-          description: |-
-            The mac address of the adapter to associate with the account.
-            Must not already be associated with another account.
-        - in: query
-          name: AdapterID
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            IF the adapter is replacing an existing adapter, include the
-            AdapterID of the Adapter to replace.  The AdapterID will not change
-            but the Adapter will replace the existing adapter known by that ID.
-            The old Adapter will then become unassociated from the client.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                oldid:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+            examples:
+              new:
+                value:
+                  id: "d6faadd3-d339-4910-89b4-570ec9f72cb7"
+                description: Claiming a new adapter.
+              replacement:
+                value:
+                  id: "d6faadd3-d339-4910-89b4-570ec9f72cb7"
+                  oldid: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                description: Replacing an existing adapter.
 
       responses:
         "200":

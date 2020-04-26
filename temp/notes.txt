@@ -354,21 +354,24 @@ API Call description format:
                 error: "Internal Server Error."
 
 
-                    "settings": {
-                      "current": {
-                        "enabled": true,
-                        "country": "US"
-                      },
-                      "pending": {
-                        "country": "GB"
-                      }
 
-                    "settings": {
-                      "current": {
-                        "enabled": true,
-                        "country": "GB"
-                      },
-                      "pending": {
-                        "enabled": false
-                      }
-                    }
+
+                parameters:
+        - in: query
+          name: ID
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+          example: "d6faadd3-d339-4910-89b4-570ec9f72cb7"
+          description: |-
+            The mac address of the adapter to associate with the account.
+            Must not already be associated with another account.
+        - in: query
+          name: oldID
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            IF the adapter is replacing an existing adapter, include the
+            AdapterID of the Adapter to replace.  The AdapterID will not change
+            but the Adapter will replace the existing adapter known by that ID.
+            The old Adapter will then become unassociated from the client.
