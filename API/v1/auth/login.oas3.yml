@@ -41,7 +41,7 @@ paths:
         Logs a client in to their account, by validating their credentials
         and returning a Bearer token for API access.
 
-        Must have a valid appToken for the request to be processed.
+        Must have a valid appKey for the request to be processed.
 
         **id**: The clients ID,  different clients will present different ID.
           - Customer: Their email address

@@ -30,7 +30,7 @@ paths:
               application/json:
                 schema:
                   oneOf:
-                    - $ref: "#/components/schemas/BadAppToken"
+                    - $ref: "#/components/schemas/BadAppKey"
                     - $ref: "#/components/schemas/Authorized"
 
 
@@ -57,7 +57,7 @@ components:
     #WWW-Authenticate: Bearer realm="example",
     #                       error="invalid_token",
     #                       error_description="The access token expired"
-    BadAppToken:
+    BadAppKey:
       type: object
 
     Authorized:

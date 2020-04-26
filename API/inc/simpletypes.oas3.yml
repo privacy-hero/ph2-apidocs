@@ -46,6 +46,7 @@ paths:
                     - $ref: "#/components/schemas/url"
                     - $ref: "#/components/schemas/url-http-s"
                     - $ref: "#/components/schemas/url-absolute"
+                    - $ref: "#/components/schemas/url-clean-path"
                     - $ref: "#/components/schemas/activation-code"
                     - $ref: "#/components/schemas/adapter-type"
                     - $ref: "#/components/schemas/epoch-timestamp"
@@ -161,7 +162,7 @@ components:
       nullable: true
       pattern: "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
       description: |-
-        A URL","including relative references.  Will only accept https
+        A URL, including relative references.  Will only accept https or
         relative urls.
       example: "./relative.url"
 
@@ -173,9 +174,9 @@ components:
       nullable: true
       pattern: "^(?:(?:http(s)?:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$"
       description: |-
-        A URL","including relative references.  Will accept http/https and
+        A URL, including relative references.  Will accept http/https and
         relative urls.
-      example: "./relative.url"
+      example: "http://absolute.url"
 
     url-absolute:
       type: string
@@ -187,6 +188,17 @@ components:
       description: |-
         An Absolute URL.  Will only accept https as protocol.
       example: "https://absolute.url"
+
+    url-clean-path:
+      type: string
+      format: "URL"
+      minLength: 1
+      maxLength: 2000
+      nullable: true
+      pattern: "^(\\/([a-zA-Z0-9-_%])+)+$"
+      description: |-
+        The path component of a URL.
+      example: "/a/path/example"
 
     # Adapter Activation Code
     activation-code:

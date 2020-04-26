@@ -41,7 +41,7 @@ paths:
         Confirms creation of the new account for a Customer, from the back link
         provided by the email to the customer.
 
-        Must have a valid appToken for the request to be processed.
+        Must have a valid appKey for the request to be processed.
 
         **verify**: The token from the callback which invoked this API call.
       requestBody:
