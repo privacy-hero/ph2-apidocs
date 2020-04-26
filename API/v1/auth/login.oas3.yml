@@ -24,7 +24,10 @@ servers:
 
 components:
   securitySchemes:
-    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+    appKey:
+      $ref: "../../PH2-API.oas3.yml#/components/securitySchemes/appKey"
+    clientToken:
+      $ref: "../../PH2-API.oas3.yml#/components/securitySchemes/clientToken"
 
 tags:
   - name: Account Management
@@ -57,18 +60,43 @@ paths:
           "application/json":
             schema:
               type: object
+              additionalProperties: false
               required:
                 - id
                 - pwd
-              additionalProperties: false
               properties:
                 id:
-                  oneOf:
-                    - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email-address"
-                    - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/admin-as-email-address"
-                    - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/mac"
+                  type: string
+                  format: email | admin-as-client | mac
+                  pattern: "^.+$" # Regex far too complex.
+                  minLength: 6
+                  maxLength: 768
+                  description: |-
+                    One of the three valid login id formats.
                 pwd:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
+            examples:
+              client:
+                value:
+                  id: "client@email.com"
+                  pwd: "123456789"
+                description: An Example Client login
+              admin:
+                value:
+                  id: "admin@privacyhero.com"
+                  pwd: "iNBi5tRE"
+                description: An Example Admin login
+              admin-as-client:
+                value:
+                  id: "admin@privacyhero.com:client@email.com"
+                  pwd: "iNBi5tRE"
+                description: An Example Admin logging in as a client.
+              adapter:
+                value:
+                  id: "00-00-5E-DF-98-EB"
+                  pwd: "nfhggkjebkqw413basbkJHGlkgqfrg"
+                description: An Example of an adapter logging in.
+
       security:
         - appKey: []
 
