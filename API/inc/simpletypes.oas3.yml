@@ -138,7 +138,7 @@ components:
     mac:
       type: string
       format: EUI-48
-      pattern: "^([0-9a-fA-F]{2}([:-]))(([0-9a-fA-F]{2})\\2){4}([0-9a-fA-F]{2})$"
+      pattern: "^(([0-9a-fA-F]{2}-){5})|(([0-9a-fA-F]{2}-){5})([0-9a-fA-F]{2})$"
       maxLength: 17
       minLength: 17
       description: |-
@@ -241,7 +241,7 @@ components:
       maximum: 4743406575
       nullable: true
       description: |-
-        A Time","expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
+        A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
       example: 1587732975
 
     # Epoch Timestamp
@@ -251,7 +251,7 @@ components:
       minimum: 1587732975
       maximum: 4743406575
       description: |-
-        A Time","expressed as seconds since Jan 01 1970. (UTC).
+        A Time, expressed as seconds since Jan 01 1970. (UTC).
       example: 1587732975
 
     # ISO 3166 Country Codes
@@ -313,8 +313,8 @@ components:
     email-address:
       type: string
       format: email
-      minLength: 6 # len("a@b.cd")
-      maxLength: 320 # RFC3696
+      minLength: 6
+      maxLength: 320
       pattern: "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
       example: "example@email.com"
       description: An email address
@@ -322,8 +322,8 @@ components:
     admin-as-email-address:
       type: string
       format: admin:client email
-      minLength: 6 # len("a@b.cd")
-      maxLength: 320 # RFC3696
+      minLength: 13
+      maxLength: 641
       pattern: "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]):(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]\\:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
       example: "admin@privacyhero.com:example@email.com"
       description: An email address
