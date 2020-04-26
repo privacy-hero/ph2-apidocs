@@ -68,6 +68,12 @@ paths:
         "200":
           description: |-
             Success, WiFi settings set.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "Success, WiFi settings set."
 
         "400":
           description: |-
@@ -88,3 +94,5 @@ paths:
           $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
           $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

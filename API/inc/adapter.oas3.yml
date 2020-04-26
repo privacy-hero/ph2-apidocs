@@ -227,7 +227,6 @@ components:
       type: array
       maxItems: 1000
       description: List of streaming services
-      additionalProperties: false
       items:
         type: object
         description: Streaming Services
@@ -317,16 +316,16 @@ components:
 
 
     Adapter-Unassociated:
+      type: object
+      required:
+        - adapter
+        - since
       additionalProperties: false
-      allOf:
-        - $ref: "#/components/schemas/Adapter-Base"
-        - type: object
-          required:
-            - since
-          additionalProperties: false
-          properties:
-            since:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+      properties:
+        adapter:
+          $ref: "#/components/schemas/Adapter-Base"
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         * since - The time this adapter last came online.
 
@@ -556,7 +555,6 @@ components:
       type: array
       maxItems: 10
       description: An Array of Adapter Records.
-      additionalProperties: false
       items:
         $ref: "#/components/schemas/Adapter"
 

@@ -106,3 +106,5 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

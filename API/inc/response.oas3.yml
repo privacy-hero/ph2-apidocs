@@ -120,6 +120,16 @@ components:
           schema:
             $ref: "#/components/schemas/GW_InternalError"
 
+    default:
+      description: |-
+        Unspecified Error
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nack"
+          example:
+            error: "Unspecified Error"
+
 
   schemas:
 

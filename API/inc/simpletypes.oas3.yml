@@ -80,7 +80,6 @@ components:
 
     password:
       type: string
-      additionalProperties: false
       format: password
       minLength: 8
       maxLength: 64
@@ -91,7 +90,6 @@ components:
     # IP4 IP Address
     ip4:
       type: string
-      additionalProperties: false
       format: IPv4 Address
       pattern: "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
       minLength: 7
@@ -103,7 +101,6 @@ components:
     # IP6 IP Address
     ip6:
       type: string
-      additionalProperties: false
       format: IPv6 Address
       pattern: "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$"
       minLength: 3
@@ -115,7 +112,6 @@ components:
     # IP4 CIDR
     cidr4:
       type: string
-      additionalProperties: false
       format: IPv4 CIDR
       pattern: "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))$"
       minLength: 9
@@ -127,7 +123,6 @@ components:
     # IP6 CIDR
     cidr6:
       type: string
-      additionalProperties: false
       format: IPv6 CIDR
       pattern: "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))?$"
       minLength: 4
@@ -139,9 +134,8 @@ components:
     # EUI-48 MAC Address
     mac:
       type: string
-      additionalProperties: false
       format: EUI-48
-      pattern: "^(?:[0-9a-fA-F]{2}([-:]))(?:[0-9a-fA-F]{2}\\1){4}[0-9a-fA-F]{2}$"
+      pattern: "^([0-9a-fA-F]{2}([:-]))(([0-9a-fA-F]{2})\\2){4}([0-9a-fA-F]{2})$"
       maxLength: 17
       minLength: 17
       description: |-
@@ -151,7 +145,6 @@ components:
     # Universally Unique ID
     uuid:
       type: string
-      additionalProperties: false
       format: UUID
       description: |-
         Unique Identifier
@@ -162,7 +155,6 @@ components:
 
     url:
       type: string
-      additionalProperties: false
       format: "URL"
       minLength: 1
       maxLength: 2000
@@ -175,7 +167,6 @@ components:
 
     url-http-s:
       type: string
-      additionalProperties: false
       format: "URL"
       minLength: 1
       maxLength: 2000
@@ -188,7 +179,6 @@ components:
 
     url-absolute:
       type: string
-      additionalProperties: false
       format: "URL"
       minLength: 1
       maxLength: 2000
@@ -201,7 +191,6 @@ components:
     # Adapter Activation Code
     activation-code:
       type: string
-      additionalProperties: false
       pattern: "^....-....$"
       minLength: 9
       maxLength: 9
@@ -213,7 +202,6 @@ components:
     # Type of Adapter
     adapter-type:
       type: string
-      additionalProperties: false
       enum:
         - "Router-V1"
       description: |-
@@ -222,7 +210,6 @@ components:
     # Epoch Timestamp
     epoch-timestamp:
       type: integer
-      additionalProperties: false
       format: int64
       minimum: 1587732975
       maximum: 4743406575
@@ -234,12 +221,11 @@ components:
     # ISO 3166 Country Codes
     iso3166-country:
       type: string
-      additionalProperties: false
       format: ISO3166 Code
-      pattern: "^[A-Z][A-Z]$"
+      #pattern: "^[A-Z][A-Z]$"
       example: "US"
-      minLength: 2
-      maxLength: 2
+      #minLength: 2
+      #maxLength: 2
       enum:
         ["AF","AX","AL","DZ","AS","AD","AO","AI","AQ","AG","AR","AM","AW","AU","AT","AZ","BS","BH",
         "BD","BB","BY","BE","BZ","BJ","BM","BT","BO","BQ","BA","BW","BV","BR","IO","BN","BG",

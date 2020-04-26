@@ -53,12 +53,10 @@ paths:
         - clientToken: []
       parameters:
         - in: query
+          required: false
           name: code
           schema:
-            allOf:
-              - $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
-              - nullable: true
-            additionalProperties: false
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
           description: |-
             If not set, the function will look for all unassociated adapters
             that share the internet connection of the client making the call.
@@ -97,4 +95,6 @@ paths:
           $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
           $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
 
