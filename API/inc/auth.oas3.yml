@@ -30,10 +30,7 @@ paths:
               application/json:
                 schema:
                   oneOf:
-                    - $ref: "#/components/schemas/BadAppKey"
                     - $ref: "#/components/schemas/Authorized"
-
-
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -53,14 +50,6 @@ tags:
 components:
 
   schemas:
-
-    #WWW-Authenticate: Bearer realm="example",
-    #                       error="invalid_token",
-    #                       error_description="The access token expired"
-    BadAppKey:
-      type: object
-      additionalProperties: false
-      properties: {}
 
     Authorized:
       type: object
