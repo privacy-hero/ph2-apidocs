@@ -77,6 +77,27 @@ components:
               indicates the authentication scheme(s) and parameters
               applicable to the target resource.
 
+    "401-appKey":
+      description: |-
+        The appKey API Key is not recognized.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nack"
+          example:
+            error: "Invalid API Key."
+      headers:
+        WWW-Authenticate:
+          schema:
+            type: string
+            enum:
+              - "X-API-KEY realm=api2.privacyhero.com"
+            default: "X-API-KEY realm=api2.privacyhero.com"
+            example: "X-API-KEY realm=api2.privacyhero.com"
+            description: |-
+              Indicates that the applications API Key was not authorized to
+              access this API.
+
     "403":
       description: |-
         Invalid Client Token, could not authorize api access.
@@ -84,6 +105,15 @@ components:
         application/json:
           schema:
             $ref: "#/components/schemas/GW_NegAuth"
+
+    "403-appKey":
+      description: |-
+        The appKey API Key does not have authority to access the API.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/GW_NegAuth"
+
     "404":
       description: Not found
       content:

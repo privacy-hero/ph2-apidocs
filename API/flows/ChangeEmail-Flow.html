@@ -16,7 +16,7 @@
             C --X A: UI: Change Email
             A ->> M: /auth/chgemail
 
-            note over A,M: Authority: Bearer client.token <br/> X-AppToken: app.token <br/> email: customer@theirdomain.com <br/> callback: AppURL.Local/path
+            note over A,M: Authority: Bearer client.token <br/> X-appKey: app.token <br/> email: customer@theirdomain.com <br/> callback: AppURL.Local/path
             alt Email not already used
                 M ->> A: 200 OK
                 A -->> C: UI: Advise Email Incoming

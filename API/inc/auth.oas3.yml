@@ -59,6 +59,8 @@ components:
     #                       error_description="The access token expired"
     BadAppKey:
       type: object
+      additionalProperties: false
+      properties: {}
 
     Authorized:
       type: object

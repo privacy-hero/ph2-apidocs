@@ -59,7 +59,7 @@ paths:
         ```
         callback.url/<path>?verify=<token>&pw=<false/true>&exp=<time>
         ```
-
+         - **/path** is an optional path component of the url.
          - **verify** is the verification token to be sent back to the API server by
         the app on the **/v1/auth/confirmcustomer** call.
          - **pw** specifies that an initial password must be prompted from the Client,
@@ -124,9 +124,9 @@ paths:
               example:
                 error: "Internal Server Error."
         "401":
-          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+          $ref: "../../inc/response.oas3.yml#/components/responses/401-appKey"
         "403":
-          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+          $ref: "../../inc/response.oas3.yml#/components/responses/403-appKey"
         "415":
           $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
