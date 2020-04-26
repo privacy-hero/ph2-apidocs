@@ -97,7 +97,7 @@ paths:
                 email:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email-address"
                 callback:
-                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url-http-s"
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url-callback"
       security:
         - appKey: []
 

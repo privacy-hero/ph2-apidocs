@@ -22,8 +22,8 @@ tags:
     description: Operations related to Account Creation and Management
 
 paths:
-  /{callbackpath}:
-    post:
+  /callback:
+    get:
       operationId: appCallback
       tags:
         - Account Management
@@ -33,24 +33,15 @@ paths:
         customer in their confirmation email.
 
         It is linked to the instigating App, so that the App can continue
-        the process of creating the new account.
+        the process of creating the new account, resetting the password,
+        re-establishing credentials, etc .
       servers:
-        - url: https://www.myapp.url/
+        - url: ph2app://android.app/some/path
           description: |-
             The link which can open the app which called
-            /auth/newcustomer.
-            - exp=\<time>\
+            **v1//auth/newcustomer**, etc.
 
       parameters:
-        - in: path
-          required: true
-          name: callbackpath
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url-http-s"
-          description: Any path required by the application callback.
-            The base URL and callback path are derived from the `callback`
-            parameter from the `newcustomer` API Call.
-
         - in: query
           name: verify
           required: true
@@ -58,26 +49,24 @@ paths:
             type: string
             format: token
             pattern: "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$"
+            minLength: 64
             maxLength: 1000
-            example: "abcdefghijklmnopqrstuzwxyz12345.67890ABCDEFGHIJKMLNOPQRSTUVWXYZ"
+            example: "abcdefghijklmnopqrstuzwxyz12345.67890ABCDEFGHIJKMLNOPQRSTUVWXYZa"
           description: The New Customer confirmation token.
         - in: query
           name: exp
           required: true
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-          description:
-            The Time, being the Epoch Time, after which the verification token
-            will become invalid.
+          description: |-
+            The Time, after which the verification token will become invalid.
 
-            Epoch Time is the number of seconds that have elapsed since the time
-            00:00:00 UTC on 1 January 1970, minus leap seconds
         - in: query
           name: pw
           schema:
             type: boolean
             default: true
-          description:
+          description: |-
             If true, the user must be prompted to create a password and the
             password must be sent in the `confirmcustomer` API call.
             If it is not present, it defaults to `true`
@@ -99,8 +88,6 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
-        "415":
-          $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
           $ref: "../../inc/response.oas3.yml#/components/responses/429"
         default:

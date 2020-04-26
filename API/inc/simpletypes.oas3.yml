@@ -47,6 +47,7 @@ paths:
                     - $ref: "#/components/schemas/url-http-s"
                     - $ref: "#/components/schemas/url-absolute"
                     - $ref: "#/components/schemas/url-clean-path"
+                    - $ref: "#/components/schemas/url-callback"
                     - $ref: "#/components/schemas/activation-code"
                     - $ref: "#/components/schemas/adapter-type"
                     - $ref: "#/components/schemas/epoch-timestamp"
@@ -177,6 +178,18 @@ components:
         A URL, including relative references.  Will accept http/https and
         relative urls.
       example: "http://absolute.url"
+
+    url-callback:
+      type: string
+      format: "URL"
+      minLength: 1
+      maxLength: 2000
+      nullable: true
+      pattern: "^[\\w.-]+:\\/\\/[\\w.-]+(\\/[\\w.-]+)*$"
+      description: |-
+        A URL, including relative references.  Will accept http/https and
+        relative urls.
+      example: "ph2app://absolute.url"
 
     url-absolute:
       type: string
