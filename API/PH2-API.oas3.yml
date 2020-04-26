@@ -113,6 +113,10 @@ paths:
   /v1/auth/delcustomer: # delete the customer
     $ref: "v1/auth/delcustomer.oas3.yml#/paths/~1auth~1delcustomer"
 
+  ######### CLIENT MANAGEMENT API CALLS ######################
+
+  /v1/client/notify:
+    $ref: "v1/client/notify.oas3.yml#/paths/~1client~1notify"
 
   ######### ADAPTER  MANAGEMENT API CALLS ######################
 
@@ -155,10 +159,6 @@ paths:
   /v1/streaming/cfg:
     $ref: "v1/streaming/cfg.oas3.yml#/paths/~1streaming~1cfg"
 
-  ######### CLIENT MANAGEMENT API CALLS ######################
-
-  /v1/client/notify:
-    $ref: "v1/client/notify.oas3.yml#/paths/~1client~1notify"
 
   ######### PROFILE  MANAGEMENT API CALLS ######################
 

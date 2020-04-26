@@ -41,43 +41,70 @@ paths:
         - Client Management
       summary: Subscribe/Unsubscribe to notifications.
       description: |-
-        Allows the client to subscribe/unsubscribe from push notifications.
+        # Usage
+        Allows the client to subscribe/unsubscribe web push notifications.
+
+        Push notifications require the client to authorize the subscription.
+        The App is responsible for getting the clients authority with the
+        relevant service, and then passing the WebPush Client Token (AKA
+        "Registration Id") to the Backend API.  Anytime the WebPush Client Token
+        is renewed by the Client, this same call is made to update it.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **token**: the WebPush Client Token obtained when the client
+          consented to receiving notifications.
+          - **service**: the WebPush Service being employed by the clients
+          application.
+            - **"FIREBASE"** is used for Android and non-safari web push
+            notifications.
+            - **"APNS-IOS"** is used for IOS Apps.
+            - **"APNS-WEB"** is used for Safari Web Push notifications.
+          - **cancel**: Optional.  Set to True, to cancel notifications for the service.
+
       security:
         - clientToken: []
 
-      parameters:
-        - in: query
-          name: token
-          required: true
-          schema:
-            type: string
-            format: WebPush Client Token
-            pattern: "^[\\w]+$"
-            minLength: 8
-            maxLength: 256  # TODO: Find out the true range of token sizes.
-            nullable: true
-          example: "124FDSDGSDFG23452345FGsrfgsdf235" # TODO: A proper example
-          description: |-
-            The clients notification token for their service.  Also known as the
-            "Registration Id".  **null** will disable all notifications.
-
-        - in: query
-          name: service
-          required: true
-          schema:
-            type: string
-            format: Notification
-            enum:
-              - "FIREBASE"
-              - "APNS-IOS"
-              - "APNS-WEB"
-          example: "FIREBASE"
-          description: |-
-            The service the client token relates to.
-            **"FIREBASE"** is used for Android and non-safari web push
-            notifications.
-            **"APNS-IOS"** is used for IOS Apps.
-            **"APNS-WEB"** is used for Safari Web Push notifications.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - token
+                - service
+              additionalProperties: false
+              properties:
+                token:
+                  type: string
+                  format: WebPush Client Token
+                  pattern: "^[\\w]+$"
+                  minLength: 8
+                  maxLength: 256  # TODO: Find out the true range of token sizes.
+                  example: "124FDSDGSDFG23452345FGsrfgsdf235" # TODO: A proper example
+                  description: |-
+                    The clients notification token for their service.  Also known as the
+                    "Registration Id".
+                service:
+                  type: string
+                  format: Notification
+                  enum:
+                    - "FIREBASE"
+                    - "APNS-IOS"
+                    - "APNS-WEB"
+                  example: "FIREBASE"
+                  description: |-
+                    The service the client token relates to.
+                cancel:
+                  type: boolean
+                  default: false
+                  example: false
+                  description: |-
+                    IF true, the notifications attached to this token are canceled.
 
       responses:
         "200":
@@ -92,13 +119,18 @@ paths:
 
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Invalid Service"` - Password failed security strength check.
+            * `"Invalid WebPush Token"` - Token is not valid.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not name the adapter!"
+                error: "Internal Server Error."
 
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"

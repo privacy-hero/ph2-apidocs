@@ -326,7 +326,7 @@ API Call description format:
             to **/v1/auth/confirmcustomer**` after this time will fail.
 
         ## Security Requirements
-          - **appKey** **MUST** be valid and present in the call.
+          - **appKey** **MUST NOT** be present in the call.
           - **clientToken** **MUST** be present, not in need of renewal and valid.
 
         ## Parameters
