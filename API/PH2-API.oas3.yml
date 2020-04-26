@@ -12,7 +12,7 @@ info:
       - **[PrivacyHero2 API - RapiDoc/Pdf](.)**
       - [PrivacyHero2 API - Swagger UI](./index-swui.html)
       - [PrivacyHero2 API - Redocly](./index-redocly.html)
-      - [Download API JSON](./API/openapi.json)
+      - [Download API JSON](./API/PH2-API.oas3.json)
 
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
