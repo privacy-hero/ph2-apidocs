@@ -38,12 +38,20 @@ paths:
         - Account Management
       summary: Confirm the New Customer Request
       description: |-
-        Confirms creation of the new account for a Customer, from the back link
+        Confirms creation of the new account for a Customer, via the back link
         provided by the email to the customer.
+
+        ## Security Requirements
+          - **appKey** must be valid and present in the call.
+          - **clientToken** may be present, but is ignored.
 
         Must have a valid appKey for the request to be processed.
 
-        **verify**: The token from the callback which invoked this API call.
+        ## Parameters
+          - **verify**: The token passed to the callback which invoked this API
+          call.
+          - **pwd**: The clients chosen password.  This should only be provided
+          if the callback specified that a password was required.
       requestBody:
         required: true
         content:
@@ -56,8 +64,9 @@ paths:
               properties:
                 verify:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/ph2-bearer-token"
-                password:
+                pwd:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
+
       security:
         - appKey: []
 
@@ -69,10 +78,22 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/auth.oas3.yml#/components/schemas/Authorized"
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
         "401":
-          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+          $ref: "../../inc/response.oas3.yml#/components/responses/401-appKey"
         "403":
-          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+          $ref: "../../inc/response.oas3.yml#/components/responses/403-appKey"
         "415":
           $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
