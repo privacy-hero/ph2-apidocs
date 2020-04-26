@@ -57,12 +57,11 @@ paths:
         The URL passed as the callback must be able to accept three parameter in
         the url of the form:
         ```
-        callback.url/<path>?verify=<token>&pw=<false/true>&exp=<time>
+        callback.url/path?verify=<token>&pw=<false/true>&exp=<time>
         ```
-         - **/path** is an optional path component of the url.
          - **verify** is the verification token to be sent back to the API server by
         the app on the **/v1/auth/confirmcustomer** call.
-         - **pw** specifies that an initial password must be prompted from the Client,
+         - **pwd** specifies that an initial password must be prompted from the Client,
         and supplied to the API in the **/v1/auth/confirmcustomer** call.
          - **exp** specifies when the verification token will expire.  Any call to
         **/v1/auth/confirmcustomer**` after this time will fail.

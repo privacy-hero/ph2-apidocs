@@ -38,8 +38,21 @@ paths:
         - Account Management
       summary: Renew a Client Authorization Token.
       description: |-
+        # Usage
+
+        When the Clients Authorization Token is about to (or already has)
+        reached its renewal time.  This call is made to provide a new token for
+        continued use of the API without requiring account recover.  If the
+        token has finally expired, account recovery will be required to generate
+        a new fresh Token.
+
         Causes the Authorization token attached to the API call
         to be renewed, and a new token returned.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present and **NOT** expired.
+
       security:
         - clientToken: []
 
@@ -51,6 +64,19 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/auth.oas3.yml#/components/schemas/Authorized"
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

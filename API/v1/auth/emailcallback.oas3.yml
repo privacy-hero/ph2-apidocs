@@ -29,12 +29,31 @@ paths:
         - Account Management
       summary: Callback to App that requested a New Customer.
       description: |-
+        # Usage
         This is the format of the callback that will be presented to the
         customer in their confirmation email.
 
         It is linked to the instigating App, so that the App can continue
         the process of creating the new account, resetting the password,
         re-establishing credentials, etc .
+
+        ## Security Requirements
+
+        There are no specific security requirements.  However the token is
+        cryptographically signed, and only valid for the specified duration.
+        The application only needs to check the duration in the call, the API
+        server will verify the token remains valid and is properly formed when
+        the token is presented.
+
+        ## Parameters
+         - **verify** is the verification token to be sent back to the API server by
+            the app on the **/v1/auth/confirmcustomer** call.
+         - **pwd** specifies that a confirmation password must be prompted from
+            the Client, and supplied to the API in the **/v1/auth/confirmcustomer**
+            call.
+         - **exp** specifies when the verification token will expire.  Any call
+            to **/v1/auth/confirmcustomer**` after this time will fail.
+
       servers:
         - url: ph2app://android.app/some/path
           description: |-
@@ -46,13 +65,9 @@ paths:
           name: verify
           required: true
           schema:
-            type: string
-            format: token
-            pattern: "^[A-Za-z0-9-_]+\\.[A-Za-z0-9-_]+$"
-            minLength: 64
-            maxLength: 1000
-            example: "abcdefghijklmnopqrstuzwxyz12345.67890ABCDEFGHIJKMLNOPQRSTUVWXYZa"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/ph2-bearer-token"
           description: The New Customer confirmation token.
+          example: "AeyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjJ9AB"
         - in: query
           name: exp
           required: true
@@ -60,12 +75,13 @@ paths:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
           description: |-
             The Time, after which the verification token will become invalid.
-
+          example: 1587759975
         - in: query
-          name: pw
+          name: pwd
           schema:
             type: boolean
             default: true
+            example: false
           description: |-
             If true, the user must be prompted to create a password and the
             password must be sent in the `confirmcustomer` API call.

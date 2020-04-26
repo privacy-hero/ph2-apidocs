@@ -36,16 +36,15 @@ paths:
       operationId: confirmCustomer
       tags:
         - Account Management
-      summary: Confirm the New Customer Request
+      summary: Confirm the Customer Account Maintenance Request
       description: |-
+        # Usage
         Confirms creation of the new account for a Customer, via the back link
         provided by the email to the customer.
 
         ## Security Requirements
           - **appKey** must be valid and present in the call.
           - **clientToken** may be present, but is ignored.
-
-        Must have a valid appKey for the request to be processed.
 
         ## Parameters
           - **verify**: The token passed to the callback which invoked this API
@@ -73,7 +72,7 @@ paths:
       responses:
         "200":
           description: |-
-            The message was accepted, and the account has been created.
+            The message was accepted, and the account has been created/modified.
           content:
             application/json:
               schema:

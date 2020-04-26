@@ -41,6 +41,7 @@ paths:
         - Account Management
       summary: Log a Client in to their account.
       description: |-
+        # Usage
         Logs a client in to their account, by validating their credentials
         and returning a Bearer token for API access.
 
@@ -50,12 +51,17 @@ paths:
         authorization validation.  Other applications need to do account
         recovery if the access token is lost or expired.
 
-        **id**: The clients ID,  different clients will present different ID.
-          - Customer: Their email address
-          - Admin: Their email address
-          - Admin as Customer: \<admin email\>:\<customer email\>
-          - Router: MAC Address
-        **pwd**: The shared secret used to identify the client.  Typically this
+        ## Security Requirements
+          - **appKey** **MUST** be present in the call.
+          - **clientToken** **MAY** be present but is ignored.
+
+        ## Parameters
+          - **id**: The clients ID,  different clients will present different ID.
+            - Customer: Their email address
+            - Admin: Their email address
+            - Admin as Customer: \<admin email\>:\<customer email\>
+            - Router: MAC Address
+          - **pwd**: The shared secret used to identify the client.  Typically this
         is a password.  It is sent unencrypted/unhashed because the link is
         protected from eaves dropping with https.
       requestBody:

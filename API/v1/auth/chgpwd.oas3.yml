@@ -38,10 +38,16 @@ paths:
         - Account Management
       summary: Change a Clients password.
       description: |-
+        # Usage
         Causes the Clients password to be changed.
 
-        **old**: The old password of the Client.
-        **new**: The new password of the Client.
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **old**: The old password of the Client.  Must be Valid.
+          - **new**: The new password of the Client.
       security:
         - clientToken: []
 
@@ -75,16 +81,19 @@ paths:
 
         "400":
           description: |-
-            The new password is not secure enough.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Insecure Password"` - Password failed security strength check.
+            * `"Old Password doesn't match"` - Old Password failed security check.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: |-
-                  Password must contain at least One UpperCase character, One
-                  LowerCase character, One Number and be at least 8 characters
-                  long.
+                error: "Internal Server Error."
+
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":
