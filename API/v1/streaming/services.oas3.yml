@@ -108,15 +108,6 @@ paths:
                         "IL","ID"
                       ]
                     },
-                    "settings": {
-                      "current": {
-                        "enabled": true,
-                        "country": "US"
-                      },
-                      "pending": {
-                        "country": "GB"
-                      }
-                    }
                   },
                   {
                     "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
@@ -131,28 +122,21 @@ paths:
                         "TH","ID"
                       ]
                     },
-                    "settings": {
-                      "current": {
-                        "enabled": true,
-                        "country": "GB"
-                      },
-                      "pending": {
-                        "enabled": false
-                      }
-                    }
                   }
                 ]
 
-
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not find the adapter!"
+                error: "Internal Server Error."
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

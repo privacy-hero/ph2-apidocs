@@ -24,10 +24,7 @@ servers:
 
 components:
   securitySchemes:
-    appKey:
-      $ref: "../../PH2-API.oas3.yml#/components/securitySchemes/appKey"
-    clientToken:
-      $ref: "../../PH2-API.oas3.yml#/components/securitySchemes/clientToken"
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 tags:
   - name: Account Management

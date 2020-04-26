@@ -132,7 +132,6 @@ components:
           maximum: 2000
           description: |-
             **+VE** = millisecond latency result. **NULL** = Unknown.
-
         when:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 

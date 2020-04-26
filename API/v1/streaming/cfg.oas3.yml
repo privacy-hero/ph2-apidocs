@@ -45,6 +45,16 @@ paths:
         For a particular Adapter, query its streaming configuration.  This call
         will reflect the current applied configuration and any pending but
         unconfirmed configuration changes.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **id**: The id of the adapter to retrieve the current streaming
+          configuration for.
+
       parameters:
         - in: query
           name: id
@@ -58,11 +68,35 @@ paths:
       responses:
         "200":
           description: |-
-            Success, Streaming Service Configuration Queued.
+            Success, Streaming Service Configuration Returned.  This is an array
+            of all streaming services, and their current configuration on the
+            adapter.
+
+            - **id**: the id of the streaming service
+            - **settings.current**: The current setting.
+            - **settings.pending**: The pending setting, not yet confirmed.
+            - **enabled**: if relocation is enabled for this service.
+            - **country**: the country the streaming service is directed from.
+
           content:
             application/json:
               schema:
                 $ref: "../../inc/adapter.oas3.yml#/components/schemas/streams-settings"
+              example: [
+                {
+                  "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
+                  "settings": {
+                    "current": {
+                      "enabled": true,
+                      "country": "US",
+                    },
+                    "pending": {
+                      "country": "JP"
+                    }
+                  }
+                },
+              ]
+
         "400":
           description: |-
             General Request processing error.  Possible errors are:
@@ -96,7 +130,21 @@ paths:
       summary: Set the streaming cfg for an adapter.
       description: |-
         # Usage
-        For a particular Adapter, set its streaming configuration.
+        For a particular Adapter, set its streaming configuration.  Until the
+        settings are confirmed applied by the adapter, they will be reported as
+        pending.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **id**: The id of the adapter to set the pending streaming
+          configuration for.
+          - **cfg**: The configuration to set.  If this is not present, then no
+          configuration will change, and the call will simply return the
+          requested stream id's current and pending settings.
       parameters:
         - in: query
           name: id
@@ -114,7 +162,6 @@ paths:
               type: object
               required:
                 - id
-                - cfg
               additionalProperties: false
               properties:
                 id:
@@ -125,7 +172,7 @@ paths:
                 id: "29a16e31-bb4d-4407-8244-8e68b820b854"
                 cfg:
                   enabled: true
-                  country: "JP"
+                  country: "GB"
 
       responses:
         "200":
@@ -135,20 +182,37 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/adapter.oas3.yml#/components/schemas/stream-settings"
+              example: {
+                "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
+                "settings": {
+                  "current": {
+                    "enabled": true,
+                    "country": "US",
+                  },
+                  "pending": {
+                    "country": "GB",
+                  }
+                }
+              }
 
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not query the adapter!"
+                error: "Internal Server Error."
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
         "415":
           $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":

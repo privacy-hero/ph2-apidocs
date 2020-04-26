@@ -352,3 +352,23 @@ API Call description format:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Internal Server Error."
+
+
+                    "settings": {
+                      "current": {
+                        "enabled": true,
+                        "country": "US"
+                      },
+                      "pending": {
+                        "country": "GB"
+                      }
+
+                    "settings": {
+                      "current": {
+                        "enabled": true,
+                        "country": "GB"
+                      },
+                      "pending": {
+                        "enabled": false
+                      }
+                    }
