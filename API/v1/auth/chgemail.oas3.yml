@@ -27,7 +27,7 @@ tags:
 
 components:
   securitySchemes:
-    $ref: "../../PHMothership.openapi.yml#/components/securitySchemes"
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 paths:
   /auth/chgemail:
