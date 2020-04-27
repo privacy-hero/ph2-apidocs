@@ -93,8 +93,7 @@ components:
       description: latency diagnostic result
       required:
         - latency
-        - average
-        - when
+        - completion
       additionalProperties: false
       properties:
         latency:
@@ -105,9 +104,8 @@ components:
     datacaps:
       type: array
       description: A per-month Data Cap.  An Empty Array is no data cap.
-      additionalProperties: false
-      minLength: 0
-      maxLength: 2
+      minItems: 0
+      maxItems: 2
       items:
         $ref: "./simpletypes.oas3.yml#/components/schemas/datacap"
 
