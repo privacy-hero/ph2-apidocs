@@ -1,0 +1,152 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /profile/create"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Create a user profile.
+
+    `/profile/create`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Profile Management
+    description: Operations related to Profile Management
+
+paths:
+  /profile/create:
+    post:
+      operationId: profileCreate
+      tags:
+        - Profile Management
+      summary: Create a new user profile.
+      description: |-
+        # Usage
+
+        Creates a new profile for the client.  Initially the profile will have
+        default settings and no devices, the only thing set in creation is the
+        profile name (which must be unique to the client) and its icon.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **name**: The name of the new profile.  Must not be the same as any
+          existing profile, or a reserved profile name.
+          - **icon**: Optionally, a link to the icon to use for the profile.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+              additionalProperties: false
+              properties:
+                name:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/profile-name"
+                icon:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
+              example:
+                name: "Kids"
+                icon: "butterfly.ico"
+
+      responses:
+        "200":
+          description: |-
+            Success, The profile was created.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/profile.oas3.yml#/components/schemas/Profile"
+              example: {
+                "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                "name": "Kids",
+                "icon": "butterfly.ico",
+                "settings": {
+                  "youtube-restricted": false,
+                  "safesearch": false,
+                  "internet-pause": null,
+                  "bedtime": [
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    },
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    },
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    },
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    },
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    },
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    },
+                    {
+                      "start-time": 0,
+                      "duration": 0
+                    }
+                  ],
+                  "bedtime-delay": 0
+                }
+              }
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Profile Name not unique."` - The Profile Name is not unique.
+            * `"Profile Name reserved."` - The Profile Name is reserved.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        "default":
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

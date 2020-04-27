@@ -167,8 +167,19 @@ paths:
 
   ######### PROFILE  MANAGEMENT API CALLS ######################
 
-  #/v1/profile/list:
-  #  $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
+  /v1/profile/list:
+    $ref: "v1/profile/list.oas3.yml#/paths/~1profile~1list"
+
+  /v1/profile/create:
+    $ref: "v1/profile/create.oas3.yml#/paths/~1profile~1create"
+
+# /v1/profile/delete
+# /v1/profile/cfg/name (Also can change icon)
+# /v1/profile/cfg/bedtimes
+# /v1/profile/cfg/bedtime-delay
+# /v1/profile/cfg/pause-internet
+
+
 
   ######### DEVICE  MANAGEMENT API CALLS ######################
 

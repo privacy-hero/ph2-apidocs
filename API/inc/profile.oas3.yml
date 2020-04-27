@@ -55,7 +55,16 @@ components:
   schemas:
 
     Profile:
-      description: A device setting profile
+      description: |-
+        A device settings profile.  Profiles define common settings for all
+        associated devices.
+
+        - **id**: The profiles unique id.
+        - **name**: The descriptive name of the profile.
+        - **icon**: An identifier for the icon.
+        - **system**: Is this a system profile?  If so, can not be edited or
+        deleted.
+        - **settings**: Current state of settings for the profile.
       type: object
       required:
         - id
@@ -65,6 +74,8 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         name:
           $ref: "./simpletypes.oas3.yml#/components/schemas/profile-name"
+        icon:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/url"
         system:
           type: boolean
           default: false
@@ -82,29 +93,15 @@ components:
         be ONE bedtime per day, but the duration may make the bedtime extend
         the next day.  Nominally a disabled bedtime should be encoded as
         start-time=0 and duration=0
+        - **start-time**: The absolute time that bedtime starts.
+        - **duration**: The delay from **start-time** until bedtime ends.
       type: object
       additionalProperties: false
       properties:
         start-time:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 86399
-          default: 0
-          description: |-
-            This is the time (in seconds) from midnight (the start the day) when
-            bedtime starts.  For example 79200 is 10pm.
+          $ref: "./simpletypes.oas3.yml#/components/schemas/time-of-day"
         duration:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 86399
-          default: 0
-          description: |-
-            This is the duration of the bedtime period in seconds.  IF bedtime
-            starts at 10pm, and ends at 6am the next day, then the duration is:
-            28800 seconds (8 hours).  A duration of zero disables bedtime for a
-            particular day.
+          $ref: "./simpletypes.oas3.yml#/components/schemas/time-delay"
 
     Bedtimes:
       type: array
@@ -127,6 +124,10 @@ components:
         - **safesearch**: If search engines are forced to return safe results.
         - **internet-pause**: Internet will be paused until this time passes. If
           the value is negative, internet is paused indefinitely.
+        - **bedtime**: A list of bedtimes, one for each day of a week.
+        - **bedtime-delay**: A once off delay for the current days bedtime
+        start.  Note, this does not change bedtime end.  This will automatically
+        be reset back to zero when bedtime ends.
       type: object
       additionalProperties: false
       properties:
@@ -142,11 +143,16 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
         bedtime:
           $ref: "#/components/schemas/Bedtimes"
+        bedtime-delay:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/time-delay"
+
 
 
     Profiles:
       description: An array of known profiles
       type: array
+      minItems: 1
+      maxItems: 100
       items:
         $ref: "#/components/schemas/Profile"
 

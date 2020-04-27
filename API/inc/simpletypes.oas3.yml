@@ -63,6 +63,8 @@ paths:
                     - $ref: "#/components/schemas/datacap"
                     - $ref: "#/components/schemas/datausage"
                     - $ref: "#/components/schemas/profile-name"
+                    - $ref: "#/components/schemas/time-of-day"
+                    - $ref: "#/components/schemas/time-delay"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -404,3 +406,21 @@ components:
       maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
       description: |-
         Data Usage in Bytes.
+
+    time-of-day:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 86399
+      default: 0
+      description: |-
+        An absolute time of the day in seconds, where 0 = midnight.
+
+    time-delay:
+      type: integer
+      format: int32
+      minimum: 0
+      maximum: 86399
+      default: 0
+      description: |-
+        A time delay, where 0 = no delay.
