@@ -41,23 +41,40 @@ paths:
         - Adapter Management
       summary: Set the datacap for a particular adapter.
       description: |-
-        Sets the data caps for the identified adapter.
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            The Adapter ID to Set DataCap of.
+        # Usage
+        Sets the data caps for the identified adapter.  Data Cap is used to
+        check if monthly usage will exceed the data cap for reporting and
+        notification purposes.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **id**: The Adapters ID to set the data cap for.
+          - **cap**: The datacap for the adapter.  This is an array.  No entries
+          means that no datacap has been sent.  A single entry means that the
+          datacap is combined over tx & rx.  Two entries specifies a datacap
+          that may be different in both tx & rx.  The first entry is tx, the
+          second is rx.
+
       requestBody:
         required: true
         description: "The DataCap settings to apply."
         content:
           application/json:
             schema:
-              $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap"
+              type: object
+              required:
+                - id
+                - cap
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                cap:
+                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacaps"
 
       responses:
         "200":
@@ -69,17 +86,18 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
               example:
                 msg: "Success, Adapter datacap set."
-
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not name the adapter!"
-
+                error: "Internal Server Error."
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

@@ -60,6 +60,7 @@ paths:
                     - $ref: "#/components/schemas/latency-percentage"
                     - $ref: "#/components/schemas/adapter-services"
                     - $ref: "#/components/schemas/adapter-state"
+                    - $ref: "#/components/schemas/datacap"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -375,3 +376,11 @@ components:
       description: |-
         **true**=Enable the Service. **false**=Disable the Service.
         **null**=No Change
+
+    datacap:
+      type: integer
+      format: uint64
+      minimum: 0
+      maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
+      description: |-
+        Data Cap in Bytes per month. 0 = no data cap

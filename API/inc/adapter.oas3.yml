@@ -102,32 +102,14 @@ components:
         completion:
           $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
 
-    datacap:
-      type: object
-      description: A per-month Data Cap.
+    datacaps:
+      type: array
+      description: A per-month Data Cap.  An Empty Array is no data cap.
       additionalProperties: false
-      properties:
-        tx:
-          type: integer
-          format: uint64
-          minimum: 0
-          maximum: 9999999999999
-          nullable: true
-          description: |-
-            Transmit Data Cap in Bytes per month. **null** = no tx data cap
-        rx:
-          type: integer
-          format: uint64
-          minimum: 0
-          maximum: 9999999999999
-          nullable: true
-          description: |-
-            Receive Data Cap in Bytes per month. **null** = no rx data cap
-        combined:
-          type: boolean
-          default: false
-          description: |-
-            IF **true** then the tx data cap is the combined tx+rx data cap.
+      minLength: 0
+      maxLength: 2
+      items:
+        $ref: "./simpletypes.oas3.yml#/components/schemas/datacap"
 
     wifi-settings:
       type: object
@@ -307,68 +289,48 @@ components:
       items:
         $ref: "#/components/schemas/Adapter-Unassociated"
 
+    Adapter-Cfg:
+      type: object
+      description: The Adapter configuration settings.
+      additionalProperties: false
+      properties:
+        wifi:
+          $ref: "#/components/schemas/wifi-settings"
+        data-cap:
+          $ref: "#/components/schemas/datacaps"
+        vpn:
+          type: boolean
+          description: |-
+            VPN: **true**=Enabled, **false**=Disabled.
+        adblock:
+          type: boolean
+          description: |-
+            Ad Blocking: **true**=Enabled, **false**=Disabled.
+        streaming:
+          type: boolean
+          description: |-
+            Streaming Relocation: **true**=Enabled, **false**=Disabled
+        malware:
+          type: boolean
+          description: |-
+            Malware/Phishing protection: **true**=Enabled, **false**=Disabled
+
+
     Adapter-Settings:
       type: object
       additionalProperties: false
       properties:
-
         settings:
           type: object
           description: The settings of the Adapter/Router.
+          required:
+            - current
           additionalProperties: false
           properties:
             current:
-              type: object
-              description: The current settings.
-              additionalProperties: false
-              properties:
-                wifi:
-                  $ref: "#/components/schemas/wifi-settings"
-                data-cap:
-                  $ref: "#/components/schemas/datacap"
-                vpn:
-                  type: boolean
-                  description: |-
-                    VPN: **true**=Enabled, **false**=Disabled.
-                adblock:
-                  type: boolean
-                  description: |-
-                    Ad Blocking: **true**=Enabled, **false**=Disabled.
-                streaming:
-                  type: boolean
-                  description: |-
-                    Streaming Relocation: **true**=Enabled, **false**=Disabled
-                malware:
-                  type: boolean
-                  description: |-
-                    Malware/Phishing protection: **true**=Enabled, **false**=Disabled
+              $ref: "#/components/schemas/Adapter-Cfg"
             pending:
-              type: object
-              description: |-
-                The settings we are attempting to set on the adapter.
-              additionalProperties: false
-              properties:
-                wifi:
-                  $ref: "#/components/schemas/wifi-settings"
-                data-cap:
-                  $ref: "#/components/schemas/datacap"
-                vpn:
-                  type: boolean
-                  description: |-
-                    VPN: **true**=enabling. **false**=disabling.
-                adblock:
-                  type: boolean
-                  description: |-
-                    Ad Blocking: **true**=enabling. **false**=disabling.
-                streaming:
-                  type: boolean
-                  description: |-
-                    Streaming Relocation: **true**=enabling. **false**=disabling.
-                malware:
-                  type: boolean
-                  description: |-
-                    Malware/Phishing protection: **true**=enabling, **false**=disabling.
-
+              $ref: "#/components/schemas/Adapter-Cfg"
 
     Adapter:
       type: object

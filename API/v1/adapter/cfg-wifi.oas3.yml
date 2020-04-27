@@ -41,17 +41,21 @@ paths:
         - Adapter Management
       summary: Set the WiFi settings for a particular adapter.
       description: |-
-        Sets the Wifi settings for the 2.4Ghz and 5Ghz Network.
-        Any setting excluded or set to **null** will not be changed.
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            The Adapter ID to Set Wifi Setting of.
+        # Usage
+        Sets the Wifi settings for the 2.4Ghz and 5Ghz Network for an adapter.
+        If an adapter has multiple wifi radios, both radios will be set to the
+        same SSID, and password.  If the adapter has no radios, this command
+        yields no results on the adapter.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: The id of the adapter to configure.
+          - **wifi**: The wifi settings for the adapter. Any setting excluded or
+           set to **null** will not be changed.
+
       requestBody:
         required: true
         description: |-
@@ -59,7 +63,16 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings"
+              type: object
+              required:
+                - id
+                - wifi
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                wifi:
+                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings"
 
       responses:
         "200":
