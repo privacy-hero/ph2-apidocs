@@ -55,6 +55,9 @@ paths:
                     - $ref: "#/components/schemas/adapter-name"
                     - $ref: "#/components/schemas/email-address"
                     - $ref: "#/components/schemas/admin-as-email-address"
+                    - $ref: "#/components/schemas/speed-bps"
+                    - $ref: "#/components/schemas/latency-ms"
+                    - $ref: "#/components/schemas/latency-percentage"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -324,3 +327,30 @@ components:
       pattern: "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\]):(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\\\x01-\\\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]\\:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])"
       example: "admin@privacyhero.com:example@email.com"
       description: An email address
+
+    speed-bps:
+      type: integer
+      format: uint32
+      minimum: 0
+      maximum: 0xffffffff
+      nullable: true
+      description: |-
+        Bits per second speed result. **NULL** = Unknown.
+
+    latency-ms:
+      type: integer
+      format: uint16
+      minimum: 0
+      maximum: 0xffff
+      nullable: true
+      description: |-
+        Latency measured in milliseconds. **NULL** = Unknown.
+
+    latency-percentage:
+      type: integer
+      format: uint16
+      minimum: 0
+      maximum: 10000
+      nullable: true
+      description: |-
+        Percentage of successful tests (*100). Eg. 9876 = 98.76%. **NULL** = Unknown.

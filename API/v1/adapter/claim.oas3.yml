@@ -96,21 +96,27 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter"
-
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Insecure Password"` - Password failed security strength check.
+            * `"Old Password doesn't match"` - Old Password failed security check.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not claim the adapter!"
+                error: "Internal Server Error."
 
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
         "415":
           $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":

@@ -77,35 +77,16 @@ components:
     speed-diag:
       type: object
       description: |-
-        Speed Diagnostic Results. Negative values are estimated run time in seconds.
+        Speed Diagnostic Results.
       required:
         - speed
         - when
       additionalProperties: false
       properties:
         speed:
-          type: integer
-          format: int32
-          minimum: 0
-          maximum: 0x7fffffff
-          nullable: true
-          description: |-
-            **+VE** = bits per second speed result. **NULL** = Unknown. **-VE** = Test running.
+          $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
         when:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
-    wan-vpn-speed-diag:
-      type: object
-      description: Speed Diagnostic result for WAN and VPN Network
-      required:
-        - wan
-        - vpn
-      additionalProperties: false
-      properties:
-        wan:
-          $ref: "#/components/schemas/speed-diag"
-        vpn:
-          $ref: "#/components/schemas/speed-diag"
 
     latency-diag:
       type: object
@@ -117,36 +98,9 @@ components:
       additionalProperties: false
       properties:
         latency:
-          type: integer
-          format: uint16
-          nullable: true
-          minimum: 1
-          maximum: 2000
-          description: |-
-            **+VE** = millisecond latency result. **NULL** = Unknown.
-        average:
-          type: integer
-          format: uint32
-          nullable: true
-          minimum: 1
-          maximum: 2000
-          description: |-
-            **+VE** = millisecond latency result. **NULL** = Unknown.
-        when:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
-    wan-vpn-latency-diag:
-      type: object
-      description: Latency Diagnostic results for the WAN and VPN Networks
-      required:
-        - wan
-        - vpn
-      additionalProperties: false
-      properties:
-        wan:
-          $ref: "#/components/schemas/latency-diag"
-        vpn:
-          $ref: "#/components/schemas/latency-diag"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/latency-ms"
+        completion:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
 
     datacap:
       type: object
@@ -417,156 +371,109 @@ components:
 
 
     Adapter:
-      additionalProperties: false
       type: object
-      allOf:
-        - type: object
+      required:
+        - id
+        - hw
+        - location
+        - timezone
+        - ip
+        - registered
+        - state
+      additionalProperties: false
+      properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        hw:
+          $ref: "#/components/schemas/Adapter-Base"
+        name:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/adapter-name"
+        location:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
+        timezone:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iana-timezone"
+
+        ip:
+          type: object
           required:
-            - AdapterID
+            - lan
+            - wan
+            - vpn
+          description: |-
+            The current or last known IP addresses of the adapter/router.
           additionalProperties: false
           properties:
-            AdapterID:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
-
-        - $ref: "#/components/schemas/Adapter-Base"
-
-        - type: object
-          required:
-            - location
-            - timezone
-            - ip
-            - registered
-            - state
-          additionalProperties: false
-          properties:
-            name:
-              type: string
-              nullable: true
-              default: null
-              minLength: 0
-              maxLength: 64
-              pattern: "^[\\S ]+$"
-              example: "Home Office Router"
-              description: |-
-                The Name assigned to the Adapter/Router by the Client.
-            location:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
-            timezone:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/iana-timezone"
-
-            ip:
+            lan:
               type: object
               required:
-                - lan
-                - wan
-                - vpn
-              description: |-
-                The current or last known IP addresses of the adapter/router.
+                - ip4
+              description: The Local network IP addresses.
               additionalProperties: false
               properties:
-                lan:
-                  type: object
-                  required:
-                    - ip4
-                  description: The Local network IP addresses.
-                  additionalProperties: false
-                  properties:
-                    ip4:
-                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
-                    ip6:
-                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
-                wan:
-                  type: object
-                  required:
-                    - ip4
-                  description: The ISP Native IP addresses.
-                  additionalProperties: false
-                  properties:
-                    ip4:
-                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
-                    ip6:
-                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
-                vpn:
-                  type: object
-                  required:
-                    - ip4
-                  description: The VPN endpoint IP addresses.
-                  additionalProperties: false
-                  properties:
-                    ip4:
-                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
-                    ip6:
-                      $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
-
-            registered:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
-            state:
+                ip4:
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
+                ip6:
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
+            wan:
               type: object
-              description: The current state of the Adapter/Router.
               required:
-                - online
-                - vpn
-                - ad-blocking
-                - stream-relocation
-                - malware-phising
+                - ip4
+              description: The ISP Native IP addresses.
               additionalProperties: false
               properties:
-                online:
-                  $ref: "#/components/schemas/state"
-                vpn:
-                  $ref: "#/components/schemas/state"
-                ad-blocking:
-                  $ref: "#/components/schemas/state"
-                stream-relocation:
-                  $ref: "#/components/schemas/state"
-                malware-phising:
-                  $ref: "#/components/schemas/state"
+                ip4:
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
+                ip6:
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
+              example:
+                ip4: "183.89.52.15"
 
-        - $ref: "#/components/schemas/Adapter-Settings"
+            vpn:
+              type: object
+              required:
+                - ip4
+              description: The VPN endpoint IP addresses.
+              additionalProperties: false
+              properties:
+                ip4:
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
+                ip6:
+                  $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
+              example:
+                ip4: "177.11.22.13"
+                ip6: "2001:4860:4860::8844"
 
-        - type: object
+
+        registered:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+        state:
+          type: object
+          description: The current state of the Adapter/Router.
+          required:
+            - online
+            - vpn
+            - ad-blocking
+            - stream-relocation
+            - malware-phising
           additionalProperties: false
           properties:
-            diags:
-              type: object
-              description: Results from the last and best diagnostic tests
-              additionalProperties: false
-              properties:
-                speed_test:
-                  type: object
-                  description: Network Speed test results
-                  additionalProperties: false
-                  properties:
-                    tx:
-                      type: object
-                      description: Transmit Speed Diagnostics
-                      additionalProperties: false
-                      properties:
-                        last:
-                          $ref: "#/components/schemas/wan-vpn-speed-diag"
-                        best:
-                          $ref: "#/components/schemas/wan-vpn-speed-diag"
+            online:
+              $ref: "#/components/schemas/state"
+            vpn:
+              $ref: "#/components/schemas/state"
+            ad-blocking:
+              $ref: "#/components/schemas/state"
+            stream-relocation:
+              $ref: "#/components/schemas/state"
+            malware-phising:
+              $ref: "#/components/schemas/state"
 
-                    rx:
-                      type: object
-                      description: Receive Speed Diagnostics
-                      additionalProperties: false
-                      properties:
-                        last:
-                          $ref: "#/components/schemas/wan-vpn-speed-diag"
-                        best:
-                          $ref: "#/components/schemas/wan-vpn-speed-diag"
+        settings:
+          $ref: "#/components/schemas/Adapter-Settings"
 
-                ping_test:
-                  type: object
-                  description: ping test latency results
-                  additionalProperties: false
-                  properties:
-                    last:
-                      $ref: "#/components/schemas/wan-vpn-latency-diag"
-                    best:
-                      $ref: "#/components/schemas/wan-vpn-latency-diag"
+        health:
+          $ref: "#/components/schemas/Adapter-Diags"
 
     Adapters:
       type: array
@@ -575,3 +482,75 @@ components:
       items:
         $ref: "#/components/schemas/Adapter"
 
+    Adapter-Speed-Diags:
+      type: object
+      description: |-
+        Adapter Speed Diagnostic Results
+        - **latest**: Result of last speed test
+        - **averages**: Historical speed test results
+        - **running**: Time the current speed test is expected to complete.
+      additionalProperties: false
+      properties:
+        latest:
+          $ref: "#/components/schemas/speed-diag"
+        averages:
+          type: object
+          description: Historical Averages
+          additionalProperties: false
+          properties:
+            days7:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+            days30:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+            alltime:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+        running:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+    Adapter-Latency-Diags:
+      type: object
+      description: |-
+        Adapter Latency Diagnostic Results
+        - **latest**: Result of last latency test
+        - **averages**: Historical latency test results
+        - **running**: Time the current latency test is expected to complete.
+      additionalProperties: false
+      properties:
+        latest:
+          type: object
+          additionalProperties: false
+          properties:
+            result:
+              $ref: "#/components/schemas/latency-diag"
+            when:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        averages:
+          type: object
+          description: Historical Averages
+          additionalProperties: false
+          properties:
+            days7:
+              $ref: "#/components/schemas/latency-diag"
+            days30:
+              $ref: "#/components/schemas/latency-diag"
+            alltime:
+              $ref: "#/components/schemas/latency-diag"
+        running:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+    Adapter-Diags:
+          type: object
+          description: Results from the last and best diagnostic tests
+          additionalProperties: false
+          properties:
+            speed:
+              type: object
+              description: Network Speed test results
+              additionalProperties: false
+              properties:
+                tx:
+                  $ref: "#/components/schemas/Adapter-Speed-Diags"
+                rx:
+                  $ref: "#/components/schemas/Adapter-Speed-Diags"
+            ping:
+              $ref: "#/components/schemas/Adapter-Latency-Diags"
