@@ -208,7 +208,3 @@ paths:
   /v1/device/setting:
     $ref: "v1/device/setting.oas3.yml#/paths/~1device~1setting"
 
-  # vpn on/off (pause timed/unpause)
-  # adblocking on/off (pause timed/unpause)
-  # device protection on/off (pause/unpause internet)
-
