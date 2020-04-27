@@ -52,6 +52,9 @@ paths:
           - **clientToken** **MUST** be present, not in need of renewal and valid.
 
         ## Parameters
+          - **id**: The unique id of the adapter we are associating the new
+          profile with. Must not be the same as any existing profile on that
+          adapter, or a reserved profile name.
           - **name**: The name of the new profile.  Must not be the same as any
           existing profile, or a reserved profile name.
           - **icon**: Optionally, a link to the icon to use for the profile.
@@ -63,17 +66,18 @@ paths:
             schema:
               type: object
               required:
+                - id
                 - name
               additionalProperties: false
               properties:
-                adapter:
+                id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
                 name:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/profile-name"
                 icon:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
               example:
-                adapter: "d46cb964-4a40-43ac-87f6-cdefa19fa121"
+                id: "d46cb964-4a40-43ac-87f6-cdefa19fa121"
                 name: "Kids"
                 icon: "butterfly.ico"
 
@@ -90,6 +94,10 @@ paths:
                 "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
                 "name": "Kids",
                 "icon": "butterfly.ico",
+                "datausage": {
+                  "tx": 0,
+                  "rx": 0
+                },
                 "settings": {
                   "youtube-restricted": false,
                   "safesearch": false,

@@ -116,6 +116,10 @@ paths:
                 "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
                 "name": "Rugrats",
                 "icon": "rugrats.ico",
+                "datausage": {
+                  "tx": 1234567,
+                  "rx": 1234613450
+                },
                 "settings": {
                   "youtube-restricted": false,
                   "safesearch": false,

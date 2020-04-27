@@ -245,11 +245,11 @@ Proposed:
         Device Protection Bypass (Permanent/Timed)
 ```
 
-Profile Functions:
-Restrict youtube/safesearch
-global vpn Bypass
-global ad blocking
-global device protection bypass
+device vpn Bypass
+device ad blocking
+device protection bypass
+list devices, all, adapter, one, profile
+
 
 
 Push Notifications, using AWS SNS (Simple Notification Service)

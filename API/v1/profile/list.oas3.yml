@@ -51,32 +51,18 @@ paths:
           - **clientToken** **MUST** be present, not in need of renewal and valid.
 
         ## Parameters
-          - **adapter**: The unique ID of the adapter the profile belongs to.
-          IF not set, the list will be for all profiles, on all adapters
-          associated with the client.
-          - **id**: Optional. The id of a profile, if a specific profile is
-          required.  Can only query for profiles associated with the current
-          users account.
-
-          Only specify either **adapter** or **id** it is an error to specify
-          both.  However, they are both optional, so neither may validly be
-          specified.
+          - **id**: Optional. The id of an adapter or profile.  If an adapter id
+          is provided, all profiles belonging to that adapter will be reported.
+          If a specific profile id is provided, that specific profile will be
+          reported, otherwise all profiles on all adapters will be reported.
 
       parameters:
-
-        - in: query
-          name: adapter
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          description: |-
-            The adapters unique id.
-
         - in: query
           name: id
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           description: |-
-            The profiles unique id.
+            The unique id of either an adapter or a profile.
 
       responses:
         "200":
