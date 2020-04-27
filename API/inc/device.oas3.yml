@@ -101,16 +101,15 @@ components:
 
     DeviceUsageRecord:
       type: object
+      description: |-
+        - **timestamp**: The start of the period.
+        - **tx**: Number of bytes sent by the device in the period.
+        - **rx**: Number of bytes received by the device in the period.
       required:
         - timestamp
         - tx
         - rx
       additionalProperties: false
-      description: |-
-        - **vpn**: Enabled or Not, and Pause time.
-        - **Ad-blocking**: Enabled or Not, and Pause time.
-        - **device-protection**: Enabled or not.  IF Pause time is greater than
-        now, all internet for the device is blocked until pause time elapses.
       properties:
         timestamp:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
@@ -193,6 +192,62 @@ components:
           $ref: "#/components/schemas/DeviceConfig"
         usage:
           $ref: "#/components/schemas/DeviceUsageSummary"
+      example: {
+        "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
+        "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
+        "profile": "66f7346a-48af-4614-bd7b-6c17093d75e3",
+        "mac": "00-00-5E-DF-98-EB",
+        "name": "Nokia N78",
+        "type": "Smartphone",
+        "manufacturer": "Nokia",
+        "given_name": "Granpa's Nokia",
+        "given_type": null,
+        "given_manufacturer": null,
+        "ip": {
+          "ip4": "192.168.0.55",
+          "ip6": "2001:db8:85a3::8a2e:370:7334"
+        },
+        "online": true,
+        "online_since": 1587732975,
+        "discovered": 1587732975,
+        "cfg": {
+          "vpn": {
+            "state": false,
+            "pause": 1587732975
+          },
+          "ad-blocking": {
+            "state": false,
+            "pause": 1587732975
+          },
+          "device-protection": {
+            "state": false,
+            "pause": 1587732975
+          }
+        },
+        "usage": {
+          "hours24": {
+            "timestamp": 1587732975,
+            "tx": 123450,
+            "rx": 243512340
+          },
+          "week": {
+            "timestamp": 1587732975,
+            "tx": 1234504,
+            "rx": 2435123406
+          },
+          "month": {
+            "timestamp": 1587732975,
+            "tx": 12345047,
+            "rx": 24351234068
+          },
+          "quater": {
+            "timestamp": 1587732975,
+            "tx": 123450472,
+            "rx": 243512340683
+          }
+        }
+      }
+
 
     Devices:
       description: An array of known devices
