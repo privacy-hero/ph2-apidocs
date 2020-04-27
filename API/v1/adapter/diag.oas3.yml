@@ -85,13 +85,13 @@ paths:
               example:
                 error: "Internal Server Error."
         "401":
-          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "404":
           $ref: "../../inc/response.oas3.yml#/components/responses/404"
         "429":
-          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
           $ref: "../../inc/response.oas3.yml#/components/responses/500"
         "default":
@@ -165,7 +165,7 @@ paths:
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "415":
-          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+          $ref: "../../inc/response.oas3.yml#/components/responses/405"
         "429":
           $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
