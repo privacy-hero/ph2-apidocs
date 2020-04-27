@@ -246,14 +246,10 @@ Proposed:
 ```
 
 Profile Functions:
-1. Delay Bedtime
-2. Set/Update Bedtime
-3. Create Profile
-4. Delete Profile
-5. Rename Profile
-6. Change Profile Icon
-7. Pause/Unpause internet
-
+Restrict youtube/safesearch
+global vpn Bypass
+global ad blocking
+global device protection bypass
 
 
 Push Notifications, using AWS SNS (Simple Notification Service)

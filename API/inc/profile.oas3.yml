@@ -151,8 +151,6 @@ components:
         bedtime-delay:
           $ref: "./simpletypes.oas3.yml#/components/schemas/time-delay"
 
-
-
     Profiles:
       description: An array of known profiles
       type: array

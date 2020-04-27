@@ -1,0 +1,180 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /profile/cfg/setting"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Set a bedtime delay.
+
+    `/profile/cfg/setting`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Profile Management
+    description: Operations related to Profile Management
+
+paths:
+  /profile/cfg/setting:
+    post:
+      operationId: profileCfgSetting
+      tags:
+        - Profile Management
+      summary: Change a Configuration Setting on a profile.
+      description: |-
+        # Usage
+
+        Allows all devices, associated to a profile, access to the internet to
+        be paused.  Either for a timed period, or indefinitely, or for
+        safesearch to be enforced, or youtube to be restricted, as required.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: The unique id of the profile.
+          - **restrict-youtube**: True, youtube is restricted.  False,
+          unrestricted.
+          - **safe-search**: True, search engine safe search enforced.  False,
+          unrestricted.
+          - **internet-paused**: The time when we "unpause" internet.  If this is in the
+          past, then by definition internet is enabled.  To pause indefinitely,
+          set to -1.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                restrict-youtube:
+                  type: boolean
+                  nullable: true
+                  default: false
+                safe-search:
+                  type: boolean
+                  nullable: true
+                  default: false
+                internet-paused:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+            examples:
+              pause:
+                summary: Pausing the internet
+                value:
+                  id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                  internet-paused: 1619533887
+              restrict-youtube:
+                summary: Restricting YouTube
+                value:
+                  id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                  restrict-youtube: true
+              safesearch:
+                summary: Setting Safe Search active
+                value:
+                  id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                  safesearch: true
+
+      responses:
+        "200":
+          description: |-
+            Success, The profiles internet access is paused until the time set.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/profile.oas3.yml#/components/schemas/Profile"
+              example: {
+                "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
+                "name": "Rugrats",
+                "icon": "rugrats.ico",
+                "settings": {
+                  "youtube-restricted": true,
+                  "safesearch": true,
+                  "internet-pause": 1619533887,
+                  "bedtime": [
+                    {
+                      "start-time": 77400,
+                      "duration": 37800
+                    },
+                    {
+                      "start-time": 77400,
+                      "duration": 37800
+                    },
+                    {
+                      "start-time": 77400,
+                      "duration": 37800
+                    },
+                    {
+                      "start-time": 77400,
+                      "duration": 37800
+                    },
+                    {
+                      "start-time": 77400,
+                      "duration": 37800
+                    },
+                    {
+                      "start-time": 82800,
+                      "duration": 25200
+                    },
+                    {
+                      "start-time": 82800,
+                      "duration": 25200
+                    }
+                  ],
+                  "bedtime-delay": 1800
+                }
+              }
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Pause time in the past."` - Can't pause into the past.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        "default":
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

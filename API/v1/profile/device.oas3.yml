@@ -1,0 +1,139 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /profile/device"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Make a global config change to all devices on a profile.
+
+    `/profile/device`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Profile Management
+    description: Operations related to Profile Management
+
+paths:
+  /profile/device:
+    post:
+      operationId: profileDevice
+      tags:
+        - Profile Management
+      summary: Make a configuration change to all devices connected to a profile.
+      description: |-
+        # Usage
+
+        Allows all devices to have certain configuration attributes globally
+        set.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: The unique id of the profile.
+          - **setting**: The setting to set on all devices.
+          - **duration**: How long the setting lasts.  -1 is indefinite.
+
+          All parameters are required to be set.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+                - setting
+                - duration
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                setting:
+                  type: string
+                  enum:
+                    - "VPNBypass"
+                    - "AdBlockingBypass"
+                    - "DeviceProtectionBypass"
+                duration:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+            examples:
+              VPN:
+                summary: Indefinite VPN Bypass
+                value:
+                  id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                  setting: "VPNBypass"
+                  duration: -1
+              AdBlocking:
+                summary: Timed Ad-blocking Bypass
+                value:
+                  id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                  setting: "AdBlockingBypass"
+                  duration: 1619533887
+              DeviceProtection:
+                summary: Permanent Device Protection Bypass
+                value:
+                  id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                  setting: "DeviceProtectionBypass"
+                  duration: -1
+
+      responses:
+        "200":
+          description: |-
+            Success, The setting has been applied to all associated devices.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "VPN Bypass enabled on devices."
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Bypass time in the past."` - Can't bypass into the past.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        "default":
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
