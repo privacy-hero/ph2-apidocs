@@ -179,7 +179,9 @@ paths:
   /v1/profile/cfg/name:
     $ref: "v1/profile/cfg-name.oas3.yml#/paths/~1profile~1cfg~1name"
 
-# /v1/profile/cfg/bedtimes
+  /v1/profile/cfg/bedtimes:
+    $ref: "v1/profile/cfg-bedtimes.oas3.yml#/paths/~1profile~1cfg~1bedtimes"
+
 # /v1/profile/cfg/bedtime-delay
 # /v1/profile/cfg/pause-internet
 # /v1/profile/device (vpn-bypass-global, adblock-bypass-global, protection-bypass-global)

@@ -61,7 +61,7 @@ paths:
             schema:
               type: object
               required:
-                - name
+                - id
               additionalProperties: false
               properties:
                 id:

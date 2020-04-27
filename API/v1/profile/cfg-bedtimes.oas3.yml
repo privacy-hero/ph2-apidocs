@@ -34,16 +34,18 @@ tags:
     description: Operations related to Profile Management
 
 paths:
-  /profile/cfg/name:
+  /profile/cfg/bedtimes:
     post:
-      operationId: profileCfgName
+      operationId: profileCfgBedtimes
       tags:
         - Profile Management
-      summary: Change Name and/or Icon of a Profile.
+      summary: Set the weekly bedtimes for a profile.
       description: |-
         # Usage
 
-        Allows the descriptive name or icon of a profile to be changed.
+        Allows the weekly bedtimes to be set for a profile.  The entire weekly
+        schedule is always set, if some entries do not change, simply send them
+        as configured.
 
         ## Security Requirements
           - **appKey** **MUST NOT** be present in the call.
@@ -51,12 +53,7 @@ paths:
 
         ## Parameters
           - **id**: The unique id of the profile.
-          - **name**: Optionally, The name of the new profile.  Must not be the same as any
-          existing profile, or a reserved profile name.
-          - **icon**: Optionally, a link to the icon to use for the profile.
-
-        The call may change either or both the **name** and **icon**.  If the
-        call is made, and neither **name** or **icon** is present, it is an error.
+          - **bedtime**: An array of bedtimes to set for the profile.
 
       requestBody:
         required: true
@@ -66,6 +63,7 @@ paths:
               type: object
               required:
                 - id
+                - bedtime
               additionalProperties: false
               properties:
                 id:
