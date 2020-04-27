@@ -1,0 +1,176 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /device/name"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Assign a device to a profile.
+
+    `/device/name`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Device Management
+    description: Operations related to Device Management
+
+paths:
+  /device/name:
+    post:
+      operationId: deviceName
+      tags:
+        - Device Management
+      summary: Set one or more device name field over-rides to the clients choice.
+      description: |-
+        # Usage
+
+        Assigns a device to a profile.  Can only assign devices to profiles that
+        exist associated with the same adapter.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: The unique id of the device we are associating with the profile.
+          - **name**: Optional, the name preferred by the client.
+          - **type**: Optional, the device type preferred by the client.
+          - **manufacturer**: Optional, the manufacturt preferred by the client.
+
+          The call may specify one or more name fields, name fields that are
+          present are set.  Ones that are not present are cleared and default
+          back to the system assigned names.  If a name needs to be changed and
+          the others remain, set all name fields.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                name:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/device-name"
+                type:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/device-name"
+                manufacturer:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/device-name"
+              example:
+                id: "d46cb964-4a40-43ac-87f6-cdefa19fa121"
+                name: "My Iphone"
+                type: "Iphone 13"
+                manufacturer: "Apple"
+
+      responses:
+        "200":
+          description: |-
+            Success, The device was assigned to the profile.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/device.oas3.yml#/components/schemas/Device"
+              example: {
+                "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
+                "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                "profile": "66f7346a-48af-4614-bd7b-6c17093d75e3",
+                "mac": "00-00-5E-DF-98-EB",
+                "name": "Unknown Iphone",
+                "type": "Unknown",
+                "manufacturer": "Unknown",
+                "given_name": "My Iphone",
+                "given_type": "Iphone 13",
+                "given_manufacturer": "Apple",
+                "ip": {
+                  "ip4": "192.168.0.55",
+                  "ip6": "2001:db8:85a3::8a2e:370:7334"
+                },
+                "online": true,
+                "online_since": 1587732975,
+                "discovered": 1587732975,
+                "cfg": {
+                  "vpn": {
+                    "state": false,
+                    "pause": 1587732975
+                  },
+                  "ad-blocking": {
+                    "state": false,
+                    "pause": 1587732975
+                  },
+                  "device-protection": {
+                    "state": false,
+                    "pause": 1587732975
+                  }
+                },
+                "usage": {
+                  "hours24": {
+                    "timestamp": 1587732975,
+                    "tx": 123450,
+                    "rx": 243512340
+                  },
+                  "week": {
+                    "timestamp": 1587732975,
+                    "tx": 1234504,
+                    "rx": 2435123406
+                  },
+                  "month": {
+                    "timestamp": 1587732975,
+                    "tx": 12345047,
+                    "rx": 24351234068
+                  },
+                  "quater": {
+                    "timestamp": 1587732975,
+                    "tx": 123450472,
+                    "rx": 243512340683
+                  }
+                }
+              }
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        "default":
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

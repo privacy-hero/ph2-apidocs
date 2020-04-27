@@ -78,7 +78,7 @@ paths:
         - in: query
           name: start
           schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-time"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
           description: |-
             The start of the reporting window.  If not specified, defaults to
             the oldest data on record for the device.
@@ -86,7 +86,7 @@ paths:
         - in: query
           name: end
           schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-time"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
           description: |-
             The end of the reporting window.  If not specified, defaults to
             now.

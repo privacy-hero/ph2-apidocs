@@ -190,6 +190,8 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
         cfg:
           $ref: "#/components/schemas/DeviceConfig"
+        pending-cfg:
+          $ref: "#/components/schemas/DeviceConfig"
         usage:
           $ref: "#/components/schemas/DeviceUsageSummary"
       example: {
