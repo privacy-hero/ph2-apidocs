@@ -60,6 +60,7 @@ components:
         associated devices.
 
         - **id**: The profiles unique id.
+        - **adapter**: The unique id of the adapter the profile belongs to.
         - **name**: The descriptive name of the profile.
         - **icon**: An identifier for the icon.
         - **system**: Is this a system profile?  If so, can not be edited or
@@ -71,6 +72,8 @@ components:
       additionalProperties: false
       properties:
         id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        adapter:
           $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         name:
           $ref: "./simpletypes.oas3.yml#/components/schemas/profile-name"

@@ -173,11 +173,17 @@ paths:
   /v1/profile/create:
     $ref: "v1/profile/create.oas3.yml#/paths/~1profile~1create"
 
-# /v1/profile/delete
-# /v1/profile/cfg/name (Also can change icon)
+  /v1/profile/delete:
+    $ref: "v1/profile/delete.oas3.yml#/paths/~1profile~1delete"
+
+  /v1/profile/cfg/name:
+    $ref: "v1/profile/cfg-name.oas3.yml#/paths/~1profile~1cfg~1name"
+
 # /v1/profile/cfg/bedtimes
 # /v1/profile/cfg/bedtime-delay
 # /v1/profile/cfg/pause-internet
+# /v1/profile/device (vpn-bypass-global, adblock-bypass-global, protection-bypass-global)
+
 
 
 

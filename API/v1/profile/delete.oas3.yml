@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /profile/list"
+  title: "Privacy Hero 2 - Mothership API - /profile/delete"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    List all/selected profiles created for the account.
+    delete a user profile.
 
-    `/profile/list`
+    `/profile/delete`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
     url: ./LICENSE.md
@@ -34,58 +34,49 @@ tags:
     description: Operations related to Profile Management
 
 paths:
-  /profile/list:
-    get:
-      operationId: profileList
+  /profile/delete:
+    post:
+      operationId: profileDelete
       tags:
         - Profile Management
-      summary: Lists all/selected profiles created by the client on their account.
+      summary: Delete a new user profile.
       description: |-
         # Usage
 
-        Generates a list of specific profile, or all profiles associated with
-        the clients account.
+        deletes an existing profile for the client.  Any devices which remain
+        attached to the profile will be moved to the system "shared" profile.
 
         ## Security Requirements
           - **appKey** **MUST NOT** be present in the call.
           - **clientToken** **MUST** be present, not in need of renewal and valid.
 
         ## Parameters
-          - **adapter**: The unique ID of the adapter the profile belongs to.
-          IF not set, the list will be for all profiles, on all adapters
-          associated with the client.
-          - **id**: Optional. The id of a profile, if a specific profile is
-          required.  Can only query for profiles associated with the current
-          users account.
+          - **id**: The unique id of the profile.  The profile must belong to
+          the client account deleting it.
 
-          Only specify either **adapter** or **id** it is an error to specify
-          both.  However, they are both optional, so neither may validly be
-          specified.
-
-      parameters:
-
-        - in: query
-          name: adapter
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          description: |-
-            The adapters unique id.
-
-        - in: query
-          name: id
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          description: |-
-            The profiles unique id.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - name
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
 
       responses:
         "200":
           description: |-
-            Success, The profile details.
+            Success, The profile was deleted.
           content:
             application/json:
               schema:
-                $ref: "../../inc/profile.oas3.yml#/components/schemas/Profiles"
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "Profile Deleted OK."
 
         "400":
           description: |-
@@ -93,6 +84,8 @@ paths:
             * `"Internal Server Error."` - Fatal uncategorized error in server.
             * `"Required Parameters missing or malformed."` - JSON Message Body
             Error.
+            * `"Cannot delete system profile."` - It is not possible to delete
+            system profiles.
           content:
             application/json:
               schema:
@@ -105,6 +98,8 @@ paths:
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "404":
           $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
           $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
