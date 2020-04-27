@@ -40,9 +40,21 @@ paths:
       tags:
         - Adapter Management
       summary: Query the result of adapter diagnostics.
-      description:
-        For a particular Adapter, return the current and pending diagnostic
-        result.
+      description: |-
+        # Usage
+
+        When an adapter health diagnostic is running (or at any time) this api
+        call may be made to get the current status of any running tests. AND to
+        get the historical diagnostic/health results.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **id**: The id of the adapter to retrieve diagnostic health status from.
+
       parameters:
         - in: query
           name: id
@@ -55,102 +67,91 @@ paths:
       responses:
         "200":
           description: |-
-            Success, Adapter Query Result returned.
+            Success, Diagnostic Health Result returned.
           content:
             application/json:
               schema:
-                type: object
-                additionalProperties: false
-                properties:
-                  current:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      last:
-                        $ref: "../../inc/adapter.oas3.yml#/components/schemas/wan-vpn-speed-diag"
-                      best:
-                        $ref: "../../inc/adapter.oas3.yml#/components/schemas/wan-vpn-speed-diag"
-                  pending:
-                    type: object
-                    additionalProperties: false
-                    properties:
-                      wan:
-                        $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
-
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Diags"
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not query the adapter!"
+                error: "Internal Server Error."
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "500":
           $ref: "../../inc/response.oas3.yml#/components/responses/500"
 
     post:
-      operationId: adapterCfg
+      operationId: adapterDiagStart
       tags:
         - Adapter Management
-      summary: Change the Adapter Configuration.
+      summary: Start a diagnostic health check now.
       description: |-
-        Change the Adapter Configuration.
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            The Adapter ID to Name.
+        # Usage
 
-        - in: query
-          name: service
-          required: true
-          schema:
-            type: string
-            enum:
-              - "VPN"
-              - "AdBlocking"
-              - "SRelocation"
-              - "Malware"
-          example: "VPN"
-          description: |-
-            The service to configure.
+        The system and adapters automatically run diagnostic health checks on a
+        daily basis, however, if the client wishes to force an adapter to run a
+        diagnostic health check now, this call can be made.
 
-        - in: query
-          name: state
-          required: true
-          schema:
-            type: boolean
-          example: true
-          description: |-
-            **true**=Enable the Service. **false**=Disable the Service.
-            **null**=No Change
+        ## Parameters
+          - **id**: The id of the adapter to run the test on.  The Adapter must
+          be registered to the current client.
+          - **test**: The test to perform.
+            - "**SpeedTest**" will automatically pick the closest speedtest.com
+            server to the adapter and complete the speed test check.
+            - "**BasicConnectivity**" will cause a series of pings to be sent to
+                 a wel known and reliable server.  The time taken to reply and
+                 the number of replies which fail to be received will be recorded.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+                - test
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                test:
+                  type: string
+                  enum:
+                    - "SpeedTest"
+                    - "BasicConnectivity"
+
 
       responses:
         "200":
           description: |-
-            Success, Adapter Config Change queued.
+            Success, Current Diagnostic Health Result returned.
           content:
             application/json:
               schema:
-                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Settings"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Diags"
 
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not name the adapter!"
+                error: "Internal Server Error."
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403"
         "500":
