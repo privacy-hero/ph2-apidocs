@@ -1,0 +1,193 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/datausage"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Get monthly Data usage statistics for an adapter.
+
+    `/adapter/datausage`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/datausage:
+    get:
+      operationId: adapterDataUsage
+      tags:
+        - Adapter Management
+      summary: Get data usage statistics for an adapter.
+      description: |-
+        # Usage
+        Generates a series of statistics for datausage of an adapter.
+        Monthly, for the life of the adapter.
+        Daily for the last 31 days.
+        Daily Future Projection, for every day from today thru the end of the month.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: the ID of the adapter.  Only adapters associated with a
+          clients account can be returned with this call.  IF the id is valid,
+          but the adapter is not associated with this clients account, then that
+          is treated the same as the adapter ID being invalid.
+
+      parameters:
+        - in: query
+          name: id
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            The Adapter ID to get data usage statistics for.
+
+      responses:
+        "200":
+          description: |-
+            Success, The adapters data usage statistics.
+
+            - **AdapterID** - is the Unique ID of this Adapter.
+            - **mac** - The Adapters mac address.
+            - **ip** - list of ip addresses, either current, or last known.
+            - **registered** - the time the adapter was first claimed by the
+            customer.
+            - **state** - the current state of the listed services.
+            - **settings** - the current adapter level settings.
+            - **health** - the last and best result from diagnostic tests.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Settings for an individual wifi network
+                required:
+                  - monthly
+                  - daily
+                  - projection
+                additionalProperties: false
+                properties:
+                  monthly:
+                    type: object
+                    description: |-
+                      Monthly data usage statistics. Listed in reverse order,
+                      for all months held.  ie, the first entry is the
+                      monthly total for the current month.  The second entry is
+                      the cumulative monthly total for last month, etc.
+                    additionalProperties: false
+                    properties:
+                      tx:
+                        type: array
+                        minItems: 1
+                        maxItems: 256
+                        items:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datausage"
+                      rx:
+                        type: array
+                        minItems: 1
+                        maxItems: 256
+                        items:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datausage"
+                    example: {
+                      tx: [320000,1900000,1850000,1940000,1890000],
+                      rx: [1151000000,3782000000,3591000000,4276000000,3264000000],
+                    }
+
+                  daily:
+                    type: object
+                    description: |-
+                      Daily data usage statistics. Listed in reverse order,
+                      for the last 32 days.  ie, the first entry is the
+                      daily total for today.  The second entry is
+                      the cumulative daily total for yesterday, etc.
+                    additionalProperties: false
+                    properties:
+                      tx:
+                        type: array
+                        minItems: 1
+                        maxItems: 32
+                        items:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datausage"
+                      rx:
+                        type: array
+                        minItems: 1
+                        maxItems: 32
+                        items:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datausage"
+                    example: {
+                      tx: [2800,80000,60000,40000,20000],
+                      rx: [15000000,14000000,13000000,12000000,11000000]
+                    }
+                  projection:
+                    type: object
+                    description: |-
+                      Projected future total daily data usage statistics. Listed in
+                      order, for everyday from today to the last day of the
+                      month, inclusive.
+                    additionalProperties: false
+                    properties:
+                      tx:
+                        type: array
+                        minItems: 1
+                        maxItems: 31
+                        items:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datausage"
+                      rx:
+                        type: array
+                        minItems: 1
+                        maxItems: 31
+                        items:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datausage"
+                    example: {
+                      tx: [120000,160000,200000,240000,280000],
+                      rx: [15000000,16000000,17000000,18000000,19000000]
+                    }
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

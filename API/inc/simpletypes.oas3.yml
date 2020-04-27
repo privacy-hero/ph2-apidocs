@@ -61,6 +61,7 @@ paths:
                     - $ref: "#/components/schemas/adapter-services"
                     - $ref: "#/components/schemas/adapter-state"
                     - $ref: "#/components/schemas/datacap"
+                    - $ref: "#/components/schemas/datausage"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -384,3 +385,11 @@ components:
       maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
       description: |-
         Data Cap in Bytes per month. 0 = no data cap
+
+    datausage:
+      type: integer
+      format: uint64
+      minimum: 0
+      maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
+      description: |-
+        Data Usage in Bytes.

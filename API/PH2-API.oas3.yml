@@ -157,6 +157,9 @@ paths:
   # Wan Ping (Latency) Test - Start/Query
   # VPN Pint (Latency) Test - Start/Query
 
+  /v1/adapter/datausage:
+    $ref: "v1/adapter/datausage.oas3.yml#/paths/~1adapter~1datausage"
+
   ######### STREAMING MANAGEMENT API CALLS ######################
 
   /v1/streaming/services:
