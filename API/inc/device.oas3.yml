@@ -30,8 +30,7 @@ paths:
                   oneOf:
                     - $ref: "#/components/schemas/Device"
                     - $ref: "#/components/schemas/Devices"
-                    - $ref: "#/components/schemas/AdapterDevices"
-                    - $ref: "#/components/schemas/AdaptersDevices"
+                    - $ref: "#/components/schemas/DeviceUsageHistory"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -52,64 +51,155 @@ components:
 
   schemas:
 
+    DeviceIP:
+      type: object
+      required:
+        - ip4
+      additionalProperties: false
+      properties:
+        ip4:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/ip4"
+        ip6:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
+
+    PauseSetting:
+      type: object
+      additionalProperties: false
+      description: |-
+        - **state**: if true the system is enabled persistently.
+        - **pause**: if the time is greater than now, then regardless of the
+        **state** the service is disabled, until the pause time elapses.  After
+        which, the **state** reasserts itself.
+      properties:
+        state:
+          type: boolean
+          default: false
+          description: |-
+            **true** = ON.  **false** = Off
+        pause:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+    DeviceConfig:
+      type: object
+      required:
+        - vpn
+        - device-protection
+        - ad-blocking
+      additionalProperties: false
+      description: |-
+        - **vpn**: Enabled or Not, and Pause time.
+        - **Ad-blocking**: Enabled or Not, and Pause time.
+        - **device-protection**: Enabled or not.  IF Pause time is greater than
+        now, all internet for the device is blocked until pause time elapses.
+      properties:
+        vpn:
+          $ref: "#/components/schemas/PauseSetting"
+        ad-blocking:
+          $ref: "#/components/schemas/PauseSetting"
+        device-protection:
+          $ref: "#/components/schemas/PauseSetting"
+
+    DeviceUsageRecord:
+      type: object
+      required:
+        - timestamp
+        - tx
+        - rx
+      additionalProperties: false
+      description: |-
+        - **vpn**: Enabled or Not, and Pause time.
+        - **Ad-blocking**: Enabled or Not, and Pause time.
+        - **device-protection**: Enabled or not.  IF Pause time is greater than
+        now, all internet for the device is blocked until pause time elapses.
+      properties:
+        timestamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        tx:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
+        rx:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
+
+    DeviceUsageHistory:
+      type: array
+      description: |-
+        Holds up to 90 days worth of hourly data usage records for the device.
+        The resolution of the items (daily or hourly) depends on the api call.
+      minItems: 1
+      maxItems: 2160
+      items:
+        $ref: "#/components/schemas/DeviceUsageRecord"
+
+    DeviceUsageSummary:
+      type: object
+      description: |-
+        Holds a summary of the devices usage.
+        - **hours24**: The last 24 hour agregated usage.
+        - **week**: The last 7 days agregated usage.
+        - **month**: The last 30 days agregated usage.
+        - **quater**: The last 90 days agregated usage.
+
+        **timestamp** in the device usage is the start of the period in question.
+      additionalProperties: false
+      properties:
+        hours24:
+          $ref: "#/components/schemas/DeviceUsageRecord"
+        week:
+          $ref: "#/components/schemas/DeviceUsageRecord"
+        month:
+          $ref: "#/components/schemas/DeviceUsageRecord"
+        quater:
+          $ref: "#/components/schemas/DeviceUsageRecord"
+
+
     Device:
       type: object
       required:
+        - id
+        - adapter
+        - profile
         - mac
-        - name
-        - type
       additionalProperties: false
       properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        adapter:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        profile:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         mac:
-          type: string
-          format: MAC Address
-          example: "00-00-5E-32-5C-DE"
-          description: Devices EUI-48 Formatted MAC Address
+          $ref: "./simpletypes.oas3.yml#/components/schemas/mac"
         name:
-          type: string
-          example: "android-e960b7e925b22464"
-          description: The default name of the device
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
         type:
-          type: string
-          example: "Android Smart Phone"
-          description: |-
-            Automatically detected device type, used as `desc` if desc is null.
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
+        manufacturer:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
         given_name:
-          type: string
-          example: null
-          description: If NOT null, this is the name the Client gave the device.
-          nullable: true
-        desc:
-          type: string
-          example: "Mums Samsung S12+"
-          description: If not null, the Name given to the device by the user.
-          nullable: true
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
+        given_type:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
+        given_manufacturer:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
+        ip:
+          $ref: "#/components/schemas/DeviceIP"
+        online:
+          type: boolean
+          default: true
+        online_since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        discovered:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        cfg:
+          $ref: "#/components/schemas/DeviceConfig"
+        usage:
+          $ref: "#/components/schemas/DeviceUsageSummary"
 
     Devices:
       description: An array of known devices
       type: array
+      minItems: 0
+      maxItems: 512
       items:
         $ref: "#/components/schemas/Device"
 
-    AdapterDevices:
-      description: An Adapter/Router and all it's known devices.
-      #type: object
-      #required:
-      #  - mac
-      #  - desc
-      #properties:
-        #mac:
-        #  $ref: "#/components/schemas/Adapter/properties/mac"
-        #desc:
-        #  $ref: "#/components/schemas/Adapter/properties/desc"
-        #name:
-        #  $ref: "#/components/schemas/Adapter/properties/name"
-        #devices:
-        #  $ref: "#/components/schemas/Devices"
-
-    AdaptersDevices:
-      description: An array of adapters, and their devices.
-      type: array
-      items:
-        $ref: "#/components/schemas/AdapterDevices"
 

@@ -65,6 +65,7 @@ paths:
                     - $ref: "#/components/schemas/profile-name"
                     - $ref: "#/components/schemas/time-of-day"
                     - $ref: "#/components/schemas/time-delay"
+                    - $ref: "#/components/schemas/device-name"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -326,6 +327,16 @@ components:
       maxLength: 64
       pattern: "^[\\w\\W]+$"
       example: "Shared"
+
+    device-name:
+      type: string
+      format: text
+      nullable: true
+      description: The name of the device.
+      minLength: 0
+      maxLength: 64
+      pattern: "^[\\w\\W]+$"
+      example: "Granpa's Nokia"
 
     email-address:
       type: string

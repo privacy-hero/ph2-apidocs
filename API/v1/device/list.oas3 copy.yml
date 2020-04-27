@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /device/list"
+  title: "Privacy Hero 2 - Mothership API - /profile/list"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    List all adapters on an account.
+    List all/selected profiles created for the account.
 
-    `/device/list`
+    `/profile/list`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
     url: ./LICENSE.md
@@ -30,35 +30,31 @@ components:
     $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 tags:
-  - name: Device Management
-    description: Operations related to Device Management
+  - name: Profile Management
+    description: Operations related to Profile Management
 
 paths:
-  /device/list:
+  /profile/list:
     get:
-      operationId: deviceList
+      operationId: profileList
       tags:
-        - Device Management
-      summary: Lists all devices and their associated Adapter/Profile.
+        - Profile Management
+      summary: Lists all/selected profiles created by the client on their account.
       description: |-
         # Usage
 
-        Generates a list of either, all devices associated with the client, a
-        specific device, all devices on a profile, or all devices on an adapter.
+        Generates a list of specific profile, or all profiles associated with
+        the clients account.
 
         ## Security Requirements
           - **appKey** **MUST NOT** be present in the call.
           - **clientToken** **MUST** be present, not in need of renewal and valid.
 
         ## Parameters
-          - **id**: Optional. This can be either:
-            - The Unique ID of an Adapter: Will return all devices on that
-            adapter.
-            - The Unique ID of a Profile: Will return all devices attached to
-            that profile.
-            - The Unique ID of a device, will return that 1 device.
-            If no id is specified, all devices associated with the clients
-            account will be returned.
+          - **id**: Optional. The id of an adapter or profile.  If an adapter id
+          is provided, all profiles belonging to that adapter will be reported.
+          If a specific profile id is provided, that specific profile will be
+          reported, otherwise all profiles on all adapters will be reported.
 
       parameters:
         - in: query
@@ -66,16 +62,16 @@ paths:
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           description: |-
-            Either the unique id of a adapter, profile or device.
+            The unique id of either an adapter or a profile.
 
       responses:
         "200":
           description: |-
-            Success, The device details, filtered as requested.
+            Success, The profile details.
           content:
             application/json:
               schema:
-                $ref: "../../inc/device.oas3.yml#/components/schemas/Devices"
+                $ref: "../../inc/profile.oas3.yml#/components/schemas/Profiles"
 
         "400":
           description: |-

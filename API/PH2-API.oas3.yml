@@ -193,8 +193,8 @@ paths:
 
   ######### DEVICE  MANAGEMENT API CALLS ######################
 
-  #/v1/device/list:
-  #  $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
+  /v1/device/list:
+    $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
 
   #/v1/device/assign:
   #  $ref: "v1/device/assign.oas3.yml#/paths/~1device~1assign"
