@@ -71,14 +71,12 @@ paths:
           description: |-
             Success, The adapters data usage statistics.
 
-            - **AdapterID** - is the Unique ID of this Adapter.
-            - **mac** - The Adapters mac address.
-            - **ip** - list of ip addresses, either current, or last known.
-            - **registered** - the time the adapter was first claimed by the
-            customer.
-            - **state** - the current state of the listed services.
-            - **settings** - the current adapter level settings.
-            - **health** - the last and best result from diagnostic tests.
+            - **monthly** - Data used each month, in reverse order from this
+            month inclusive.
+            - **daily** - Data used each day for the last 32 days, in reverse
+            order from this day inclusive.
+            - **projection** - The projected future daily usage, from today
+            to last day of month (inclusive).
 
           content:
             application/json:
