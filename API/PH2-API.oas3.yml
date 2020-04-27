@@ -196,6 +196,16 @@ paths:
   /v1/device/list:
     $ref: "v1/device/list.oas3.yml#/paths/~1device~1list"
 
-  #/v1/device/assign:
-  #  $ref: "v1/device/assign.oas3.yml#/paths/~1device~1assign"
+  /v1/device/assign:
+    $ref: "v1/device/assign.oas3.yml#/paths/~1device~1assign"
+
+  /v1/device/usage:
+    $ref: "v1/device/usage.oas3.yml#/paths/~1device~1usage"
+
+  #/v1/device/name
+  # Change name, type and manufacturer
+
+  # vpn on/off (pause timed/unpause)
+  # adblocking on/off (pause timed/unpause)
+  # device protection on/off (pause/unpause internet)
 

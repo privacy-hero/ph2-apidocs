@@ -1,0 +1,127 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /device/usage"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Generate a data usage report for a device.
+
+    `/device/usage`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Device Management
+    description: Operations related to Device Management
+
+paths:
+  /device/usage:
+    get:
+      operationId: deviceUsage
+      tags:
+        - Device Management
+      summary: Get device data usage.
+      description: |-
+        # Usage
+
+        Generates a list of data usage values for a device, at a specified resolution.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: The Unique device ID.
+
+      parameters:
+        - in: query
+          name: id
+          required: true
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+          description: |-
+            The unique device id.
+        - in: query
+          name: resolution
+          schema:
+            type: string
+            enum:
+              - "Hourly"
+              - "Daily"
+              - "Weekly"
+              - "Monthly"
+            default: "Hourly"
+          description: |-
+            The time resolution to report. Hourly is hourly, Daily is 24 hours.
+            Weekly is 7 days and Monthly is 30 days.  If not specified the
+            resolution is "Hourly"
+
+        - in: query
+          name: start
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-time"
+          description: |-
+            The start of the reporting window.  If not specified, defaults to
+            the oldest data on record for the device.
+
+        - in: query
+          name: end
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-time"
+          description: |-
+            The end of the reporting window.  If not specified, defaults to
+            now.
+
+
+      responses:
+        "200":
+          description: |-
+            Success, The device data usage is returned.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/device.oas3.yml#/components/schemas/DeviceUsageHistory"
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        "default":
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
