@@ -375,3 +375,7 @@ API Call description format:
             AdapterID of the Adapter to replace.  The AdapterID will not change
             but the Adapter will replace the existing adapter known by that ID.
             The old Adapter will then become unassociated from the client.
+
+
+          description: |-
+            The Name assigned to the Adapter/Router by the Client.
