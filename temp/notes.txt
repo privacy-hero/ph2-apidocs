@@ -344,8 +344,6 @@ API Call description format:
             * `"Internal Server Error."` - Fatal uncategorized error in server.
             * `"Required Parameters missing or malformed."` - JSON Message Body
             Error.
-            * `"Insecure Password"` - Password failed security strength check.
-            * `"Old Password doesn't match"` - Old Password failed security check.
           content:
             application/json:
               schema:

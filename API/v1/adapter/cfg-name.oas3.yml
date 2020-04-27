@@ -1,11 +1,11 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /adapter/datacap"
+  title: "Privacy Hero 2 - Mothership API - /adapter/name"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    Set the Datacap for a particular Adapter.
+    Give the adapter a name.
 
     `/adapter/name`
   license:
@@ -34,52 +34,60 @@ tags:
     description: Operations related to Adapter Management
 
 paths:
-  /adapter/datacap:
+  /adapter/cfg/name:
     post:
-      operationId: adapterDataCap
+      operationId: adapterName
       tags:
         - Adapter Management
-      summary: Set the datacap for a particular adapter.
+      summary: Give an adapter a descriptive name.
       description: |-
-        Sets the data caps for the identified adapter.
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            The Adapter ID to Set DataCap of.
+        # Usage
+
+        Allows the descriptive name of the adapter to be set.  Typically used by
+        a UI to allow a client to give an adapter a more meaningful name like
+        "Rental Appt. 1"
       requestBody:
         required: true
-        description: "The DataCap settings to apply."
         content:
-          application/json:
+          "application/json":
             schema:
-              $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap"
+              type: object
+              required:
+                - id
+                - name
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                name:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/adapter-name"
+              example:
+                id:  "cd73b915-89a4-4971-9d86-bce91786b12a"
+                name: "Home Office Adapter"
 
       responses:
         "200":
           description: |-
-            Success, Adapter datacap set.
+            Success, Adapter named.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
               example:
-                msg: "Success, Adapter datacap set."
+                msg: "Success, Adapter named."
 
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not name the adapter!"
-
+                error: "Internal Server Error."
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

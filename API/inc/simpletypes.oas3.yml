@@ -58,6 +58,8 @@ paths:
                     - $ref: "#/components/schemas/speed-bps"
                     - $ref: "#/components/schemas/latency-ms"
                     - $ref: "#/components/schemas/latency-percentage"
+                    - $ref: "#/components/schemas/adapter-services"
+                    - $ref: "#/components/schemas/adapter-state"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -354,3 +356,22 @@ components:
       nullable: true
       description: |-
         Percentage of successful tests (*100). Eg. 9876 = 98.76%. **NULL** = Unknown.
+
+    adapter-services:
+      type: string
+      enum:
+        - "VPN"
+        - "AdBlocking"
+        - "StreamRelocation"
+        - "Malware"
+      example: "VPN"
+      description: |-
+        A service running on the adapter.
+
+    adapter-state:
+      type: boolean
+      nullable: true
+      default: true
+      description: |-
+        **true**=Enable the Service. **false**=Disable the Service.
+        **null**=No Change

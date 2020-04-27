@@ -1,11 +1,11 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /adapter/name"
+  title: "Privacy Hero 2 - Mothership API - /adapter/datacap"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    Give the adapter a name.
+    Set the Datacap for a particular Adapter.
 
     `/adapter/name`
   license:
@@ -34,14 +34,14 @@ tags:
     description: Operations related to Adapter Management
 
 paths:
-  /adapter/name:
+  /adapter/cfg/datacap:
     post:
-      operationId: adapterName
+      operationId: adapterDataCap
       tags:
         - Adapter Management
-      summary: Give an adapter a descriptive name.
+      summary: Set the datacap for a particular adapter.
       description: |-
-        Provides a descriptive name to an adapter that helps identify it.
+        Sets the data caps for the identified adapter.
       parameters:
         - in: query
           name: id
@@ -50,27 +50,25 @@ paths:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
-            The Adapter ID to Name.
-
-        - in: query
-          name: name
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/adapter-name"
-          example: "Home Office Adapter"
-          description: |-
-            The name to apply to the adapter.
+            The Adapter ID to Set DataCap of.
+      requestBody:
+        required: true
+        description: "The DataCap settings to apply."
+        content:
+          application/json:
+            schema:
+              $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap"
 
       responses:
         "200":
           description: |-
-            Success, Adapter named.
+            Success, Adapter datacap set.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
               example:
-                msg: "Success, Adapter named."
+                msg: "Success, Adapter datacap set."
 
         "400":
           description: |-
@@ -81,6 +79,7 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Could not name the adapter!"
+
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

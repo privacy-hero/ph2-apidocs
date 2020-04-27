@@ -41,7 +41,23 @@ paths:
         - Adapter Management
       summary: Lists one or all adapters associated with the clients account.
       description: |-
+        # Usage
         Generates a list of adapters associated with the clients account.
+        Can list a single adapter, or all adapters associated with the account.
+        In the case that a client has no adapters associated, this will be an
+        empty list.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+          - **id**: Optional, the ID of the adapter, if only one adapters
+          information is being requested.  Only adapters associated with a
+          clients account can be returned with this call.  IF the id is valid,
+          but the adapter is not associated with this clients account, then that
+          is treated the same as the adapter ID being invalid.
+
       parameters:
         - in: query
           name: id
@@ -56,6 +72,16 @@ paths:
         "200":
           description: |-
             Success, The adapters details.
+
+            - **AdapterID** - is the Unique ID of this Adapter.
+            - **mac** - The Adapters mac address.
+            - **ip** - list of ip addresses, either current, or last known.
+            - **registered** - the time the adapter was first claimed by the
+            customer.
+            - **state** - the current state of the listed services.
+            - **settings** - the current adapter level settings.
+            - **health** - the last and best result from diagnostic tests.
+
           content:
             application/json:
               schema:

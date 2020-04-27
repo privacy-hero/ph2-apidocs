@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /adapter/wifi"
+  title: "Privacy Hero 2 - Mothership API - /adapter/cfg"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    Set the WiFi settings for a particular Adapter.
+    Query/Change the Adapter Configuration.
 
-    `/adapter/wifi`
+    `/adapter/name`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
     url: ./LICENSE.md
@@ -34,43 +34,54 @@ tags:
     description: Operations related to Adapter Management
 
 paths:
-  /adapter/wifi:
+
+  /adapter/cfg/service:
     post:
-      operationId: adapterWiFi
+      operationId: adapterCfgService
       tags:
         - Adapter Management
-      summary: Set the WiFi settings for a particular adapter.
+      summary: Change the Adapter Service Configuration.
       description: |-
-        Sets the Wifi settings for the 2.4Ghz and 5Ghz Network.
-        Any setting excluded or set to **null** will not be changed.
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            The Adapter ID to Set Wifi Setting of.
+        # Usage
+        For a particular Adapter, change its current service configuration.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **id**: The adapters ID.  Can only get config for adapters
+          associated with the calling clients account.
+        Change the Adapter Configuration.
+
       requestBody:
         required: true
-        description: |-
-          "The Wifi Settings to apply. Set to null anything that shouldn't change."
         content:
-          application/json:
+          "application/json":
             schema:
-              $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings"
+              type: object
+              required:
+                - id
+                - service
+                - state
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                service:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/adapter-services"
+                state:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/adapter-state"
 
       responses:
         "200":
           description: |-
-            Success, WiFi settings set.
+            Success, Adapter Config Change queued.
           content:
             application/json:
               schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
-              example:
-                msg: "Success, WiFi settings set."
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Settings"
 
         "400":
           description: |-
@@ -81,6 +92,7 @@ paths:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
                 error: "Could not name the adapter!"
+
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":

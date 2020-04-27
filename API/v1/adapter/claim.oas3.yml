@@ -52,6 +52,19 @@ paths:
         adapter will be unassociated from the clients account and the newly
         claimed adapter will replace it in its entirety.
 
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and
+          valid.
+
+        ## Parameters
+          - **id**: The id of the adapter the client wants to claim.
+          - **oldid**: Optional. Allows the claimed adapter t replace an
+          existing adapter on the clients account.  In this instance, the old
+          adapter becomes unassociated with any account, and the new adapter
+          takes over the configuration, discovered devices and profiles of the
+          old adapter.
+
       requestBody:
         required: true
         content:
@@ -89,8 +102,7 @@ paths:
             customer.
             - **state** - the current state of the listed services.
             - **settings** - the current adapter level settings.
-            - **diags** - the last and best result from diagnostic tests.
-
+            - **health** - the last and best result from diagnostic tests.
 
           content:
             application/json:
