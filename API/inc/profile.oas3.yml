@@ -32,6 +32,8 @@ paths:
                     - $ref: "#/components/schemas/Profiles"
                     - $ref: "#/components/schemas/ProfileDevices"
                     - $ref: "#/components/schemas/ProfilesDevices"
+                    - $ref: "#/components/schemas/Bedtime"
+                    - $ref: "#/components/schemas/Bedtimes"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -55,11 +57,92 @@ components:
     Profile:
       description: A device setting profile
       type: object
+      required:
+        - id
       additionalProperties: false
       properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         name:
-          type: string
-          description: The name given to the profile.
+          $ref: "./simpletypes.oas3.yml#/components/schemas/profile-name"
+        system:
+          type: boolean
+          default: false
+          description: |-
+            System profiles are fixed by the system.  They may not be modified,
+            renamed or deleted.  Devices may be freely associated with them.
+        settings:
+          $ref: "#/components/schemas/ProfileSettings"
+
+    Bedtime:
+      description: |-
+        A time setting which defines when a "bedtime" state on a profile occurs.
+        In the UI, bedtime is defined as a Start and End time, however we define
+        a bedtime in the system as a Start time, and a duration.  There can only
+        be ONE bedtime per day, but the duration may make the bedtime extend
+        the next day.  Nominally a disabled bedtime should be encoded as
+        start-time=0 and duration=0
+      type: object
+      additionalProperties: false
+      properties:
+        start-time:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 86399
+          default: 0
+          description: |-
+            This is the time (in seconds) from midnight (the start the day) when
+            bedtime starts.  For example 79200 is 10pm.
+        duration:
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 86399
+          default: 0
+          description: |-
+            This is the duration of the bedtime period in seconds.  IF bedtime
+            starts at 10pm, and ends at 6am the next day, then the duration is:
+            28800 seconds (8 hours).  A duration of zero disables bedtime for a
+            particular day.
+
+    Bedtimes:
+      type: array
+      minItems: 7
+      maxItems: 7
+      description: |-
+        This is a list of bedtimes for the week.  The first element is always
+        MONDAY. The second is TUESDAY, and so on, until SUNDAY (the seventh
+        item).  This will need to be displayed correctly depending on how the
+        client defines which day is the start of the week. MONDAY is not
+        defined as the start of the week, it is an arbitrary starting point for
+        this array only.
+      items:
+        $ref: "#/components/schemas/Bedtime"
+
+    ProfileSettings:
+      description: |-
+        The settings for a profile.
+        - **youtube-restricted**: If youtube is restricted or normal.
+        - **safesearch**: If search engines are forced to return safe results.
+        - **internet-pause**: Internet will be paused until this time passes. If
+          the value is negative, internet is paused indefinitely.
+      type: object
+      additionalProperties: false
+      properties:
+        youtube-restricted:
+          type: boolean
+          default: false
+          description: If Youtube is restricted for all devices in this profile.
+        safesearch:
+          type: boolean
+          default: false
+          description: If search providers are forced to safe search.
+        internet-pause:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        bedtime:
+          $ref: "#/components/schemas/Bedtimes"
+
 
     Profiles:
       description: An array of known profiles

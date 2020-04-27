@@ -1,0 +1,123 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/cfg/locale"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Set locale specific information about the adapter.
+
+    `/adapter/cfg/locale`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/cfg/locale:
+    post:
+      operationId: adapterLocale
+      tags:
+        - Adapter Management
+      summary: Set Locale specific information for an adapter.
+      description: |-
+        # Usage
+
+        This allows the country the adapter is in, and/or its timezone to be
+        set.  Any setting will permanently over-ride the auto detected values.
+
+        ## Security Requirements
+          - **appKey** **MUST NOT** be present in the call.
+          - **clientToken** **MUST** be present, not in need of renewal and valid.
+
+        ## Parameters
+        - **id**: The adapters ID.
+        - **country**: The two character ISO3166 country identifier where the
+        adapter resides.
+        - **timezone**: The IANA timezone name where the adapter resides.
+
+        Note: No check is made to ensure the adapters timezone and country
+        coincide, it is up to the User to ensure the settings are meaningful,
+        and the UI to provide clear guidance.
+
+        At least one of **country** or **timezone** must be present, otherwise
+        the message is invalid.  If a setting is not present, it is not changed.
+         It is valid for **country** and **timezone** to both be present
+         simultaneously.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                country:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iso3166-country"
+                timezone:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iana-timezone"
+              example:
+                id:  "cd73b915-89a4-4971-9d86-bce91786b12a"
+                country: "US"
+                timezone: "America/Chicago"
+
+      responses:
+        "200":
+          description: |-
+            Success, Adapter locale set.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "Success, Adapter locale set."
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

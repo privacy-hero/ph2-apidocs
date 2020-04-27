@@ -5,9 +5,7 @@ info:
   description: |-
     Privacy Hero 2 API.
 
-    List all profiles created for the account.
-
-    **_EARLY DRAFT_**
+    List all/selected profiles created for the account.
 
     `/profile/list`
   license:
@@ -43,35 +41,24 @@ paths:
         - Profile Management
       summary: Lists all/selected profiles created by the client on their account.
       description: |-
-        Generates a list of all profiles associated with the clients account.
+        # Usage
 
-        **_EARLY DRAFT_**
+        Generates a list of specific profile, or all profiles associated with
+        the clients account.
+
+
       parameters:
         - in: query
-          name: profile
+          name: id
           schema:
-            type: string
-            default: null
-            nullable: true
-          example: "shared"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           description: |-
-            If specified, the profile list returned in the response will be
-            restricted to this single profile.
-        - in: query
-          name: devices
-          schema:
-            type: boolean
-            default: false
-          example: true
-          description: |-
-            If devices is not present, or false, then the response will just
-            list the known profiles.  If it is true, the list will include every
-            device linked to the profiles.
+            The profiles unique id.
 
       responses:
         "200":
           description: |-
-            Success, The claimed adapters details.
+            Success, The profile details.
           content:
             application/json:
               schema:
@@ -81,13 +68,16 @@ paths:
 
         "400":
           description: |-
-            General Request processing error.
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
           content:
             application/json:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
               example:
-                error: "Could not claim the adapter!"
+                error: "Internal Server Error."
         "401":
           $ref: "../../inc/response.oas3.yml#/components/responses/401"
         "403":
