@@ -147,15 +147,8 @@ paths:
   /v1/adapter/cfg/wifi:
     $ref: "v1/adapter/cfg-wifi.oas3.yml#/paths/~1adapter~1cfg~1wifi"
 
-  # Get - Just get current diag running state.
-  # Post - Trigger the running of a diag.
-  #/v1/adapter/health:
-  #  $ref: "v1/adapter/diag.oas3.yml#/paths/~1adapter~1diag"
-
-  # Wan Speed Test - Start/Query State
-  # VPN Speed Test - Start/Query State
-  # Wan Ping (Latency) Test - Start/Query
-  # VPN Pint (Latency) Test - Start/Query
+  /v1/adapter/health:
+    $ref: "v1/adapter/diag.oas3.yml#/paths/~1adapter~1diag"
 
   /v1/adapter/datausage:
     $ref: "v1/adapter/datausage.oas3.yml#/paths/~1adapter~1datausage"
