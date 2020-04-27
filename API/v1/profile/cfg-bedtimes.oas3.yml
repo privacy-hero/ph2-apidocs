@@ -105,8 +105,6 @@ paths:
                     }
                   ]
 
-                ]
-
       responses:
         "200":
           description: |-
@@ -117,6 +115,7 @@ paths:
                 $ref: "../../inc/profile.oas3.yml#/components/schemas/Profile"
               example: {
                 "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
                 "name": "Rugrats",
                 "icon": "rugrats.ico",
                 "settings": {

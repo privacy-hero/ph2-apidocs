@@ -66,11 +66,14 @@ paths:
                 - name
               additionalProperties: false
               properties:
+                adapter:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
                 name:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/profile-name"
                 icon:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
               example:
+                adapter: "d46cb964-4a40-43ac-87f6-cdefa19fa121"
                 name: "Kids"
                 icon: "butterfly.ico"
 
@@ -84,6 +87,7 @@ paths:
                 $ref: "../../inc/profile.oas3.yml#/components/schemas/Profile"
               example: {
                 "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
                 "name": "Kids",
                 "icon": "butterfly.ico",
                 "settings": {

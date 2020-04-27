@@ -69,6 +69,8 @@ components:
       type: object
       required:
         - id
+        - adapter
+        - name
       additionalProperties: false
       properties:
         id:
