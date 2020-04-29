@@ -48,7 +48,7 @@ components:
   schemas: {}
 
   securitySchemes:
-    clientToken:
+    jwtToken:
       type: http
       scheme: bearer
       bearerFormat: JWT
@@ -78,6 +78,9 @@ components:
         - **WEB APP**: AOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjM2MDAsInJiZiI6NzIwMCwic3ViIjoiZGV2IHdlYiBhcHAifQ.jys7vsUg4D3zX7zrJ_LHjgsz0r6nPbn9VXgt_3aS4F4
         - **Android**: aOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjMxNTM2MDAwMCwicmJmIjozNDY4OTYwMDAsInN1YiI6ImRldiBpb3MgYXBwIn0.pa7AgQDr6lvTbwYkFwEM7ceVD09quum5dmxNuD-RJr8
         - **IOS APP**: aOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjYzMDcyMDAwLCJyYmYiOjk0NjA4MDAwLCJzdWIiOiJkZXYgYW5kcm9pZCBhcHAifQ.Z_crn9q4se2BlGfLrV7zkEf5nlIF6_TbfCo4_ct3xfE
+
+security:
+  - jwtToken: []
 
 tags:
   - name: Account Management
