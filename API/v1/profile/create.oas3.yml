@@ -47,10 +47,6 @@ paths:
         default settings and no devices, the only thing set in creation is the
         profile name (which must be unique to the client) and its icon.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the adapter we are associating the new
           profile with. Must not be the same as any existing profile on that

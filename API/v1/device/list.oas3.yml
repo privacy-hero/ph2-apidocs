@@ -46,10 +46,6 @@ paths:
         Generates a list of either, all devices associated with the client, a
         specific device, all devices on a profile, or all devices on an adapter.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: Optional. This can be either:
             - The Unique ID of an Adapter: Will return all devices on that

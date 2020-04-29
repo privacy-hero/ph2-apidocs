@@ -46,10 +46,6 @@ paths:
         Generates a list of specific profile, or all profiles associated with
         the clients account.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: Optional. The id of an adapter or profile.  If an adapter id
           is provided, all profiles belonging to that adapter will be reported.

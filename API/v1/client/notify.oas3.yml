@@ -50,10 +50,6 @@ paths:
         "Registration Id") to the Backend API.  Anytime the WebPush Client Token
         is renewed by the Client, this same call is made to update it.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **token**: the WebPush Client Token obtained when the client
           consented to receiving notifications.

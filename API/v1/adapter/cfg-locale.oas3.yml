@@ -46,10 +46,6 @@ paths:
         This allows the country the adapter is in, and/or its timezone to be
         set.  Any setting will permanently over-ride the auto detected values.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
         - **id**: The adapters ID.
         - **country**: The two character ISO3166 country identifier where the

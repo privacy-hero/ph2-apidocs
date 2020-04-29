@@ -47,10 +47,6 @@ paths:
         same SSID, and password.  If the adapter has no radios, this command
         yields no results on the adapter.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The id of the adapter to configure.
           - **wifi**: The wifi settings for the adapter. Any setting excluded or

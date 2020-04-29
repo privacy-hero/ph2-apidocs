@@ -50,11 +50,6 @@ paths:
         The call may return all services, or only Portable or Non-Portable
         services, as required.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and
-          valid.
-
         ## Parameters
           - **type**: The types of services to return, options are All,
          Portable and non-portable.

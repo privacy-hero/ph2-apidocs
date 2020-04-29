@@ -50,10 +50,6 @@ paths:
         connection.  Or if that does not work, an adapter with a specific
         activation code.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **code**: This is the optional activation code.  If not set, the
             function will look for all unassociated adapters that share the

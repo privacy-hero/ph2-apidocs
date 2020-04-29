@@ -46,11 +46,6 @@ paths:
         check if monthly usage will exceed the data cap for reporting and
         notification purposes.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and
-          valid.
-
         ## Parameters
           - **id**: The Adapters ID to set the data cap for.
           - **cap**: The datacap for the adapter.  This is an array.  No entries

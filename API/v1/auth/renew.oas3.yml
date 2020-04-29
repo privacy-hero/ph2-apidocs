@@ -49,9 +49,6 @@ paths:
         Causes the Authorization token attached to the API call
         to be renewed, and a new token returned.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present and **NOT** expired.
       responses:
         "200":
           description: |-

@@ -67,8 +67,8 @@ paths:
         **/v1/auth/confirmcustomer**` after this time will fail.
 
         ## Security Requirements
-          - **appKey** must be valid and present in the call.
-          - **clientToken** may be present, but is ignored.
+          The Authorization Bearer token sent to authenticate for this message
+          is the Application unique and pre-distributed App Token.
 
         ## Parameters
           - **email**: The email address the customer wants the Account email to be
@@ -97,8 +97,6 @@ paths:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email-address"
                 callback:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url-callback"
-      security:
-        - appKey: []
 
       responses:
         "200":

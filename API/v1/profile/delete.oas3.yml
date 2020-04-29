@@ -46,10 +46,6 @@ paths:
         deletes an existing profile for the client.  Any devices which remain
         attached to the profile will be moved to the system "shared" profile.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the profile.  The profile must belong to
           the client account deleting it.

@@ -41,10 +41,6 @@ paths:
         # Usage
         Causes the Clients password to be changed.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **old**: The old password of the Client.  Must be Valid.
           - **new**: The new password of the Client.

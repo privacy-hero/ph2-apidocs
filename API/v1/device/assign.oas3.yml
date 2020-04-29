@@ -46,10 +46,6 @@ paths:
         Assigns a device to a profile.  Can only assign devices to profiles that
         exist associated with the same adapter.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the device we are associating with the profile.
           - **profile**: The unique id of the profile we are assigning the

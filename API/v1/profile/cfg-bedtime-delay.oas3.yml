@@ -48,10 +48,6 @@ paths:
         the bedtime period.  At the end of the bedtime period, the delay will be
         reset to zero.  It only operates once.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the profile.
           - **delay**: The number of seconds to delay bedtime for.  Set to zero

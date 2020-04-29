@@ -49,8 +49,8 @@ paths:
         recovery if the access token is lost or expired.
 
         ## Security Requirements
-          - **appKey** **MUST** be present in the call.
-          - **clientToken** **MAY** be present but is ignored.
+          The Authorization Bearer token sent to authenticate for this message
+          is the Application unique and pre-distributed App Token.
 
         ## Parameters
           - **id**: The clients ID,  different clients will present different ID.
@@ -103,9 +103,6 @@ paths:
                   id: "00-00-5E-DF-98-EB"
                   pwd: "nfhggkjebkqw413basbkJHGlkgqfrg"
                 description: An Example of an adapter logging in.
-
-      security:
-        - appKey: []
 
       responses:
         "200":

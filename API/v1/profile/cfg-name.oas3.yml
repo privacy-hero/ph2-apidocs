@@ -45,10 +45,6 @@ paths:
 
         Allows the descriptive name or icon of a profile to be changed.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the profile.
           - **name**: Optionally, The name of the new profile.  Must not be the same as any

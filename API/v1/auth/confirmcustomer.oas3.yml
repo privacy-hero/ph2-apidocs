@@ -43,8 +43,8 @@ paths:
         provided by the email to the customer.
 
         ## Security Requirements
-          - **appKey** must be valid and present in the call.
-          - **clientToken** may be present, but is ignored.
+          The Authorization Bearer token sent to authenticate for this message
+          is the Application unique and pre-distributed App Token.
 
         ## Parameters
           - **verify**: The token passed to the callback which invoked this API
@@ -65,9 +65,6 @@ paths:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/ph2-bearer-token"
                 pwd:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
-
-      security:
-        - appKey: []
 
       responses:
         "200":

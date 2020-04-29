@@ -47,10 +47,6 @@ paths:
         Daily for the last 31 days.
         Daily Future Projection, for every day from today thru the end of the month.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: the ID of the adapter.  Only adapters associated with a
           clients account can be returned with this call.  IF the id is valid,

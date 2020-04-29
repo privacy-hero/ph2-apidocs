@@ -46,11 +46,6 @@ paths:
         will reflect the current applied configuration and any pending but
         unconfirmed configuration changes.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and
-          valid.
-
         ## Parameters
           - **id**: The id of the adapter to retrieve the current streaming
           configuration for.
@@ -133,11 +128,6 @@ paths:
         For a particular Adapter, set its streaming configuration.  Until the
         settings are confirmed applied by the adapter, they will be reported as
         pending.
-
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and
-          valid.
 
         ## Parameters
           - **id**: The id of the adapter to set the pending streaming

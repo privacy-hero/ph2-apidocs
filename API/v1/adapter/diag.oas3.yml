@@ -47,11 +47,6 @@ paths:
         call may be made to get the current status of any running tests. AND to
         get the historical diagnostic/health results.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and
-          valid.
-
         ## Parameters
           - **id**: The id of the adapter to retrieve diagnostic health status from.
 

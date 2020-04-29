@@ -45,10 +45,6 @@ paths:
 
         Generates a list of data usage values for a device, at a specified resolution.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The Unique device ID.
 

@@ -47,10 +47,6 @@ paths:
         In the case that a client has no adapters associated, this will be an
         empty list.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: Optional, the ID of the adapter, if only one adapters
           information is being requested.  Only adapters associated with a

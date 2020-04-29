@@ -47,10 +47,6 @@ paths:
         schedule is always set, if some entries do not change, simply send them
         as configured.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the profile.
           - **bedtime**: An array of bedtimes to set for the profile.

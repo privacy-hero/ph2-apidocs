@@ -44,11 +44,6 @@ paths:
         # Usage
         For a particular Adapter, return the current and pending configuration.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and
-          valid.
-
         ## Parameters
           - **id**: The adapters ID.  Can only get config for adapters
           associated with the calling clients account.

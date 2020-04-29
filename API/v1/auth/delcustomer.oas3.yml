@@ -58,15 +58,6 @@ paths:
          - **exp** specifies when the verification token will expire.  Any call
             to **/v1/auth/confirmcustomer**` after this time will fail.
 
-        ## Security Requirements
-          - **appKey** **MUST** be valid and present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
-
-      security:
-        - clientToken: []
-          appKey: []
-
       requestBody:
         required: true
         content:

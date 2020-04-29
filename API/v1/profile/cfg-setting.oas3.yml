@@ -47,10 +47,6 @@ paths:
         be paused.  Either for a timed period, or indefinitely, or for
         safesearch to be enforced, or youtube to be restricted, as required.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the profile.
           - **restrict-youtube**: True, youtube is restricted.  False,

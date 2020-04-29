@@ -46,10 +46,6 @@ paths:
         Allows all devices to have certain configuration attributes globally
         set.
 
-        ## Security Requirements
-          - **appKey** **MUST NOT** be present in the call.
-          - **clientToken** **MUST** be present, not in need of renewal and valid.
-
         ## Parameters
           - **id**: The unique id of the profile.
           - **setting**: The setting to set on all devices.
