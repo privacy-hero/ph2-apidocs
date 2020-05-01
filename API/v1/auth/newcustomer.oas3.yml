@@ -108,7 +108,7 @@ paths:
               schema:
                 $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
               example:
-                msg: "Email sent to user, OK."
+                msg: "Email sent to customer, OK."
         "400":
           description: |-
             General Request processing error.  Possible errors are:

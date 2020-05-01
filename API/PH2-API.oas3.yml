@@ -38,7 +38,7 @@ servers:
     description: Development URL
     variables:
       awsid:
-        default: "ug07vxvxhi"
+        default: "3j3z99az92"
         description: The ID for your dev AWS deployment
 
 #########################################################
