@@ -53,7 +53,7 @@ paths:
           required: false
           name: key
           schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/ph2-bearer-token"
           description: |-
             The applications API Key.  Must be the same application the client
             authorized on or logged in with.  This prevents anyone in possession
