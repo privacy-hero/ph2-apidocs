@@ -41,13 +41,24 @@ paths:
         # Usage
 
         When the Clients Authorization Token is about to (or already has)
-        reached its renewal time.  This call is made to provide a new token for
+        reached its expiry time.  This call is made to provide a new token for
         continued use of the API without requiring account recover.  If the
-        token has finally expired, account recovery will be required to generate
-        a new fresh Token.
+        token has finally passed its "refreshh by" time, account recovery will
+        be required to generate a new fresh Token.
 
         Causes the Authorization token attached to the API call
         to be renewed, and a new token returned.
+      parameters:
+        - in: query
+          required: false
+          name: key
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/activation-code"
+          description: |-
+            The applications API Key.  Must be the same application the client
+            authorized on or logged in with.  This prevents anyone in possession
+            of the clients JWT Token, from renewing it without also having
+            access to a matching Application API Key.
 
       responses:
         "200":
