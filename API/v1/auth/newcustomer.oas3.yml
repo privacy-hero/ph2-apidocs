@@ -37,14 +37,15 @@ paths:
       operationId: authNewCustomer
       tags:
         - Account Management
-      summary: Request New Customer/Forgotten Password
+      summary: Request New Customer/Forgotten Password/Passwordless Re-authentication
       description: |-
         # Usage
 
         If the email address supplied in the message is not registered in the
         system, then this message is processed as a "New Customer
         Registration". Overwise this messages is processed
-        as an "Existing Customer forgot password" request.
+        as an "Existing Customer forgot password"/"Existing Customer needs
+        passwordless reauthentication" request.
 
         The ONLY difference in the processing is the form of the email which is
         sent to the customer.  Either acknowledging their request for a new
@@ -54,17 +55,22 @@ paths:
         email address.  It will contain instructions to click a provided link in
         the message which will act as a callback to the initiating application.
 
-        The URL passed as the callback must be able to accept three parameter in
+        The URL passed as the callback must be able to accept two parameter in
         the url of the form:
         ```
-        callback.url/path?verify=<token>&pw=<false/true>&exp=<time>
+        callback.url/path?verify=<token>&exp=<time>
         ```
          - **verify** is the verification token to be sent back to the API server by
         the app on the **/v1/auth/confirmcustomer** call.
-         - **pwd** specifies that an initial password must be prompted from the Client,
-        and supplied to the API in the **/v1/auth/confirmcustomer** call.
          - **exp** specifies when the verification token will expire.  Any call to
         **/v1/auth/confirmcustomer**` after this time will fail.
+
+        Upon receipt of the callback, if the application uses passwords, it
+        should prompt for a new password, and then send that in the
+        `confirmcustomer` message.  Otherwise, the app should just immediately
+        send the `confirmcustomer` message to the backend, which will then
+        provide authentication tokens allowing the application/client access to
+        the rest of the API.
 
         ## Security Requirements
           The Authorization Bearer token sent to authenticate for this message
