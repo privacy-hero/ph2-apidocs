@@ -35,6 +35,15 @@ servers:
         default: prod
         description: Deployment Stages
   - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Known Dev URLs
+    variables:
+      awsid:
+        enum:
+          - "3j3z99az92"
+          - "pics2jpj4b"
+        default: "pics2jpj4b"
+        description: The ID for your dev AWS deployment
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
     description: Development URL
     variables:
       awsid:
