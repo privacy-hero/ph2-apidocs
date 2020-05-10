@@ -2,8 +2,8 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.9",
-    "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - **[PrivacyHero2 API - RapiDoc/PDF](.)**\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - Redocly](./index-redocly.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
+    "version": "0.0.10",
+    "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
       "url": "http://privacy-hero.github.io/ph2-apidocs/LICENSE.html"
@@ -25,32 +25,34 @@
             "qa",
             "prod"
           ],
-          "default": "prod",
+          "default": "qa",
           "description": "Deployment Stages"
         }
       }
     },
     {
-      "url": "https://{awsid}.execute-api.us-east-1.amazonaws.com/dev",
-      "description": "Known Dev URLs",
-      "variables": {
-        "awsid": {
-          "enum": [
-            "3j3z99az92",
-            "pics2jpj4b"
-          ],
-          "default": "pics2jpj4b",
-          "description": "The ID for your dev AWS deployment"
-        }
-      }
+      "url": "https://pics2jpj4b.execute-api.us-east-1.amazonaws.com/dev",
+      "description": "API2 Raw Dev Endpoint"
     },
     {
-      "url": "https://{awsid}.execute-api.us-east-1.amazonaws.com/dev",
+      "url": "https://{awsid}.execute-api.us-east-1.amazonaws.com/{stage}",
       "description": "Development URL",
       "variables": {
         "awsid": {
-          "default": "3j3z99az92",
+          "default": "rsf12bcyml",
           "description": "The ID for your dev AWS deployment"
+        },
+        "stage": {
+          "enum": [
+            "remote-dev",
+            "remote-qa",
+            "remote-prod",
+            "dev",
+            "qa",
+            "prod"
+          ],
+          "default": "remote-dev",
+          "description": "Deployment Stages"
         }
       }
     }
