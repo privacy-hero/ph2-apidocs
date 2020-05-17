@@ -87,6 +87,7 @@ paths:
             password must be sent in the `confirmcustomer` API call.
             If it is not present, it defaults to `true`
       security: []
+      x-42c-no-authentication: true
 
       responses:
         "200":
