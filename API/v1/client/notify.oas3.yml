@@ -94,7 +94,7 @@ paths:
                 cancel:
                   type: boolean
                   default: false
-                  example: false
+                  example: true
                   description: |-
                     IF true, the notifications attached to this token are canceled.
 
