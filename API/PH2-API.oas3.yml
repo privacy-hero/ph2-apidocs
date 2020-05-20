@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.10"
+  version: "0.0.11"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -23,16 +23,8 @@ info:
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
-  - url: https://api2.privacyhero.com/{stage} # what is our URL???
+  - url: https://api2.privacyhero.com/
     description: The API deployment URL.
-    variables:
-      stage:
-        enum:
-          - dev
-          - qa
-          - prod
-        default: qa
-        description: Deployment Stages
   - url: https://pics2jpj4b.execute-api.us-east-1.amazonaws.com/dev
     description: API2 Raw Dev Endpoint
   - url: https://{awsid}.execute-api.{region}.amazonaws.com/{stage}
