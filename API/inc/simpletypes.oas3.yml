@@ -315,7 +315,7 @@ components:
       description: The name of an adapter.
       minLength: 0
       maxLength: 64
-      pattern: "^[\\w\\W]+$"
+      pattern: "^[\\w\\d\\-\\. ()!]+$"
       example: "Home Office Adapter"
 
     profile-name:
