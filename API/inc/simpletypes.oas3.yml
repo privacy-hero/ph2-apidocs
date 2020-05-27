@@ -61,6 +61,7 @@ paths:
                     - $ref: "#/components/schemas/adapter-services"
                     - $ref: "#/components/schemas/adapter-state"
                     - $ref: "#/components/schemas/datacap"
+                    - $ref: "#/components/schemas/datacap-reset"
                     - $ref: "#/components/schemas/datausage"
                     - $ref: "#/components/schemas/profile-name"
                     - $ref: "#/components/schemas/time-of-day"
@@ -406,9 +407,17 @@ components:
       type: integer
       format: uint64
       minimum: 0
-      maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
+      maximum: 1073741824  # 1 Pebibyte maximum data cap.
       description: |-
-        Data Cap in Bytes per month. 0 = no data cap
+        Data Cap in MegaBytes (1048576 bytes) per month. 0 = no data cap
+
+    datacap-reset:
+      type: integer
+      format: uint8
+      minimum: 1    # First day of month
+      maximum: 31   # Maximum Possible last day of the month.
+      description: |-
+        Day of the month, which the datacap resets at the start of.
 
     datausage:
       type: integer

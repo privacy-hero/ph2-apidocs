@@ -48,11 +48,14 @@ paths:
 
         ## Parameters
           - **id**: The Adapters ID to set the data cap for.
-          - **cap**: The datacap for the adapter.  This is an array.  No entries
-          means that no datacap has been sent.  A single entry means that the
-          datacap is combined over tx & rx.  Two entries specifies a datacap
-          that may be different in both tx & rx.  The first entry is tx, the
-          second is rx.
+          - **cap**: The datacap for the adapter.  This is the total number of
+          MB the customer may use in their internet plane before extra charges
+          are levied, or speed slows down (depending on the ISP and Plan).  It
+          is a combined value, representing both the data TX and RX.
+          - **day**: The day in the month when the datacap resets. 1 == data cap
+          resets on the 1st day of the month. If the day is greater than the
+          days in the current month, it is assumed the datacap resets at the
+          start of the last day of the month.
 
       requestBody:
         required: true
@@ -69,7 +72,9 @@ paths:
                 id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
                 cap:
-                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacaps"
+                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap"
+                day:
+                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap-reset"
 
       responses:
         "200":
