@@ -48,18 +48,9 @@ paths:
 
         ## Parameters
         - **id**: The adapters ID.
-        - **country**: The two character ISO3166 country identifier where the
-        adapter resides.
         - **timezone**: The IANA timezone name where the adapter resides.
 
-        Note: No check is made to ensure the adapters timezone and country
-        coincide, it is up to the User to ensure the settings are meaningful,
-        and the UI to provide clear guidance.
-
-        At least one of **country** or **timezone** must be present, otherwise
-        the message is invalid.  If a setting is not present, it is not changed.
-         It is valid for **country** and **timezone** to both be present
-         simultaneously.
+        **timezone** must be present, otherwise the message is invalid.
 
       requestBody:
         required: true
@@ -69,17 +60,15 @@ paths:
               type: object
               required:
                 - id
+                - timezone
               additionalProperties: false
               properties:
                 id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-                country:
-                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iso3166-country"
                 timezone:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iana-timezone"
               example:
                 id:  "cd73b915-89a4-4971-9d86-bce91786b12a"
-                country: "US"
                 timezone: "America/Chicago"
 
       responses:
