@@ -158,6 +158,15 @@ components:
           schema:
             $ref: "#/components/schemas/GW_InternalError"
 
+    "555":
+      description: Router Offline, Asynch operation to router not completed.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nack"
+          example:
+            error: "Router Offline"
+
     default:
       description: |-
         Unspecified Error
