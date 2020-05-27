@@ -55,8 +55,9 @@ paths:
           - **day**: The day in the month when the datacap resets. 1 == data cap
           resets on the 1st day of the month. If the day is greater than the
           days in the current month, it is assumed the datacap resets at the
-          start of the last day of the month.
-
+          start of the last day of the month.  Even if **cap** is set to zero,
+          the **day** must be set between 1 and 31 as it marks the first day of
+          the clients monthly billing cycle.
       requestBody:
         required: true
         description: "The DataCap settings to apply."
@@ -67,6 +68,7 @@ paths:
               required:
                 - id
                 - cap
+                - day
               additionalProperties: false
               properties:
                 id:
