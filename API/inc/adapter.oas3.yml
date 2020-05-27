@@ -313,23 +313,6 @@ components:
           description: |-
             Malware/Phishing protection: **true**=Enabled, **false**=Disabled
 
-
-    Adapter-Settings:
-      type: object
-      additionalProperties: false
-      properties:
-        settings:
-          type: object
-          description: The settings of the Adapter/Router.
-          required:
-            - current
-          additionalProperties: false
-          properties:
-            current:
-              $ref: "#/components/schemas/Adapter-Cfg"
-            pending:
-              $ref: "#/components/schemas/Adapter-Cfg"
-
     Adapter:
       type: object
       required:
@@ -429,9 +412,6 @@ components:
             malware-phising:
               $ref: "#/components/schemas/state"
 
-        settings:
-          $ref: "#/components/schemas/Adapter-Settings"
-
         health:
           $ref: "#/components/schemas/Adapter-Diags"
 
@@ -514,3 +494,35 @@ components:
                   $ref: "#/components/schemas/Adapter-Speed-Diags"
             ping:
               $ref: "#/components/schemas/Adapter-Latency-Diags"
+
+    Adapter-Settings:
+      type: object
+      additionalProperties: false
+      properties:
+        settings:
+          type: object
+          description: |-
+            The response to setting an adapter service.
+            - **current-state** The services current state.
+            - **current-tstamp** The time the current state became set on the
+            Adapter.
+            - **request-tstamp** The requested state becomes valid when its
+            "current-tstamp" value equals or exceeds the returned **request-tstamp**
+          required:
+            - current-state
+            - current-tstamp
+            - request-tstamp
+          additionalProperties: false
+          properties:
+            current-state:
+              type: boolean
+              description: |-
+                The current state of the requested service.
+            current-tstamp:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+            request-tstamp:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+          example:
+            current-state: False
+            current-tstamp: 1589978803
+            request-tstamp: 1590583603

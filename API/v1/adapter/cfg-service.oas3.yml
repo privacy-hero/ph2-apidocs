@@ -44,11 +44,22 @@ paths:
       description: |-
         # Usage
         For a particular Adapter, change its current service configuration.
+        When called, if the state requested differs from the state currently
+        active in the router, the backend will create a timestamp for the
+        request and send it to the router.  It will return that timestamp to the
+        caller.  The caller must then poll **v1/adapter/cfg** at regular
+        intervals until either a reasonable time has passed, or the state
+        changes and/or the state timestamp equals or exceeds the returned
+        request timestamp.  When the router applies the state change
+        successfully, the backend will be informed and supplied the timestamp of
+        the request, so that the backend can update the configuration to
+        persistently store the new state of the router.
 
         ## Parameters
-          - **id**: The adapters ID.  Can only get config for adapters
+          - **id**: The adapters ID.  Can only change config for adapters
           associated with the calling clients account.
-        Change the Adapter Configuration.
+          - **service**: The name of the service to set.
+          - **state**: The state to set the service to.
 
       requestBody:
         required: true
