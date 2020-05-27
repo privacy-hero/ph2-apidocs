@@ -74,9 +74,13 @@ paths:
                 id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
                 cap:
-                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap"
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datacap"
                 day:
-                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/datacap-reset"
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/datacap-reset"
+              example:
+                id:   "cd73b915-89a4-4971-9d86-bce91786b12a"
+                cap:  102400
+                day:  15
 
       responses:
         "200":
