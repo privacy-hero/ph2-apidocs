@@ -51,7 +51,7 @@ paths:
 
         ## Parameters
           - **id**: The unique id of the profile.
-          - **delay**: The number of seconds to delay bedtime for.  Set to zero
+          - **delay**: The number of minutes to delay bedtime for.  Set to zero
           to disable a previously set delay.  Delay only delays the start of
           it does not delay the end.  The delay is absolute, if the delay needs
           to be incremented or decremented, take the previous delay, adjust
