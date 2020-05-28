@@ -50,7 +50,7 @@ paths:
           - **id**: The unique id of the device we are associating with the profile.
           - **name**: Optional, the name preferred by the client.
           - **type**: Optional, the device type preferred by the client.
-          - **manufacturer**: Optional, the manufacturt preferred by the client.
+          - **manufacturer**: Optional, the manufacturer preferred by the client.
 
           The call may specify one or more name fields, name fields that are
           present are set.  Ones that are not present are cleared and default
@@ -97,9 +97,6 @@ paths:
                 "name": "Unknown Iphone",
                 "type": "Unknown",
                 "manufacturer": "Unknown",
-                "given_name": "My Iphone",
-                "given_type": "Iphone 13",
-                "given_manufacturer": "Apple",
                 "ip": {
                   "ip4": "192.168.0.55",
                   "ip6": "2001:db8:85a3::8a2e:370:7334"
@@ -110,39 +107,17 @@ paths:
                 "cfg": {
                   "vpn": {
                     "state": false,
-                    "pause": 1587732975
+                    "since": 1587732975
                   },
                   "ad-blocking": {
                     "state": false,
-                    "pause": 1587732975
+                    "since": 1587732975
                   },
                   "device-protection": {
                     "state": false,
-                    "pause": 1587732975
+                    "since": 1587732975
                   }
                 },
-                "usage": {
-                  "hours24": {
-                    "timestamp": 1587732975,
-                    "tx": 123450,
-                    "rx": 243512340
-                  },
-                  "week": {
-                    "timestamp": 1587732975,
-                    "tx": 1234504,
-                    "rx": 2435123406
-                  },
-                  "month": {
-                    "timestamp": 1587732975,
-                    "tx": 12345047,
-                    "rx": 24351234068
-                  },
-                  "quater": {
-                    "timestamp": 1587732975,
-                    "tx": 123450472,
-                    "rx": 243512340683
-                  }
-                }
               }
         "400":
           description: |-
