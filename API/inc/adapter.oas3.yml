@@ -491,32 +491,28 @@ components:
     Adapter-Settings:
       type: object
       additionalProperties: false
+      description: |-
+        The response to setting an adapter service.
+        - **current-state** The services current state.
+        - **current-tstamp** The time the current state became set on the
+        Adapter.
+        - **request-tstamp** The requested state becomes valid when its
+        "current-tstamp" value equals or exceeds the returned **request-tstamp**
+      required:
+        - current-state
+        - current-tstamp
+        - request-tstamp
       properties:
-        settings:
-          type: object
+        current-state:
+          type: boolean
           description: |-
-            The response to setting an adapter service.
-            - **current-state** The services current state.
-            - **current-tstamp** The time the current state became set on the
-            Adapter.
-            - **request-tstamp** The requested state becomes valid when its
-            "current-tstamp" value equals or exceeds the returned **request-tstamp**
-          required:
-            - current-state
-            - current-tstamp
-            - request-tstamp
-          additionalProperties: false
-          properties:
-            current-state:
-              type: boolean
-              description: |-
-                The current state of the requested service.
-            current-tstamp:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
-            request-tstamp:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
-          example:
-            current-state: False
-            current-tstamp: 1589978803
-            request-tstamp: 1590583603
+            The current state of the requested service.
+        current-tstamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+        request-tstamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+      example:
+        current-state: False
+        current-tstamp: 1589978803
+        request-tstamp: 1590583603
 
