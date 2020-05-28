@@ -449,9 +449,12 @@ components:
 
     time-delay:
       type: integer
-      format: int32
-      minimum: 0
-      maximum: 86399
+      format: int16
+      minimum: -360
+      maximum: 360
       default: 0
       description: |-
-        A time delay, where 0 = no delay.
+        A time delay, where 0 = no delay. In Minutes. The delay may be +/- 6
+        hours.  A negative delay will cause the bedtime to occur earlier and a
+        positive delay later.
+      example: -30
