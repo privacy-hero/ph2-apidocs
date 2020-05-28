@@ -38,6 +38,7 @@ paths:
                     - $ref: "#/components/schemas/Adapter-Settings"
                     - $ref: "#/components/schemas/Adapter"
                     - $ref: "#/components/schemas/Adapters"
+                    - $ref: "#/components/schemas/Adapter-Diags"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
