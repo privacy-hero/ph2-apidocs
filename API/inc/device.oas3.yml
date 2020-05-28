@@ -32,6 +32,7 @@ paths:
                     - $ref: "#/components/schemas/Devices"
                     - $ref: "#/components/schemas/DeviceUsageHistory"
                     - $ref: "#/components/schemas/Device-Settings"
+                    - $ref: "#/components/schemas/Device-Settings-Reply"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -239,3 +240,30 @@ components:
             current-tstamp: 1589978803
             request-tstamp: 1590583603
 
+
+    Device-Settings-Reply:
+      type: object
+      additionalProperties: false
+      description: |-
+        The response to setting an device service setting.
+        - **current-state** The services current state.
+        - **current-tstamp** The time the current state became set for the device.
+        - **request-tstamp** The requested state becomes valid when its
+        "current-tstamp" value equals or exceeds the returned **request-tstamp**
+      required:
+        - current-state
+        - current-tstamp
+        - request-tstamp
+      properties:
+        current-state:
+          type: boolean
+          description: |-
+            The current state of the requested service.
+        current-tstamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+        request-tstamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+      example:
+        current-state: False
+        current-tstamp: 1589978803
+        request-tstamp: 1590583603

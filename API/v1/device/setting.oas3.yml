@@ -83,37 +83,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/device.oas3.yml#/components/schemas/Device"
-              example: {
-                "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
-                "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                "profile": "66f7346a-48af-4614-bd7b-6c17093d75e3",
-                "mac": "00-00-5E-DF-98-EB",
-                "name": "Unknown Iphone",
-                "type": "Unknown",
-                "manufacturer": "Unknown",
-                "ip": {
-                  "ip4": "192.168.0.55",
-                  "ip6": "2001:db8:85a3::8a2e:370:7334"
-                },
-                "online": true,
-                "online_since": 1587732975,
-                "discovered": 1587732975,
-                "cfg": {
-                  "vpn": {
-                    "state": false,
-                    "since": 1587732975
-                  },
-                  "ad-blocking": {
-                    "state": false,
-                    "since": 1587732975
-                  },
-                  "device-protection": {
-                    "state": true,
-                    "since": 1587732975
-                  }
-                },
-              }
+                $ref: "../../inc/device.oas3.yml#/components/schemas/Device-Settings-Reply"
         "400":
           description: |-
             General Request processing error.  Possible errors are:
