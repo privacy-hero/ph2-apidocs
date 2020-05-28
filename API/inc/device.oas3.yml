@@ -31,6 +31,7 @@ paths:
                     - $ref: "#/components/schemas/Device"
                     - $ref: "#/components/schemas/Devices"
                     - $ref: "#/components/schemas/DeviceUsageHistory"
+                    - $ref: "#/components/schemas/Device-Settings"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -62,23 +63,6 @@ components:
         ip6:
           $ref: "./simpletypes.oas3.yml#/components/schemas/ip6"
 
-    PauseSetting:
-      type: object
-      additionalProperties: false
-      description: |-
-        - **state**: if true the system is enabled persistently.
-        - **pause**: if the time is greater than now, then regardless of the
-        **state** the service is disabled, until the pause time elapses.  After
-        which, the **state** reasserts itself.
-      properties:
-        state:
-          type: boolean
-          default: false
-          description: |-
-            **true** = ON.  **false** = Off
-        pause:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
     DeviceConfig:
       type: object
       required:
@@ -87,17 +71,16 @@ components:
         - ad-blocking
       additionalProperties: false
       description: |-
-        - **vpn**: Enabled or Not, and Pause time.
-        - **Ad-blocking**: Enabled or Not, and Pause time.
-        - **device-protection**: Enabled or not.  IF Pause time is greater than
-        now, all internet for the device is blocked until pause time elapses.
+        - **vpn**: Enabled or Not.
+        - **Ad-blocking**: Enabled or Not.
+        - **device-protection**: Enabled or not.
       properties:
         vpn:
-          $ref: "#/components/schemas/PauseSetting"
+          $ref: "./adapter.oas3.yml#/components/schemas/state"
         ad-blocking:
-          $ref: "#/components/schemas/PauseSetting"
+          $ref: "./adapter.oas3.yml#/components/schemas/state"
         device-protection:
-          $ref: "#/components/schemas/PauseSetting"
+          $ref: "./adapter.oas3.yml#/components/schemas/state"
 
     DeviceUsageRecord:
       type: object
@@ -128,26 +111,26 @@ components:
       items:
         $ref: "#/components/schemas/DeviceUsageRecord"
 
-    DeviceUsageSummary:
-      type: object
-      description: |-
-        Holds a summary of the devices usage.
-        - **hours24**: The last 24 hour agregated usage.
-        - **week**: The last 7 days agregated usage.
-        - **month**: The last 30 days agregated usage.
-        - **quater**: The last 90 days agregated usage.
-
-        **timestamp** in the device usage is the start of the period in question.
-      additionalProperties: false
-      properties:
-        hours24:
-          $ref: "#/components/schemas/DeviceUsageRecord"
-        week:
-          $ref: "#/components/schemas/DeviceUsageRecord"
-        month:
-          $ref: "#/components/schemas/DeviceUsageRecord"
-        quater:
-          $ref: "#/components/schemas/DeviceUsageRecord"
+    #DeviceUsageSummary:
+    #  type: object
+    #  description: |-
+    #    Holds a summary of the devices usage.
+    #    - **hours24**: The last 24 hour aggregated usage.
+    #    - **week**: The last 7 days aggregated usage.
+    #    - **month**: The last 30 days aggregated usage.
+    #    - **quarter**: The last 90 days aggregated usage.
+    #
+    #    **timestamp** in the device usage is the start of the period in question.
+    #  additionalProperties: false
+    #  properties:
+    #    hours24:
+    #      $ref: "#/components/schemas/DeviceUsageRecord"
+    #    week:
+    #      $ref: "#/components/schemas/DeviceUsageRecord"
+    #    month:
+    #      $ref: "#/components/schemas/DeviceUsageRecord"
+    #    quarter:
+    #      $ref: "#/components/schemas/DeviceUsageRecord"
 
 
     Device:
@@ -173,12 +156,6 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
         manufacturer:
           $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
-        given_name:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
-        given_type:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
-        given_manufacturer:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
         ip:
           $ref: "#/components/schemas/DeviceIP"
         online:
@@ -190,10 +167,6 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
         cfg:
           $ref: "#/components/schemas/DeviceConfig"
-        pending-cfg:
-          $ref: "#/components/schemas/DeviceConfig"
-        usage:
-          $ref: "#/components/schemas/DeviceUsageSummary"
       example: {
         "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
         "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
@@ -202,9 +175,6 @@ components:
         "name": "Nokia N78",
         "type": "Smartphone",
         "manufacturer": "Nokia",
-        "given_name": "Granpa's Nokia",
-        "given_type": null,
-        "given_manufacturer": null,
         "ip": {
           "ip4": "192.168.0.55",
           "ip6": "2001:db8:85a3::8a2e:370:7334"
@@ -215,39 +185,17 @@ components:
         "cfg": {
           "vpn": {
             "state": false,
-            "pause": 1587732975
+            "since": 1587732975
           },
           "ad-blocking": {
             "state": false,
-            "pause": 1587732975
+            "since": 1587732975
           },
           "device-protection": {
             "state": false,
-            "pause": 1587732975
+            "since": 1587732975
           }
         },
-        "usage": {
-          "hours24": {
-            "timestamp": 1587732975,
-            "tx": 123450,
-            "rx": 243512340
-          },
-          "week": {
-            "timestamp": 1587732975,
-            "tx": 1234504,
-            "rx": 2435123406
-          },
-          "month": {
-            "timestamp": 1587732975,
-            "tx": 12345047,
-            "rx": 24351234068
-          },
-          "quater": {
-            "timestamp": 1587732975,
-            "tx": 123450472,
-            "rx": 243512340683
-          }
-        }
       }
 
 
@@ -259,4 +207,35 @@ components:
       items:
         $ref: "#/components/schemas/Device"
 
+    Device-Settings:
+      type: object
+      additionalProperties: false
+      properties:
+        settings:
+          type: object
+          description: |-
+            The response to setting a device configuration.
+            - **current-state** The services current state.
+            - **current-tstamp** The time the current state became set on the
+            Adapter.
+            - **request-tstamp** The requested state becomes valid when its
+            "current-tstamp" value equals or exceeds the returned **request-tstamp**
+          required:
+            - current-state
+            - current-tstamp
+            - request-tstamp
+          additionalProperties: false
+          properties:
+            current-state:
+              type: boolean
+              description: |-
+                The current state of the requested service.
+            current-tstamp:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+            request-tstamp:
+              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+          example:
+            current-state: False
+            current-tstamp: 1589978803
+            request-tstamp: 1590583603
 
