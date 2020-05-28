@@ -102,12 +102,20 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
 
     datacaps:
-      type: array
-      description: A per-month Data Cap.  An Empty Array is no data cap.
-      minItems: 0
-      maxItems: 2
-      items:
-        $ref: "./simpletypes.oas3.yml#/components/schemas/datacap"
+      type: object
+      description: A per-month Data Cap and billing cycle.
+      required:
+        - cap
+        - day
+      additionalProperties: false
+      properties:
+        cap:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/datacap"
+        day:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/datacap-reset"
+      example:
+        cap: 0
+        day: 14
 
     wifi-settings:
       type: object
@@ -287,42 +295,18 @@ components:
       items:
         $ref: "#/components/schemas/Adapter-Unassociated"
 
-    Adapter-Cfg:
-      type: object
-      description: The Adapter configuration settings.
-      additionalProperties: false
-      properties:
-        wifi:
-          $ref: "#/components/schemas/wifi-settings"
-        data-cap:
-          $ref: "#/components/schemas/datacaps"
-        vpn:
-          type: boolean
-          description: |-
-            VPN: **true**=Enabled, **false**=Disabled.
-        adblock:
-          type: boolean
-          description: |-
-            Ad Blocking: **true**=Enabled, **false**=Disabled.
-        streaming:
-          type: boolean
-          description: |-
-            Streaming Relocation: **true**=Enabled, **false**=Disabled
-        malware:
-          type: boolean
-          description: |-
-            Malware/Phishing protection: **true**=Enabled, **false**=Disabled
-
     Adapter:
       type: object
       required:
         - id
         - hw
+        - name
         - location
         - timezone
         - ip
         - registered
-        - state
+        - services
+        - settings
       additionalProperties: false
       properties:
         id:
@@ -331,8 +315,6 @@ components:
           $ref: "#/components/schemas/Adapter-Base"
         name:
           $ref: "./simpletypes.oas3.yml#/components/schemas/adapter-name"
-        location:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
         timezone:
           $ref: "./simpletypes.oas3.yml#/components/schemas/iana-timezone"
 
@@ -390,9 +372,9 @@ components:
         registered:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
-        state:
+        services:
           type: object
-          description: The current state of the Adapter/Router.
+          description: The current state of the Adapter/Router services.
           required:
             - online
             - vpn
@@ -412,8 +394,18 @@ components:
             malware-phising:
               $ref: "#/components/schemas/state"
 
-        health:
-          $ref: "#/components/schemas/Adapter-Diags"
+        settings:
+          type: object
+          description: Adapter/Router Configuration
+          required:
+            - wifi
+            - datacap
+          additionalProperties: false
+          properties:
+            wifi:
+              $ref: "#/components/schemas/wifi-settings"
+            datacap:
+              $ref: "#/components/schemas/datacaps"
 
     Adapters:
       type: array
@@ -526,3 +518,4 @@ components:
             current-state: False
             current-tstamp: 1589978803
             request-tstamp: 1590583603
+
