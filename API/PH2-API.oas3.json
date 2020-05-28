@@ -1216,6 +1216,10 @@
         "type": "object",
         "additionalProperties": false,
         "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "If the bedtime function is enabled or not."
+          },
           "school-time": {
             "$ref": "#/components/schemas/time-of-day-mins"
           },
@@ -4132,6 +4136,7 @@
                 "type": "object",
                 "required": [
                   "id",
+                  "enabled",
                   "school",
                   "other",
                   "school-nights"
@@ -4140,6 +4145,11 @@
                 "properties": {
                   "id": {
                     "$ref": "#/components/schemas/uuid"
+                  },
+                  "enabled": {
+                    "type": "boolean",
+                    "default": false,
+                    "description": "Enable the bedtime function (true) or not (false)"
                   },
                   "school": {
                     "$ref": "#/components/schemas/time-of-day-mins"
@@ -4153,6 +4163,7 @@
                 },
                 "example": {
                   "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "enabled": true,
                   "school": 1260,
                   "other": 1350,
                   "school-nights": [
