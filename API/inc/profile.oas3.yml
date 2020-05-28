@@ -32,7 +32,6 @@ paths:
                     - $ref: "#/components/schemas/Profiles"
                     - $ref: "#/components/schemas/ProfileDevices"
                     - $ref: "#/components/schemas/ProfilesDevices"
-                    - $ref: "#/components/schemas/Bedtime"
                     - $ref: "#/components/schemas/school-nights"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
@@ -116,6 +115,7 @@ components:
       items:
         type: boolean
       default: [true, true, true, true, false, false, true]
+      example: [true, true, true, true, false, false, true]
 
     Bedtimes:
       description: |-
