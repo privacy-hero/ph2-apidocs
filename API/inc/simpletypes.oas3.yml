@@ -65,6 +65,7 @@ paths:
                     - $ref: "#/components/schemas/datausage"
                     - $ref: "#/components/schemas/profile-name"
                     - $ref: "#/components/schemas/time-of-day"
+                    - $ref: "#/components/schemas/time-of-day-mins"
                     - $ref: "#/components/schemas/time-delay"
                     - $ref: "#/components/schemas/device-name"
 
@@ -435,6 +436,16 @@ components:
       default: 0
       description: |-
         An absolute time of the day in seconds, where 0 = midnight.
+
+    time-of-day-mins:
+      type: integer
+      format: int16
+      minimum: -1
+      maximum: 1440
+      default: -1
+      description: |-
+        An absolute time of the day in minutes, where 0 = midnight.  The value
+        -1 means no time of day is set.
 
     time-delay:
       type: integer

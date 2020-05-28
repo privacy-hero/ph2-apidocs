@@ -43,13 +43,22 @@ paths:
       description: |-
         # Usage
 
-        Allows the weekly bedtimes to be set for a profile.  The entire weekly
-        schedule is always set, if some entries do not change, simply send them
-        as configured.
+        Allows the Start time for "Bedtime" to be set independently for "School
+        Nights" and "Other Nights".  The duration of a "Bedtime" is system
+        controlled.  School Nights are the nights BEFORE a school day.  So, in
+        the typical school system where a school day is Monday to Friday, school
+        nights are Sunday thru Thursday.
 
         ## Parameters
           - **id**: The unique id of the profile.
-          - **bedtime**: An array of bedtimes to set for the profile.
+          - **school**: The time in minutes from midnight when bedtime
+          starts on a "school night".  Set to -1 if it is disabled.
+          - **other**: The time in minutes from midnight when bedtime
+          starts on nights other than school nights.  Set to -1 if it is
+          disabled.
+          - **school-nights**: An array of booleans which sets which nights of the
+          week are school nights.  The First entry is Monday, the last is
+          Sunday.  true = This is a school night.  false = It is not a school night.
 
       requestBody:
         required: true
@@ -59,45 +68,24 @@ paths:
               type: object
               required:
                 - id
-                - bedtime
+                - school
+                - other
+                - school-nights
               additionalProperties: false
               properties:
                 id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-                bedtime:
-                  $ref: "../../inc/profile.oas3.yml#/components/schemas/Bedtimes"
+                school:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
+                other:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
+                school-nights:
+                  $ref: "../../inc/profile.oas3.yml#/components/schemas/school-nights"
               example:
                 id: "cd73b915-89a4-4971-9d86-bce91786b12a"
-                bedtime: [
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 82800,
-                      "duration": 25200
-                    },
-                    {
-                      "start-time": 82800,
-                      "duration": 25200
-                    }
-                  ]
+                school: 1260
+                other: 1350
+                school-nights: [true,true,true,true,false,false,true]
 
       responses:
         "200":

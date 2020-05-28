@@ -33,7 +33,7 @@ paths:
                     - $ref: "#/components/schemas/ProfileDevices"
                     - $ref: "#/components/schemas/ProfilesDevices"
                     - $ref: "#/components/schemas/Bedtime"
-                    - $ref: "#/components/schemas/Bedtimes"
+                    - $ref: "#/components/schemas/school-nights"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -104,37 +104,32 @@ components:
         rx:
           $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
 
-    Bedtime:
-      description: |-
-        A time setting which defines when a "bedtime" state on a profile occurs.
-        In the UI, bedtime is defined as a Start and End time, however we define
-        a bedtime in the system as a Start time, and a duration.  There can only
-        be ONE bedtime per day, but the duration may make the bedtime extend
-        the next day.  Nominally a disabled bedtime should be encoded as
-        start-time=0 and duration=0
-        - **start-time**: The absolute time that bedtime starts.
-        - **duration**: The delay from **start-time** until bedtime ends.
-      type: object
-      additionalProperties: false
-      properties:
-        start-time:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/time-of-day"
-        duration:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/time-delay"
-
-    Bedtimes:
+    school-nights:
       type: array
       minItems: 7
       maxItems: 7
       description: |-
-        This is a list of bedtimes for the week.  The first element is always
+        This is a list of school nights for the week.  The first element is always
         MONDAY. The second is TUESDAY, and so on, until SUNDAY (the seventh
-        item).  This will need to be displayed correctly depending on how the
-        client defines which day is the start of the week. MONDAY is not
-        defined as the start of the week, it is an arbitrary starting point for
-        this array only.
+        item).  This selects the nights when a "school night" bedtime schedule
+        will be used, or an "other night" schedule.
       items:
-        $ref: "#/components/schemas/Bedtime"
+        type: boolean
+      default: [true, true, true, true, false, false, true]
+
+    Bedtimes:
+      description: |-
+        The definition of bedtimes for a profile.
+
+      type: object
+      additionalProperties: false
+      properties:
+        school-time:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
+        other-time:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
+        school-nights:
+          $ref: "#/components/schemas/school-nights"
 
     ProfileSettings:
       description: |-
