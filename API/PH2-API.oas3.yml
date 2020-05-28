@@ -206,9 +206,6 @@ paths:
   /v1/profile/cfg/setting:
     $ref: "v1/profile/cfg-setting.oas3.yml#/paths/~1profile~1cfg~1setting"
 
-  /v1/profile/device:
-    $ref: "v1/profile/device.oas3.yml#/paths/~1profile~1device"
-
   ######### DEVICE  MANAGEMENT API CALLS ######################
 
   /v1/device/list:
