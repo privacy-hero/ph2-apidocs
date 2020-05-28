@@ -43,16 +43,19 @@ paths:
       description: |-
         # Usage
 
-        Allows todays bedtime to be delayed by the amount of seconds specified.
+        Allows todays bedtime to be delayed by the amount of minutes specified.
         The delay can not be set, such that it would extend beyond the end of
         the bedtime period.  At the end of the bedtime period, the delay will be
-        reset to zero.  It only operates once.
+        reset to zero.  It only operates once and is reset to zero at the end of
+        bedtime (6am).
 
         ## Parameters
           - **id**: The unique id of the profile.
           - **delay**: The number of seconds to delay bedtime for.  Set to zero
           to disable a previously set delay.  Delay only delays the start of
-         it does not delay the end.
+          it does not delay the end.  The delay is absolute, if the delay needs
+          to be incremented or decremented, take the previous delay, adjust
+          accordingly and re-set it using this call.
 
       requestBody:
         required: true
@@ -71,7 +74,7 @@ paths:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/time-delay"
               example:
                 id: "cd73b915-89a4-4971-9d86-bce91786b12a"
-                delay: 1800
+                delay: 45
 
       responses:
         "200":
@@ -81,48 +84,28 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/profile.oas3.yml#/components/schemas/Profile"
-              example: {
-                "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
-                "name": "Rugrats",
-                "icon": "rugrats.ico",
-                "settings": {
-                  "youtube-restricted": false,
-                  "safesearch": false,
-                  "internet-pause": null,
-                  "bedtime": [
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 82800,
-                      "duration": 25200
-                    },
-                    {
-                      "start-time": 82800,
-                      "duration": 25200
-                    }
-                  ],
-                  "bedtime-delay": 1800
-                }
-              }
+              example:
+                id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                adapter: "d46cb964-4a40-43ac-87f6-cdefa19fa121"
+                name: "Rugrats"
+                icon: "rugrats.ico"
+                settings:
+                  youtube-restricted: false
+                  safesearch: false
+                  internet-pause: null
+                  bedtime:
+                    school-time: 1290
+                    other-time: -1
+                    school-nights:
+                      - true
+                      - true
+                      - true
+                      - true
+                      - false
+                      - false
+                      - true
+                  bedtime-delay: 45
+
 
         "400":
           description: |-
