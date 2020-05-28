@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -16,7 +16,7 @@
   },
   "servers": [
     {
-      "url": "https://api2.privacyhero.com/",
+      "url": "https://api2.privacyhero.com",
       "description": "The API deployment URL."
     },
     {
@@ -293,8 +293,496 @@
         "description": "The name of an adapter.",
         "minLength": 0,
         "maxLength": 64,
-        "pattern": "^[\\w\\W]+$",
+        "pattern": "^[\\w\\d\\-\\. ()!]+$",
         "example": "Home Office Adapter"
+      },
+      "iana-timezone": {
+        "type": "string",
+        "format": "IANA Timezone",
+        "description": "IANA Timezone name.",
+        "minLength": 3,
+        "maxLength": 44,
+        "pattern": "^([A-Za-z-_]){1,14}\\/([A-Za-z-_]){1,14}(\\/([A-Za-z-_]){1,14})?$",
+        "default": "Etc/UTC",
+        "example": "America/Chicago"
+      },
+      "ip4": {
+        "type": "string",
+        "format": "IPv4 Address",
+        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
+        "minLength": 7,
+        "maxLength": 15,
+        "description": "An IP4 formatted IP Address",
+        "example": "192.168.0.55"
+      },
+      "ip6": {
+        "type": "string",
+        "format": "IPv6 Address",
+        "pattern": "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$",
+        "minLength": 3,
+        "maxLength": 45,
+        "description": "An IP6 formatted IP Address",
+        "example": "2001:db8:85a3::8a2e:370:7334"
+      },
+      "state": {
+        "type": "object",
+        "required": [
+          "state",
+          "since"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "state": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "**true**=Active, **false**=Inactive, **null**=Unknown"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        },
+        "description": "The current known value of the state, and the time that it changed."
+      },
+      "wifi-settings": {
+        "type": "object",
+        "description": "Settings for an individual wifi network",
+        "required": [
+          "enabled",
+          "ssid",
+          "key"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "type": "boolean",
+            "description": "is the wifi network enabled.",
+            "default": true
+          },
+          "ssid": {
+            "type": "string",
+            "format": "ssid",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[^!#;+\\]\\/\"\\t][^+\\]\\/\"\\t]{0,30}[^ !#;+\\]\\/\"\\t]$|^[^ !#;+\\]\\/\"\\t]$",
+            "description": "The SSID of the wifi network",
+            "default": "PrivacyHero2",
+            "example": "PrivacyHero2"
+          },
+          "key": {
+            "type": "string",
+            "format": "WPA-PSK passphrase",
+            "minLength": 8,
+            "maxLength": 63,
+            "pattern": "^[ -~]*$",
+            "nullable": true,
+            "default": "r4nd0m k3y",
+            "example": "r4nd0m k3y",
+            "description": "The WPA-PSK passphrase to secure the network. **null**=Open Wifi\nNetwork"
+          }
+        }
+      },
+      "datacap": {
+        "type": "integer",
+        "format": "uint64",
+        "minimum": 0,
+        "maximum": 1073741824,
+        "description": "Data Cap in MegaBytes (1048576 bytes) per month. 0 = no data cap"
+      },
+      "datacap-reset": {
+        "type": "integer",
+        "format": "uint8",
+        "minimum": 1,
+        "maximum": 31,
+        "description": "Day of the month, which the datacap resets at the start of."
+      },
+      "datacaps": {
+        "type": "object",
+        "description": "A per-month Data Cap and billing cycle.",
+        "required": [
+          "cap",
+          "day"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "cap": {
+            "$ref": "#/components/schemas/datacap"
+          },
+          "day": {
+            "$ref": "#/components/schemas/datacap-reset"
+          }
+        },
+        "example": {
+          "cap": 0,
+          "day": 14
+        }
+      },
+      "Adapter": {
+        "type": "object",
+        "required": [
+          "id",
+          "hw",
+          "name",
+          "location",
+          "timezone",
+          "ip",
+          "registered",
+          "services",
+          "settings"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "hw": {
+            "$ref": "#/components/schemas/Adapter-Base"
+          },
+          "name": {
+            "$ref": "#/components/schemas/adapter-name"
+          },
+          "timezone": {
+            "$ref": "#/components/schemas/iana-timezone"
+          },
+          "ip": {
+            "type": "object",
+            "required": [
+              "lan",
+              "wan",
+              "vpn"
+            ],
+            "description": "The current or last known IP addresses of the adapter/router.",
+            "additionalProperties": false,
+            "properties": {
+              "lan": {
+                "type": "object",
+                "required": [
+                  "ip4"
+                ],
+                "description": "The Local network IP addresses.",
+                "additionalProperties": false,
+                "properties": {
+                  "ip4": {
+                    "$ref": "#/components/schemas/ip4"
+                  },
+                  "ip6": {
+                    "$ref": "#/components/schemas/ip6"
+                  }
+                }
+              },
+              "wan": {
+                "type": "object",
+                "required": [
+                  "ip4"
+                ],
+                "description": "The ISP Native IP addresses.",
+                "additionalProperties": false,
+                "properties": {
+                  "ip4": {
+                    "$ref": "#/components/schemas/ip4"
+                  },
+                  "ip6": {
+                    "$ref": "#/components/schemas/ip6"
+                  }
+                },
+                "example": {
+                  "ip4": "183.89.52.15"
+                }
+              },
+              "vpn": {
+                "type": "object",
+                "required": [
+                  "ip4"
+                ],
+                "description": "The VPN endpoint IP addresses.",
+                "additionalProperties": false,
+                "properties": {
+                  "ip4": {
+                    "$ref": "#/components/schemas/ip4"
+                  },
+                  "ip6": {
+                    "$ref": "#/components/schemas/ip6"
+                  }
+                },
+                "example": {
+                  "ip4": "177.11.22.13",
+                  "ip6": "2001:4860:4860::8844"
+                }
+              }
+            }
+          },
+          "registered": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          },
+          "services": {
+            "type": "object",
+            "description": "The current state of the Adapter/Router services.",
+            "required": [
+              "online",
+              "vpn",
+              "ad-blocking",
+              "stream-relocation",
+              "malware-phising"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "online": {
+                "$ref": "#/components/schemas/state"
+              },
+              "vpn": {
+                "$ref": "#/components/schemas/state"
+              },
+              "ad-blocking": {
+                "$ref": "#/components/schemas/state"
+              },
+              "stream-relocation": {
+                "$ref": "#/components/schemas/state"
+              },
+              "malware-phising": {
+                "$ref": "#/components/schemas/state"
+              }
+            }
+          },
+          "settings": {
+            "type": "object",
+            "description": "Adapter/Router Configuration",
+            "required": [
+              "wifi",
+              "datacap"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "wifi": {
+                "$ref": "#/components/schemas/wifi-settings"
+              },
+              "datacap": {
+                "$ref": "#/components/schemas/datacaps"
+              }
+            }
+          }
+        }
+      },
+      "Adapters": {
+        "type": "array",
+        "maxItems": 10,
+        "description": "An Array of Adapter Records.",
+        "items": {
+          "$ref": "#/components/schemas/Adapter"
+        }
+      },
+      "Adapter-Settings": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "settings": {
+            "type": "object",
+            "description": "The response to setting an adapter service.\n- **current-state** The services current state.\n- **current-tstamp** The time the current state became set on the\nAdapter.\n- **request-tstamp** The requested state becomes valid when its\n\"current-tstamp\" value equals or exceeds the returned **request-tstamp**",
+            "required": [
+              "current-state",
+              "current-tstamp",
+              "request-tstamp"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "current-state": {
+                "type": "boolean",
+                "description": "The current state of the requested service."
+              },
+              "current-tstamp": {
+                "$ref": "#/components/schemas/epoch-timestamp-nonull"
+              },
+              "request-tstamp": {
+                "$ref": "#/components/schemas/epoch-timestamp-nonull"
+              }
+            },
+            "example": {
+              "current-state": false,
+              "current-tstamp": 1589978803,
+              "request-tstamp": 1590583603
+            }
+          }
+        }
+      },
+      "adapter-services": {
+        "type": "string",
+        "enum": [
+          "VPN",
+          "AdBlocking",
+          "StreamRelocation",
+          "Malware"
+        ],
+        "example": "VPN",
+        "description": "A service running on the adapter."
+      },
+      "adapter-state": {
+        "type": "boolean",
+        "nullable": true,
+        "default": true,
+        "description": "**true**=Enable the Service. **false**=Disable the Service.\n**null**=No Change"
+      },
+      "speed-bps": {
+        "type": "integer",
+        "format": "uint32",
+        "minimum": 0,
+        "maximum": 4294967295,
+        "nullable": true,
+        "description": "Bits per second speed result. **NULL** = Unknown."
+      },
+      "speed-diag": {
+        "type": "object",
+        "description": "Speed Diagnostic Results.",
+        "required": [
+          "speed",
+          "when"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "speed": {
+            "$ref": "#/components/schemas/speed-bps"
+          },
+          "when": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
+      },
+      "Adapter-Speed-Diags": {
+        "type": "object",
+        "description": "Adapter Speed Diagnostic Results\n- **latest**: Result of last speed test\n- **averages**: Historical speed test results\n- **running**: Time the current speed test is expected to complete.",
+        "additionalProperties": false,
+        "properties": {
+          "latest": {
+            "$ref": "#/components/schemas/speed-diag"
+          },
+          "averages": {
+            "type": "object",
+            "description": "Historical Averages",
+            "additionalProperties": false,
+            "properties": {
+              "days7": {
+                "$ref": "#/components/schemas/speed-bps"
+              },
+              "days30": {
+                "$ref": "#/components/schemas/speed-bps"
+              },
+              "alltime": {
+                "$ref": "#/components/schemas/speed-bps"
+              }
+            }
+          },
+          "running": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
+      },
+      "latency-ms": {
+        "type": "integer",
+        "format": "uint16",
+        "minimum": 0,
+        "maximum": 65535,
+        "nullable": true,
+        "description": "Latency measured in milliseconds. **NULL** = Unknown."
+      },
+      "latency-percentage": {
+        "type": "integer",
+        "format": "uint16",
+        "minimum": 0,
+        "maximum": 10000,
+        "nullable": true,
+        "description": "Percentage of successful tests (*100). Eg. 9876 = 98.76%. **NULL** = Unknown."
+      },
+      "latency-diag": {
+        "type": "object",
+        "description": "latency diagnostic result",
+        "required": [
+          "latency",
+          "completion"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "latency": {
+            "$ref": "#/components/schemas/latency-ms"
+          },
+          "completion": {
+            "$ref": "#/components/schemas/latency-percentage"
+          }
+        }
+      },
+      "Adapter-Latency-Diags": {
+        "type": "object",
+        "description": "Adapter Latency Diagnostic Results\n- **latest**: Result of last latency test\n- **averages**: Historical latency test results\n- **running**: Time the current latency test is expected to complete.",
+        "additionalProperties": false,
+        "properties": {
+          "latest": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "result": {
+                "$ref": "#/components/schemas/latency-diag"
+              },
+              "when": {
+                "$ref": "#/components/schemas/epoch-timestamp"
+              }
+            }
+          },
+          "averages": {
+            "type": "object",
+            "description": "Historical Averages",
+            "additionalProperties": false,
+            "properties": {
+              "days7": {
+                "$ref": "#/components/schemas/latency-diag"
+              },
+              "days30": {
+                "$ref": "#/components/schemas/latency-diag"
+              },
+              "alltime": {
+                "$ref": "#/components/schemas/latency-diag"
+              }
+            }
+          },
+          "running": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
+      },
+      "Adapter-Diags": {
+        "type": "object",
+        "description": "Results from the last and best diagnostic tests",
+        "additionalProperties": false,
+        "properties": {
+          "speed": {
+            "type": "object",
+            "description": "Network Speed test results",
+            "additionalProperties": false,
+            "properties": {
+              "tx": {
+                "$ref": "#/components/schemas/Adapter-Speed-Diags"
+              },
+              "rx": {
+                "$ref": "#/components/schemas/Adapter-Speed-Diags"
+              }
+            }
+          },
+          "ping": {
+            "$ref": "#/components/schemas/Adapter-Latency-Diags"
+          }
+        }
+      },
+      "datausage": {
+        "type": "integer",
+        "format": "uint64",
+        "minimum": 0,
+        "maximum": 1000000000000000000,
+        "description": "Data Usage in Bytes."
+      },
+      "url": {
+        "type": "string",
+        "format": "URL",
+        "minLength": 1,
+        "maxLength": 2000,
+        "nullable": true,
+        "pattern": "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+        "description": "A URL, including relative references.  Will only accept https or\nrelative urls.",
+        "example": "./relative.url"
       },
       "iso3166-country": {
         "type": "string",
@@ -553,483 +1041,6 @@
         ],
         "description": "an ISO3166 country code"
       },
-      "iana-timezone": {
-        "type": "string",
-        "format": "IANA Timezone",
-        "description": "IANA Timezone name.",
-        "minLength": 3,
-        "maxLength": 44,
-        "pattern": "^([A-Za-z-_]){1,14}\\/([A-Za-z-_]){1,14}(\\/([A-Za-z-_]){1,14})?$",
-        "default": "Etc/UTC",
-        "example": "America/Chicago"
-      },
-      "ip4": {
-        "type": "string",
-        "format": "IPv4 Address",
-        "pattern": "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$",
-        "minLength": 7,
-        "maxLength": 15,
-        "description": "An IP4 formatted IP Address",
-        "example": "192.168.0.55"
-      },
-      "ip6": {
-        "type": "string",
-        "format": "IPv6 Address",
-        "pattern": "^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$",
-        "minLength": 3,
-        "maxLength": 45,
-        "description": "An IP6 formatted IP Address",
-        "example": "2001:db8:85a3::8a2e:370:7334"
-      },
-      "state": {
-        "type": "object",
-        "required": [
-          "state",
-          "since"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "state": {
-            "type": "boolean",
-            "nullable": true,
-            "description": "**true**=Active, **false**=Inactive, **null**=Unknown"
-          },
-          "since": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        },
-        "description": "The current known value of the state, and the time that it changed."
-      },
-      "wifi-settings": {
-        "type": "object",
-        "description": "Settings for an individual wifi network",
-        "required": [
-          "enabled",
-          "ssid",
-          "key"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "enabled": {
-            "type": "boolean",
-            "description": "is the wifi network enabled.",
-            "default": true
-          },
-          "ssid": {
-            "type": "string",
-            "format": "ssid",
-            "minLength": 1,
-            "maxLength": 32,
-            "pattern": "^[^!#;+\\]\\/\"\\t][^+\\]\\/\"\\t]{0,30}[^ !#;+\\]\\/\"\\t]$|^[^ !#;+\\]\\/\"\\t]$",
-            "description": "The SSID of the wifi network",
-            "default": "PrivacyHero2",
-            "example": "PrivacyHero2"
-          },
-          "key": {
-            "type": "string",
-            "format": "WPA-PSK passphrase",
-            "minLength": 8,
-            "maxLength": 63,
-            "pattern": "^[ -~]*$",
-            "nullable": true,
-            "default": "r4nd0m k3y",
-            "example": "r4nd0m k3y",
-            "description": "The WPA-PSK passphrase to secure the network. **null**=Open Wifi\nNetwork"
-          }
-        }
-      },
-      "datacap": {
-        "type": "integer",
-        "format": "uint64",
-        "minimum": 0,
-        "maximum": 1000000000000000000,
-        "description": "Data Cap in Bytes per month. 0 = no data cap"
-      },
-      "datacaps": {
-        "type": "array",
-        "description": "A per-month Data Cap.  An Empty Array is no data cap.",
-        "minItems": 0,
-        "maxItems": 2,
-        "items": {
-          "$ref": "#/components/schemas/datacap"
-        }
-      },
-      "Adapter-Cfg": {
-        "type": "object",
-        "description": "The Adapter configuration settings.",
-        "additionalProperties": false,
-        "properties": {
-          "wifi": {
-            "$ref": "#/components/schemas/wifi-settings"
-          },
-          "data-cap": {
-            "$ref": "#/components/schemas/datacaps"
-          },
-          "vpn": {
-            "type": "boolean",
-            "description": "VPN: **true**=Enabled, **false**=Disabled."
-          },
-          "adblock": {
-            "type": "boolean",
-            "description": "Ad Blocking: **true**=Enabled, **false**=Disabled."
-          },
-          "streaming": {
-            "type": "boolean",
-            "description": "Streaming Relocation: **true**=Enabled, **false**=Disabled"
-          },
-          "malware": {
-            "type": "boolean",
-            "description": "Malware/Phishing protection: **true**=Enabled, **false**=Disabled"
-          }
-        }
-      },
-      "Adapter-Settings": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "settings": {
-            "type": "object",
-            "description": "The settings of the Adapter/Router.",
-            "required": [
-              "current"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "current": {
-                "$ref": "#/components/schemas/Adapter-Cfg"
-              },
-              "pending": {
-                "$ref": "#/components/schemas/Adapter-Cfg"
-              }
-            }
-          }
-        }
-      },
-      "speed-bps": {
-        "type": "integer",
-        "format": "uint32",
-        "minimum": 0,
-        "maximum": 4294967295,
-        "nullable": true,
-        "description": "Bits per second speed result. **NULL** = Unknown."
-      },
-      "speed-diag": {
-        "type": "object",
-        "description": "Speed Diagnostic Results.",
-        "required": [
-          "speed",
-          "when"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "speed": {
-            "$ref": "#/components/schemas/speed-bps"
-          },
-          "when": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        }
-      },
-      "Adapter-Speed-Diags": {
-        "type": "object",
-        "description": "Adapter Speed Diagnostic Results\n- **latest**: Result of last speed test\n- **averages**: Historical speed test results\n- **running**: Time the current speed test is expected to complete.",
-        "additionalProperties": false,
-        "properties": {
-          "latest": {
-            "$ref": "#/components/schemas/speed-diag"
-          },
-          "averages": {
-            "type": "object",
-            "description": "Historical Averages",
-            "additionalProperties": false,
-            "properties": {
-              "days7": {
-                "$ref": "#/components/schemas/speed-bps"
-              },
-              "days30": {
-                "$ref": "#/components/schemas/speed-bps"
-              },
-              "alltime": {
-                "$ref": "#/components/schemas/speed-bps"
-              }
-            }
-          },
-          "running": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        }
-      },
-      "latency-ms": {
-        "type": "integer",
-        "format": "uint16",
-        "minimum": 0,
-        "maximum": 65535,
-        "nullable": true,
-        "description": "Latency measured in milliseconds. **NULL** = Unknown."
-      },
-      "latency-percentage": {
-        "type": "integer",
-        "format": "uint16",
-        "minimum": 0,
-        "maximum": 10000,
-        "nullable": true,
-        "description": "Percentage of successful tests (*100). Eg. 9876 = 98.76%. **NULL** = Unknown."
-      },
-      "latency-diag": {
-        "type": "object",
-        "description": "latency diagnostic result",
-        "required": [
-          "latency",
-          "completion"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "latency": {
-            "$ref": "#/components/schemas/latency-ms"
-          },
-          "completion": {
-            "$ref": "#/components/schemas/latency-percentage"
-          }
-        }
-      },
-      "Adapter-Latency-Diags": {
-        "type": "object",
-        "description": "Adapter Latency Diagnostic Results\n- **latest**: Result of last latency test\n- **averages**: Historical latency test results\n- **running**: Time the current latency test is expected to complete.",
-        "additionalProperties": false,
-        "properties": {
-          "latest": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "result": {
-                "$ref": "#/components/schemas/latency-diag"
-              },
-              "when": {
-                "$ref": "#/components/schemas/epoch-timestamp"
-              }
-            }
-          },
-          "averages": {
-            "type": "object",
-            "description": "Historical Averages",
-            "additionalProperties": false,
-            "properties": {
-              "days7": {
-                "$ref": "#/components/schemas/latency-diag"
-              },
-              "days30": {
-                "$ref": "#/components/schemas/latency-diag"
-              },
-              "alltime": {
-                "$ref": "#/components/schemas/latency-diag"
-              }
-            }
-          },
-          "running": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        }
-      },
-      "Adapter-Diags": {
-        "type": "object",
-        "description": "Results from the last and best diagnostic tests",
-        "additionalProperties": false,
-        "properties": {
-          "speed": {
-            "type": "object",
-            "description": "Network Speed test results",
-            "additionalProperties": false,
-            "properties": {
-              "tx": {
-                "$ref": "#/components/schemas/Adapter-Speed-Diags"
-              },
-              "rx": {
-                "$ref": "#/components/schemas/Adapter-Speed-Diags"
-              }
-            }
-          },
-          "ping": {
-            "$ref": "#/components/schemas/Adapter-Latency-Diags"
-          }
-        }
-      },
-      "Adapter": {
-        "type": "object",
-        "required": [
-          "id",
-          "hw",
-          "location",
-          "timezone",
-          "ip",
-          "registered",
-          "state"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "id": {
-            "$ref": "#/components/schemas/uuid"
-          },
-          "hw": {
-            "$ref": "#/components/schemas/Adapter-Base"
-          },
-          "name": {
-            "$ref": "#/components/schemas/adapter-name"
-          },
-          "location": {
-            "$ref": "#/components/schemas/iso3166-country"
-          },
-          "timezone": {
-            "$ref": "#/components/schemas/iana-timezone"
-          },
-          "ip": {
-            "type": "object",
-            "required": [
-              "lan",
-              "wan",
-              "vpn"
-            ],
-            "description": "The current or last known IP addresses of the adapter/router.",
-            "additionalProperties": false,
-            "properties": {
-              "lan": {
-                "type": "object",
-                "required": [
-                  "ip4"
-                ],
-                "description": "The Local network IP addresses.",
-                "additionalProperties": false,
-                "properties": {
-                  "ip4": {
-                    "$ref": "#/components/schemas/ip4"
-                  },
-                  "ip6": {
-                    "$ref": "#/components/schemas/ip6"
-                  }
-                }
-              },
-              "wan": {
-                "type": "object",
-                "required": [
-                  "ip4"
-                ],
-                "description": "The ISP Native IP addresses.",
-                "additionalProperties": false,
-                "properties": {
-                  "ip4": {
-                    "$ref": "#/components/schemas/ip4"
-                  },
-                  "ip6": {
-                    "$ref": "#/components/schemas/ip6"
-                  }
-                },
-                "example": {
-                  "ip4": "183.89.52.15"
-                }
-              },
-              "vpn": {
-                "type": "object",
-                "required": [
-                  "ip4"
-                ],
-                "description": "The VPN endpoint IP addresses.",
-                "additionalProperties": false,
-                "properties": {
-                  "ip4": {
-                    "$ref": "#/components/schemas/ip4"
-                  },
-                  "ip6": {
-                    "$ref": "#/components/schemas/ip6"
-                  }
-                },
-                "example": {
-                  "ip4": "177.11.22.13",
-                  "ip6": "2001:4860:4860::8844"
-                }
-              }
-            }
-          },
-          "registered": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          },
-          "state": {
-            "type": "object",
-            "description": "The current state of the Adapter/Router.",
-            "required": [
-              "online",
-              "vpn",
-              "ad-blocking",
-              "stream-relocation",
-              "malware-phising"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "online": {
-                "$ref": "#/components/schemas/state"
-              },
-              "vpn": {
-                "$ref": "#/components/schemas/state"
-              },
-              "ad-blocking": {
-                "$ref": "#/components/schemas/state"
-              },
-              "stream-relocation": {
-                "$ref": "#/components/schemas/state"
-              },
-              "malware-phising": {
-                "$ref": "#/components/schemas/state"
-              }
-            }
-          },
-          "settings": {
-            "$ref": "#/components/schemas/Adapter-Settings"
-          },
-          "health": {
-            "$ref": "#/components/schemas/Adapter-Diags"
-          }
-        }
-      },
-      "Adapters": {
-        "type": "array",
-        "maxItems": 10,
-        "description": "An Array of Adapter Records.",
-        "items": {
-          "$ref": "#/components/schemas/Adapter"
-        }
-      },
-      "adapter-services": {
-        "type": "string",
-        "enum": [
-          "VPN",
-          "AdBlocking",
-          "StreamRelocation",
-          "Malware"
-        ],
-        "example": "VPN",
-        "description": "A service running on the adapter."
-      },
-      "adapter-state": {
-        "type": "boolean",
-        "nullable": true,
-        "default": true,
-        "description": "**true**=Enable the Service. **false**=Disable the Service.\n**null**=No Change"
-      },
-      "datausage": {
-        "type": "integer",
-        "format": "uint64",
-        "minimum": 0,
-        "maximum": 1000000000000000000,
-        "description": "Data Usage in Bytes."
-      },
-      "url": {
-        "type": "string",
-        "format": "URL",
-        "minLength": 1,
-        "maxLength": 2000,
-        "nullable": true,
-        "pattern": "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-        "description": "A URL, including relative references.  Will only accept https or\nrelative urls.",
-        "example": "./relative.url"
-      },
       "streams": {
         "type": "array",
         "maxItems": 1000,
@@ -1165,43 +1176,65 @@
           }
         }
       },
-      "time-of-day": {
+      "time-of-day-mins": {
         "type": "integer",
-        "format": "int32",
-        "minimum": 0,
-        "maximum": 86399,
-        "default": 0,
-        "description": "An absolute time of the day in seconds, where 0 = midnight."
+        "format": "int16",
+        "minimum": -1,
+        "maximum": 1440,
+        "default": -1,
+        "description": "An absolute time of the day in minutes, where 0 = midnight.  The value\n-1 means no time of day is set."
       },
-      "time-delay": {
-        "type": "integer",
-        "format": "int32",
-        "minimum": 0,
-        "maximum": 86399,
-        "default": 0,
-        "description": "A time delay, where 0 = no delay."
-      },
-      "Bedtime": {
-        "description": "A time setting which defines when a \"bedtime\" state on a profile occurs.\nIn the UI, bedtime is defined as a Start and End time, however we define\na bedtime in the system as a Start time, and a duration.  There can only\nbe ONE bedtime per day, but the duration may make the bedtime extend\nthe next day.  Nominally a disabled bedtime should be encoded as\nstart-time=0 and duration=0\n- **start-time**: The absolute time that bedtime starts.\n- **duration**: The delay from **start-time** until bedtime ends.",
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "start-time": {
-            "$ref": "#/components/schemas/time-of-day"
-          },
-          "duration": {
-            "$ref": "#/components/schemas/time-delay"
-          }
-        }
-      },
-      "Bedtimes": {
+      "school-nights": {
         "type": "array",
         "minItems": 7,
         "maxItems": 7,
-        "description": "This is a list of bedtimes for the week.  The first element is always\nMONDAY. The second is TUESDAY, and so on, until SUNDAY (the seventh\nitem).  This will need to be displayed correctly depending on how the\nclient defines which day is the start of the week. MONDAY is not\ndefined as the start of the week, it is an arbitrary starting point for\nthis array only.",
+        "description": "This is a list of school nights for the week.  The first element is always\nMONDAY. The second is TUESDAY, and so on, until SUNDAY (the seventh\nitem).  This selects the nights when a \"school night\" bedtime schedule\nwill be used, or an \"other night\" schedule.",
         "items": {
-          "$ref": "#/components/schemas/Bedtime"
+          "type": "boolean"
+        },
+        "default": [
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          true
+        ],
+        "example": [
+          true,
+          true,
+          true,
+          true,
+          false,
+          false,
+          true
+        ]
+      },
+      "Bedtimes": {
+        "description": "The definition of bedtimes for a profile.",
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "school-time": {
+            "$ref": "#/components/schemas/time-of-day-mins"
+          },
+          "other-time": {
+            "$ref": "#/components/schemas/time-of-day-mins"
+          },
+          "school-nights": {
+            "$ref": "#/components/schemas/school-nights"
+          }
         }
+      },
+      "time-delay": {
+        "type": "integer",
+        "format": "int16",
+        "minimum": -360,
+        "maximum": 360,
+        "default": 0,
+        "description": "A time delay, where 0 = no delay. In Minutes. The delay may be +/- 6\nhours.  A negative delay will cause the bedtime to occur earlier and a\npositive delay later.",
+        "example": -30
       },
       "ProfileSettings": {
         "description": "The settings for a profile.\n- **youtube-restricted**: If youtube is restricted or normal.\n- **safesearch**: If search engines are forced to return safe results.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is negative, internet is paused indefinitely.\n- **bedtime**: A list of bedtimes, one for each day of a week.\n- **bedtime-delay**: A once off delay for the current days bedtime\nstart.  Note, this does not change bedtime end.  This will automatically\nbe reset back to zero when bedtime ends.",
@@ -1603,6 +1636,19 @@
           "application/json": {
             "schema": {
               "$ref": "#/components/schemas/GW_InternalError"
+            }
+          }
+        }
+      },
+      "555": {
+        "description": "Router Offline, Asynch operation to router not completed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Nack"
+            },
+            "example": {
+              "error": "Router Offline"
             }
           }
         }
@@ -2607,7 +2653,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success, The adapters details.\n\n- **AdapterID** - is the Unique ID of this Adapter.\n- **mac** - The Adapters mac address.\n- **ip** - list of ip addresses, either current, or last known.\n- **registered** - the time the adapter was first claimed by the\ncustomer.\n- **state** - the current state of the listed services.\n- **settings** - the current adapter level settings.\n- **health** - the last and best result from diagnostic tests.",
+            "description": "Success, The adapters details.\n\n- **AdapterID** - is the Unique ID of this Adapter.\n- **mac** - The Adapters mac address.\n- **ip** - list of ip addresses, either current, or last known.\n- **registered** - the time the adapter was first claimed by the\ncustomer.\n- **state** - the current state of the listed services.\n- **settings** - the current adapter level settings.",
             "content": {
               "application/json": {
                 "schema": {
@@ -2722,7 +2768,7 @@
           "Adapter Management"
         ],
         "summary": "Change the Adapter Service Configuration.",
-        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\n\n## Parameters\n  - **id**: The adapters ID.  Can only get config for adapters\n  associated with the calling clients account.\nChange the Adapter Configuration.",
+        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n  - **state**: The state to set the service to.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2788,6 +2834,9 @@
           },
           "500": {
             "$ref": "#/components/responses/500"
+          },
+          "555": {
+            "$ref": "#/components/responses/555"
           },
           "default": {
             "$ref": "#/components/responses/default"
@@ -2885,7 +2934,7 @@
           "Adapter Management"
         ],
         "summary": "Set Locale specific information for an adapter.",
-        "description": "# Usage\n\nThis allows the country the adapter is in, and/or its timezone to be\nset.  Any setting will permanently over-ride the auto detected values.\n\n## Parameters\n- **id**: The adapters ID.\n- **country**: The two character ISO3166 country identifier where the\nadapter resides.\n- **timezone**: The IANA timezone name where the adapter resides.\n\nNote: No check is made to ensure the adapters timezone and country\ncoincide, it is up to the User to ensure the settings are meaningful,\nand the UI to provide clear guidance.\n\nAt least one of **country** or **timezone** must be present, otherwise\nthe message is invalid.  If a setting is not present, it is not changed.\n It is valid for **country** and **timezone** to both be present\n simultaneously.",
+        "description": "# Usage\n\nThis allows the country the adapter is in, and/or its timezone to be\nset.  Any setting will permanently over-ride the auto detected values.\n\n## Parameters\n- **id**: The adapters ID.\n- **timezone**: The IANA timezone name where the adapter resides.\n\n**timezone** must be present, otherwise the message is invalid.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2893,15 +2942,13 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "id"
+                  "id",
+                  "timezone"
                 ],
                 "additionalProperties": false,
                 "properties": {
                   "id": {
                     "$ref": "#/components/schemas/uuid"
-                  },
-                  "country": {
-                    "$ref": "#/components/schemas/iso3166-country"
                   },
                   "timezone": {
                     "$ref": "#/components/schemas/iana-timezone"
@@ -2909,7 +2956,6 @@
                 },
                 "example": {
                   "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "country": "US",
                   "timezone": "America/Chicago"
                 }
               }
@@ -2971,7 +3017,7 @@
           "Adapter Management"
         ],
         "summary": "Set the datacap for a particular adapter.",
-        "description": "# Usage\nSets the data caps for the identified adapter.  Data Cap is used to\ncheck if monthly usage will exceed the data cap for reporting and\nnotification purposes.\n\n## Parameters\n  - **id**: The Adapters ID to set the data cap for.\n  - **cap**: The datacap for the adapter.  This is an array.  No entries\n  means that no datacap has been sent.  A single entry means that the\n  datacap is combined over tx & rx.  Two entries specifies a datacap\n  that may be different in both tx & rx.  The first entry is tx, the\n  second is rx.",
+        "description": "# Usage\nSets the data caps for the identified adapter.  Data Cap is used to\ncheck if monthly usage will exceed the data cap for reporting and\nnotification purposes.\n\n## Parameters\n  - **id**: The Adapters ID to set the data cap for.\n  - **cap**: The datacap for the adapter.  This is the total number of\n  MB the customer may use in their internet plane before extra charges\n  are levied, or speed slows down (depending on the ISP and Plan).  It\n  is a combined value, representing both the data TX and RX.\n  - **day**: The day in the month when the datacap resets. 1 == data cap\n  resets on the 1st day of the month. If the day is greater than the\n  days in the current month, it is assumed the datacap resets at the\n  start of the last day of the month.  Even if **cap** is set to zero,\n  the **day** must be set between 1 and 31 as it marks the first day of\n  the clients monthly billing cycle.",
         "requestBody": {
           "required": true,
           "description": "The DataCap settings to apply.",
@@ -2981,7 +3027,8 @@
                 "type": "object",
                 "required": [
                   "id",
-                  "cap"
+                  "cap",
+                  "day"
                 ],
                 "additionalProperties": false,
                 "properties": {
@@ -2989,8 +3036,16 @@
                     "$ref": "#/components/schemas/uuid"
                   },
                   "cap": {
-                    "$ref": "#/components/schemas/datacaps"
+                    "$ref": "#/components/schemas/datacap"
+                  },
+                  "day": {
+                    "$ref": "#/components/schemas/datacap-reset"
                   }
+                },
+                "example": {
+                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "cap": 102400,
+                  "day": 15
                 }
               }
             }
@@ -3859,52 +3914,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Profile"
-                },
-                "example": {
-                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
-                  "name": "Kids",
-                  "icon": "butterfly.ico",
-                  "datausage": {
-                    "tx": 0,
-                    "rx": 0
-                  },
-                  "settings": {
-                    "youtube-restricted": false,
-                    "safesearch": false,
-                    "internet-pause": null,
-                    "bedtime": [
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      }
-                    ],
-                    "bedtime-delay": 0
-                  }
                 }
               }
             }
@@ -4066,52 +4075,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Profile"
-                },
-                "example": {
-                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
-                  "name": "Rugrats",
-                  "icon": "rugrats.ico",
-                  "datausage": {
-                    "tx": 1234567,
-                    "rx": 1234613450
-                  },
-                  "settings": {
-                    "youtube-restricted": false,
-                    "safesearch": false,
-                    "internet-pause": null,
-                    "bedtime": [
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      },
-                      {
-                        "start-time": 0,
-                        "duration": 0
-                      }
-                    ],
-                    "bedtime-delay": 0
-                  }
                 }
               }
             }
@@ -4160,7 +4123,7 @@
           "Profile Management"
         ],
         "summary": "Set the weekly bedtimes for a profile.",
-        "description": "# Usage\n\nAllows the weekly bedtimes to be set for a profile.  The entire weekly\nschedule is always set, if some entries do not change, simply send them\nas configured.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **bedtime**: An array of bedtimes to set for the profile.",
+        "description": "# Usage\n\nAllows the Start time for \"Bedtime\" to be set independently for \"School\nNights\" and \"Other Nights\".  The duration of a \"Bedtime\" is system\ncontrolled.  School Nights are the nights BEFORE a school day.  So, in\nthe typical school system where a school day is Monday to Friday, school\nnights are Sunday thru Thursday.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **school**: The time in minutes from midnight when bedtime\n  starts on a \"school night\".  Set to -1 if it is disabled.\n  - **other**: The time in minutes from midnight when bedtime\n  starts on nights other than school nights.  Set to -1 if it is\n  disabled.\n  - **school-nights**: An array of booleans which sets which nights of the\n  week are school nights.  The First entry is Monday, the last is\n  Sunday.  true = This is a school night.  false = It is not a school night.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4169,48 +4132,37 @@
                 "type": "object",
                 "required": [
                   "id",
-                  "bedtime"
+                  "school",
+                  "other",
+                  "school-nights"
                 ],
                 "additionalProperties": false,
                 "properties": {
                   "id": {
                     "$ref": "#/components/schemas/uuid"
                   },
-                  "bedtime": {
-                    "$ref": "#/components/schemas/Bedtimes"
+                  "school": {
+                    "$ref": "#/components/schemas/time-of-day-mins"
+                  },
+                  "other": {
+                    "$ref": "#/components/schemas/time-of-day-mins"
+                  },
+                  "school-nights": {
+                    "$ref": "#/components/schemas/school-nights"
                   }
                 },
                 "example": {
                   "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "bedtime": [
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 77400,
-                      "duration": 37800
-                    },
-                    {
-                      "start-time": 82800,
-                      "duration": 25200
-                    },
-                    {
-                      "start-time": 82800,
-                      "duration": 25200
-                    }
+                  "school": 1260,
+                  "other": 1350,
+                  "school-nights": [
+                    true,
+                    true,
+                    true,
+                    true,
+                    false,
+                    false,
+                    true
                   ]
                 }
               }
@@ -4224,52 +4176,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Profile"
-                },
-                "example": {
-                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
-                  "name": "Rugrats",
-                  "icon": "rugrats.ico",
-                  "datausage": {
-                    "tx": 1234567,
-                    "rx": 1234613450
-                  },
-                  "settings": {
-                    "youtube-restricted": false,
-                    "safesearch": false,
-                    "internet-pause": null,
-                    "bedtime": [
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 82800,
-                        "duration": 25200
-                      },
-                      {
-                        "start-time": 82800,
-                        "duration": 25200
-                      }
-                    ],
-                    "bedtime-delay": 0
-                  }
                 }
               }
             }
@@ -4318,7 +4224,7 @@
           "Profile Management"
         ],
         "summary": "Set the weekly bedtimes for a profile.",
-        "description": "# Usage\n\nAllows todays bedtime to be delayed by the amount of seconds specified.\nThe delay can not be set, such that it would extend beyond the end of\nthe bedtime period.  At the end of the bedtime period, the delay will be\nreset to zero.  It only operates once.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **delay**: The number of seconds to delay bedtime for.  Set to zero\n  to disable a previously set delay.  Delay only delays the start of\n it does not delay the end.",
+        "description": "# Usage\n\nAllows todays bedtime to be delayed by the amount of minutes specified.\nThe delay can not be set, such that it would extend beyond the end of\nthe bedtime period.  At the end of the bedtime period, the delay will be\nreset to zero.  It only operates once and is reset to zero at the end of\nbedtime (6am).\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **delay**: The number of seconds to delay bedtime for.  Set to zero\n  to disable a previously set delay.  Delay only delays the start of\n  it does not delay the end.  The delay is absolute, if the delay needs\n  to be incremented or decremented, take the previous delay, adjust\n  accordingly and re-set it using this call.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4340,7 +4246,7 @@
                 },
                 "example": {
                   "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "delay": 1800
+                  "delay": 45
                 }
               }
             }
@@ -4363,37 +4269,20 @@
                     "youtube-restricted": false,
                     "safesearch": false,
                     "internet-pause": null,
-                    "bedtime": [
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 82800,
-                        "duration": 25200
-                      },
-                      {
-                        "start-time": 82800,
-                        "duration": 25200
-                      }
-                    ],
-                    "bedtime-delay": 1800
+                    "bedtime": {
+                      "school-time": 1290,
+                      "other-time": -1,
+                      "school-nights": [
+                        true,
+                        true,
+                        true,
+                        true,
+                        false,
+                        false,
+                        true
+                      ]
+                    },
+                    "bedtime-delay": 45
                   }
                 }
               }
@@ -4506,52 +4395,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Profile"
-                },
-                "example": {
-                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
-                  "name": "Rugrats",
-                  "icon": "rugrats.ico",
-                  "datausage": {
-                    "tx": 1234567,
-                    "rx": 1234613450
-                  },
-                  "settings": {
-                    "youtube-restricted": true,
-                    "safesearch": true,
-                    "internet-pause": 1619533887,
-                    "bedtime": [
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 77400,
-                        "duration": 37800
-                      },
-                      {
-                        "start-time": 82800,
-                        "duration": 25200
-                      },
-                      {
-                        "start-time": 82800,
-                        "duration": 25200
-                      }
-                    ],
-                    "bedtime-delay": 1800
-                  }
                 }
               }
             }
