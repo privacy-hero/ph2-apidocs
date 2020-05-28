@@ -86,22 +86,19 @@ components:
           description: |-
             System profiles are fixed by the system.  They may not be modified,
             renamed or deleted.  Devices may be freely associated with them.
-        datausage:
-          $ref: "#/components/schemas/DataUsage"
-
         settings:
           $ref: "#/components/schemas/ProfileSettings"
 
-    DataUsage:
-      description: |-
-        The aggregate monthly data usage of all devices connected to the profile.
-      type: object
-      additionalProperties: false
-      properties:
-        tx:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
-        rx:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
+    #DataUsage:
+    #  description: |-
+    #    The aggregate monthly data usage of all devices connected to the profile.
+    #  type: object
+    #  additionalProperties: false
+    #  properties:
+    #    tx:
+    #      $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
+    #    rx:
+    #      $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
 
     school-nights:
       type: array
