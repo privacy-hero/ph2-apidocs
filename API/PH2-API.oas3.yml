@@ -23,7 +23,7 @@ info:
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
-  - url: https://api2.privacyhero.com/
+  - url: https://api2.privacyhero.com
     description: The API deployment URL.
   - url: https://pics2jpj4b.execute-api.us-east-1.amazonaws.com/dev
     description: API2 Raw Dev Endpoint
