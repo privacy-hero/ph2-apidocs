@@ -31,7 +31,9 @@ paths:
                 schema:
                   oneOf:
                     - $ref: "#/components/schemas/streams"
+                    - $ref: "#/components/schemas/stream-setting"
                     - $ref: "#/components/schemas/streams-settings"
+                    - $ref: "#/components/schemas/stream-setting-queued"
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
                     - $ref: "#/components/schemas/Adapter-Unassociated-Array"
@@ -175,17 +177,31 @@ components:
       properties:
         id:
           $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
-        settings:
-          type: object
-          description: Settings for the service
-          required:
-            - current
-          additionalProperties: false
-          properties:
-            current:
-              $ref: "#/components/schemas/stream-setting"
-            pending:
-              $ref: "#/components/schemas/stream-setting"
+        adapter:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        country:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+    stream-setting-queued:
+      type: object
+      description: Streaming Services Settings Queued for update
+      required:
+        - id
+      additionalProperties: false
+      properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        adapter:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        country:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        pending:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
 
     streams-settings:
       type: array
@@ -374,26 +390,7 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
         services:
-          type: object
-          description: The current state of the Adapter/Router services.
-          required:
-            - online
-            - vpn
-            - ad-blocking
-            - stream-relocation
-            - malware-phising
-          additionalProperties: false
-          properties:
-            online:
-              $ref: "#/components/schemas/state"
-            vpn:
-              $ref: "#/components/schemas/state"
-            ad-blocking:
-              $ref: "#/components/schemas/state"
-            stream-relocation:
-              $ref: "#/components/schemas/state"
-            malware-phising:
-              $ref: "#/components/schemas/state"
+          $ref: "#/components/schemas/Adapter-Services"
 
         settings:
           type: object
@@ -493,26 +490,47 @@ components:
       additionalProperties: false
       description: |-
         The response to setting an adapter service.
-        - **current-state** The services current state.
-        - **current-tstamp** The time the current state became set on the
-        Adapter.
-        - **request-tstamp** The requested state becomes valid when its
-        "current-tstamp" value equals or exceeds the returned **request-tstamp**
+        - **state** The services current state.
+        - **since** The time the current state became set on the Adapter.
+        - **pending** The requested state becomes valid when its "since" value
+        equals or exceeds the returned **pending** time stamp.
       required:
-        - current-state
-        - current-tstamp
-        - request-tstamp
+        - state
+        - since
+        - pending
       properties:
-        current-state:
+        state:
           type: boolean
           description: |-
             The current state of the requested service.
-        current-tstamp:
+        since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
-        request-tstamp:
+        pending:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
       example:
-        current-state: False
-        current-tstamp: 1589978803
-        request-tstamp: 1590583603
+        state: False
+        since: 1589978803
+        pending: 1590583603
 
+
+    Adapter-Services:
+      type: object
+      description: The current state of the Adapter/Router services.
+      additionalProperties: false
+      required:
+        - online
+        - vpn
+        - ad-blocking
+        - stream-relocation
+        - malware-phising
+      properties:
+        online:
+          $ref: "#/components/schemas/state"
+        vpn:
+          $ref: "#/components/schemas/state"
+        ad-blocking:
+          $ref: "#/components/schemas/state"
+        stream-relocation:
+          $ref: "#/components/schemas/state"
+        malware-phising:
+          $ref: "#/components/schemas/state"

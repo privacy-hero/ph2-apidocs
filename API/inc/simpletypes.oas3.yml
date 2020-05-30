@@ -248,7 +248,7 @@ components:
       type: integer
       format: int64
       minimum: 1587732975
-      maximum: 4743406575
+      maximum: 4743406575000
       nullable: true
       description: |-
         A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
@@ -259,7 +259,7 @@ components:
       type: integer
       format: int64
       minimum: 1587732975
-      maximum: 4743406575
+      maximum: 4743406575000
       description: |-
         A Time, expressed as seconds since Jan 01 1970. (UTC).
       example: 1587732975

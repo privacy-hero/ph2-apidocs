@@ -150,9 +150,6 @@ paths:
   /v1/adapter/list:
     $ref: "v1/adapter/list.oas3.yml#/paths/~1adapter~1list"
 
-  /v1/adapter/cfg:
-    $ref: "v1/adapter/cfg.oas3.yml#/paths/~1adapter~1cfg"
-
   /v1/adapter/cfg/service:
     $ref: "v1/adapter/cfg-service.oas3.yml#/paths/~1adapter~1cfg~1service"
 
@@ -205,6 +202,9 @@ paths:
 
   /v1/profile/cfg/setting:
     $ref: "v1/profile/cfg-setting.oas3.yml#/paths/~1profile~1cfg~1setting"
+
+  /v1/profile/usage:
+    $ref: "v1/profile/usage.oas3.yml#/paths/~1profile~1usage"
 
   ######### DEVICE  MANAGEMENT API CALLS ######################
 

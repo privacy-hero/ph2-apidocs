@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /adapter/cfg"
+  title: "Privacy Hero 2 - Mothership API - /profile/usage"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    Query/Change the Adapter Configuration.
+    Generate a data usage report for all device on a profile.
 
-    `/adapter/name`
+    `/profile/usage`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
     url: ./LICENSE.md
@@ -30,23 +30,27 @@ components:
     $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 tags:
-  - name: Adapter Management
-    description: Operations related to Adapter Management
+  - name: Device Management
+    description: Operations related to Device Management
 
 paths:
-  /adapter/cfg:
+  /profile/usage:
     get:
-      operationId: adapterCfgQuery
+      operationId: profileUsage
       tags:
-        - Adapter Management
-      summary: Query the state of configuration for an adapter.
+        - Profile Management
+      summary: Get device data usage.
       description: |-
         # Usage
-        For a particular Adapter, return the current and pending configuration.
+
+        Generates a list of data usage values for a profile, at a specified
+        resolution.  Profile usage is a synthetic aggregate of all device usage,
+        so, for example, if a high volume device is moved between profiles, the
+        old profiles usage will decrease by the devices usage, and the new profile
+        of the device will increase its usage by the same amount.
 
         ## Parameters
-          - **id**: The adapters ID.  Can only get config for adapters
-          associated with the calling clients account.
+          - **id**: The Unique profile ID.
 
       parameters:
         - in: query
@@ -54,17 +58,48 @@ paths:
           required: true
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
-            The Adapter ID to Query.
+            The unique profile id.
+        - in: query
+          name: resolution
+          schema:
+            type: string
+            enum:
+              - "Hourly"
+              - "Daily"
+              - "Weekly"
+              - "Monthly"
+            default: "Hourly"
+          description: |-
+            The time resolution to report. Hourly is hourly, Daily is 24 hours.
+            Weekly is 7 days and Monthly is 30 days.  If not specified the
+            resolution is "Hourly"
+
+        - in: query
+          name: start
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+          description: |-
+            The start of the reporting window.  If not specified, defaults to
+            the oldest data on record for the device.
+
+        - in: query
+          name: end
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+          description: |-
+            The end of the reporting window.  If not specified, defaults to
+            now.
+
+
       responses:
         "200":
           description: |-
-            Success, Adapter Query Result returned.
+            Success, The device data usage is returned.
           content:
             application/json:
               schema:
-                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Services"
+                $ref: "../../inc/device.oas3.yml#/components/schemas/DeviceUsageHistory"
 
         "400":
           description: |-
@@ -88,5 +123,5 @@ paths:
           $ref: "../../inc/response.oas3.yml#/components/responses/429"
         "500":
           $ref: "../../inc/response.oas3.yml#/components/responses/500"
-        default:
+        "default":
           $ref: "../../inc/response.oas3.yml#/components/responses/default"

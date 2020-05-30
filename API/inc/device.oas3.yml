@@ -216,29 +216,29 @@ components:
           type: object
           description: |-
             The response to setting a device configuration.
-            - **current-state** The services current state.
-            - **current-tstamp** The time the current state became set on the
+            - **state** The services current state.
+            - **since** The time the current state became set on the
             Adapter.
-            - **request-tstamp** The requested state becomes valid when its
-            "current-tstamp" value equals or exceeds the returned **request-tstamp**
+            - **pending** The requested state becomes valid when its **since**
+            value equals or exceeds the returned **pending** value.
           required:
-            - current-state
-            - current-tstamp
-            - request-tstamp
+            - state
+            - since
+            - pending
           additionalProperties: false
           properties:
-            current-state:
+            state:
               type: boolean
               description: |-
                 The current state of the requested service.
-            current-tstamp:
+            since:
               $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
-            request-tstamp:
+            pending:
               $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
           example:
-            current-state: False
-            current-tstamp: 1589978803
-            request-tstamp: 1590583603
+            state: False
+            since: 1589978803
+            pending: 1590583603
 
 
     Device-Settings-Reply:
@@ -246,24 +246,25 @@ components:
       additionalProperties: false
       description: |-
         The response to setting an device service setting.
-        - **current-state** The services current state.
-        - **current-tstamp** The time the current state became set for the device.
-        - **request-tstamp** The requested state becomes valid when its
-        "current-tstamp" value equals or exceeds the returned **request-tstamp**
+        - **state** The services current state.
+        - **since** The time the current state became set for the device.
+        - **pending** The requested state becomes valid when its
+        **since** time stamp value equals or exceeds the returned **pending**
+        time stamp.
       required:
-        - current-state
-        - current-tstamp
-        - request-tstamp
+        - state
+        - since
+        - pending
       properties:
-        current-state:
+        state:
           type: boolean
           description: |-
             The current state of the requested service.
-        current-tstamp:
+        since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
-        request-tstamp:
+        pending:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
       example:
-        current-state: False
-        current-tstamp: 1589978803
-        request-tstamp: 1590583603
+        state: False
+        since: 1589978803
+        pending: 1590583603

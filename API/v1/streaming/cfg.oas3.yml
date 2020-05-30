@@ -68,10 +68,9 @@ paths:
             adapter.
 
             - **id**: the id of the streaming service
-            - **settings.current**: The current setting.
-            - **settings.pending**: The pending setting, not yet confirmed.
-            - **enabled**: if relocation is enabled for this service.
+            - **adapter**: The id of the adapter the setting realates to.
             - **country**: the country the streaming service is directed from.
+            - **since**: The timestamp when the streaming service last changed.
 
           content:
             application/json:
@@ -80,15 +79,9 @@ paths:
               example: [
                 {
                   "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                  "settings": {
-                    "current": {
-                      "enabled": true,
-                      "country": "US",
-                    },
-                    "pending": {
-                      "country": "JP"
-                    }
-                  }
+                  "adapter" : "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "country": "US",
+                  "since": 1590834650124
                 },
               ]
 
@@ -125,25 +118,15 @@ paths:
       summary: Set the streaming cfg for an adapter.
       description: |-
         # Usage
-        For a particular Adapter, set its streaming configuration.  Until the
-        settings are confirmed applied by the adapter, they will be reported as
-        pending.
+        For a particular Adapter, set its streaming configuration.  Will respond
+        with the current configuration and a pending time stamp that can be
+        compared against since to determine if the setting has been applied or
+        not.
 
         ## Parameters
-          - **id**: The id of the adapter to set the pending streaming
-          configuration for.
-          - **cfg**: The configuration to set.  If this is not present, then no
-          configuration will change, and the call will simply return the
-          requested stream id's current and pending settings.
-      parameters:
-        - in: query
-          name: id
-          required: true
-          schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
-          description: |-
-            The Adapter ID to set.
+          - **id**: The id of the stream to configure.
+          - **adapter**: The adapter ID to set the streaming config on.
+          - **country**: The country to set the stream to.
       requestBody:
         required: true
         content:
@@ -152,38 +135,42 @@ paths:
               type: object
               required:
                 - id
+                - adapter
+                - country
               additionalProperties: false
               properties:
                 id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-                cfg:
-                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/stream-setting"
+                adapter:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                country:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/iso3166-country"
               example:
                 id: "29a16e31-bb4d-4407-8244-8e68b820b854"
-                cfg:
-                  enabled: true
-                  country: "GB"
+                adapter: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                country: "GB"
 
       responses:
         "200":
           description: |-
             Success, Streaming Service Configuration Queued.
+            - **id**: The id of the stream.
+            - **adapter**: The adapter ID the streaming config relates to.
+            - **country**: The country the stream is CURRENTLY set to.
+            - **since**: The last time this stream config changed.
+            - **pending**: The next timestamp which indicates the config has
+            been changed.
+
           content:
             application/json:
               schema:
-                $ref: "../../inc/adapter.oas3.yml#/components/schemas/stream-settings"
-              example: {
-                "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                "settings": {
-                  "current": {
-                    "enabled": true,
-                    "country": "US",
-                  },
-                  "pending": {
-                    "country": "GB",
-                  }
-                }
-              }
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/stream-setting-queued"
+              example:
+                id: "29a16e31-bb4d-4407-8244-8e68b820b854"
+                adapter: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                country: "US"
+                since : 1590834650123
+                pending : 1590841399785
 
         "400":
           description: |-
