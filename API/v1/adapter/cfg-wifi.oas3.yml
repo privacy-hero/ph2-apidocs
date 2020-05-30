@@ -59,16 +59,7 @@ paths:
         content:
           application/json:
             schema:
-              type: object
-              required:
-                - id
-                - wifi
-              additionalProperties: false
-              properties:
-                id:
-                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-                wifi:
-                  $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings"
+              $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings-change"
 
       responses:
         "200":
@@ -77,9 +68,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
-              example:
-                msg: "Success, WiFi settings set."
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/wifi-settings-change-queued"
 
         "400":
           description: |-

@@ -34,6 +34,8 @@ paths:
                     - $ref: "#/components/schemas/stream-setting"
                     - $ref: "#/components/schemas/streams-settings"
                     - $ref: "#/components/schemas/stream-setting-queued"
+                    - $ref: "#/components/schemas/wifi-settings-change"
+                    - $ref: "#/components/schemas/wifi-settings-change-queued"
                     - $ref: "#/components/schemas/Adapter-Base"
                     - $ref: "#/components/schemas/Adapter-Unassociated"
                     - $ref: "#/components/schemas/Adapter-Unassociated-Array"
@@ -127,6 +129,7 @@ components:
         - enabled
         - ssid
         - key
+        - since
       additionalProperties: false
       properties:
         enabled:
@@ -154,6 +157,103 @@ components:
           description: |-
             The WPA-PSK passphrase to secure the network. **null**=Open Wifi
             Network
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+    wifi-settings-change:
+      type: object
+      description: |-
+        Settings for an individual wifi network.
+
+        - **id** Adapters id
+        - **enabled** Is the wife enabled or not.
+        - **ssid** Networks Wifi Name
+        - **key** Networks password
+      required:
+        - id
+        - enabled
+        - ssid
+        - key
+      additionalProperties: false
+      properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        enabled:
+          type: boolean
+          description: is the wifi network enabled.
+          default: true
+        ssid:
+          type: string
+          format: ssid
+          minLength: 1
+          maxLength: 32
+          pattern: '^[^!#;+\]\/"\t][^+\]\/"\t]{0,30}[^ !#;+\]\/"\t]$|^[^ !#;+\]\/"\t]$'
+          description: The SSID of the wifi network
+          default: "PrivacyHero2"
+          example: "PrivacyHero2"
+        key:
+          type: string
+          format: WPA-PSK passphrase
+          minLength: 8
+          maxLength: 63
+          pattern: "^[\u0020-\u007e]*$"
+          nullable: true
+          default: "r4nd0m k3y"
+          example: "r4nd0m k3y"
+          description: |-
+            The WPA-PSK passphrase to secure the network. **null**=Open Wifi
+            Network
+
+    wifi-settings-change-queued:
+      type: object
+      description: |-
+        Current Settings for an individual wifi network after a change was queued.
+
+        - **enabled** Is the wifi enabled or not.
+        - **ssid** Networks Wifi Name
+        - **key** Networks password
+        - **since** Timestamp of last change to the settings.
+        - **pending** Current pending config state change timestamp.  When
+        **since** equals or exceeds this value, the configuration has been
+        applied.
+      required:
+        - id
+        - enabled
+        - ssid
+        - key
+      additionalProperties: false
+      properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        enabled:
+          type: boolean
+          description: is the wifi network enabled.
+          default: true
+        ssid:
+          type: string
+          format: ssid
+          minLength: 1
+          maxLength: 32
+          pattern: '^[^!#;+\]\/"\t][^+\]\/"\t]{0,30}[^ !#;+\]\/"\t]$|^[^ !#;+\]\/"\t]$'
+          description: The SSID of the wifi network
+          default: "PrivacyHero2"
+          example: "PrivacyHero2"
+        key:
+          type: string
+          format: WPA-PSK passphrase
+          minLength: 8
+          maxLength: 63
+          pattern: "^[\u0020-\u007e]*$"
+          nullable: true
+          default: "r4nd0m k3y"
+          example: "r4nd0m k3y"
+          description: |-
+            The WPA-PSK passphrase to secure the network. **null**=Open Wifi
+            Network
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        pending:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
     stream-setting:
       type: object
