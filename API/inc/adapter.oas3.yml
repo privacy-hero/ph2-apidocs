@@ -622,7 +622,7 @@ components:
         - vpn
         - ad-blocking
         - stream-relocation
-        - malware-phising
+        - malware-phishing
       properties:
         online:
           $ref: "#/components/schemas/state"
@@ -632,5 +632,5 @@ components:
           $ref: "#/components/schemas/state"
         stream-relocation:
           $ref: "#/components/schemas/state"
-        malware-phising:
+        malware-phishing:
           $ref: "#/components/schemas/state"
