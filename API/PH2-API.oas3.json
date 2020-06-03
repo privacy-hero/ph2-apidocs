@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.12",
+    "version": "0.0.14",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -160,7 +160,7 @@
         "type": "integer",
         "format": "int64",
         "minimum": 1587732975,
-        "maximum": 4743406575,
+        "maximum": 4743406575000,
         "nullable": true,
         "description": "A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown",
         "example": 1587732975
@@ -177,7 +177,7 @@
         "type": "integer",
         "format": "int64",
         "minimum": 1587732975,
-        "maximum": 4743406575,
+        "maximum": 4743406575000,
         "description": "A Time, expressed as seconds since Jan 01 1970. (UTC).",
         "example": 1587732975
       },
@@ -343,13 +343,43 @@
         },
         "description": "The current known value of the state, and the time that it changed."
       },
+      "Adapter-Services": {
+        "type": "object",
+        "description": "The current state of the Adapter/Router services.",
+        "additionalProperties": false,
+        "required": [
+          "online",
+          "vpn",
+          "ad-blocking",
+          "stream-relocation",
+          "malware-phishing"
+        ],
+        "properties": {
+          "online": {
+            "$ref": "#/components/schemas/state"
+          },
+          "vpn": {
+            "$ref": "#/components/schemas/state"
+          },
+          "ad-blocking": {
+            "$ref": "#/components/schemas/state"
+          },
+          "stream-relocation": {
+            "$ref": "#/components/schemas/state"
+          },
+          "malware-phishing": {
+            "$ref": "#/components/schemas/state"
+          }
+        }
+      },
       "wifi-settings": {
         "type": "object",
         "description": "Settings for an individual wifi network",
         "required": [
           "enabled",
           "ssid",
-          "key"
+          "key",
+          "since"
         ],
         "additionalProperties": false,
         "properties": {
@@ -378,6 +408,9 @@
             "default": "r4nd0m k3y",
             "example": "r4nd0m k3y",
             "description": "The WPA-PSK passphrase to secure the network. **null**=Open Wifi\nNetwork"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
           }
         }
       },
@@ -514,33 +547,7 @@
             "$ref": "#/components/schemas/epoch-timestamp"
           },
           "services": {
-            "type": "object",
-            "description": "The current state of the Adapter/Router services.",
-            "required": [
-              "online",
-              "vpn",
-              "ad-blocking",
-              "stream-relocation",
-              "malware-phising"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "online": {
-                "$ref": "#/components/schemas/state"
-              },
-              "vpn": {
-                "$ref": "#/components/schemas/state"
-              },
-              "ad-blocking": {
-                "$ref": "#/components/schemas/state"
-              },
-              "stream-relocation": {
-                "$ref": "#/components/schemas/state"
-              },
-              "malware-phising": {
-                "$ref": "#/components/schemas/state"
-              }
-            }
+            "$ref": "#/components/schemas/Adapter-Services"
           },
           "settings": {
             "type": "object",
@@ -569,39 +576,6 @@
           "$ref": "#/components/schemas/Adapter"
         }
       },
-      "Adapter-Settings": {
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "settings": {
-            "type": "object",
-            "description": "The response to setting an adapter service.\n- **current-state** The services current state.\n- **current-tstamp** The time the current state became set on the\nAdapter.\n- **request-tstamp** The requested state becomes valid when its\n\"current-tstamp\" value equals or exceeds the returned **request-tstamp**",
-            "required": [
-              "current-state",
-              "current-tstamp",
-              "request-tstamp"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "current-state": {
-                "type": "boolean",
-                "description": "The current state of the requested service."
-              },
-              "current-tstamp": {
-                "$ref": "#/components/schemas/epoch-timestamp-nonull"
-              },
-              "request-tstamp": {
-                "$ref": "#/components/schemas/epoch-timestamp-nonull"
-              }
-            },
-            "example": {
-              "current-state": false,
-              "current-tstamp": 1589978803,
-              "request-tstamp": 1590583603
-            }
-          }
-        }
-      },
       "adapter-services": {
         "type": "string",
         "enum": [
@@ -618,6 +592,123 @@
         "nullable": true,
         "default": true,
         "description": "**true**=Enable the Service. **false**=Disable the Service.\n**null**=No Change"
+      },
+      "Adapter-Settings": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "The response to setting an adapter service.\n- **state** The services current state.\n- **since** The time the current state became set on the Adapter.\n- **pending** The requested state becomes valid when its \"since\" value\nequals or exceeds the returned **pending** time stamp.",
+        "required": [
+          "state",
+          "since",
+          "pending"
+        ],
+        "properties": {
+          "state": {
+            "type": "boolean",
+            "description": "The current state of the requested service."
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
+          },
+          "pending": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
+          }
+        },
+        "example": {
+          "state": false,
+          "since": 1589978803,
+          "pending": 1590583603
+        }
+      },
+      "wifi-settings-change": {
+        "type": "object",
+        "description": "Settings for an individual wifi network.\n\n- **id** Adapters id\n- **enabled** Is the wife enabled or not.\n- **ssid** Networks Wifi Name\n- **key** Networks password",
+        "required": [
+          "id",
+          "enabled",
+          "ssid",
+          "key"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "is the wifi network enabled.",
+            "default": true
+          },
+          "ssid": {
+            "type": "string",
+            "format": "ssid",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[^!#;+\\]\\/\"\\t][^+\\]\\/\"\\t]{0,30}[^ !#;+\\]\\/\"\\t]$|^[^ !#;+\\]\\/\"\\t]$",
+            "description": "The SSID of the wifi network",
+            "default": "PrivacyHero2",
+            "example": "PrivacyHero2"
+          },
+          "key": {
+            "type": "string",
+            "format": "WPA-PSK passphrase",
+            "minLength": 8,
+            "maxLength": 63,
+            "pattern": "^[ -~]*$",
+            "nullable": true,
+            "default": "r4nd0m k3y",
+            "example": "r4nd0m k3y",
+            "description": "The WPA-PSK passphrase to secure the network. **null**=Open Wifi\nNetwork"
+          }
+        }
+      },
+      "wifi-settings-change-queued": {
+        "type": "object",
+        "description": "Current Settings for an individual wifi network after a change was queued.\n\n- **enabled** Is the wifi enabled or not.\n- **ssid** Networks Wifi Name\n- **key** Networks password\n- **since** Timestamp of last change to the settings.\n- **pending** Current pending config state change timestamp.  When\n**since** equals or exceeds this value, the configuration has been\napplied.",
+        "required": [
+          "id",
+          "enabled",
+          "ssid",
+          "key"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "enabled": {
+            "type": "boolean",
+            "description": "is the wifi network enabled.",
+            "default": true
+          },
+          "ssid": {
+            "type": "string",
+            "format": "ssid",
+            "minLength": 1,
+            "maxLength": 32,
+            "pattern": "^[^!#;+\\]\\/\"\\t][^+\\]\\/\"\\t]{0,30}[^ !#;+\\]\\/\"\\t]$|^[^ !#;+\\]\\/\"\\t]$",
+            "description": "The SSID of the wifi network",
+            "default": "PrivacyHero2",
+            "example": "PrivacyHero2"
+          },
+          "key": {
+            "type": "string",
+            "format": "WPA-PSK passphrase",
+            "minLength": 8,
+            "maxLength": 63,
+            "pattern": "^[ -~]*$",
+            "nullable": true,
+            "default": "r4nd0m k3y",
+            "example": "r4nd0m k3y",
+            "description": "The WPA-PSK passphrase to secure the network. **null**=Open Wifi\nNetwork"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          },
+          "pending": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
       },
       "speed-bps": {
         "type": "integer",
@@ -1101,21 +1192,6 @@
           }
         }
       },
-      "stream-setting": {
-        "type": "object",
-        "description": "Settings for an individual relocatable stream",
-        "additionalProperties": false,
-        "properties": {
-          "enabled": {
-            "type": "boolean",
-            "default": true,
-            "description": "If the stream relocation is enabled for this service or not."
-          },
-          "country": {
-            "$ref": "#/components/schemas/iso3166-country"
-          }
-        }
-      },
       "stream-settings": {
         "type": "object",
         "description": "Streaming Services Settings",
@@ -1127,21 +1203,14 @@
           "id": {
             "$ref": "#/components/schemas/uuid"
           },
-          "settings": {
-            "type": "object",
-            "description": "Settings for the service",
-            "required": [
-              "current"
-            ],
-            "additionalProperties": false,
-            "properties": {
-              "current": {
-                "$ref": "#/components/schemas/stream-setting"
-              },
-              "pending": {
-                "$ref": "#/components/schemas/stream-setting"
-              }
-            }
+          "adapter": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "country": {
+            "$ref": "#/components/schemas/iso3166-country"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
           }
         }
       },
@@ -1153,6 +1222,31 @@
           "$ref": "#/components/schemas/stream-settings"
         }
       },
+      "stream-setting-queued": {
+        "type": "object",
+        "description": "Streaming Services Settings Queued for update",
+        "required": [
+          "id"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "adapter": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "country": {
+            "$ref": "#/components/schemas/iso3166-country"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          },
+          "pending": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        }
+      },
       "profile-name": {
         "type": "string",
         "format": "text",
@@ -1162,19 +1256,6 @@
         "maxLength": 64,
         "pattern": "^[\\w\\W]+$",
         "example": "Shared"
-      },
-      "DataUsage": {
-        "description": "The aggregate monthly data usage of all devices connected to the profile.",
-        "type": "object",
-        "additionalProperties": false,
-        "properties": {
-          "tx": {
-            "$ref": "#/components/schemas/datausage"
-          },
-          "rx": {
-            "$ref": "#/components/schemas/datausage"
-          }
-        }
       },
       "time-of-day-mins": {
         "type": "integer",
@@ -1293,9 +1374,6 @@
             "default": false,
             "description": "System profiles are fixed by the system.  They may not be modified,\nrenamed or deleted.  Devices may be freely associated with them."
           },
-          "datausage": {
-            "$ref": "#/components/schemas/DataUsage"
-          },
           "settings": {
             "$ref": "#/components/schemas/ProfileSettings"
           }
@@ -1308,6 +1386,36 @@
         "maxItems": 100,
         "items": {
           "$ref": "#/components/schemas/Profile"
+        }
+      },
+      "DeviceUsageRecord": {
+        "type": "object",
+        "description": "- **timestamp**: The start of the period.\n- **tx**: Number of bytes sent by the device in the period.\n- **rx**: Number of bytes received by the device in the period.",
+        "required": [
+          "timestamp",
+          "tx",
+          "rx"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "timestamp": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          },
+          "tx": {
+            "$ref": "#/components/schemas/datausage"
+          },
+          "rx": {
+            "$ref": "#/components/schemas/datausage"
+          }
+        }
+      },
+      "DeviceUsageHistory": {
+        "type": "array",
+        "description": "Holds up to 90 days worth of hourly data usage records for the device.\nThe resolution of the items (daily or hourly) depends on the api call.",
+        "minItems": 1,
+        "maxItems": 2160,
+        "items": {
+          "$ref": "#/components/schemas/DeviceUsageRecord"
         }
       },
       "device-name": {
@@ -1335,21 +1443,6 @@
           }
         }
       },
-      "PauseSetting": {
-        "type": "object",
-        "additionalProperties": false,
-        "description": "- **state**: if true the system is enabled persistently.\n- **pause**: if the time is greater than now, then regardless of the\n**state** the service is disabled, until the pause time elapses.  After\nwhich, the **state** reasserts itself.",
-        "properties": {
-          "state": {
-            "type": "boolean",
-            "default": false,
-            "description": "**true** = ON.  **false** = Off"
-          },
-          "pause": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        }
-      },
       "DeviceConfig": {
         "type": "object",
         "required": [
@@ -1358,56 +1451,16 @@
           "ad-blocking"
         ],
         "additionalProperties": false,
-        "description": "- **vpn**: Enabled or Not, and Pause time.\n- **Ad-blocking**: Enabled or Not, and Pause time.\n- **device-protection**: Enabled or not.  IF Pause time is greater than\nnow, all internet for the device is blocked until pause time elapses.",
+        "description": "- **vpn**: Enabled or Not.\n- **Ad-blocking**: Enabled or Not.\n- **device-protection**: Enabled or not.",
         "properties": {
           "vpn": {
-            "$ref": "#/components/schemas/PauseSetting"
+            "$ref": "#/components/schemas/state"
           },
           "ad-blocking": {
-            "$ref": "#/components/schemas/PauseSetting"
+            "$ref": "#/components/schemas/state"
           },
           "device-protection": {
-            "$ref": "#/components/schemas/PauseSetting"
-          }
-        }
-      },
-      "DeviceUsageRecord": {
-        "type": "object",
-        "description": "- **timestamp**: The start of the period.\n- **tx**: Number of bytes sent by the device in the period.\n- **rx**: Number of bytes received by the device in the period.",
-        "required": [
-          "timestamp",
-          "tx",
-          "rx"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "timestamp": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          },
-          "tx": {
-            "$ref": "#/components/schemas/datausage"
-          },
-          "rx": {
-            "$ref": "#/components/schemas/datausage"
-          }
-        }
-      },
-      "DeviceUsageSummary": {
-        "type": "object",
-        "description": "Holds a summary of the devices usage.\n- **hours24**: The last 24 hour agregated usage.\n- **week**: The last 7 days agregated usage.\n- **month**: The last 30 days agregated usage.\n- **quater**: The last 90 days agregated usage.\n\n**timestamp** in the device usage is the start of the period in question.",
-        "additionalProperties": false,
-        "properties": {
-          "hours24": {
-            "$ref": "#/components/schemas/DeviceUsageRecord"
-          },
-          "week": {
-            "$ref": "#/components/schemas/DeviceUsageRecord"
-          },
-          "month": {
-            "$ref": "#/components/schemas/DeviceUsageRecord"
-          },
-          "quater": {
-            "$ref": "#/components/schemas/DeviceUsageRecord"
+            "$ref": "#/components/schemas/state"
           }
         }
       },
@@ -1442,15 +1495,6 @@
           "manufacturer": {
             "$ref": "#/components/schemas/device-name"
           },
-          "given_name": {
-            "$ref": "#/components/schemas/device-name"
-          },
-          "given_type": {
-            "$ref": "#/components/schemas/device-name"
-          },
-          "given_manufacturer": {
-            "$ref": "#/components/schemas/device-name"
-          },
           "ip": {
             "$ref": "#/components/schemas/DeviceIP"
           },
@@ -1466,12 +1510,6 @@
           },
           "cfg": {
             "$ref": "#/components/schemas/DeviceConfig"
-          },
-          "pending-cfg": {
-            "$ref": "#/components/schemas/DeviceConfig"
-          },
-          "usage": {
-            "$ref": "#/components/schemas/DeviceUsageSummary"
           }
         },
         "example": {
@@ -1482,9 +1520,6 @@
           "name": "Nokia N78",
           "type": "Smartphone",
           "manufacturer": "Nokia",
-          "given_name": "Granpa's Nokia",
-          "given_type": null,
-          "given_manufacturer": null,
           "ip": {
             "ip4": "192.168.0.55",
             "ip6": "2001:db8:85a3::8a2e:370:7334"
@@ -1495,37 +1530,15 @@
           "cfg": {
             "vpn": {
               "state": false,
-              "pause": 1587732975
+              "since": 1587732975
             },
             "ad-blocking": {
               "state": false,
-              "pause": 1587732975
+              "since": 1587732975
             },
             "device-protection": {
               "state": false,
-              "pause": 1587732975
-            }
-          },
-          "usage": {
-            "hours24": {
-              "timestamp": 1587732975,
-              "tx": 123450,
-              "rx": 243512340
-            },
-            "week": {
-              "timestamp": 1587732975,
-              "tx": 1234504,
-              "rx": 2435123406
-            },
-            "month": {
-              "timestamp": 1587732975,
-              "tx": 12345047,
-              "rx": 24351234068
-            },
-            "quater": {
-              "timestamp": 1587732975,
-              "tx": 123450472,
-              "rx": 243512340683
+              "since": 1587732975
             }
           }
         }
@@ -1539,13 +1552,31 @@
           "$ref": "#/components/schemas/Device"
         }
       },
-      "DeviceUsageHistory": {
-        "type": "array",
-        "description": "Holds up to 90 days worth of hourly data usage records for the device.\nThe resolution of the items (daily or hourly) depends on the api call.",
-        "minItems": 1,
-        "maxItems": 2160,
-        "items": {
-          "$ref": "#/components/schemas/DeviceUsageRecord"
+      "Device-Settings-Reply": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "The response to setting an device service setting.\n- **state** The services current state.\n- **since** The time the current state became set for the device.\n- **pending** The requested state becomes valid when its\n**since** time stamp value equals or exceeds the returned **pending**\ntime stamp.",
+        "required": [
+          "state",
+          "since",
+          "pending"
+        ],
+        "properties": {
+          "state": {
+            "type": "boolean",
+            "description": "The current state of the requested service."
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
+          },
+          "pending": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
+          }
+        },
+        "example": {
+          "state": false,
+          "since": 1589978803,
+          "pending": 1590583603
         }
       }
     },
@@ -2700,71 +2731,6 @@
         }
       }
     },
-    "/v1/adapter/cfg": {
-      "get": {
-        "operationId": "adapterCfgQuery",
-        "tags": [
-          "Adapter Management"
-        ],
-        "summary": "Query the state of configuration for an adapter.",
-        "description": "# Usage\nFor a particular Adapter, return the current and pending configuration.\n\n## Parameters\n  - **id**: The adapters ID.  Can only get config for adapters\n  associated with the calling clients account.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/uuid"
-            },
-            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
-            "description": "The Adapter ID to Query."
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Success, Adapter Query Result returned.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Adapter-Settings"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Nack"
-                },
-                "example": {
-                  "error": "Internal Server Error."
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/401"
-          },
-          "403": {
-            "$ref": "#/components/responses/403"
-          },
-          "404": {
-            "$ref": "#/components/responses/404"
-          },
-          "429": {
-            "$ref": "#/components/responses/429"
-          },
-          "500": {
-            "$ref": "#/components/responses/500"
-          },
-          "default": {
-            "$ref": "#/components/responses/default"
-          }
-        }
-      }
-    },
     "/v1/adapter/cfg/service": {
       "post": {
         "operationId": "adapterCfgService",
@@ -3117,20 +3083,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "wifi"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "$ref": "#/components/schemas/uuid"
-                  },
-                  "wifi": {
-                    "$ref": "#/components/schemas/wifi-settings"
-                  }
-                }
+                "$ref": "#/components/schemas/wifi-settings-change"
               }
             }
           }
@@ -3141,10 +3094,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ack"
-                },
-                "example": {
-                  "msg": "Success, WiFi settings set."
+                  "$ref": "#/components/schemas/wifi-settings-change-queued"
                 }
               }
             }
@@ -3645,7 +3595,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success, Streaming Service Configuration Returned.  This is an array\nof all streaming services, and their current configuration on the\nadapter.\n\n- **id**: the id of the streaming service\n- **settings.current**: The current setting.\n- **settings.pending**: The pending setting, not yet confirmed.\n- **enabled**: if relocation is enabled for this service.\n- **country**: the country the streaming service is directed from.",
+            "description": "Success, Streaming Service Configuration Returned.  This is an array\nof all streaming services, and their current configuration on the\nadapter.\n\n- **id**: the id of the streaming service\n- **adapter**: The id of the adapter the setting realates to.\n- **country**: the country the streaming service is directed from.\n- **since**: The timestamp when the streaming service last changed.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3654,15 +3604,9 @@
                 "example": [
                   {
                     "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                    "settings": {
-                      "current": {
-                        "enabled": true,
-                        "country": "US"
-                      },
-                      "pending": {
-                        "country": "JP"
-                      }
-                    }
+                    "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                    "country": "US",
+                    "since": 1590834650124
                   }
                 ]
               }
@@ -3707,19 +3651,7 @@
           "Streaming Relocation Management"
         ],
         "summary": "Set the streaming cfg for an adapter.",
-        "description": "# Usage\nFor a particular Adapter, set its streaming configuration.  Until the\nsettings are confirmed applied by the adapter, they will be reported as\npending.\n\n## Parameters\n  - **id**: The id of the adapter to set the pending streaming\n  configuration for.\n  - **cfg**: The configuration to set.  If this is not present, then no\n  configuration will change, and the call will simply return the\n  requested stream id's current and pending settings.",
-        "parameters": [
-          {
-            "in": "query",
-            "name": "id",
-            "required": true,
-            "schema": {
-              "$ref": "#/components/schemas/uuid"
-            },
-            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
-            "description": "The Adapter ID to set."
-          }
-        ],
+        "description": "# Usage\nFor a particular Adapter, set its streaming configuration.  Will respond\nwith the current configuration and a pending time stamp that can be\ncompared against since to determine if the setting has been applied or\nnot.\n\n## Parameters\n  - **id**: The id of the stream to configure.\n  - **adapter**: The adapter ID to set the streaming config on.\n  - **country**: The country to set the stream to.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3727,23 +3659,26 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "id"
+                  "id",
+                  "adapter",
+                  "country"
                 ],
                 "additionalProperties": false,
                 "properties": {
                   "id": {
                     "$ref": "#/components/schemas/uuid"
                   },
-                  "cfg": {
-                    "$ref": "#/components/schemas/stream-setting"
+                  "adapter": {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  "country": {
+                    "$ref": "#/components/schemas/iso3166-country"
                   }
                 },
                 "example": {
                   "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                  "cfg": {
-                    "enabled": true,
-                    "country": "GB"
-                  }
+                  "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "country": "GB"
                 }
               }
             }
@@ -3751,23 +3686,18 @@
         },
         "responses": {
           "200": {
-            "description": "Success, Streaming Service Configuration Queued.",
+            "description": "Success, Streaming Service Configuration Queued.\n- **id**: The id of the stream.\n- **adapter**: The adapter ID the streaming config relates to.\n- **country**: The country the stream is CURRENTLY set to.\n- **since**: The last time this stream config changed.\n- **pending**: The next timestamp which indicates the config has\nbeen changed.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/stream-settings"
+                  "$ref": "#/components/schemas/stream-setting-queued"
                 },
                 "example": {
                   "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                  "settings": {
-                    "current": {
-                      "enabled": true,
-                      "country": "US"
-                    },
-                    "pending": {
-                      "country": "GB"
-                    }
-                  }
+                  "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "country": "US",
+                  "since": 1590834650123,
+                  "pending": 1590841399785
                 }
               }
             }
@@ -4235,7 +4165,7 @@
           "Profile Management"
         ],
         "summary": "Set the weekly bedtimes for a profile.",
-        "description": "# Usage\n\nAllows todays bedtime to be delayed by the amount of minutes specified.\nThe delay can not be set, such that it would extend beyond the end of\nthe bedtime period.  At the end of the bedtime period, the delay will be\nreset to zero.  It only operates once and is reset to zero at the end of\nbedtime (6am).\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **delay**: The number of seconds to delay bedtime for.  Set to zero\n  to disable a previously set delay.  Delay only delays the start of\n  it does not delay the end.  The delay is absolute, if the delay needs\n  to be incremented or decremented, take the previous delay, adjust\n  accordingly and re-set it using this call.",
+        "description": "# Usage\n\nAllows todays bedtime to be delayed by the amount of minutes specified.\nThe delay can not be set, such that it would extend beyond the end of\nthe bedtime period.  At the end of the bedtime period, the delay will be\nreset to zero.  It only operates once and is reset to zero at the end of\nbedtime (6am).\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **delay**: The number of minutes to delay bedtime for.  Set to zero\n  to disable a previously set delay.  Delay only delays the start of\n  it does not delay the end.  The delay is absolute, if the delay needs\n  to be incremented or decremented, take the previous delay, adjust\n  accordingly and re-set it using this call.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4447,88 +4377,69 @@
         }
       }
     },
-    "/v1/profile/device": {
-      "post": {
-        "operationId": "profileDevice",
+    "/v1/profile/usage": {
+      "get": {
+        "operationId": "profileUsage",
         "tags": [
           "Profile Management"
         ],
-        "summary": "Make a configuration change to all devices connected to a profile.",
-        "description": "# Usage\n\nAllows all devices to have certain configuration attributes globally\nset.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **setting**: The setting to set on all devices.\n  - **duration**: How long the setting lasts.  -1 is indefinite.\n\n  All parameters are required to be set.",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "setting",
-                  "duration"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "$ref": "#/components/schemas/uuid"
-                  },
-                  "setting": {
-                    "type": "string",
-                    "enum": [
-                      "VPNBypass",
-                      "AdBlockingBypass",
-                      "DeviceProtectionBypass"
-                    ]
-                  },
-                  "duration": {
-                    "$ref": "#/components/schemas/epoch-timestamp"
-                  }
-                }
-              },
-              "examples": {
-                "VPN": {
-                  "summary": "Indefinite VPN Bypass",
-                  "value": {
-                    "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                    "setting": "VPNBypass",
-                    "duration": -1
-                  }
-                },
-                "AdBlocking": {
-                  "summary": "Timed Ad-blocking Bypass",
-                  "value": {
-                    "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                    "setting": "AdBlockingBypass",
-                    "duration": 1619533887
-                  }
-                },
-                "DeviceProtection": {
-                  "summary": "Permanent Device Protection Bypass",
-                  "value": {
-                    "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                    "setting": "DeviceProtectionBypass",
-                    "duration": -1
-                  }
-                }
-              }
-            }
+        "summary": "Get device data usage.",
+        "description": "# Usage\n\nGenerates a list of data usage values for a profile, at a specified\nresolution.  Profile usage is a synthetic aggregate of all device usage,\nso, for example, if a high volume device is moved between profiles, the\nold profiles usage will decrease by the devices usage, and the new profile\nof the device will increase its usage by the same amount.\n\n## Parameters\n  - **id**: The Unique profile ID.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            },
+            "description": "The unique profile id."
+          },
+          {
+            "in": "query",
+            "name": "resolution",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Hourly",
+                "Daily",
+                "Weekly",
+                "Monthly"
+              ],
+              "default": "Hourly"
+            },
+            "description": "The time resolution to report. Hourly is hourly, Daily is 24 hours.\nWeekly is 7 days and Monthly is 30 days.  If not specified the\nresolution is \"Hourly\""
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "$ref": "#/components/schemas/epoch-timestamp"
+            },
+            "description": "The start of the reporting window.  If not specified, defaults to\nthe oldest data on record for the device."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "$ref": "#/components/schemas/epoch-timestamp"
+            },
+            "description": "The end of the reporting window.  If not specified, defaults to\nnow."
           }
-        },
+        ],
         "responses": {
           "200": {
-            "description": "Success, The setting has been applied to all associated devices.",
+            "description": "Success, The device data usage is returned.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Ack"
-                },
-                "example": {
-                  "msg": "VPN Bypass enabled on devices."
+                  "$ref": "#/components/schemas/DeviceUsageHistory"
                 }
               }
             }
           },
           "400": {
-            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.\n* `\"Bypass time in the past.\"` - Can't bypass into the past.",
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4548,9 +4459,6 @@
           },
           "404": {
             "$ref": "#/components/responses/404"
-          },
-          "415": {
-            "$ref": "#/components/responses/415"
           },
           "429": {
             "$ref": "#/components/responses/429"
@@ -4812,7 +4720,7 @@
           "Device Management"
         ],
         "summary": "Set one or more device name field over-rides to the clients choice.",
-        "description": "# Usage\n\nAssigns a device to a profile.  Can only assign devices to profiles that\nexist associated with the same adapter.\n\n## Parameters\n  - **id**: The unique id of the device we are associating with the profile.\n  - **name**: Optional, the name preferred by the client.\n  - **type**: Optional, the device type preferred by the client.\n  - **manufacturer**: Optional, the manufacturt preferred by the client.\n\n  The call may specify one or more name fields, name fields that are\n  present are set.  Ones that are not present are cleared and default\n  back to the system assigned names.  If a name needs to be changed and\n  the others remain, set all name fields.",
+        "description": "# Usage\n\nAssigns a device to a profile.  Can only assign devices to profiles that\nexist associated with the same adapter.\n\n## Parameters\n  - **id**: The unique id of the device we are associating with the profile.\n  - **name**: Optional, the name preferred by the client.\n  - **type**: Optional, the device type preferred by the client.\n  - **manufacturer**: Optional, the manufacturer preferred by the client.\n\n  The call may specify one or more name fields, name fields that are\n  present are set.  Ones that are not present are cleared and default\n  back to the system assigned names.  If a name needs to be changed and\n  the others remain, set all name fields.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4863,9 +4771,6 @@
                   "name": "Unknown Iphone",
                   "type": "Unknown",
                   "manufacturer": "Unknown",
-                  "given_name": "My Iphone",
-                  "given_type": "Iphone 13",
-                  "given_manufacturer": "Apple",
                   "ip": {
                     "ip4": "192.168.0.55",
                     "ip6": "2001:db8:85a3::8a2e:370:7334"
@@ -4876,37 +4781,15 @@
                   "cfg": {
                     "vpn": {
                       "state": false,
-                      "pause": 1587732975
+                      "since": 1587732975
                     },
                     "ad-blocking": {
                       "state": false,
-                      "pause": 1587732975
+                      "since": 1587732975
                     },
                     "device-protection": {
                       "state": false,
-                      "pause": 1587732975
-                    }
-                  },
-                  "usage": {
-                    "hours24": {
-                      "timestamp": 1587732975,
-                      "tx": 123450,
-                      "rx": 243512340
-                    },
-                    "week": {
-                      "timestamp": 1587732975,
-                      "tx": 1234504,
-                      "rx": 2435123406
-                    },
-                    "month": {
-                      "timestamp": 1587732975,
-                      "tx": 12345047,
-                      "rx": 24351234068
-                    },
-                    "quater": {
-                      "timestamp": 1587732975,
-                      "tx": 123450472,
-                      "rx": 243512340683
+                      "since": 1587732975
                     }
                   }
                 }
@@ -4957,7 +4840,7 @@
           "Device Management"
         ],
         "summary": "Set device setting.",
-        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: Optional, the name preferred by the client.\n  - **type**: Optional, the device type preferred by the client.\n  - **manufacturer**: Optional, the manufacturer preferred by the client.\n\n  The call may specify one or more name fields, name fields that are\n  present are set.  Ones that are not present are cleared and default\n  back to the system assigned names.  If a name needs to be changed and\n  the others remain, set all name fields.",
+        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n  - **setting**: The state we want the configuration to become.\n\n  All field must be present in the call.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4966,7 +4849,8 @@
                 "type": "object",
                 "required": [
                   "id",
-                  "service"
+                  "service",
+                  "setting"
                 ],
                 "additionalProperties": false,
                 "properties": {
@@ -4982,7 +4866,7 @@
                     ]
                   },
                   "setting": {
-                    "$ref": "#/components/schemas/PauseSetting"
+                    "type": "boolean"
                   }
                 }
               }
@@ -4995,76 +4879,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Device"
-                },
-                "example": {
-                  "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
-                  "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
-                  "profile": "66f7346a-48af-4614-bd7b-6c17093d75e3",
-                  "mac": "00-00-5E-DF-98-EB",
-                  "name": "Unknown Iphone",
-                  "type": "Unknown",
-                  "manufacturer": "Unknown",
-                  "given_name": "My Iphone",
-                  "given_type": "Iphone 13",
-                  "given_manufacturer": "Apple",
-                  "ip": {
-                    "ip4": "192.168.0.55",
-                    "ip6": "2001:db8:85a3::8a2e:370:7334"
-                  },
-                  "online": true,
-                  "online_since": 1587732975,
-                  "discovered": 1587732975,
-                  "cfg": {
-                    "vpn": {
-                      "state": false,
-                      "pause": 1587732975
-                    },
-                    "ad-blocking": {
-                      "state": false,
-                      "pause": 1587732975
-                    },
-                    "device-protection": {
-                      "state": true,
-                      "pause": 1587732975
-                    }
-                  },
-                  "pending-cfg": {
-                    "vpn": {
-                      "state": false,
-                      "pause": 1587732975
-                    },
-                    "ad-blocking": {
-                      "state": false,
-                      "pause": 1587732975
-                    },
-                    "device-protection": {
-                      "state": false,
-                      "pause": 1587732975
-                    }
-                  },
-                  "usage": {
-                    "hours24": {
-                      "timestamp": 1587732975,
-                      "tx": 123450,
-                      "rx": 243512340
-                    },
-                    "week": {
-                      "timestamp": 1587732975,
-                      "tx": 1234504,
-                      "rx": 2435123406
-                    },
-                    "month": {
-                      "timestamp": 1587732975,
-                      "tx": 12345047,
-                      "rx": 24351234068
-                    },
-                    "quater": {
-                      "timestamp": 1587732975,
-                      "tx": 123450472,
-                      "rx": 243512340683
-                    }
-                  }
+                  "$ref": "#/components/schemas/Device-Settings-Reply"
                 }
               }
             }
