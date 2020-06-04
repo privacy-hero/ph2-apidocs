@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.14",
+    "version": "0.0.15",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -1443,6 +1443,31 @@
           }
         }
       },
+      "epoch-timestamp-pause": {
+        "type": "integer",
+        "format": "int64",
+        "minimum": -1,
+        "maximum": 4743406575000,
+        "description": "A Time, expressed as seconds since Jan 01 1970. (UTC). -1 = Indefinite unpause",
+        "example": 1587732975
+      },
+      "time-state": {
+        "type": "object",
+        "required": [
+          "state",
+          "since"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "state": {
+            "$ref": "#/components/schemas/epoch-timestamp-pause"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
+        },
+        "description": "The current known value of the state, and the time that it changed."
+      },
       "DeviceConfig": {
         "type": "object",
         "required": [
@@ -1451,7 +1476,7 @@
           "ad-blocking"
         ],
         "additionalProperties": false,
-        "description": "- **vpn**: Enabled or Not.\n- **Ad-blocking**: Enabled or Not.\n- **device-protection**: Enabled or not.",
+        "description": "- **vpn**: Enabled or Not.\n- **Ad-blocking**: Enabled or Not.\n- **device-protection**: Enabled or not.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is negative, internet is paused indefinitely.",
         "properties": {
           "vpn": {
             "$ref": "#/components/schemas/state"
@@ -1461,6 +1486,9 @@
           },
           "device-protection": {
             "$ref": "#/components/schemas/state"
+          },
+          "internet-pause": {
+            "$ref": "#/components/schemas/time-state"
           }
         }
       },
@@ -1539,6 +1567,10 @@
             "device-protection": {
               "state": false,
               "since": 1587732975
+            },
+            "internet-pause": {
+              "state": 0,
+              "since": 1587732975
             }
           }
         }
@@ -1550,6 +1582,54 @@
         "maxItems": 512,
         "items": {
           "$ref": "#/components/schemas/Device"
+        }
+      },
+      "DeviceSetBooleanCfg": {
+        "type": "object",
+        "required": [
+          "id",
+          "service",
+          "setting"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "VPN",
+              "AdBlocking",
+              "DeviceProtection"
+            ]
+          },
+          "setting": {
+            "type": "boolean"
+          }
+        }
+      },
+      "DeviceSetPauseCfg": {
+        "type": "object",
+        "required": [
+          "id",
+          "service",
+          "setting"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "service": {
+            "type": "string",
+            "enum": [
+              "InternetPause"
+            ]
+          },
+          "setting": {
+            "$ref": "#/components/schemas/epoch-timestamp-pause"
+          }
         }
       },
       "Device-Settings-Reply": {
@@ -4840,33 +4920,34 @@
           "Device Management"
         ],
         "summary": "Set device setting.",
-        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n  - **setting**: The state we want the configuration to become.\n\n  All field must be present in the call.",
+        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n    - **\"VPN\"** : Set the VPN On/Off\n    - **\"AdBlocking\"** : Set AdBlocking On/Off\n    - **\"DeviceProtection\"** : Set Device Protection On/Off\n    - **\"InternetPause\"** : Set the duration of a pause to internet access.\n  - **setting**: The state we want the configuration to become.\n    - For VPN/AdBlocking/DeviceProtection - true or false\n    - For InternetPause - The time to pause until, -1 = pause\n    indefinitely. 0 = Dont pause.\n\n  All field must be present in the call.",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "required": [
-                  "id",
-                  "service",
-                  "setting"
-                ],
-                "additionalProperties": false,
-                "properties": {
-                  "id": {
-                    "$ref": "#/components/schemas/uuid"
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/DeviceSetBooleanCfg"
                   },
-                  "service": {
-                    "type": "string",
-                    "enum": [
-                      "VPN",
-                      "AdBlocking",
-                      "DeviceProtection"
-                    ]
-                  },
-                  "setting": {
-                    "type": "boolean"
+                  {
+                    "$ref": "#/components/schemas/DeviceSetPauseCfg"
+                  }
+                ]
+              },
+              "examples": {
+                "bool": {
+                  "value": {
+                    "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
+                    "service": "VPN",
+                    "setting": true
+                  }
+                },
+                "pause": {
+                  "value": {
+                    "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
+                    "service": "InternetPause",
+                    "setting": -1
                   }
                 }
               }
