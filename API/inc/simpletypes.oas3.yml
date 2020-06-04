@@ -49,6 +49,7 @@ paths:
                     - $ref: "#/components/schemas/adapter-type"
                     - $ref: "#/components/schemas/epoch-timestamp"
                     - $ref: "#/components/schemas/epoch-timestamp-nonull"
+                    - $ref: "#/components/schemas/epoch-timestamp-pause"
                     - $ref: "#/components/schemas/iso3166-country"
                     - $ref: "#/components/schemas/iana-timezone"
                     - $ref: "#/components/schemas/ph2-bearer-token"
@@ -254,7 +255,7 @@ components:
         A Time, expressed as seconds since Jan 01 1970. (UTC). **NULL** = unknown
       example: 1587732975
 
-    # Epoch Timestamp
+    # Epoch Timestamp - No Null
     epoch-timestamp-nonull:
       type: integer
       format: int64
@@ -263,6 +264,17 @@ components:
       description: |-
         A Time, expressed as seconds since Jan 01 1970. (UTC).
       example: 1587732975
+
+    # Epoch Timestamp - Pause - No Null
+    epoch-timestamp-pause:
+      type: integer
+      format: int64
+      minimum: -1
+      maximum: 4743406575000
+      description: |-
+        A Time, expressed as seconds since Jan 01 1970. (UTC). -1 = Indefinite unpause
+      example: 1587732975
+
 
     # ISO 3166 Country Codes
     iso3166-country:

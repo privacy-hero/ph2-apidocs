@@ -30,6 +30,7 @@ paths:
               application/json:
                 schema:
                   oneOf:
+                    - $ref: "#/components/schemas/time-state"
                     - $ref: "#/components/schemas/streams"
                     - $ref: "#/components/schemas/stream-setting"
                     - $ref: "#/components/schemas/streams-settings"
@@ -74,6 +75,20 @@ components:
           nullable: true
           description: |-
             **true**=Active, **false**=Inactive, **null**=Unknown
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+      description: |-
+        The current known value of the state, and the time that it changed.
+
+    time-state:
+      type: object
+      required:
+        - state
+        - since
+      additionalProperties: false
+      properties:
+        state:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-pause"
         since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-

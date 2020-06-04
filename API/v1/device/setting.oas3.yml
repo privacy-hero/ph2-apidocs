@@ -48,7 +48,14 @@ paths:
         ## Parameters
           - **id**: The unique id of the device.
           - **service**: The service we are configuring
+            - **"VPN"** : Set the VPN On/Off
+            - **"AdBlocking"** : Set AdBlocking On/Off
+            - **"DeviceProtection"** : Set Device Protection On/Off
+            - **"InternetPause"** : Set the duration of a pause to internet access.
           - **setting**: The state we want the configuration to become.
+            - For VPN/AdBlocking/DeviceProtection - true or false
+            - For InternetPause - The time to pause until, -1 = pause
+            indefinitely. 0 = Dont pause.
 
           All field must be present in the call.
 
@@ -57,24 +64,20 @@ paths:
         content:
           "application/json":
             schema:
-              type: object
-              required:
-                - id
-                - service
-                - setting
-              additionalProperties: false
-              properties:
-                id:
-                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
-                service:
-                  type: string
-                  enum:
-                    - "VPN"
-                    - "AdBlocking"
-                    - "DeviceProtection"
-                setting:
-                  type: boolean
-
+              oneOf:
+                - $ref: "../../inc/device.oas3.yml#/components/schemas/DeviceSetBooleanCfg"
+                - $ref: "../../inc/device.oas3.yml#/components/schemas/DeviceSetPauseCfg"
+            examples:
+              bool:
+                value:
+                  id: "e22cfd99-44e5-4c93-8cad-3185c623cc25"
+                  service: "VPN"
+                  setting: true
+              pause:
+                value:
+                  id: "e22cfd99-44e5-4c93-8cad-3185c623cc25"
+                  service: "InternetPause"
+                  setting: -1
 
       responses:
         "200":
