@@ -44,6 +44,7 @@ paths:
                     - $ref: "#/components/schemas/Adapter"
                     - $ref: "#/components/schemas/Adapters"
                     - $ref: "#/components/schemas/Adapter-Diags"
+                    - $ref: "#/components/schemas/Adapter-Diag_Requested-Reply"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -93,33 +94,6 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
       description: |-
         The current known value of the state, and the time that it changed.
-
-    speed-diag:
-      type: object
-      description: |-
-        Speed Diagnostic Results.
-      required:
-        - speed
-        - when
-      additionalProperties: false
-      properties:
-        speed:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
-        when:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
-    latency-diag:
-      type: object
-      description: latency diagnostic result
-      required:
-        - latency
-        - completion
-      additionalProperties: false
-      properties:
-        latency:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/latency-ms"
-        completion:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
 
     datacaps:
       type: object
@@ -527,78 +501,78 @@ components:
       items:
         $ref: "#/components/schemas/Adapter"
 
-    Adapter-Speed-Diags:
-      type: object
-      description: |-
-        Adapter Speed Diagnostic Results
-        - **latest**: Result of last speed test
-        - **averages**: Historical speed test results
-        - **running**: Time the current speed test is expected to complete.
-      additionalProperties: false
-      properties:
-        latest:
-          $ref: "#/components/schemas/speed-diag"
-        averages:
-          type: object
-          description: Historical Averages
-          additionalProperties: false
-          properties:
-            days7:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
-            days30:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
-            alltime:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
-        running:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
-    Adapter-Latency-Diags:
-      type: object
-      description: |-
-        Adapter Latency Diagnostic Results
-        - **latest**: Result of last latency test
-        - **averages**: Historical latency test results
-        - **running**: Time the current latency test is expected to complete.
-      additionalProperties: false
-      properties:
-        latest:
-          type: object
-          additionalProperties: false
-          properties:
-            result:
-              $ref: "#/components/schemas/latency-diag"
-            when:
-              $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-        averages:
-          type: object
-          description: Historical Averages
-          additionalProperties: false
-          properties:
-            days7:
-              $ref: "#/components/schemas/latency-diag"
-            days30:
-              $ref: "#/components/schemas/latency-diag"
-            alltime:
-              $ref: "#/components/schemas/latency-diag"
-        running:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+    health-results:
+        type: object
+        description: |-
+          Health result Records.
+          * **timestamp** - The timestamp of the time the test was conducted.
+          * **location-server** - The location of the server the test was
+          conducted against.
+          * **provider** - The ISP or Network operator who manages the server.
+          * **distance** - The estimated distance to the test server (in miles).  A
+          Negative number is to be represented as < (less than) this value.  A
+          positive number is an estimated distance.
+          * **latency** - The average latency (ping time) to the test URL.
+          * **latency-completion** - The percentage of latency checks which
+          completed successfully. (whole number, 85 = 85%, 100=100%)
+          * **speed-rx** - Bits per second result of the Receive speed test.
+          * **speed-tx** - Bits per second result of the Transmit speed test.
+          * **connection** - The internet connection the speed test was completed on.
+        additionalProperties: false
+        properties:
+          timestamp:
+            $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+          location-server:
+            type: string
+            description: The Location/Server the test was conducted against.
+          provider:
+            type: string
+            description: The ISP/Network operator managing the server.
+          distance:
+            type: integer
+            description: |-
+              The estimated distance in miles between the client and
+              the test server.  The distance is expressed as "Less than" this
+              value.  Eg, 50 = <50 miles.
+          latency:
+            $ref: "./simpletypes.oas3.yml#/components/schemas/latency-ms"
+          latency-completion:
+            $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
+          speed-rx:
+            $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+          speed-tx:
+            $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+          connection:
+            type: string
+            enum:
+              - "VPN"
+              - "WAN"
 
     Adapter-Diags:
-          type: object
-          description: Results from the last and best diagnostic tests
-          additionalProperties: false
-          properties:
-            speed:
-              type: object
-              description: Network Speed test results
-              additionalProperties: false
-              properties:
-                tx:
-                  $ref: "#/components/schemas/Adapter-Speed-Diags"
-                rx:
-                  $ref: "#/components/schemas/Adapter-Speed-Diags"
-            ping:
-              $ref: "#/components/schemas/Adapter-Latency-Diags"
+      type: array
+      maxItems: 1000
+      description: The diagnostic results of previous health checks.
+      items:
+        $ref: "#/components/schemas/health-results"
+
+    Adapter-Diag_Requested-Reply:
+      type: object
+      additionalProperties: false
+      description: |-
+        The response to requesting a diagnostic on the adapter.
+        - **pending** The time which will be associated with the speed test
+        results for the requested test.  The test is complete when the results
+        for the last day contain this test timestamp.
+      required:
+        - pending
+      properties:
+        pending:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+      example:
+        pending: 1591887170
+
+
+
 
     Adapter-Settings:
       type: object

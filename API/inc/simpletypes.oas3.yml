@@ -33,6 +33,7 @@ paths:
                 schema:
                   additionalProperties: false
                   oneOf:
+                    - $ref: "#/components/schemas/health-days"
                     - $ref: "#/components/schemas/password"
                     - $ref: "#/components/schemas/ip4"
                     - $ref: "#/components/schemas/ip6"
@@ -91,6 +92,17 @@ components:
     $ref: "../PH2-API.oas3.yml#/components/securitySchemes"
 
   schemas:
+
+    health-days:
+      type: integer
+      format: int16
+      minimum: 1
+      maximum: 90
+      example: 10
+      description: |-
+        The number of days into the past to provide adapter health records for.
+        1 is today, 90 is up to 90 days ago.
+
 
     password:
       type: string

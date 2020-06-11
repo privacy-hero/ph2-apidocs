@@ -48,7 +48,9 @@ paths:
         get the historical diagnostic/health results.
 
         ## Parameters
-          - **id**: The id of the adapter to retrieve diagnostic health status from.
+          - **id**: The id of the adapter to retrieve diagnostic health status
+          from.
+          - **days**: The maximum number of previous days to report. 1 = today.
 
       parameters:
         - in: query
@@ -59,6 +61,16 @@ paths:
           example: "cd73b915-89a4-4971-9d86-bce91786b12a"
           description: |-
             The Adapter ID to Query.
+        - in: query
+          name: days
+          required: false
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/health-days"
+          example: 1
+          description: |-
+            The number of days of health history to provide. 1 is the most
+            recent day.
+
       responses:
         "200":
           description: |-
@@ -67,6 +79,52 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Diags"
+              example:  [
+                          {
+                            "timestamp": 1591886048,
+                            "location-server": "Phuket, Thailand",
+                            "provider": "3BB",
+                            "distance": -50,
+                            "latency": 5,
+                            "latency-completion": 100,
+                            "speed-rx": 185608437,
+                            "speed-tx": 282140344,
+                            "connection": "WAN"
+                          },
+                          {
+                            "timestamp": 1591884008,
+                            "location-server": "Singapore",
+                            "provider": "Singtel",
+                            "distance": 600,
+                            "latency": 36,
+                            "latency-completion": 90,
+                            "speed-rx": 185608437,
+                            "speed-tx": 282140344,
+                            "connection": "VPN"
+                          },
+                          {
+                            "timestamp": 1591799408,
+                            "location-server": "Phuket, Thailand",
+                            "provider": "3BB",
+                            "distance": -50,
+                            "latency": 5,
+                            "latency-completion": 100,
+                            "speed-rx": 185608437,
+                            "speed-tx": 282140344,
+                            "connection": "WAN"
+                          },
+                          {
+                            "timestamp": 1591797608,
+                            "location-server": "Singapore",
+                            "provider": "Singtel",
+                            "distance": 600,
+                            "latency": 36,
+                            "latency-completion": 90,
+                            "speed-rx": 185608437,
+                            "speed-tx": 282140344,
+                            "connection": "VPN"
+                          },
+                        ]
         "400":
           description: |-
             General Request processing error.  Possible errors are:
@@ -108,11 +166,9 @@ paths:
           - **id**: The id of the adapter to run the test on.  The Adapter must
           be registered to the current client.
           - **test**: The test to perform.
-            - "**SpeedTest**" will automatically pick the closest speedtest.com
-            server to the adapter and complete the speed test check.
-            - "**BasicConnectivity**" will cause a series of pings to be sent to
-                 a wel known and reliable server.  The time taken to reply and
-                 the number of replies which fail to be received will be recorded.
+            - "**SpeedTest**" will automatically pick the most appropriate speedtest.com
+            server and perform WAN and (if active) VPN speed tests, and update
+            the health records.
 
       requestBody:
         required: true
@@ -131,7 +187,6 @@ paths:
                   type: string
                   enum:
                     - "SpeedTest"
-                    - "BasicConnectivity"
 
 
       responses:
@@ -141,7 +196,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Diags"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Diag_Requested-Reply"
 
         "400":
           description: |-
