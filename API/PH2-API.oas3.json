@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.15",
+    "version": "0.0.16",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -710,59 +710,13 @@
           }
         }
       },
-      "speed-bps": {
+      "health-days": {
         "type": "integer",
-        "format": "uint32",
-        "minimum": 0,
-        "maximum": 4294967295,
-        "nullable": true,
-        "description": "Bits per second speed result. **NULL** = Unknown."
-      },
-      "speed-diag": {
-        "type": "object",
-        "description": "Speed Diagnostic Results.",
-        "required": [
-          "speed",
-          "when"
-        ],
-        "additionalProperties": false,
-        "properties": {
-          "speed": {
-            "$ref": "#/components/schemas/speed-bps"
-          },
-          "when": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        }
-      },
-      "Adapter-Speed-Diags": {
-        "type": "object",
-        "description": "Adapter Speed Diagnostic Results\n- **latest**: Result of last speed test\n- **averages**: Historical speed test results\n- **running**: Time the current speed test is expected to complete.",
-        "additionalProperties": false,
-        "properties": {
-          "latest": {
-            "$ref": "#/components/schemas/speed-diag"
-          },
-          "averages": {
-            "type": "object",
-            "description": "Historical Averages",
-            "additionalProperties": false,
-            "properties": {
-              "days7": {
-                "$ref": "#/components/schemas/speed-bps"
-              },
-              "days30": {
-                "$ref": "#/components/schemas/speed-bps"
-              },
-              "alltime": {
-                "$ref": "#/components/schemas/speed-bps"
-              }
-            }
-          },
-          "running": {
-            "$ref": "#/components/schemas/epoch-timestamp"
-          }
-        }
+        "format": "int16",
+        "minimum": 1,
+        "maximum": 90,
+        "example": 10,
+        "description": "The number of days into the past to provide adapter health records for.\n1 is today, 90 is up to 90 days ago."
       },
       "latency-ms": {
         "type": "integer",
@@ -780,82 +734,77 @@
         "nullable": true,
         "description": "Percentage of successful tests (*100). Eg. 9876 = 98.76%. **NULL** = Unknown."
       },
-      "latency-diag": {
+      "speed-bps": {
+        "type": "integer",
+        "format": "uint32",
+        "minimum": 0,
+        "maximum": 4294967295,
+        "nullable": true,
+        "description": "Bits per second speed result. **NULL** = Unknown."
+      },
+      "health-results": {
         "type": "object",
-        "description": "latency diagnostic result",
-        "required": [
-          "latency",
-          "completion"
-        ],
+        "description": "Health result Records.\n* **timestamp** - The timestamp of the time the test was conducted.\n* **location-server** - The location of the server the test was\nconducted against.\n* **provider** - The ISP or Network operator who manages the server.\n* **distance** - The estimated distance to the test server (in miles).  A\nNegative number is to be represented as < (less than) this value.  A\npositive number is an estimated distance.\n* **latency** - The average latency (ping time) to the test URL.\n* **latency-completion** - The percentage of latency checks which\ncompleted successfully. (whole number, 85 = 85%, 100=100%)\n* **speed-rx** - Bits per second result of the Receive speed test.\n* **speed-tx** - Bits per second result of the Transmit speed test.\n* **connection** - The internet connection the speed test was completed on.",
         "additionalProperties": false,
         "properties": {
+          "timestamp": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          },
+          "location-server": {
+            "type": "string",
+            "description": "The Location/Server the test was conducted against."
+          },
+          "provider": {
+            "type": "string",
+            "description": "The ISP/Network operator managing the server."
+          },
+          "distance": {
+            "type": "integer",
+            "description": "The estimated distance in miles between the client and\nthe test server.  The distance is expressed as \"Less than\" this\nvalue.  Eg, 50 = <50 miles."
+          },
           "latency": {
             "$ref": "#/components/schemas/latency-ms"
           },
-          "completion": {
+          "latency-completion": {
             "$ref": "#/components/schemas/latency-percentage"
-          }
-        }
-      },
-      "Adapter-Latency-Diags": {
-        "type": "object",
-        "description": "Adapter Latency Diagnostic Results\n- **latest**: Result of last latency test\n- **averages**: Historical latency test results\n- **running**: Time the current latency test is expected to complete.",
-        "additionalProperties": false,
-        "properties": {
-          "latest": {
-            "type": "object",
-            "additionalProperties": false,
-            "properties": {
-              "result": {
-                "$ref": "#/components/schemas/latency-diag"
-              },
-              "when": {
-                "$ref": "#/components/schemas/epoch-timestamp"
-              }
-            }
           },
-          "averages": {
-            "type": "object",
-            "description": "Historical Averages",
-            "additionalProperties": false,
-            "properties": {
-              "days7": {
-                "$ref": "#/components/schemas/latency-diag"
-              },
-              "days30": {
-                "$ref": "#/components/schemas/latency-diag"
-              },
-              "alltime": {
-                "$ref": "#/components/schemas/latency-diag"
-              }
-            }
+          "speed-rx": {
+            "$ref": "#/components/schemas/speed-bps"
           },
-          "running": {
-            "$ref": "#/components/schemas/epoch-timestamp"
+          "speed-tx": {
+            "$ref": "#/components/schemas/speed-bps"
+          },
+          "connection": {
+            "type": "string",
+            "enum": [
+              "VPN",
+              "WAN"
+            ]
           }
         }
       },
       "Adapter-Diags": {
+        "type": "array",
+        "maxItems": 1000,
+        "description": "The diagnostic results of previous health checks.",
+        "items": {
+          "$ref": "#/components/schemas/health-results"
+        }
+      },
+      "Adapter-Diag_Requested-Reply": {
         "type": "object",
-        "description": "Results from the last and best diagnostic tests",
         "additionalProperties": false,
+        "description": "The response to requesting a diagnostic on the adapter.\n- **pending** The time which will be associated with the speed test\nresults for the requested test.  The test is complete when the results\nfor the last day contain this test timestamp.",
+        "required": [
+          "pending"
+        ],
         "properties": {
-          "speed": {
-            "type": "object",
-            "description": "Network Speed test results",
-            "additionalProperties": false,
-            "properties": {
-              "tx": {
-                "$ref": "#/components/schemas/Adapter-Speed-Diags"
-              },
-              "rx": {
-                "$ref": "#/components/schemas/Adapter-Speed-Diags"
-              }
-            }
-          },
-          "ping": {
-            "$ref": "#/components/schemas/Adapter-Latency-Diags"
+          "pending": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
           }
+        },
+        "example": {
+          "pending": 1591887170
         }
       },
       "datausage": {
@@ -1261,7 +1210,7 @@
         "type": "integer",
         "format": "int16",
         "minimum": -1,
-        "maximum": 1440,
+        "maximum": 1439,
         "default": -1,
         "description": "An absolute time of the day in minutes, where 0 = midnight.  The value\n-1 means no time of day is set."
       },
@@ -3220,7 +3169,7 @@
           "Adapter Management"
         ],
         "summary": "Query the result of adapter diagnostics.",
-        "description": "# Usage\n\nWhen an adapter health diagnostic is running (or at any time) this api\ncall may be made to get the current status of any running tests. AND to\nget the historical diagnostic/health results.\n\n## Parameters\n  - **id**: The id of the adapter to retrieve diagnostic health status from.",
+        "description": "# Usage\n\nWhen an adapter health diagnostic is running (or at any time) this api\ncall may be made to get the current status of any running tests. AND to\nget the historical diagnostic/health results.\n\n## Parameters\n  - **id**: The id of the adapter to retrieve diagnostic health status\n  from.\n  - **days**: The maximum number of previous days to report. 1 = today.",
         "parameters": [
           {
             "in": "query",
@@ -3231,6 +3180,16 @@
             },
             "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
             "description": "The Adapter ID to Query."
+          },
+          {
+            "in": "query",
+            "name": "days",
+            "required": false,
+            "schema": {
+              "$ref": "#/components/schemas/health-days"
+            },
+            "example": 1,
+            "description": "The number of days of health history to provide. 1 is the most\nrecent day."
           }
         ],
         "responses": {
@@ -3240,7 +3199,53 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Adapter-Diags"
-                }
+                },
+                "example": [
+                  {
+                    "timestamp": 1591886048,
+                    "location-server": "Phuket, Thailand",
+                    "provider": "3BB",
+                    "distance": -50,
+                    "latency": 5,
+                    "latency-completion": 100,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "WAN"
+                  },
+                  {
+                    "timestamp": 1591884008,
+                    "location-server": "Singapore",
+                    "provider": "Singtel",
+                    "distance": 600,
+                    "latency": 36,
+                    "latency-completion": 90,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "VPN"
+                  },
+                  {
+                    "timestamp": 1591799408,
+                    "location-server": "Phuket, Thailand",
+                    "provider": "3BB",
+                    "distance": -50,
+                    "latency": 5,
+                    "latency-completion": 100,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "WAN"
+                  },
+                  {
+                    "timestamp": 1591797608,
+                    "location-server": "Singapore",
+                    "provider": "Singtel",
+                    "distance": 600,
+                    "latency": 36,
+                    "latency-completion": 90,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "VPN"
+                  }
+                ]
               }
             }
           },
@@ -3283,7 +3288,7 @@
           "Adapter Management"
         ],
         "summary": "Start a diagnostic health check now.",
-        "description": "# Usage\n\nThe system and adapters automatically run diagnostic health checks on a\ndaily basis, however, if the client wishes to force an adapter to run a\ndiagnostic health check now, this call can be made.\n\n## Parameters\n  - **id**: The id of the adapter to run the test on.  The Adapter must\n  be registered to the current client.\n  - **test**: The test to perform.\n    - \"**SpeedTest**\" will automatically pick the closest speedtest.com\n    server to the adapter and complete the speed test check.\n    - \"**BasicConnectivity**\" will cause a series of pings to be sent to\n         a wel known and reliable server.  The time taken to reply and\n         the number of replies which fail to be received will be recorded.",
+        "description": "# Usage\n\nThe system and adapters automatically run diagnostic health checks on a\ndaily basis, however, if the client wishes to force an adapter to run a\ndiagnostic health check now, this call can be made.\n\n## Parameters\n  - **id**: The id of the adapter to run the test on.  The Adapter must\n  be registered to the current client.\n  - **test**: The test to perform.\n    - \"**SpeedTest**\" will automatically pick the most appropriate speedtest.com\n    server and perform WAN and (if active) VPN speed tests, and update\n    the health records.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3302,8 +3307,7 @@
                   "test": {
                     "type": "string",
                     "enum": [
-                      "SpeedTest",
-                      "BasicConnectivity"
+                      "SpeedTest"
                     ]
                   }
                 }
@@ -3317,7 +3321,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Adapter-Diags"
+                  "$ref": "#/components/schemas/Adapter-Diag_Requested-Reply"
                 }
               }
             }
