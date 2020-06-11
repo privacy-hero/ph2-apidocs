@@ -45,6 +45,7 @@ paths:
                     - $ref: "#/components/schemas/Adapters"
                     - $ref: "#/components/schemas/Adapter-Diags"
                     - $ref: "#/components/schemas/Adapter-Diag_Requested-Reply"
+                    - $ref: "#/components/schemas/Adapter-Usage-History"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -623,3 +624,34 @@ components:
           $ref: "#/components/schemas/state"
         malware-phishing:
           $ref: "#/components/schemas/state"
+
+    Adapter-Usage-Record:
+      type: object
+      description: |-
+        - **timestamp**: The start of the period.
+        - **tx**: Number of bytes sent by the adapter in the period. (-ve value
+        is predicted)
+        - **rx**: Number of bytes received by the adapter in the period. (-ve value
+        is predicted)
+      required:
+        - timestamp
+        - tx
+        - rx
+      additionalProperties: false
+      properties:
+        timestamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+        tx:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/datausage-predictable"
+        rx:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/datausage-predictable"
+
+    Adapter-Usage-History:
+      type: array
+      description: |-
+        Holds up to 90 days worth of hourly data usage records for the device.
+        The resolution of the items (daily or hourly) depends on the api call.
+      minItems: 1
+      maxItems: 2160
+      items:
+        $ref: "#/components/schemas/Adapter-Usage-Record"

@@ -1,13 +1,13 @@
 openapi: 3.0.1
 info:
-  title: "Privacy Hero 2 - Mothership API - /profile/usage"
+  title: "Privacy Hero 2 - Mothership API - /adapter/usage"
   version: "1.0"
   description: |-
     Privacy Hero 2 API.
 
-    Generate a data usage report for all device on a profile.
+    Generate a data usage report for an adapter.
 
-    `/profile/usage`
+    `/adapter/usage`
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
     url: ./LICENSE.md
@@ -30,27 +30,52 @@ components:
     $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 tags:
-  - name: Device Management
-    description: Operations related to Device Management
+  - name: Adapter Management
+    description: Operations related to Adapter Management
 
 paths:
-  /profile/usage:
+  /adapter/usage:
     get:
-      operationId: profileUsage
+      operationId: adapterUsage
       tags:
-        - Profile Management
+        - Adapter Management
       summary: Get device data usage.
       description: |-
         # Usage
 
-        Generates a list of data usage values for a profile, at a specified
-        resolution.  Profile usage is a synthetic aggregate of all device usage,
-        so, for example, if a high volume device is moved between profiles, the
-        old profiles usage will decrease by the devices usage, and the new profile
-        of the device will increase its usage by the same amount.
+        Generates a list of data usage values for an adapter, at a specified
+        resolution.  Adapter usage is a measurer of actual traffic through an
+        adapter and may not be the same value as the aggregated device usage on
+        an adapter (It should not be less).  Deletion of devices, or their
+        movement between profiles does not have an impact on the device usage
+        figures.
 
         ## Parameters
-          - **id**: The Unique profile ID.
+          - **id**: The Unique adapter ID.
+          - **resolution**: The resolution of the report.
+          - **start**: The earliest time to report (is rounded down to the
+          beginning of the resolution period the time appears within)
+          - **end**: The latest time to report (is rounded up to the end of the
+          resolution period the time appears within)
+
+          Note, Resolution will always return a full period, so a monthly report
+          will always return full months, and the data will be aligned with the
+          billing period set in the adapter datacap configuration.
+
+        ## Predicted values
+          If a period or range extends into the future, the API will attempt to
+          predict usage, based on previous usage history.  That usage will be
+          reported as a negative value (to distinguish it from a known usage
+          value)  Because a period may include both a known and a predicted
+          component, in those cases, the period will be reported twice.  Firstly
+          with the known usage in the period, and secondly with the predicted
+          usage for that period.  The sum of the two values is the total usage
+          the API guesses will be used in the period. (ie, prediction does not
+          include the known data usage, only the extra predicted usage).
+
+          Prediction will only extend up until the end of the current billing
+          period, after the current billing periods future expiry date, no
+          future predicted usage values will be returned.
 
       parameters:
         - in: query
@@ -59,7 +84,7 @@ paths:
           schema:
             $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
           description: |-
-            The unique profile id.
+            The unique adapter id.
         - in: query
           name: resolution
           schema:
@@ -73,7 +98,7 @@ paths:
           description: |-
             The time resolution to report. Hourly is hourly, Daily is 24 hours.
             Weekly is 7 days and Monthly is the full month aligned to the
-            billing period.  If not specified the resolution is "Hourly".
+            billing period.  If not specified the resolution is "Hourly"
 
         - in: query
           name: start
@@ -95,11 +120,29 @@ paths:
       responses:
         "200":
           description: |-
-            Success, The device data usage is returned.
+            Success, The adapters data usage is returned.
           content:
             application/json:
               schema:
-                $ref: "../../inc/device.oas3.yml#/components/schemas/DeviceUsageHistory"
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Usage-History"
+              example: [
+                {
+                  "timestamp": 1591918680,
+                  "tx": 128974848,
+                  "rx": 268435456
+                },
+                {
+                  "timestamp": 1591918680,
+                  "tx": -64487424,
+                  "rx": -134217728
+                },
+                {
+                  "timestamp": 1589119208,
+                  "tx": 212808499,
+                  "rx": 442918502
+                },
+              ]
+
 
         "400":
           description: |-

@@ -102,7 +102,7 @@ components:
       additionalProperties: false
       properties:
         timestamp:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
         tx:
           $ref: "./simpletypes.oas3.yml#/components/schemas/datausage"
         rx:
@@ -117,28 +117,6 @@ components:
       maxItems: 2160
       items:
         $ref: "#/components/schemas/DeviceUsageRecord"
-
-    #DeviceUsageSummary:
-    #  type: object
-    #  description: |-
-    #    Holds a summary of the devices usage.
-    #    - **hours24**: The last 24 hour aggregated usage.
-    #    - **week**: The last 7 days aggregated usage.
-    #    - **month**: The last 30 days aggregated usage.
-    #    - **quarter**: The last 90 days aggregated usage.
-    #
-    #    **timestamp** in the device usage is the start of the period in question.
-    #  additionalProperties: false
-    #  properties:
-    #    hours24:
-    #      $ref: "#/components/schemas/DeviceUsageRecord"
-    #    week:
-    #      $ref: "#/components/schemas/DeviceUsageRecord"
-    #    month:
-    #      $ref: "#/components/schemas/DeviceUsageRecord"
-    #    quarter:
-    #      $ref: "#/components/schemas/DeviceUsageRecord"
-
 
     Device:
       type: object

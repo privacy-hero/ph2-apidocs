@@ -68,7 +68,8 @@ paths:
             default: "Hourly"
           description: |-
             The time resolution to report. Hourly is hourly, Daily is 24 hours.
-            Weekly is 7 days and Monthly is 30 days.  If not specified the
+            Weekly is 7 days and Monthly is the full month between billing
+            periods (and aligned to those periods).  If not specified the
             resolution is "Hourly"
 
         - in: query

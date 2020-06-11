@@ -70,6 +70,8 @@ paths:
                     - $ref: "#/components/schemas/time-of-day-mins"
                     - $ref: "#/components/schemas/time-delay"
                     - $ref: "#/components/schemas/device-name"
+                    - $ref: "#/components/schemas/datausage-predictable"
+
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -449,6 +451,14 @@ components:
       format: uint64
       minimum: 0
       maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
+      description: |-
+        Data Usage in Bytes.
+
+    datausage-predictable:
+      type: integer
+      format: uint64
+      minimum: -1000000000000000000
+      maximum: 1000000000000000000  # 1 Exabyte maximum data usage.
       description: |-
         Data Usage in Bytes.
 

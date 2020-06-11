@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.16",
+    "version": "0.0.17",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -807,12 +807,42 @@
           "pending": 1591887170
         }
       },
-      "datausage": {
+      "datausage-predictable": {
         "type": "integer",
         "format": "uint64",
-        "minimum": 0,
+        "minimum": -1000000000000000000,
         "maximum": 1000000000000000000,
         "description": "Data Usage in Bytes."
+      },
+      "Adapter-Usage-Record": {
+        "type": "object",
+        "description": "- **timestamp**: The start of the period.\n- **tx**: Number of bytes sent by the adapter in the period. (-ve value\nis predicted)\n- **rx**: Number of bytes received by the adapter in the period. (-ve value\nis predicted)",
+        "required": [
+          "timestamp",
+          "tx",
+          "rx"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "timestamp": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
+          },
+          "tx": {
+            "$ref": "#/components/schemas/datausage-predictable"
+          },
+          "rx": {
+            "$ref": "#/components/schemas/datausage-predictable"
+          }
+        }
+      },
+      "Adapter-Usage-History": {
+        "type": "array",
+        "description": "Holds up to 90 days worth of hourly data usage records for the device.\nThe resolution of the items (daily or hourly) depends on the api call.",
+        "minItems": 1,
+        "maxItems": 2160,
+        "items": {
+          "$ref": "#/components/schemas/Adapter-Usage-Record"
+        }
       },
       "url": {
         "type": "string",
@@ -1337,6 +1367,13 @@
           "$ref": "#/components/schemas/Profile"
         }
       },
+      "datausage": {
+        "type": "integer",
+        "format": "uint64",
+        "minimum": 0,
+        "maximum": 1000000000000000000,
+        "description": "Data Usage in Bytes."
+      },
       "DeviceUsageRecord": {
         "type": "object",
         "description": "- **timestamp**: The start of the period.\n- **tx**: Number of bytes sent by the device in the period.\n- **rx**: Number of bytes received by the device in the period.",
@@ -1348,7 +1385,7 @@
         "additionalProperties": false,
         "properties": {
           "timestamp": {
-            "$ref": "#/components/schemas/epoch-timestamp"
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
           },
           "tx": {
             "$ref": "#/components/schemas/datausage"
@@ -3360,159 +3397,81 @@
         }
       }
     },
-    "/v1/adapter/datausage": {
+    "/v1/adapter/usage": {
       "get": {
-        "operationId": "adapterDataUsage",
+        "operationId": "adapterUsage",
         "tags": [
           "Adapter Management"
         ],
-        "summary": "Get data usage statistics for an adapter.",
-        "description": "# Usage\nGenerates a series of statistics for datausage of an adapter.\nMonthly, for the life of the adapter.\nDaily for the last 31 days.\nDaily Future Projection, for every day from today thru the end of the month.\n\n## Parameters\n  - **id**: the ID of the adapter.  Only adapters associated with a\n  clients account can be returned with this call.  IF the id is valid,\n  but the adapter is not associated with this clients account, then that\n  is treated the same as the adapter ID being invalid.",
+        "summary": "Get device data usage.",
+        "description": "# Usage\n\nGenerates a list of data usage values for an adapter, at a specified\nresolution.  Adapter usage is a measurer of actual traffic through an\nadapter and may not be the same value as the aggregated device usage on\nan adapter (It should not be less).  Deletion of devices, or their\nmovement between profiles does not have an impact on the device usage\nfigures.\n\n## Parameters\n  - **id**: The Unique adapter ID.\n  - **resolution**: The resolution of the report.\n  - **start**: The earliest time to report (is rounded down to the\n  beginning of the resolution period the time appears within)\n  - **end**: The latest time to report (is rounded up to the end of the\n  resolution period the time appears within)\n\n  Note, Resolution will always return a full period, so a monthly report\n  will always return full months, and the data will be aligned with the\n  billing period set in the adapter datacap configuration.\n\n## Predicted values\n  If a period or range extends into the future, the API will attempt to\n  predict usage, based on previous usage history.  That usage will be\n  reported as a negative value (to distinguish it from a known usage\n  value)  Because a period may include both a known and a predicted\n  component, in those cases, the period will be reported twice.  Firstly\n  with the known usage in the period, and secondly with the predicted\n  usage for that period.  The sum of the two values is the total usage\n  the API guesses will be used in the period. (ie, prediction does not\n  include the known data usage, only the extra predicted usage).\n\n  Prediction will only extend up until the end of the current billing\n  period, after the current billing periods future expiry date, no\n  future predicted usage values will be returned.",
         "parameters": [
           {
             "in": "query",
             "name": "id",
+            "required": true,
             "schema": {
               "$ref": "#/components/schemas/uuid"
             },
-            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
-            "description": "The Adapter ID to get data usage statistics for."
+            "description": "The unique adapter id."
+          },
+          {
+            "in": "query",
+            "name": "resolution",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "Hourly",
+                "Daily",
+                "Weekly",
+                "Monthly"
+              ],
+              "default": "Hourly"
+            },
+            "description": "The time resolution to report. Hourly is hourly, Daily is 24 hours.\nWeekly is 7 days and Monthly is the full month aligned to the\nbilling period.  If not specified the resolution is \"Hourly\""
+          },
+          {
+            "in": "query",
+            "name": "start",
+            "schema": {
+              "$ref": "#/components/schemas/epoch-timestamp"
+            },
+            "description": "The start of the reporting window.  If not specified, defaults to\nthe oldest data on record for the device."
+          },
+          {
+            "in": "query",
+            "name": "end",
+            "schema": {
+              "$ref": "#/components/schemas/epoch-timestamp"
+            },
+            "description": "The end of the reporting window.  If not specified, defaults to\nnow."
           }
         ],
         "responses": {
           "200": {
-            "description": "Success, The adapters data usage statistics.\n\n- **monthly** - Data used each month, in reverse order from this\nmonth inclusive.\n- **daily** - Data used each day for the last 32 days, in reverse\norder from this day inclusive.\n- **projection** - The projected future daily usage, from today\nto last day of month (inclusive).",
+            "description": "Success, The adapters data usage is returned.",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "description": "Settings for an individual wifi network",
-                  "required": [
-                    "monthly",
-                    "daily",
-                    "projection"
-                  ],
-                  "additionalProperties": false,
-                  "properties": {
-                    "monthly": {
-                      "type": "object",
-                      "description": "Monthly data usage statistics. Listed in reverse order,\nfor all months held.  ie, the first entry is the\nmonthly total for the current month.  The second entry is\nthe cumulative monthly total for last month, etc.",
-                      "additionalProperties": false,
-                      "properties": {
-                        "tx": {
-                          "type": "array",
-                          "minItems": 1,
-                          "maxItems": 256,
-                          "items": {
-                            "$ref": "#/components/schemas/datausage"
-                          }
-                        },
-                        "rx": {
-                          "type": "array",
-                          "minItems": 1,
-                          "maxItems": 256,
-                          "items": {
-                            "$ref": "#/components/schemas/datausage"
-                          }
-                        }
-                      },
-                      "example": {
-                        "tx": [
-                          320000,
-                          1900000,
-                          1850000,
-                          1940000,
-                          1890000
-                        ],
-                        "rx": [
-                          1151000000,
-                          3782000000,
-                          3591000000,
-                          4276000000,
-                          3264000000
-                        ]
-                      }
-                    },
-                    "daily": {
-                      "type": "object",
-                      "description": "Daily data usage statistics. Listed in reverse order,\nfor the last 32 days.  ie, the first entry is the\ndaily total for today.  The second entry is\nthe cumulative daily total for yesterday, etc.",
-                      "additionalProperties": false,
-                      "properties": {
-                        "tx": {
-                          "type": "array",
-                          "minItems": 1,
-                          "maxItems": 32,
-                          "items": {
-                            "$ref": "#/components/schemas/datausage"
-                          }
-                        },
-                        "rx": {
-                          "type": "array",
-                          "minItems": 1,
-                          "maxItems": 32,
-                          "items": {
-                            "$ref": "#/components/schemas/datausage"
-                          }
-                        }
-                      },
-                      "example": {
-                        "tx": [
-                          2800,
-                          80000,
-                          60000,
-                          40000,
-                          20000
-                        ],
-                        "rx": [
-                          15000000,
-                          14000000,
-                          13000000,
-                          12000000,
-                          11000000
-                        ]
-                      }
-                    },
-                    "projection": {
-                      "type": "object",
-                      "description": "Projected future total daily data usage statistics. Listed in\norder, for everyday from today to the last day of the\nmonth, inclusive.",
-                      "additionalProperties": false,
-                      "properties": {
-                        "tx": {
-                          "type": "array",
-                          "minItems": 1,
-                          "maxItems": 31,
-                          "items": {
-                            "$ref": "#/components/schemas/datausage"
-                          }
-                        },
-                        "rx": {
-                          "type": "array",
-                          "minItems": 1,
-                          "maxItems": 31,
-                          "items": {
-                            "$ref": "#/components/schemas/datausage"
-                          }
-                        }
-                      },
-                      "example": {
-                        "tx": [
-                          120000,
-                          160000,
-                          200000,
-                          240000,
-                          280000
-                        ],
-                        "rx": [
-                          15000000,
-                          16000000,
-                          17000000,
-                          18000000,
-                          19000000
-                        ]
-                      }
-                    }
+                  "$ref": "#/components/schemas/Adapter-Usage-History"
+                },
+                "example": [
+                  {
+                    "timestamp": 1591918680,
+                    "tx": 128974848,
+                    "rx": 268435456
+                  },
+                  {
+                    "timestamp": 1591918680,
+                    "tx": -64487424,
+                    "rx": -134217728
+                  },
+                  {
+                    "timestamp": 1589119208,
+                    "tx": 212808499,
+                    "rx": 442918502
                   }
-                }
+                ]
               }
             }
           },
@@ -4492,7 +4451,7 @@
               ],
               "default": "Hourly"
             },
-            "description": "The time resolution to report. Hourly is hourly, Daily is 24 hours.\nWeekly is 7 days and Monthly is 30 days.  If not specified the\nresolution is \"Hourly\""
+            "description": "The time resolution to report. Hourly is hourly, Daily is 24 hours.\nWeekly is 7 days and Monthly is the full month aligned to the\nbilling period.  If not specified the resolution is \"Hourly\"."
           },
           {
             "in": "query",
@@ -4733,7 +4692,7 @@
               ],
               "default": "Hourly"
             },
-            "description": "The time resolution to report. Hourly is hourly, Daily is 24 hours.\nWeekly is 7 days and Monthly is 30 days.  If not specified the\nresolution is \"Hourly\""
+            "description": "The time resolution to report. Hourly is hourly, Daily is 24 hours.\nWeekly is 7 days and Monthly is the full month between billing\nperiods (and aligned to those periods).  If not specified the\nresolution is \"Hourly\""
           },
           {
             "in": "query",
