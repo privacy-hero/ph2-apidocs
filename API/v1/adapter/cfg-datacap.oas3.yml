@@ -49,7 +49,7 @@ paths:
         ## Parameters
           - **id**: The Adapters ID to set the data cap for.
           - **cap**: The datacap for the adapter.  This is the total number of
-          MB the customer may use in their internet plane before extra charges
+          MB the customer may use in their internet plan before extra charges
           are levied, or speed slows down (depending on the ISP and Plan).  It
           is a combined value, representing both the data TX and RX.
           - **day**: The day in the month when the datacap resets. 1 == data cap
