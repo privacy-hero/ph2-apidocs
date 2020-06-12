@@ -30,8 +30,8 @@ components:
     $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 tags:
-  - name: Device Management
-    description: Operations related to Device Management
+  - name: Profile Management
+    description: Operations related to Profile Management
 
 paths:
   /profile/usage:
@@ -39,7 +39,7 @@ paths:
       operationId: profileUsage
       tags:
         - Profile Management
-      summary: Get device data usage.
+      summary: Get profile data usage.
       description: |-
         # Usage
 
@@ -95,7 +95,7 @@ paths:
       responses:
         "200":
           description: |-
-            Success, The device data usage is returned.
+            Success, The profile data usage is returned.
           content:
             application/json:
               schema:
