@@ -39,7 +39,7 @@ paths:
       operationId: deviceAssign
       tags:
         - Device Management
-      summary: Create a new user profile.
+      summary: Assign a device to a Profile.
       description: |-
         # Usage
 
