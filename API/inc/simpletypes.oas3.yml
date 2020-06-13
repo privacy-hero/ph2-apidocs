@@ -100,6 +100,7 @@ components:
       format: int16
       minimum: 0
       maximum: 90
+      default: 0
       example: 10
       description: |-
         The number of days into the past to provide adapter health records for.

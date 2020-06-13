@@ -51,6 +51,8 @@ paths:
           - **id**: The id of the adapter to retrieve diagnostic health status
           from.
           - **days**: The maximum number of previous days to report. 1 = today.
+          0 = The most recent "WAN" result only. (Note, if this parameter is not
+          present, it defaults to 0.)
 
       parameters:
         - in: query
@@ -69,7 +71,7 @@ paths:
           example: 1
           description: |-
             The number of days of health history to provide. 1 is the most
-            recent day.
+            recent day.  0 = the most recent WAN Record. (Default)
 
       responses:
         "200":
