@@ -27,25 +27,25 @@ paths:
         "200":
           description: dummy response to silence lint errors in this file
           content:
-              application/json:
-                schema:
-                  oneOf:
-                    - $ref: "#/components/schemas/time-state"
-                    - $ref: "#/components/schemas/streams"
-                    - $ref: "#/components/schemas/stream-setting"
-                    - $ref: "#/components/schemas/streams-settings"
-                    - $ref: "#/components/schemas/stream-setting-queued"
-                    - $ref: "#/components/schemas/wifi-settings-change"
-                    - $ref: "#/components/schemas/wifi-settings-change-queued"
-                    - $ref: "#/components/schemas/Adapter-Base"
-                    - $ref: "#/components/schemas/Adapter-Unassociated"
-                    - $ref: "#/components/schemas/Adapter-Unassociated-Array"
-                    - $ref: "#/components/schemas/Adapter-Settings"
-                    - $ref: "#/components/schemas/Adapter"
-                    - $ref: "#/components/schemas/Adapters"
-                    - $ref: "#/components/schemas/Adapter-Diags"
-                    - $ref: "#/components/schemas/Adapter-Diag_Requested-Reply"
-                    - $ref: "#/components/schemas/Adapter-Usage-History"
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/time-state"
+                  - $ref: "#/components/schemas/streams"
+                  - $ref: "#/components/schemas/stream-setting"
+                  - $ref: "#/components/schemas/streams-settings"
+                  - $ref: "#/components/schemas/stream-setting-queued"
+                  - $ref: "#/components/schemas/wifi-settings-change"
+                  - $ref: "#/components/schemas/wifi-settings-change-queued"
+                  - $ref: "#/components/schemas/Adapter-Base"
+                  - $ref: "#/components/schemas/Adapter-Unassociated"
+                  - $ref: "#/components/schemas/Adapter-Unassociated-Array"
+                  - $ref: "#/components/schemas/Adapter-Settings"
+                  - $ref: "#/components/schemas/Adapter"
+                  - $ref: "#/components/schemas/Adapters"
+                  - $ref: "#/components/schemas/Adapter-Diags"
+                  - $ref: "#/components/schemas/Adapter-Diag_Requested-Reply"
+                  - $ref: "#/components/schemas/Adapter-Usage-History"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -63,7 +63,6 @@ tags:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-
   schemas:
     state:
       type: object
@@ -290,7 +289,6 @@ components:
         pending:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
-
     streams-settings:
       type: array
       maxItems: 1000
@@ -378,7 +376,6 @@ components:
             A description of the hardware of the adapter/router.
           example: "Privacy Hero 2 - Router V1"
 
-
     Adapter-Unassociated:
       type: object
       required:
@@ -392,7 +389,6 @@ components:
           $ref: "#/components/schemas/Adapter-Base"
         since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-
 
     Adapter-Unassociated-Array:
       type: array
@@ -473,7 +469,6 @@ components:
                 ip4: "177.11.22.13"
                 ip6: "2001:4860:4860::8844"
 
-
         registered:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
@@ -501,51 +496,64 @@ components:
         $ref: "#/components/schemas/Adapter"
 
     health-results:
-        type: object
-        description: |-
-          Health result Records.
-          * **timestamp** - The timestamp of the time the test was conducted.
-          * **location-server** - The location of the server the test was
-          conducted against.
-          * **provider** - The ISP or Network operator who manages the server.
-          * **distance** - The estimated distance to the test server (in miles).  A
-          Negative number is to be represented as < (less than) this value.  A
-          positive number is an estimated distance.
-          * **latency** - The average latency (ping time) to the test URL.
-          * **latency-completion** - The percentage of latency checks which
-          completed successfully. (whole number, 85 = 85%, 100=100%)
-          * **speed-rx** - Bits per second result of the Receive speed test.
-          * **speed-tx** - Bits per second result of the Transmit speed test.
-          * **connection** - The internet connection the speed test was completed on.
-        additionalProperties: false
-        properties:
-          timestamp:
-            $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
-          location-server:
-            type: string
-            description: The Location/Server the test was conducted against.
-          provider:
-            type: string
-            description: The ISP/Network operator managing the server.
-          distance:
-            type: integer
-            description: |-
-              The estimated distance in miles between the client and
-              the test server.  The distance is expressed as "Less than" this
-              value.  Eg, 50 = <50 miles.
-          latency:
-            $ref: "./simpletypes.oas3.yml#/components/schemas/latency-ms"
-          latency-completion:
-            $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
-          speed-rx:
-            $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
-          speed-tx:
-            $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
-          connection:
-            type: string
-            enum:
-              - "VPN"
-              - "WAN"
+      type: object
+      description: |-
+        Health result Records.
+        * **timestamp** - The timestamp of the time the test was conducted.
+        * **location-server** - The location of the server the test was
+        conducted against.
+        * **provider** - The ISP or Network operator who manages the server.
+        * **distance** - The estimated distance to the test server (in miles).  A
+        Negative number is to be represented as < (less than) this value.  A
+        positive number is an estimated distance.
+        * **latency** - The average latency (ping time) to the test URL.
+        * **latency-completion** - The percentage of latency checks which
+        completed successfully. (whole number, 85 = 85%, 100=100%)
+        * **speed-rx** - Bits per second result of the Receive speed test.
+        * **speed-tx** - Bits per second result of the Transmit speed test.
+        * **connection** - The internet connection the speed test was
+        completed on.
+        * **quality** - This is the system derived synthetic "QUALITY" of the
+        link, which is derived from historical records of the adapters health.
+          * HIGH - The Link meets or exceeds historical precedence.
+          * POOR - The Link is no meeting historical precedence, and normally
+          does better.
+          * LOW - The Link is very low quality, and/or has failed all together.
+      additionalProperties: false
+      properties:
+        timestamp:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        location-server:
+          type: string
+          description: The Location/Server the test was conducted against.
+        provider:
+          type: string
+          description: The ISP/Network operator managing the server.
+        distance:
+          type: integer
+          description: |-
+            The estimated distance in miles between the client and
+            the test server.  The distance is expressed as "Less than" this
+            value.  Eg, 50 = <50 miles.
+        latency:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/latency-ms"
+        latency-completion:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/latency-percentage"
+        speed-rx:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+        speed-tx:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/speed-bps"
+        connection:
+          type: string
+          enum:
+            - "VPN"
+            - "WAN"
+        quality:
+          type: string
+          enum:
+            - "HIGH"
+            - "POOR"
+            - "LOW"
 
     Adapter-Diags:
       type: array
@@ -569,9 +577,6 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
       example:
         pending: 1591887170
-
-
-
 
     Adapter-Settings:
       type: object
@@ -599,7 +604,6 @@ components:
         state: False
         since: 1589978803
         pending: 1590583603
-
 
     Adapter-Services:
       type: object

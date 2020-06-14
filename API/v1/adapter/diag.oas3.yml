@@ -81,52 +81,57 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter-Diags"
-              example:  [
-                          {
-                            "timestamp": 1591886048,
-                            "location-server": "Phuket, Thailand",
-                            "provider": "3BB",
-                            "distance": -50,
-                            "latency": 5,
-                            "latency-completion": 100,
-                            "speed-rx": 185608437,
-                            "speed-tx": 282140344,
-                            "connection": "WAN"
-                          },
-                          {
-                            "timestamp": 1591884008,
-                            "location-server": "Singapore",
-                            "provider": "Singtel",
-                            "distance": 600,
-                            "latency": 36,
-                            "latency-completion": 90,
-                            "speed-rx": 185608437,
-                            "speed-tx": 282140344,
-                            "connection": "VPN"
-                          },
-                          {
-                            "timestamp": 1591799408,
-                            "location-server": "Phuket, Thailand",
-                            "provider": "3BB",
-                            "distance": -50,
-                            "latency": 5,
-                            "latency-completion": 100,
-                            "speed-rx": 185608437,
-                            "speed-tx": 282140344,
-                            "connection": "WAN"
-                          },
-                          {
-                            "timestamp": 1591797608,
-                            "location-server": "Singapore",
-                            "provider": "Singtel",
-                            "distance": 600,
-                            "latency": 36,
-                            "latency-completion": 90,
-                            "speed-rx": 185608437,
-                            "speed-tx": 282140344,
-                            "connection": "VPN"
-                          },
-                        ]
+              example:
+                [
+                  {
+                    "timestamp": 1591886048,
+                    "location-server": "Phuket, Thailand",
+                    "provider": "3BB",
+                    "distance": -50,
+                    "latency": 5,
+                    "latency-completion": 100,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "WAN",
+                    "quality": "HIGH",
+                  },
+                  {
+                    "timestamp": 1591884008,
+                    "location-server": "Singapore",
+                    "provider": "Singtel",
+                    "distance": 600,
+                    "latency": 36,
+                    "latency-completion": 90,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "VPN",
+                    "quality": "HIGH",
+                  },
+                  {
+                    "timestamp": 1591799408,
+                    "location-server": "Phuket, Thailand",
+                    "provider": "3BB",
+                    "distance": -50,
+                    "latency": 5,
+                    "latency-completion": 100,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "WAN",
+                    "quality": "POOR",
+                  },
+                  {
+                    "timestamp": 1591797608,
+                    "location-server": "Singapore",
+                    "provider": "Singtel",
+                    "distance": 600,
+                    "latency": 36,
+                    "latency-completion": 90,
+                    "speed-rx": 185608437,
+                    "speed-tx": 282140344,
+                    "connection": "VPN",
+                    "quality": "LOW",
+                  },
+                ]
         "400":
           description: |-
             General Request processing error.  Possible errors are:
@@ -189,7 +194,6 @@ paths:
                   type: string
                   enum:
                     - "SpeedTest"
-
 
       responses:
         "200":
