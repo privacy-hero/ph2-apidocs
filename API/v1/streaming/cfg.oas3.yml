@@ -68,7 +68,6 @@ paths:
             adapter.
 
             - **id**: the id of the streaming service
-            - **adapter**: The id of the adapter the setting realates to.
             - **country**: the country the streaming service is directed from.
             - **since**: The timestamp when the streaming service last changed.
 
@@ -79,7 +78,6 @@ paths:
               example: [
                 {
                   "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                  "adapter" : "cd73b915-89a4-4971-9d86-bce91786b12a",
                   "country": "US",
                   "since": 1590834650124
                 },

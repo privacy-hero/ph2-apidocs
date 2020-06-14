@@ -267,8 +267,6 @@ components:
       properties:
         id:
           $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
-        adapter:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         country:
           $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
         since:
