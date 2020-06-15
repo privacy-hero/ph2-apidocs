@@ -12,6 +12,14 @@ def cli():
     """Remains empty, just for the command line option parser."""
 
 
+def print_file_linenos(dump):
+    """Print the file in the multi-line dump string with line numbers."""
+    linecount = 1
+    for line in dump.splitlines():
+        print(f"{linecount:4} : {line}")
+        linecount += 1
+
+
 @cli.command()
 def make_docs():
     """Make the AsyncAPI Websocket Documentation."""
@@ -21,10 +29,15 @@ def make_docs():
     print("Checking for valid JSON...")
     # Check we made valid json
     try:
-        json_fmt_api = subprocess.check_output("jsonlint", input=raw_api.encode())
+        json_fmt_api = subprocess.check_output(
+            "jsonlint", input=raw_api.encode(), stderr=subprocess.STDOUT
+        )
     except subprocess.CalledProcessError as ex:
         print("ERROR:")
         print(ex.output.decode())
+        print("------------------------------------------------------")
+        print_file_linenos(raw_api)
+
         exit(1)
 
     with open("./json/asyncapi.json", "w") as text_file:

@@ -4,5 +4,5 @@ from textwrap import dedent
 
 def mls(mlstr):
     """Return a quoted JSON Multiline string."""
-    mlstr = dedent(mlstr).strip().replace("\n", "\\n")
+    mlstr = dedent(mlstr).strip().replace("\n", "\\n").replace('"', '\\"')
     return f'"{mlstr}"'
