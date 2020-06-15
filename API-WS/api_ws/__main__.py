@@ -30,7 +30,7 @@ def make_docs():
     with open("./json/asyncapi.json", "w") as text_file:
         text_file.write(json_fmt_api.decode())
 
-    print("Checking for valid AYSNCAPI...")
+    print("Checking for valid ASYNCAPI...")
     # Check we made a valid asyncapi file
     try:
         subprocess.check_output(["node", "./validate-asyncapi.js"])
@@ -49,8 +49,6 @@ def make_docs():
             [
                 "docker",
                 "run",
-                # "-u",
-                # f"{os.getuid()}:{os.getgid()}",
                 "--rm",
                 "-it",
                 "-v",
