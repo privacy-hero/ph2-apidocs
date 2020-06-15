@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.17"
+  version: "0.0.18"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -107,7 +107,6 @@ tags:
     description: Operations related to Streaming Services and Relocation
 
 paths:
-
   ######### AUTHORIZATION API CALLS #########################
 
   /v1/auth/newcustomer: # Causes a new customer email to be sent
@@ -179,7 +178,6 @@ paths:
   /v1/streaming/cfg:
     $ref: "v1/streaming/cfg.oas3.yml#/paths/~1streaming~1cfg"
 
-
   ######### PROFILE  MANAGEMENT API CALLS ######################
 
   /v1/profile/list:
@@ -222,4 +220,3 @@ paths:
 
   /v1/device/setting:
     $ref: "v1/device/setting.oas3.yml#/paths/~1device~1setting"
-
