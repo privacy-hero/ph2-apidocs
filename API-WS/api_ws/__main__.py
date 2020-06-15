@@ -12,12 +12,19 @@ def cli():
     """Remains empty, just for the command line option parser."""
 
 
-def print_file_linenos(dump):
+def print_file_linenos(dump, lineno, col, msg):
     """Print the file in the multi-line dump string with line numbers."""
     linecount = 1
+    this = "  "
     for line in dump.splitlines():
-        print(f"{linecount:4} : {line}")
+        if linecount == lineno:
+            this = "->"
+        if (linecount >= lineno - 6) and (linecount <= lineno + 6):
+            print(f"{this} {linecount:5} : {line}")
+        if linecount == lineno:
+            print(f'{" "*(col+11)}^ {msg}')
         linecount += 1
+        this = "  "
 
 
 @cli.command()
@@ -30,14 +37,17 @@ def make_docs():
     # Check we made valid json
     try:
         json_fmt_api = subprocess.check_output(
-            "jsonlint", input=raw_api.encode(), stderr=subprocess.STDOUT
+            ["jsonlint", "--compact"], input=raw_api.encode(), stderr=subprocess.STDOUT
         )
     except subprocess.CalledProcessError as ex:
         print("ERROR:")
-        print(ex.output.decode())
+        print(ex.output.decode().strip())
+        err = ex.output.decode().split(" ", 4)
+        lineno = int(err[1][:-1])
+        col = int(err[3][:-1])
+        msg = err[4].strip()
         print("------------------------------------------------------")
-        print_file_linenos(raw_api)
-
+        print_file_linenos(raw_api, lineno, col, msg)
         exit(1)
 
     with open("./json/asyncapi.json", "w") as text_file:
