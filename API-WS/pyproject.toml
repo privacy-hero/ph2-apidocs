@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "API-WS"
+version = "0.1.0"
+description = "Websocket API for Privacy Hero 2"
+authors = ["Steven Johnson <sakurainds@gmail.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.8"
+click = "^7.1.2"
+
+[tool.poetry.dev-dependencies]
+pytest = "^5.2"
+pylint = "^2.5.3"
+pydocstyle = "^5.0.2"
+black = "^19.10b0"
+
+[tool.poetry.scripts]
+ws_api = "api_ws.__main__:cli"
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+

@@ -1,0 +1,49 @@
+{
+  "asyncapi": "2.0.0",
+  "info": {
+    "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
+    "version": "0.1",
+    "description": "The API for Adapter to Backend communication.\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state as required, and is\nalso triggered to perform operations or update its state asynchronously from\nthe backend through the same connection.\n\nBoth directions of the connection use the same basic message format."
+  },
+  "servers": {
+    "development": {
+      "url": "ws2-dev.privacyhero.com",
+      "description": "Development server",
+      "protocol": "wss",
+      "security": [
+        {
+          "user-password": []
+        }
+      ]
+    },
+    "qa": {
+      "url": "ws2-qa.privacyhero.com",
+      "description": "QA Test server",
+      "protocol": "wss",
+      "security": [
+        {
+          "user-password": []
+        }
+      ]
+    },
+    "production": {
+      "url": "wss://ws2.privacyhero.com",
+      "description": "Production server",
+      "protocol": "wss",
+      "security": [
+        {
+          "user-password": []
+        }
+      ]
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "user-password": {
+        "type": "userPassword",
+        "description": "The user password follows the form <Adapter MAC>:<Adapter Secret Hash>\n\n- **Adapter MAC** is the hardware Mac address of the Adapter and it must\nbe the same as the mac used to register the adapter in production.\n- **Adapter Secret Hash** is a Base64-URL encoded SHA256 hash of the\nunique id contained within the cpu or chips of the adapter."
+      }
+    }
+  },
+  "channels": {}
+}

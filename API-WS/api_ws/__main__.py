@@ -1,0 +1,75 @@
+"""Websocket API Generation Script."""
+import subprocess
+import os
+
+import click
+
+from .api import ws_api
+
+
+@click.group()
+def cli():
+    """Remains empty, just for the command line option parser."""
+
+
+@cli.command()
+def make_docs():
+    """Make the AsyncAPI Websocket Documentation."""
+    print("Generating API JSON File...")
+    raw_api = ws_api()
+
+    print("Checking for valid JSON...")
+    # Check we made valid json
+    try:
+        json_fmt_api = subprocess.check_output("jsonlint", input=raw_api.encode())
+    except subprocess.CalledProcessError as ex:
+        print("ERROR:")
+        print(ex.output.decode())
+        exit(1)
+
+    with open("./json/asyncapi.json", "w") as text_file:
+        text_file.write(json_fmt_api.decode())
+
+    print("Checking for valid AYSNCAPI...")
+    # Check we made a valid asyncapi file
+    try:
+        subprocess.check_output(["node", "./validate-asyncapi.js"])
+    except subprocess.CalledProcessError as ex:
+        print("ERROR:")
+        print(ex.output.decode())
+        exit(1)
+
+    print("Generating HTML...")
+    # Generate HTML Version - use docker because native ag has issues.
+    input_file = os.path.abspath("json/asyncapi.json")
+    output_dir = os.path.abspath("html")
+
+    try:
+        subprocess.check_output(
+            [
+                "docker",
+                "run",
+                # "-u",
+                # f"{os.getuid()}:{os.getgid()}",
+                "--rm",
+                "-it",
+                "-v",
+                f"{input_file}:/app/asyncapi.json",
+                "-v",
+                f"{output_dir}:/app/output",
+                "asyncapi/generator",
+                "/app/asyncapi.json",
+                "@asyncapi/html-template",
+                "-o",
+                "/app/output",
+                "--force-write",
+            ]
+        )
+    except subprocess.CalledProcessError as ex:
+        print("ERROR:")
+        print(ex.output.decode())
+        exit(1)
+
+
+if __name__ == "__main__":
+    cli()
