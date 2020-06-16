@@ -14,21 +14,44 @@ NOTE: Literal Json { and }  must be represented as {{ and }} inside the f string
 from .util import mls
 from .common_channel import common_channel
 
+from .aws_errors import aws_errors_channel
+
 from .backend_channel import backend_channel
 from .adapter_channel import adapter_channel
+
+from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
 VERSION = "0.0.3"
 DESC = mls(
     """
-    The API for Adapter to Backend communication.
+    # The API for Adapter to Backend communication.
+
+    ## Overview
 
     All communication is carried out through a single websocket connection per
-    adapter.  The Adapter connects and sends updates to state as required, and is
-    also triggered to perform operations or update its state asynchronously from
-    the backend through the same connection.
+    adapter.  The Adapter connects and sends updates to state or requests for
+    configuration as required, and is also triggered to perform operations or
+    update its state asynchronously from the backend through the same connection.
 
     Both directions of the connection use the same basic message format.
+
+    ## Operations
+
+    The API is broken down by operation, and message type/source.
+
+    ### Documentation Convertions:
+
+    * **SUB** [Subscribe] messages are messages which are sent to the Backend from the
+    Adapter.
+    * **PUB** [Publish] messages are messages which are sent to the Adapter from the
+    Backend.
+
+    The API does not have any inherent Publish/Subscribe semantics.  This is a
+    documentation convention only.
+
+    All messages to/from the adapter have a common format, which are documented in the
+    *Basic Message Forms*. set of operations.
     """
 )
 
@@ -103,9 +126,10 @@ def components():
 def channels():
     """Message Channels."""
     return f"""
-        "COMMON": {{ {common_channel()} }},
-        "BACKEND": {{ {backend_channel()} }},
-        "ADAPTER": {{ {adapter_channel()} }}
+        "COMMON":     {{ {common_channel()} }},
+        "AWS_ERRORS": {{ {aws_errors_channel()} }},
+        "BACKEND":    {{ {backend_channel()} }},
+        "ADAPTER":    {{ {adapter_channel()} }}
     """
 
 
@@ -117,6 +141,7 @@ def ws_api():
         "info": {{ {info()} }},
         "servers": {{ {servers()} }},
         "components": {{ {components()} }},
-        "channels": {{ {channels()} }}
+        "channels": {{ {channels()} }},
+        {TAGS.field()}
     }}
     """

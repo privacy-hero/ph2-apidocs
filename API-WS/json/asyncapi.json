@@ -4,7 +4,7 @@
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
     "version": "0.0.3",
-    "description": "The API for Adapter to Backend communication.\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state as required, and is\nalso triggered to perform operations or update its state asynchronously from\nthe backend through the same connection.\n\nBoth directions of the connection use the same basic message format."
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Convertions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations."
   },
   "servers": {
     "development": {
@@ -49,9 +49,9 @@
   "channels": {
     "COMMON": {
       "description": "The common channel is not an actual channel.  It defines the basic message\nstructure upon which all other messages are based.",
-      "publish": {
-        "summary": "Basic Message Forms.",
-        "description": "All messages are sent by each end of the websocket as required.\n\n*Subscribe/Sub* messages are requests for information which do not update state.\nThey do not establish an ongoing \"subscription\" to changes to said state, but\nsimply cause the information requested to be sent once.\n\n*Publish/Pub* messages are either synchronous replies to Subscribe messages, OR\nthey are operational messages which can effect state. (Such as turning on WiFi)\n\nThere is no strict Subscribe/Publish semantic it is documentation convention\nONLY. The websocket acts as two unidirectional message pipes and Sub/Pub\nmessages are formatted, sent, received and treated identically and without\ndistinction.",
+      "subscribe": {
+        "summary": "Basic Message Forms",
+        "description": "All messages are sent by each end of the websocket as required.  These message\nformats are equally valid for transmission from the adapter [SUB] as well as\ntransmission by the back end [PUB].\n\nThere is no strict Subscribe/Publish semantic it is documentation convention\nONLY. The websocket acts as two unidirectional message pipes and Sub/Pub\nmessages are formatted, sent, received and treated identically and without\ndistinction.",
         "message": {
           "oneOf": [
             {
@@ -59,6 +59,12 @@
               "title": "Base Message",
               "summary": "Standard Message Base Format",
               "description": "All Privacy Hero 2 system messages have the following standard form.",
+              "tags": [
+                {
+                  "name": "Message Formats",
+                  "description": "Generic Message Formats"
+                }
+              ],
               "payload": {
                 "type": "object",
                 "properties": {
@@ -86,6 +92,12 @@
               "title": "Multi Message",
               "summary": "Multiple Message Packet",
               "description": "All Privacy Hero 2 system messages may be bundled into a single multi-message.\nThe multi message is a standard message, which hold an array of individual\nmessages.  The individual messages when received will be treated as if they\nwere received sequentially and independently in the order they are listed.\n\nThe purpose of a Multi-Message is to cluster message processing for efficiency.",
+              "tags": [
+                {
+                  "name": "Message Formats",
+                  "description": "Generic Message Formats"
+                }
+              ],
               "payload": {
                 "type": "object",
                 "properties": {
@@ -141,14 +153,132 @@
               }
             }
           ]
-        }
+        },
+        "tags": [
+          {
+            "name": "Message Formats",
+            "description": "Generic Message Formats"
+          }
+        ]
+      },
+      "publish": {
+        "summary": "Basic Message Forms",
+        "description": "All messages are sent by each end of the websocket as required.  These message\nformats are equally valid for transmission from the adapter [SUB] as well as\ntransmission by the back end [PUB].\n\nThere is no strict Subscribe/Publish semantic it is documentation convention\nONLY. The websocket acts as two unidirectional message pipes and Sub/Pub\nmessages are formatted, sent, received and treated identically and without\ndistinction.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "BaseMsg",
+              "title": "Base Message",
+              "summary": "Standard Message Base Format",
+              "description": "All Privacy Hero 2 system messages have the following standard form.",
+              "tags": [
+                {
+                  "name": "Message Formats",
+                  "description": "Generic Message Formats"
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "This is the name of the message.  The operation that is to be performed\nand the further fields contained within the message can be identified\nbased solely on this message type string."
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "Every adapter/backend generated message contains a unique **tstamp**\nfield.  This field defines both the time of a particular event having\nocurred, and the pairing of messages in the case of events which are\ntriggered as a result of commands from the backend.\n\nAn Adapter will always return the tstamp of any message it is\nreplying to.  IF the Adapter is generating an event asynchronously\nand not as a result of a direct comment, the tstamp contains the time\nof the event as generated by the adapter.\n\nThe Field is an integer and is the number of **milliseconds** since\nmidnight 1970, UTC.  Otherwise known as the Unix Epoch."
+                  }
+                },
+                "example": {
+                  "message": "example",
+                  "tstamp": 1592217870123
+                },
+                "required": [
+                  "message"
+                ]
+              }
+            },
+            {
+              "name": "MultiMsg",
+              "title": "Multi Message",
+              "summary": "Multiple Message Packet",
+              "description": "All Privacy Hero 2 system messages may be bundled into a single multi-message.\nThe multi message is a standard message, which hold an array of individual\nmessages.  The individual messages when received will be treated as if they\nwere received sequentially and independently in the order they are listed.\n\nThe purpose of a Multi-Message is to cluster message processing for efficiency.",
+              "tags": [
+                {
+                  "name": "Message Formats",
+                  "description": "Generic Message Formats"
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Multiple Message Packet.",
+                    "const": "multi"
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time the message was generated, unrelated to the bundled messages\ntimestamps."
+                  },
+                  "msgs": {
+                    "type": "array",
+                    "description": "An array of complete and individual messages as defined elsewhere in\nthis specification.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "description": "This is the name of the message.  The operation that is to be performed\nand the further fields contained within the message can be identified\nbased solely on this message type string."
+                        },
+                        "tstamp": {
+                          "type": "int",
+                          "format": "int64",
+                          "description": "Every adapter/backend generated message contains a unique **tstamp**\nfield.  This field defines both the time of a particular event having\nocurred, and the pairing of messages in the case of events which are\ntriggered as a result of commands from the backend.\n\nAn Adapter will always return the tstamp of any message it is\nreplying to.  IF the Adapter is generating an event asynchronously\nand not as a result of a direct comment, the tstamp contains the time\nof the event as generated by the adapter.\n\nThe Field is an integer and is the number of **milliseconds** since\nmidnight 1970, UTC.  Otherwise known as the Unix Epoch."
+                        }
+                      },
+                      "example": {
+                        "message": "example",
+                        "tstamp": 1592217870123
+                      },
+                      "required": [
+                        "message"
+                      ]
+                    },
+                    "minItems": 1,
+                    "maxItems": 32
+                  }
+                },
+                "example": {
+                  "message": "multi",
+                  "tstamp": 1592217870123,
+                  "msgs": []
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "msgs"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Message Formats",
+            "description": "Generic Message Formats"
+          }
+        ]
       }
     },
-    "BACKEND": {
-      "description": "This is the message channel from the backend to the adapter.  The backend will\ntypically contact the adapter in reply to a request from the adapter itself,\nor a request from the client interacting with the backend.\n\nMost communication from the backend operates as a state machine.  The backend\nwill set a tstamp in a message and send the message to the adapter, once the\nadapter has executed the operation, it will reply with a state change that\nreflects the tstamp in the message which triggered it.",
+    "AWS_ERRORS": {
+      "description": "These are AWS Generated error messages from the backend to the adapter.\n\nThey are generated by the AWS infrastructure, and not the backend code.\n\nIF the adapter receives one, it should assume the link is fatally compromised\nand internally record the error.  It should then drop the websocket connection\nand attempt to reconnect to the backed.  After a successful reconnection, the\nerror should be logged to the AWS backend.",
       "publish": {
-        "summary": "Backend Messages.",
-        "description": "Message from the Backend to the Adapter.",
+        "summary": "AWS Error Messages",
+        "description": "AWS Error Message from the Backend to the Adapter.",
         "message": {
           "oneOf": [
             {
@@ -158,7 +288,8 @@
               "description": "This message is generated directly by AWS, and does not contain a tstamp.\n\nThis messages indicates something fatal has ocurred in the server.  Upon\nreceipt, the adapter should record the fact it ocurred, and try and reconnect\nto the backend, if a successful reconnection occurs, the adapter should log\nthe internal server error to the backend, and then continue.",
               "tags": [
                 {
-                  "name": "AWS Errors"
+                  "name": "AWS Errors",
+                  "description": "Errors Generated by AWS and sent to the adapter."
                 }
               ],
               "payload": {
@@ -198,7 +329,8 @@
               "description": "This message is generated directly by AWS, and does not contain a tstamp.\n\nThis messages indicates something fatal has ocurred in the server.  Upon\nreceipt, the adapter should record the fact it ocurred, and try and reconnect\nto the backend, if a successful reconnection occurs, the adapter should log\nthe internal server error to the backend, and then continue.",
               "tags": [
                 {
-                  "name": "AWS Errors"
+                  "name": "AWS Errors",
+                  "description": "Errors Generated by AWS and sent to the adapter."
                 }
               ],
               "payload": {
@@ -226,7 +358,108 @@
               }
             }
           ]
-        }
+        },
+        "tags": [
+          {
+            "name": "AWS Errors",
+            "description": "Errors Generated by AWS and sent to the adapter."
+          }
+        ]
+      }
+    },
+    "BACKEND": {
+      "description": "This is the message channel from the backend to the adapter.  The backend will\ntypically contact the adapter in reply to a request from the adapter itself,\nor a request from the client interacting with the backend.\n\nMost communication from the backend operates as a state machine.  The backend\nwill set a tstamp in a message and send the message to the adapter, once the\nadapter has executed the operation, it will reply with a state change that\nreflects the tstamp in the message which triggered it.",
+      "publish": {
+        "summary": "Backend Messages.",
+        "description": "Message from the Backend to the Adapter.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "AWSInternalServerError",
+              "title": "AWS Internal Server Error",
+              "summary": "AWS Internal Server Error",
+              "description": "This message is generated directly by AWS, and does not contain a tstamp.\n\nThis messages indicates something fatal has ocurred in the server.  Upon\nreceipt, the adapter should record the fact it ocurred, and try and reconnect\nto the backend, if a successful reconnection occurs, the adapter should log\nthe internal server error to the backend, and then continue.",
+              "tags": [
+                {
+                  "name": "AWS Errors",
+                  "description": "Errors Generated by AWS and sent to the adapter."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "An internal server error, AWS Generated",
+                    "const": "Internal server error"
+                  },
+                  "connectionId": {
+                    "type": "string",
+                    "description": "The AWS Websocket Connection ID."
+                  },
+                  "requestId": {
+                    "type": "string",
+                    "description": "The ID of the request which caused the error."
+                  }
+                },
+                "example": {
+                  "message": "Internal server error",
+                  "connectionId": "d2Vic29ja2V0IElE",
+                  "requestId": "cmVxdWVzdCBJRA"
+                },
+                "required": [
+                  "message",
+                  "connectionId",
+                  "requestId"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "AWSServerError",
+              "title": "AWS Server Error",
+              "summary": "AWS Server Error",
+              "description": "This message is generated directly by AWS, and does not contain a tstamp.\n\nThis messages indicates something fatal has ocurred in the server.  Upon\nreceipt, the adapter should record the fact it ocurred, and try and reconnect\nto the backend, if a successful reconnection occurs, the adapter should log\nthe internal server error to the backend, and then continue.",
+              "tags": [
+                {
+                  "name": "AWS Errors",
+                  "description": "Errors Generated by AWS and sent to the adapter."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "A general server error, AWS Generated",
+                    "const": "Error"
+                  },
+                  "error": {
+                    "type": "string",
+                    "description": "The description of the Error."
+                  }
+                },
+                "example": {
+                  "message": "Error",
+                  "error": "An error ocurred."
+                },
+                "required": [
+                  "message",
+                  "error"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "AWS Errors"
+          },
+          {
+            "name": "mothership"
+          }
+        ]
       }
     },
     "ADAPTER": {
@@ -254,5 +487,15 @@
         }
       }
     }
-  }
+  },
+  "tags": [
+    {
+      "name": "Message Formats",
+      "description": "Generic Message Formats"
+    },
+    {
+      "name": "AWS Errors",
+      "description": "Errors Generated by AWS and sent to the adapter."
+    }
+  ]
 }

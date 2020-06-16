@@ -84,6 +84,8 @@ def make_docs():
                 "-o",
                 "/app/output",
                 "--force-write",
+                "-p",
+                "sidebarOrganization=byTags",
             ]
         )
     except subprocess.CalledProcessError as ex:
