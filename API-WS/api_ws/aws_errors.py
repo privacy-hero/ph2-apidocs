@@ -5,7 +5,7 @@ Privacy Hero 2 - Websocket API - Common Channel Definition.
 """
 
 from .util import mls
-from .schemas import message_type_field, channel
+from .schemas import Field, channel
 from .tags import TAGS
 
 
@@ -31,7 +31,7 @@ def aws_internal_server_error():
         "payload" : {{
             "type" : "object",
             "properties" : {{
-                {message_type_field("Internal server error",
+                {Field.message_type("Internal server error",
                                     "An internal server error, AWS Generated")},
                 "connectionId" : {{
                     "type" : "string",
@@ -79,7 +79,7 @@ def aws_server_error():
         "payload" : {{
             "type" : "object",
             "properties" : {{
-                {message_type_field("Error",
+                {Field.message_type("Error",
                                     "A general server error, AWS Generated")},
                 "error" : {{
                     "type" : "string",
@@ -122,18 +122,3 @@ def aws_errors_channel():
         pub_msgs=publish_msgs,
         tags=TAGS.AWS_ERRORS,
     )
-
-    return f"""
-        "description": {mls(description)},
-        "publish": {{
-            "summary" : "AWS Error Messages.",
-            "description": "AWS Error Message from the Backend to the Adapter.",
-            "message" : {{
-                "oneOf" : [
-                   {{ {aws_internal_server_error()} }},
-                   {{ {aws_server_error()} }}
-                ]
-            }},
-            { TAGS.field(TAGS.AWS_ERRORS) }
-        }}
-    """

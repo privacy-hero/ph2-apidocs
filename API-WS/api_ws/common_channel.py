@@ -55,6 +55,22 @@ def multi_message():
         were received sequentially and independently in the order they are listed.
 
         The purpose of a Multi-Message is to cluster message processing for efficiency.
+
+        ## Notes regarding adapter bundling implementation.
+
+        The Backend is charged in 100ms units of execution.  It also takes time for the
+        backend to startup and begin processing.  Therefore, it is preferable, unless
+        the message is urgent, that all messages are bundled in the adapter in a minimum
+        of 200ms blocks.  If an urgent message must be sent, it should be added to
+        the current bundle and the entire bundle be sent immediately.
+
+        The maximum single multi-message size must not exceed 32KB.  If adding a message
+        to the bundle would cause the message size to exceed 32KB, the bundle should be
+        sent and the message which would have exceeded the size is added to the next
+        bundle.  IF a message is defined which does exceed 32KB, it should not be
+        bundled, but MUST be sent as a discreet message.  In this case, the maximum
+        message size must never exceed 128KB.
+
         """
 
     tstamp_desc = """

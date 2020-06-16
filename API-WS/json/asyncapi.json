@@ -62,7 +62,7 @@
               "tags": [
                 {
                   "name": "Message Formats",
-                  "description": "Generic Message Formats"
+                  "description": "Generic Message Formats."
                 }
               ],
               "payload": {
@@ -91,11 +91,11 @@
               "name": "MultiMsg",
               "title": "Multi Message",
               "summary": "Multiple Message Packet",
-              "description": "All Privacy Hero 2 system messages may be bundled into a single multi-message.\nThe multi message is a standard message, which hold an array of individual\nmessages.  The individual messages when received will be treated as if they\nwere received sequentially and independently in the order they are listed.\n\nThe purpose of a Multi-Message is to cluster message processing for efficiency.",
+              "description": "All Privacy Hero 2 system messages may be bundled into a single multi-message.\nThe multi message is a standard message, which hold an array of individual\nmessages.  The individual messages when received will be treated as if they\nwere received sequentially and independently in the order they are listed.\n\nThe purpose of a Multi-Message is to cluster message processing for efficiency.\n\n## Notes regarding adapter bundling implementation.\n\nThe Backend is charged in 100ms units of execution.  It also takes time for the\nbackend to startup and begin processing.  Therefore, it is preferable, unless\nthe message is urgent, that all messages are bundled in the adapter in a minimum\nof 200ms blocks.  If an urgent message must be sent, it should be added to\nthe current bundle and the entire bundle be sent immediately.\n\nThe maximum single multi-message size must not exceed 32KB.  If adding a message\nto the bundle would cause the message size to exceed 32KB, the bundle should be\nsent and the message which would have exceeded the size is added to the next\nbundle.  IF a message is defined which does exceed 32KB, it should not be\nbundled, but MUST be sent as a discreet message.  In this case, the maximum\nmessage size must never exceed 128KB.",
               "tags": [
                 {
                   "name": "Message Formats",
-                  "description": "Generic Message Formats"
+                  "description": "Generic Message Formats."
                 }
               ],
               "payload": {
@@ -157,7 +157,7 @@
         "tags": [
           {
             "name": "Message Formats",
-            "description": "Generic Message Formats"
+            "description": "Generic Message Formats."
           }
         ]
       },
@@ -174,7 +174,7 @@
               "tags": [
                 {
                   "name": "Message Formats",
-                  "description": "Generic Message Formats"
+                  "description": "Generic Message Formats."
                 }
               ],
               "payload": {
@@ -203,11 +203,11 @@
               "name": "MultiMsg",
               "title": "Multi Message",
               "summary": "Multiple Message Packet",
-              "description": "All Privacy Hero 2 system messages may be bundled into a single multi-message.\nThe multi message is a standard message, which hold an array of individual\nmessages.  The individual messages when received will be treated as if they\nwere received sequentially and independently in the order they are listed.\n\nThe purpose of a Multi-Message is to cluster message processing for efficiency.",
+              "description": "All Privacy Hero 2 system messages may be bundled into a single multi-message.\nThe multi message is a standard message, which hold an array of individual\nmessages.  The individual messages when received will be treated as if they\nwere received sequentially and independently in the order they are listed.\n\nThe purpose of a Multi-Message is to cluster message processing for efficiency.\n\n## Notes regarding adapter bundling implementation.\n\nThe Backend is charged in 100ms units of execution.  It also takes time for the\nbackend to startup and begin processing.  Therefore, it is preferable, unless\nthe message is urgent, that all messages are bundled in the adapter in a minimum\nof 200ms blocks.  If an urgent message must be sent, it should be added to\nthe current bundle and the entire bundle be sent immediately.\n\nThe maximum single multi-message size must not exceed 32KB.  If adding a message\nto the bundle would cause the message size to exceed 32KB, the bundle should be\nsent and the message which would have exceeded the size is added to the next\nbundle.  IF a message is defined which does exceed 32KB, it should not be\nbundled, but MUST be sent as a discreet message.  In this case, the maximum\nmessage size must never exceed 128KB.",
               "tags": [
                 {
                   "name": "Message Formats",
-                  "description": "Generic Message Formats"
+                  "description": "Generic Message Formats."
                 }
               ],
               "payload": {
@@ -269,7 +269,7 @@
         "tags": [
           {
             "name": "Message Formats",
-            "description": "Generic Message Formats"
+            "description": "Generic Message Formats."
           }
         ]
       }
@@ -367,22 +367,22 @@
         ]
       }
     },
-    "BACKEND": {
-      "description": "This is the message channel from the backend to the adapter.  The backend will\ntypically contact the adapter in reply to a request from the adapter itself,\nor a request from the client interacting with the backend.\n\nMost communication from the backend operates as a state machine.  The backend\nwill set a tstamp in a message and send the message to the adapter, once the\nadapter has executed the operation, it will reply with a state change that\nreflects the tstamp in the message which triggered it.",
-      "publish": {
-        "summary": "Backend Messages.",
-        "description": "Message from the Backend to the Adapter.",
+    "ADAPTER_DIAGS": {
+      "description": "These are messages related to the diagnostic processes of the adapter.\n\nDiagnostics are performed as required by the adapter, and also as a result of\nexplicit command from the backend.\n\nIf the adapter requested a diagnostic check, the tstamp in the reply MUST match\nthe tstamp in the request.",
+      "subscribe": {
+        "summary": "Adapter Diagnostics",
+        "description": "Diagnostic reports from the Adapter.",
         "message": {
           "oneOf": [
             {
-              "name": "AWSInternalServerError",
-              "title": "AWS Internal Server Error",
-              "summary": "AWS Internal Server Error",
-              "description": "This message is generated directly by AWS, and does not contain a tstamp.\n\nThis messages indicates something fatal has ocurred in the server.  Upon\nreceipt, the adapter should record the fact it ocurred, and try and reconnect\nto the backend, if a successful reconnection occurs, the adapter should log\nthe internal server error to the backend, and then continue.",
+              "name": "LogMsg",
+              "title": "Log Message",
+              "summary": "Log Message to Backend",
+              "description": "This message causes the backend to log error and general diagnostic messages\nfrom the adapter to the system logs.  It can be sent anytime the adapter\nwishes to log a message.",
               "tags": [
                 {
-                  "name": "AWS Errors",
-                  "description": "Errors Generated by AWS and sent to the adapter."
+                  "name": "Adapter Diagnostics",
+                  "description": "Adapter Diagnostic Messages."
                 }
               ],
               "payload": {
@@ -390,62 +390,40 @@
                 "properties": {
                   "message": {
                     "type": "string",
-                    "description": "An internal server error, AWS Generated",
-                    "const": "Internal server error"
+                    "description": "Log Message to Backend",
+                    "const": "log"
                   },
-                  "connectionId": {
-                    "type": "string",
-                    "description": "The AWS Websocket Connection ID."
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time the log message was generated inside the adapter. (According to the\nadapters internal clock.)"
                   },
-                  "requestId": {
+                  "level": {
                     "type": "string",
-                    "description": "The ID of the request which caused the error."
+                    "description": "The level of the log messages.",
+                    "enum": [
+                      "ERROR",
+                      "WARNING",
+                      "DEBUG"
+                    ]
+                  },
+                  "log": {
+                    "type": "string",
+                    "description": "The message to be logged by the Adapter.",
+                    "minLength": 1
                   }
                 },
                 "example": {
-                  "message": "Internal server error",
-                  "connectionId": "d2Vic29ja2V0IElE",
-                  "requestId": "cmVxdWVzdCBJRA"
+                  "message": "log",
+                  "tstamp": 1592217870123,
+                  "level": "ERROR",
+                  "log": "An Error ocurred inside the Adapter"
                 },
                 "required": [
                   "message",
-                  "connectionId",
-                  "requestId"
-                ],
-                "additionalProperties": false
-              }
-            },
-            {
-              "name": "AWSServerError",
-              "title": "AWS Server Error",
-              "summary": "AWS Server Error",
-              "description": "This message is generated directly by AWS, and does not contain a tstamp.\n\nThis messages indicates something fatal has ocurred in the server.  Upon\nreceipt, the adapter should record the fact it ocurred, and try and reconnect\nto the backend, if a successful reconnection occurs, the adapter should log\nthe internal server error to the backend, and then continue.",
-              "tags": [
-                {
-                  "name": "AWS Errors",
-                  "description": "Errors Generated by AWS and sent to the adapter."
-                }
-              ],
-              "payload": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "A general server error, AWS Generated",
-                    "const": "Error"
-                  },
-                  "error": {
-                    "type": "string",
-                    "description": "The description of the Error."
-                  }
-                },
-                "example": {
-                  "message": "Error",
-                  "error": "An error ocurred."
-                },
-                "required": [
-                  "message",
-                  "error"
+                  "tstamp",
+                  "level",
+                  "log"
                 ],
                 "additionalProperties": false
               }
@@ -454,48 +432,216 @@
         },
         "tags": [
           {
-            "name": "AWS Errors"
-          },
-          {
-            "name": "mothership"
+            "name": "Adapter Diagnostics",
+            "description": "Adapter Diagnostic Messages."
           }
         ]
       }
     },
-    "ADAPTER": {
-      "description": "The common channel defines the messages that are either templates of all other\nmessages or common to both the backend and the adapter channels.",
-      "publish": {
-        "summary": "Adapter Messages.",
-        "description": "Message from the Adapter to the Backend.",
+    "SPEEDTEST": {
+      "description": "These are messages related to the diagnostic processes of the adapter.\n\nDiagnostics are performed as required by the adapter, and also as a result of\nexplicit command from the backend.\n\nIf the adapter requested a diagnostic check, the tstamp in the reply MUST match\nthe tstamp in the request.",
+      "subscribe": {
+        "summary": "Speed Test",
+        "description": "Speedtest Reports from the Adapter.",
         "message": {
           "oneOf": [
             {
-              "name": "BaseRouterMsg",
-              "title": "Base Router Message",
-              "summary": "Base Router Message Summary",
-              "description": "Basic Message Template Description.",
+              "name": "SpeedTest",
+              "title": "Speed Test",
+              "summary": "Report of Speed Test Results",
+              "description": "This message causes the latest speedtest result to be logged for the\nAdapter in the backend.",
+              "tags": [
+                {
+                  "name": "Adapter Diagnostics",
+                  "description": "Adapter Diagnostic Messages."
+                }
+              ],
               "payload": {
                 "type": "object",
                 "properties": {
                   "message": {
-                    "type": "string"
+                    "type": "string",
+                    "description": "Report of Speed Test Results",
+                    "const": "speedtest"
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "IF the speedtest was performed as a result of a automatic or scheduled test\nthe timestamp is the time the speed test started on the adapter.\n\nIF the speedtest was conducted as a result of a command from the backend,\nthe tstamp is the tstamp from the backend request to commence the speedtest."
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "The URL of the website the speedtest was conducted against."
+                  },
+                  "location": {
+                    "type": "string",
+                    "description": "The String description of the speedtest server location"
+                  },
+                  "provider": {
+                    "type": "string",
+                    "description": "The name of the ISP/Network operator managing the speedtest server."
+                  },
+                  "distance": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The distance is the approximate distance from the adapter to the speedtest\nserver.  The distance can be either a value that is estimated to be LESS THAN\nthe distance stated, or CLOSE TO the distance stated.\n\n* -VE = The estimate is a LESS THAN this estimate.\n* +VE = The estimate is a CLOSE TO this estimate.\n\nThe distance is measured in whole MILES."
+                  },
+                  "ping": {
+                    "type": "array",
+                    "description": "The ping result is an array with a minimum of 10 entries, that represent\nthe results from at least 10 consecutive pings to the server.\nThe ping result is a positive integer which represents the number of\nwhole milliseconds (rounded up) it took for the ping to the server to\nbe replied to.\n\nIF a ping fails, the position in the array where the result would be is set\nto null.\n\nThere can be more than 10 results, but there can not be less than 10.",
+                    "items": {
+                      "type": "int",
+                      "format": "uint64",
+                      "description": "number of milliseconds the ping took to reply, or null if no reply."
+                    },
+                    "minItems": 10
+                  },
+                  "rx": {
+                    "type": "int",
+                    "format": "Result in bits per second of the receive speed test.",
+                    "description": "A INT"
+                  },
+                  "tx": {
+                    "type": "int",
+                    "format": "Result in bits per second of the transmit speed test.",
+                    "description": "A INT"
+                  },
+                  "connection": {
+                    "type": "string",
+                    "description": "The connection which was tested.\n\n* **WAN** is the native WAN Interface of the Adapter.\n* **VPN** is the through the VPN tunnel.",
+                    "enum": [
+                      "WAN",
+                      "VPN"
+                    ]
                   }
-                }
+                },
+                "example": {
+                  "message": "speedtest",
+                  "tstamp": 1592217870123,
+                  "url": "http://www.3bb.com/speedtest",
+                  "location": "Phuket, Thailand",
+                  "provider": "3BB",
+                  "distance": -50,
+                  "ping": [
+                    10,
+                    null,
+                    7,
+                    9,
+                    2,
+                    5,
+                    10,
+                    12,
+                    5,
+                    3
+                  ],
+                  "rx": 185608437,
+                  "tx": 282140344,
+                  "connection": "WAN"
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "url",
+                  "location",
+                  "provider",
+                  "distance",
+                  "ping",
+                  "rx",
+                  "tx",
+                  "connection"
+                ],
+                "additionalProperties": false
               }
             }
           ]
-        }
+        },
+        "tags": [
+          {
+            "name": "Adapter Diagnostics",
+            "description": "Adapter Diagnostic Messages."
+          }
+        ]
+      },
+      "publish": {
+        "summary": "Speed Test",
+        "description": "Commands to instigate speedtest checks.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "RunSpeedTest",
+              "title": "Run Speed Test",
+              "summary": "Run a Speed Test and Report the Results",
+              "description": "This message causes the adapter that receives it to perfrom ping and speedtests\nand return the results in a \"speedtest\" message.",
+              "tags": [
+                {
+                  "name": "Adapter Diagnostics",
+                  "description": "Adapter Diagnostic Messages."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Run a Speed Test and Report the Results",
+                    "const": "run-speedtest"
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The request timestamp of the speedtest, this tstamp must be returned\nin the reply with the results as the message tstamp."
+                  },
+                  "connection": {
+                    "type": "string",
+                    "description": "OPTIONAL: The connection to test.  If not present, the test is to be preformed\nagainst the native WAN interface.\n\n* **WAN** is the native WAN Interface of the Adapter.\n* **VPN** is the through the VPN tunnel.",
+                    "enum": [
+                      "WAN",
+                      "VPN"
+                    ]
+                  },
+                  "url": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "OPTIONAL: URL to perform the speedtest against.  IF not supplied use\nthe best url probed from speedtest server lists."
+                  }
+                },
+                "example": {
+                  "message": "run-speedtest",
+                  "tstamp": 1592217870123,
+                  "connection": "VPN",
+                  "url": "http://www.3bb.com/speedtest"
+                },
+                "required": [
+                  "message",
+                  "tstamp"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Diagnostics",
+            "description": "Adapter Diagnostic Messages."
+          }
+        ]
       }
     }
   },
   "tags": [
     {
       "name": "Message Formats",
-      "description": "Generic Message Formats"
+      "description": "Generic Message Formats."
     },
     {
       "name": "AWS Errors",
       "description": "Errors Generated by AWS and sent to the adapter."
+    },
+    {
+      "name": "Adapter Diagnostics",
+      "description": "Adapter Diagnostic Messages."
     }
   ]
 }

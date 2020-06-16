@@ -15,9 +15,7 @@ from .util import mls
 from .common_channel import common_channel
 
 from .aws_errors import aws_errors_channel
-
-from .backend_channel import backend_channel
-from .adapter_channel import adapter_channel
+from .adapter_diagnostics import adapter_diagnostics_channel, speedtest_channel
 
 from .tags import TAGS
 
@@ -126,10 +124,10 @@ def components():
 def channels():
     """Message Channels."""
     return f"""
-        "COMMON":     {{ {common_channel()} }},
-        "AWS_ERRORS": {{ {aws_errors_channel()} }},
-        "BACKEND":    {{ {backend_channel()} }},
-        "ADAPTER":    {{ {adapter_channel()} }}
+        "COMMON":        {{ {common_channel()} }},
+        "AWS_ERRORS":    {{ {aws_errors_channel()} }},
+        "ADAPTER_DIAGS": {{ {adapter_diagnostics_channel()} }},
+        "SPEEDTEST":     {{ {speedtest_channel()} }}
     """
 
 

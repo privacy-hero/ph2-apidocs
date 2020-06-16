@@ -129,17 +129,6 @@
             
           
              
-              <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-                href="#operation-publish-BACKEND">
-                <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
-                  style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
-                
-                <span style="padding-top: 2px;">
-                  Backend Messages.
-                </span>
-                
-              </a>
-            
 
             
           
@@ -150,14 +139,11 @@
         </div>
       </div>
       
-      
-
-      
-      <!-- Untagged operations -->
       <div class="mt-4 ">
         <div class="js-prop cursor-pointer py-2 flex property">
           <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-            <span class="text-sm" style="word-break: break-word;text-transform: capitalize;">Untagged</span>
+            <span class="text-sm"
+              style="word-break: break-word;text-transform: capitalize;">Adapter Diagnostics</span>
             <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0" xmlns="http://www.w3.org/2000/svg" y="0">
               <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
             </svg>
@@ -165,31 +151,62 @@
         </div>
         <div class="children">
           
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-            href="#operation-publish-ADAPTER">
-            <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
-              style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
+             
+
             
-            <span style="padding-top: 2px;">
-              Adapter Messages.
-            </span>
+          
+             
+
             
-          </a>
           
+             
+
+            
+            <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+              href="#operation-subscribe-ADAPTER_DIAGS">
+              
+              <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
+                style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
+              
+              <span style="padding-top: 2px;">
+                Adapter Diagnostics
+              </span>
+              
+            </a>
+            
           
+             
+              <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+                href="#operation-publish-SPEEDTEST">
+                <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
+                  style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
+                
+                <span style="padding-top: 2px;">
+                  Speed Test
+                </span>
+                
+              </a>
+            
+
+            
+            <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+              href="#operation-subscribe-SPEEDTEST">
+              
+              <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
+                style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
+              
+              <span style="padding-top: 2px;">
+                Speed Test
+              </span>
+              
+            </a>
+            
           
         </div>
       </div>
+      
+      
+
       
 
       
@@ -233,10 +250,28 @@
         </a>
       
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#message-BaseRouterMsg">
+          href="#message-LogMsg">
           <div style="display:inline-block;">
             
-<span class="string-chunk" style="padding-top: 2px;">BaseRouterMsg</span>
+<span class="string-chunk" style="padding-top: 2px;">LogMsg</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-RunSpeedTest">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">RunSpeedTest</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-SpeedTest">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">SpeedTest</span>
 
           </div>
         </a>
@@ -607,7 +642,7 @@ distinction.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -840,7 +875,7 @@ midnight 1970, UTC.  Otherwise known as the Unix Epoch.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -853,6 +888,18 @@ The multi message is a standard message, which hold an array of individual
 messages.  The individual messages when received will be treated as if they
 were received sequentially and independently in the order they are listed.</p>
 <p>The purpose of a Multi-Message is to cluster message processing for efficiency.</p>
+<h2>Notes regarding adapter bundling implementation.</h2>
+<p>The Backend is charged in 100ms units of execution.  It also takes time for the
+backend to startup and begin processing.  Therefore, it is preferable, unless
+the message is urgent, that all messages are bundled in the adapter in a minimum
+of 200ms blocks.  If an urgent message must be sent, it should be added to
+the current bundle and the entire bundle be sent immediately.</p>
+<p>The maximum single multi-message size must not exceed 32KB.  If adding a message
+to the bundle would cause the message size to exceed 32KB, the bundle should be
+sent and the message which would have exceeded the size is added to the next
+bundle.  IF a message is defined which does exceed 32KB, it should not be
+bundled, but MUST be sent as a discreet message.  In this case, the maximum
+message size must never exceed 128KB.</p>
 </div>
   
 <div>
@@ -1342,7 +1389,7 @@ midnight 1970, UTC.  Otherwise known as the Unix Epoch.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -1490,7 +1537,7 @@ distinction.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -1723,7 +1770,7 @@ midnight 1970, UTC.  Otherwise known as the Unix Epoch.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -1736,6 +1783,18 @@ The multi message is a standard message, which hold an array of individual
 messages.  The individual messages when received will be treated as if they
 were received sequentially and independently in the order they are listed.</p>
 <p>The purpose of a Multi-Message is to cluster message processing for efficiency.</p>
+<h2>Notes regarding adapter bundling implementation.</h2>
+<p>The Backend is charged in 100ms units of execution.  It also takes time for the
+backend to startup and begin processing.  Therefore, it is preferable, unless
+the message is urgent, that all messages are bundled in the adapter in a minimum
+of 200ms blocks.  If an urgent message must be sent, it should be added to
+the current bundle and the entire bundle be sent immediately.</p>
+<p>The maximum single multi-message size must not exceed 32KB.  If adding a message
+to the bundle would cause the message size to exceed 32KB, the bundle should be
+sent and the message which would have exceeded the size is added to the next
+bundle.  IF a message is defined which does exceed 32KB, it should not be
+bundled, but MUST be sent as a discreet message.  In this case, the maximum
+message size must never exceed 128KB.</p>
 </div>
   
 <div>
@@ -2225,7 +2284,7 @@ midnight 1970, UTC.  Otherwise known as the Unix Epoch.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -2957,674 +3016,34 @@ string
 
   <div class="responsive-container">
     
+  </div>
+  <div class="responsive-container">
+    
       
 
-<a name="operation-publish-BACKEND"></a>
+<a name="operation-subscribe-ADAPTER_DIAGS"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
       
-      <span class="font-mono border border-blue text-blue uppercase p-1 rounded" title="Publish">Pub</span>
+      
+      <span class="font-mono border border-green-dark text-green-dark uppercase p-1 rounded"
+        title="Subscribe">Sub</span>
       
       
-      
-<span class="string-chunk" >BACKEND</span>
+<span class="string-chunk" >ADAPTER_DIAGS</span>
 
     </h3>
 
-    <div class="mt-4 mb-4 markdown"><p>This is the message channel from the backend to the adapter.  The backend will
-typically contact the adapter in reply to a request from the adapter itself,
-or a request from the client interacting with the backend.</p>
-<p>Most communication from the backend operates as a state machine.  The backend
-will set a tstamp in a message and send the message to the adapter, once the
-adapter has executed the operation, it will reply with a state change that
-reflects the tstamp in the message which triggered it.</p>
+    <div class="mt-4 mb-4 markdown"><p>These are messages related to the diagnostic processes of the adapter.</p>
+<p>Diagnostics are performed as required by the adapter, and also as a result of
+explicit command from the backend.</p>
+<p>If the adapter requested a diagnostic check, the tstamp in the reply MUST match
+the tstamp in the request.</p>
 </div>
 
-    <p class="text-grey text-sm">Backend Messages.</p>
-    <div class="mt-4 mb-4 markdown"><p>Message from the Backend to the Adapter.</p>
-</div>
-
-
-
-    
-
-
-    
-    <p>Accepts <strong>one of</strong> the following messages:</p>
-    
-    
-
-<div class="bg-grey-lighter rounded p-4 mt-2">
-  <div class="text-sm text-grey-darker mb-2">
-    
-    <span class="text-grey-darker font-bold mr-2">#1</span>
-    
-    
-      AWS Internal Server Error
-      
-        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">AWSInternalServerError</span>
-      
-    
-  </div>
-  <p class="text-grey-dark text-sm">AWS Internal Server Error</p>
-  
-  
-
-<div class="mt-4">
-  
-      
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Errors Generated by AWS and sent to the adapter.">AWS Errors</span>
-      
-  
-</div>
-
-
-
-
-  <div class="mt-4 mb-4 markdown"><p>This message is generated directly by AWS, and does not contain a tstamp.</p>
-<p>This messages indicates something fatal has ocurred in the server.  Upon
-receipt, the adapter should record the fact it ocurred, and try and reconnect
-to the backend, if a successful reconnection occurs, the adapter should log
-the internal server error to the backend, and then continue.</p>
-</div>
-  
-<div>
-  
-
-<div class="bg-grey-lighter  rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">Payload</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-object
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">message</span>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>An internal server error, AWS Generated</p>
-</div>
-        
-        
-        
-          <div class="text-xs">Const: &quot;Internal server error&quot;</div>
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">connectionId</span>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The AWS Websocket Connection ID.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">requestId</span>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The ID of the request which caused the error.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-          
-        
-
-        
-        
-
-        
-
-        
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
-          
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-</div>
-
-  
-</div>
-
-
-    
-    
-
-<div class="bg-grey-lighter rounded p-4 mt-2">
-  <div class="text-sm text-grey-darker mb-2">
-    
-    <span class="text-grey-darker font-bold mr-2">#2</span>
-    
-    
-      AWS Server Error
-      
-        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">AWSServerError</span>
-      
-    
-  </div>
-  <p class="text-grey-dark text-sm">AWS Server Error</p>
-  
-  
-
-<div class="mt-4">
-  
-      
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Errors Generated by AWS and sent to the adapter.">AWS Errors</span>
-      
-  
-</div>
-
-
-
-
-  <div class="mt-4 mb-4 markdown"><p>This message is generated directly by AWS, and does not contain a tstamp.</p>
-<p>This messages indicates something fatal has ocurred in the server.  Upon
-receipt, the adapter should record the fact it ocurred, and try and reconnect
-to the backend, if a successful reconnection occurs, the adapter should log
-the internal server error to the backend, and then continue.</p>
-</div>
-  
-<div>
-  
-
-<div class="bg-grey-lighter  rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">Payload</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-object
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">message</span>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>A general server error, AWS Generated</p>
-</div>
-        
-        
-        
-          <div class="text-xs">Const: &quot;Error&quot;</div>
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">error</span>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The description of the Error.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-          
-        
-
-        
-        
-
-        
-
-        
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
-          
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-</div>
-
-  
-</div>
-
-
-    
-    
-
-    
-
-<div class="mt-4">
-  
-      
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="">AWS Errors</span>
-      
-  
-      
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="">mothership</span>
-      
-  
-</div>
-
-
-
-  </div>
-</div>
-
-<div class="right-block p-8">
-  <h4 class="text-lg text-white mb-4">Examples</h4>
-
-  
-  
-  
-
-<form>
-  <h5 class="examples-uid text-orange mt-4">AWSInternalServerError</h5>
-  
-    <div class="payload-examples mb-4 ">
-      <div class="js-prop cursor-pointer  flex property">
-        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
-          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-            xmlns="http://www.w3.org/2000/svg" y="0">
-            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-          </svg>
-        
-      </div>
-      <div class="children payload-examples mt-4">
-        
-        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
-  "message": "Internal server error",
-  "connectionId": "d2Vic29ja2V0IElE",
-  "requestId": "cmVxdWVzdCBJRA"
-}</code></pre>
-        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
-        
-      </div>
-    </div>
-  
-
-  
-</form>
-
-
-  
-  
-
-<form>
-  <h5 class="examples-uid text-orange mt-4">AWSServerError</h5>
-  
-    <div class="payload-examples mb-4 ">
-      <div class="js-prop cursor-pointer  flex property">
-        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
-        
-          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-            xmlns="http://www.w3.org/2000/svg" y="0">
-            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-          </svg>
-        
-      </div>
-      <div class="children payload-examples mt-4">
-        
-        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
-  "message": "Error",
-  "error": "An error ocurred."
-}</code></pre>
-        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
-        
-      </div>
-    </div>
-  
-
-  
-</form>
-
-
-  
-  
-</div>
-
-
-
-    
-  </div>
-  <div class="responsive-container">
-    
-  </div>
-
-  <div class="responsive-container">
-    
-      
-
-<a name="operation-publish-ADAPTER"></a>
-<div class="center-block p-8">
-  <div class="operation pt-8 pb-8">
-    <h3 class="font-mono text-base">
-      
-      <span class="font-mono border border-blue text-blue uppercase p-1 rounded" title="Publish">Pub</span>
-      
-      
-      
-<span class="string-chunk" >ADAPTER</span>
-
-    </h3>
-
-    <div class="mt-4 mb-4 markdown"><p>The common channel defines the messages that are either templates of all other
-messages or common to both the backend and the adapter channels.</p>
-</div>
-
-    <p class="text-grey text-sm">Adapter Messages.</p>
-    <div class="mt-4 mb-4 markdown"><p>Message from the Adapter to the Backend.</p>
+    <p class="text-grey text-sm">Adapter Diagnostics</p>
+    <div class="mt-4 mb-4 markdown"><p>Diagnostic reports from the Adapter.</p>
 </div>
 
 
@@ -3640,24 +3059,30 @@ messages or common to both the backend and the adapter channels.</p>
   <div class="text-sm text-grey-darker mb-2">
     
     
-      Base Router Message
+      Log Message
       
-        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">BaseRouterMsg</span>
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">LogMsg</span>
       
     
   </div>
-  <p class="text-grey-dark text-sm">Base Router Message Summary</p>
+  <p class="text-grey-dark text-sm">Log Message to Backend</p>
   
   
 
 <div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
   
 </div>
 
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>Basic Message Template Description.</p>
+  <div class="mt-4 mb-4 markdown"><p>This message causes the backend to log error and general diagnostic messages
+from the adapter to the system logs.  It can be sent anytime the adapter
+wishes to log a message.</p>
 </div>
   
 <div>
@@ -3721,6 +3146,8 @@ object
         <span class="text-sm" style="word-break: break-word;">message</span>
         
         
+          <div class="text-red-dark text-xs">required</div>
+        
         
       </div>
 
@@ -3728,6 +3155,400 @@ object
         <div class="capitalize text-sm text-teal font-bold">
           
 string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Log Message to Backend</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;log&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The time the log message was generated inside the adapter. (According to the
+adapters internal clock.)</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">level</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The level of the log messages.</p>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"ERROR"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"WARNING"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"DEBUG"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">log</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The message to be logged by the Adapter.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+
+    
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
+</div>
+
+
+
+  </div>
+</div>
+
+<div class="right-block p-8">
+  <h4 class="text-lg text-white mb-4">Examples</h4>
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">LogMsg</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "log",
+  "tstamp": 1592217870123,
+  "level": "ERROR",
+  "log": "An Error ocurred inside the Adapter"
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+</div>
+
+
+
+    
+  </div>
+
+  <div class="responsive-container">
+    
+      
+
+<a name="operation-publish-SPEEDTEST"></a>
+<div class="center-block p-8">
+  <div class="operation pt-8 pb-8">
+    <h3 class="font-mono text-base">
+      
+      <span class="font-mono border border-blue text-blue uppercase p-1 rounded" title="Publish">Pub</span>
+      
+      
+      
+<span class="string-chunk" >SPEEDTEST</span>
+
+    </h3>
+
+    <div class="mt-4 mb-4 markdown"><p>These are messages related to the diagnostic processes of the adapter.</p>
+<p>Diagnostics are performed as required by the adapter, and also as a result of
+explicit command from the backend.</p>
+<p>If the adapter requested a diagnostic check, the tstamp in the reply MUST match
+the tstamp in the request.</p>
+</div>
+
+    <p class="text-grey text-sm">Speed Test</p>
+    <div class="mt-4 mb-4 markdown"><p>Commands to instigate speedtest checks.</p>
+</div>
+
+
+
+    
+
+
+    
+    <p>Accepts the following message:</p>
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    
+      Run Speed Test
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">RunSpeedTest</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Run a Speed Test and Report the Results</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message causes the adapter that receives it to perfrom ping and speedtests
+and return the results in a &quot;speedtest&quot; message.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="is-open">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
           
           
           
@@ -3755,6 +3576,236 @@ string
     </div>
 
     
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Run a Speed Test and Report the Results</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;run-speedtest&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The request timestamp of the speedtest, this tstamp must be returned
+in the reply with the results as the message tstamp.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">connection</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>OPTIONAL: The connection to test.  If not present, the test is to be preformed
+against the native WAN interface.</p>
+<ul>
+<li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
+<li><strong>VPN</strong> is the through the VPN tunnel.</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"WAN"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">url</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>OPTIONAL: URL to perform the speedtest against.  IF not supplied use
+the best url probed from speedtest server lists.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
   </div>
 </div>
 
@@ -3769,7 +3820,7 @@ string
 
         
           
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
           
         
 
@@ -3796,6 +3847,10 @@ string
 
 <div class="mt-4">
   
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
 </div>
 
 
@@ -3810,7 +3865,7 @@ string
   
 
 <form>
-  <h5 class="examples-uid text-orange mt-4">BaseRouterMsg</h5>
+  <h5 class="examples-uid text-orange mt-4">RunSpeedTest</h5>
   
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
@@ -3825,7 +3880,10 @@ string
       <div class="children payload-examples mt-4">
         
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
-  "message": "string"
+  "message": "run-speedtest",
+  "tstamp": 1592217870123,
+  "connection": "VPN",
+  "url": "http://www.3bb.com/speedtest"
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
         
@@ -3845,6 +3903,895 @@ string
     
   </div>
   <div class="responsive-container">
+    
+      
+
+<a name="operation-subscribe-SPEEDTEST"></a>
+<div class="center-block p-8">
+  <div class="operation pt-8 pb-8">
+    <h3 class="font-mono text-base">
+      
+      
+      <span class="font-mono border border-green-dark text-green-dark uppercase p-1 rounded"
+        title="Subscribe">Sub</span>
+      
+      
+<span class="string-chunk" >SPEEDTEST</span>
+
+    </h3>
+
+    <div class="mt-4 mb-4 markdown"><p>These are messages related to the diagnostic processes of the adapter.</p>
+<p>Diagnostics are performed as required by the adapter, and also as a result of
+explicit command from the backend.</p>
+<p>If the adapter requested a diagnostic check, the tstamp in the reply MUST match
+the tstamp in the request.</p>
+</div>
+
+    <p class="text-grey text-sm">Speed Test</p>
+    <div class="mt-4 mb-4 markdown"><p>Speedtest Reports from the Adapter.</p>
+</div>
+
+
+
+    
+
+
+    
+    <p>Accepts the following message:</p>
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    
+      Speed Test
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">SpeedTest</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Report of Speed Test Results</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message causes the latest speedtest result to be logged for the
+Adapter in the backend.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="is-open">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Report of Speed Test Results</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;speedtest&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>IF the speedtest was performed as a result of a automatic or scheduled test
+the timestamp is the time the speed test started on the adapter.</p>
+<p>IF the speedtest was conducted as a result of a command from the backend,
+the tstamp is the tstamp from the backend request to commence the speedtest.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">url</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The URL of the website the speedtest was conducted against.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">location</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The String description of the speedtest server location</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">provider</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The name of the ISP/Network operator managing the speedtest server.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">distance</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The distance is the approximate distance from the adapter to the speedtest
+server.  The distance can be either a value that is estimated to be LESS THAN
+the distance stated, or CLOSE TO the distance stated.</p>
+<ul>
+<li>-VE = The estimate is a LESS THAN this estimate.</li>
+<li>+VE = The estimate is a CLOSE TO this estimate.</li>
+</ul>
+<p>The distance is measured in whole MILES.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ping</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;int&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 10 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The ping result is an array with a minimum of 10 entries, that represent
+the results from at least 10 consecutive pings to the server.
+The ping result is a positive integer which represents the number of
+whole milliseconds (rounded up) it took for the ping to the server to
+be replied to.</p>
+<p>IF a ping fails, the position in the array where the result would be is set
+to null.</p>
+<p>There can be more than 10 results, but there can not be less than 10.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">uint64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>number of milliseconds the ping took to reply, or null if no reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rx</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the receive speed test.</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A INT</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tx</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the transmit speed test.</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A INT</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">connection</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The connection which was tested.</p>
+<ul>
+<li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
+<li><strong>VPN</strong> is the through the VPN tunnel.</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"WAN"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+
+    
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
+</div>
+
+
+
+  </div>
+</div>
+
+<div class="right-block p-8">
+  <h4 class="text-lg text-white mb-4">Examples</h4>
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">SpeedTest</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "speedtest",
+  "tstamp": 1592217870123,
+  "url": "http://www.3bb.com/speedtest",
+  "location": "Phuket, Thailand",
+  "provider": "3BB",
+  "distance": -50,
+  "ping": [
+    10,
+    null,
+    7,
+    9,
+    2,
+    5,
+    10,
+    12,
+    5,
+    3
+  ],
+  "rx": 185608437,
+  "tx": 282140344,
+  "connection": "WAN"
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+</div>
+
+
+
     
   </div>
 
@@ -3881,7 +4828,7 @@ string
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -4115,7 +5062,7 @@ midnight 1970, UTC.  Otherwise known as the Unix Epoch.</p>
 <div class="mt-4">
   
       
-        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats">Message Formats</span>
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Generic Message Formats.">Message Formats</span>
       
   
 </div>
@@ -4128,6 +5075,18 @@ The multi message is a standard message, which hold an array of individual
 messages.  The individual messages when received will be treated as if they
 were received sequentially and independently in the order they are listed.</p>
 <p>The purpose of a Multi-Message is to cluster message processing for efficiency.</p>
+<h2>Notes regarding adapter bundling implementation.</h2>
+<p>The Backend is charged in 100ms units of execution.  It also takes time for the
+backend to startup and begin processing.  Therefore, it is preferable, unless
+the message is urgent, that all messages are bundled in the adapter in a minimum
+of 200ms blocks.  If an urgent message must be sent, it should be added to
+the current bundle and the entire bundle be sent immediately.</p>
+<p>The maximum single multi-message size must not exceed 32KB.  If adding a message
+to the bundle would cause the message size to exceed 32KB, the bundle should be
+sent and the message which would have exceeded the size is added to the next
+bundle.  IF a message is defined which does exceed 32KB, it should not be
+bundled, but MUST be sent as a discreet message.  In this case, the maximum
+message size must never exceed 128KB.</p>
 </div>
   
 <div>
@@ -5119,7 +6078,7 @@ string
 
 
       
-      <a name="message-BaseRouterMsg"></a>
+      <a name="message-LogMsg"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
@@ -5128,24 +6087,30 @@ string
     <span class="text-grey-darker font-bold mr-2">#5</span>
     
     
-      Base Router Message
+      Log Message
       
-        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">BaseRouterMsg</span>
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">LogMsg</span>
       
     
   </div>
-  <p class="text-grey-dark text-sm">Base Router Message Summary</p>
+  <p class="text-grey-dark text-sm">Log Message to Backend</p>
   
   
 
 <div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
   
 </div>
 
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>Basic Message Template Description.</p>
+  <div class="mt-4 mb-4 markdown"><p>This message causes the backend to log error and general diagnostic messages
+from the adapter to the system logs.  It can be sent anytime the adapter
+wishes to log a message.</p>
 </div>
   
 <div>
@@ -5209,6 +6174,8 @@ object
         <span class="text-sm" style="word-break: break-word;">message</span>
         
         
+          <div class="text-red-dark text-xs">required</div>
+        
         
       </div>
 
@@ -5216,6 +6183,307 @@ object
         <div class="capitalize text-sm text-teal font-bold">
           
 string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Log Message to Backend</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;log&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The time the log message was generated inside the adapter. (According to the
+adapters internal clock.)</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">level</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The level of the log messages.</p>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"ERROR"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"WARNING"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"DEBUG"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">log</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The message to be logged by the Adapter.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-RunSpeedTest"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#6</span>
+    
+    
+      Run Speed Test
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">RunSpeedTest</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Run a Speed Test and Report the Results</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message causes the adapter that receives it to perfrom ping and speedtests
+and return the results in a &quot;speedtest&quot; message.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
           
           
           
@@ -5243,6 +6511,236 @@ string
     </div>
 
     
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Run a Speed Test and Report the Results</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;run-speedtest&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The request timestamp of the speedtest, this tstamp must be returned
+in the reply with the results as the message tstamp.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">connection</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>OPTIONAL: The connection to test.  If not present, the test is to be preformed
+against the native WAN interface.</p>
+<ul>
+<li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
+<li><strong>VPN</strong> is the through the VPN tunnel.</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"WAN"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">url</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>OPTIONAL: URL to perform the speedtest against.  IF not supplied use
+the best url probed from speedtest server lists.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
   </div>
 </div>
 
@@ -5257,7 +6755,789 @@ string
 
         
           
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-SpeedTest"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#7</span>
+    
+    
+      Speed Test
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">SpeedTest</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Report of Speed Test Results</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Adapter Diagnostic Messages.">Adapter Diagnostics</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message causes the latest speedtest result to be logged for the
+Adapter in the backend.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Report of Speed Test Results</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;speedtest&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>IF the speedtest was performed as a result of a automatic or scheduled test
+the timestamp is the time the speed test started on the adapter.</p>
+<p>IF the speedtest was conducted as a result of a command from the backend,
+the tstamp is the tstamp from the backend request to commence the speedtest.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">url</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The URL of the website the speedtest was conducted against.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">location</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The String description of the speedtest server location</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">provider</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The name of the ISP/Network operator managing the speedtest server.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">distance</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The distance is the approximate distance from the adapter to the speedtest
+server.  The distance can be either a value that is estimated to be LESS THAN
+the distance stated, or CLOSE TO the distance stated.</p>
+<ul>
+<li>-VE = The estimate is a LESS THAN this estimate.</li>
+<li>+VE = The estimate is a CLOSE TO this estimate.</li>
+</ul>
+<p>The distance is measured in whole MILES.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ping</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;int&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 10 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The ping result is an array with a minimum of 10 entries, that represent
+the results from at least 10 consecutive pings to the server.
+The ping result is a positive integer which represents the number of
+whole milliseconds (rounded up) it took for the ping to the server to
+be replied to.</p>
+<p>IF a ping fails, the position in the array where the result would be is set
+to null.</p>
+<p>There can be more than 10 results, but there can not be less than 10.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">uint64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>number of milliseconds the ping took to reply, or null if no reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rx</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the receive speed test.</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A INT</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tx</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the transmit speed test.</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A INT</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">connection</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The connection which was tested.</p>
+<ul>
+<li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
+<li><strong>VPN</strong> is the through the VPN tunnel.</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"WAN"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
           
         
 
