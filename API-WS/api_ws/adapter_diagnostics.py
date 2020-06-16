@@ -8,17 +8,14 @@ from .schemas import base_message, channel, Field
 from .tags import TAGS
 
 
-def log_level_field(none_ok=True):
+def log_level_field(none_ok=True, name="level", desc="The level of the log messages."):
     """Return log level field."""
-    description = """
-        The level of the log messages.
-        """
     levels = []
     if none_ok:
         levels.append("NONE")
     levels += ["ERROR", "WARNING", "DEBUG"]
 
-    return Field.enum("level", description, levels)
+    return Field.enum(name, desc, levels)
 
 
 def adapter_log():

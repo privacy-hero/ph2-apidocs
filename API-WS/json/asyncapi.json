@@ -628,6 +628,158 @@
           }
         ]
       }
+    },
+    "CONNECTION": {
+      "description": "These are messages related to the websocket connection and its management.\n\n## NOTES\n\n1. AWS will terminate a websocket after remaining idle for 10 minutes.\n2. AWS May terminate a websocket connection that has been continuously\nmade for 2 Hours.\n\nThere is nothing preventing the link being immediately re-established.\n\n### TODO:\n\nIt is not clear if websocket pings are sufficient to avoid the 10 minute\nidle timeout.  This needs to be tested.\n\nIf it is not sufficient, we will need to do periodic heartbeats at around 9\nminute intervals to prevent the idle timeout.\n\nIt seems there is nothing we can do about the 2 hour timeout except reconnect.\nThis timeout needs to be tested.",
+      "subscribe": {
+        "summary": "Adapter Link Management",
+        "description": "Link Management Messages from the Adapter.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "LinkEstablished",
+              "title": "Link Established",
+              "summary": "Advise the Backend that the Adapter has connected to a new websocket",
+              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Backend that the Adapter has connected to a new websocket",
+                    "const": "link established"
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time the link established message was queued by the Adapter.\n(According to the adapters internal clock.)"
+                  },
+                  "version": {
+                    "type": "string",
+                    "format": "bas64-url-sha256",
+                    "description": "sha256 hash of the firmware image currently loaded in the Adapter. Encoded\nwith base64-url encoding.",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "variant": {
+                    "type": "string",
+                    "description": "Optional: Identifier to specify what type of operation the adapter is\nperforming.  This is used to allow the system to deploy different software\nversions to the same hardware.  Normally the backend will not change the\nvariant but will advise about the latest version of software for that variant.",
+                    "minLength": 1
+                  },
+                  "disconnected": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "Optional: If this message is being sent because the link was disconnected, the\n**disconnected** field is sent, containing the time in milliseconds when the\nadapter detected the link had failed.  If this is the first connection\nsince power on, this field is omitted."
+                  }
+                },
+                "example": {
+                  "message": "link established",
+                  "tstamp": 1592217870123,
+                  "version": "R8rCrK4M_Ff7VttHWuUd9253JrYgwvqO6U15enlcug8",
+                  "variant": "PHero2-Router",
+                  "disconnected": 1592316782123
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "version"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      },
+      "publish": {
+        "summary": "Adapter Link Management",
+        "description": "Initial Configuration.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "InitialConfig",
+              "title": "Initial Configuration",
+              "summary": "Initial Highest Level Configuration",
+              "description": "This message contains the highest level configuration and is sent by the\nbackend after a link is established, and the backend receives the\n*Link Established* message from the Adapter.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Initial Highest Level Configuration",
+                    "const": "initial cfg"
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
+                  },
+                  "version": {
+                    "type": "string",
+                    "format": "bas64-url-sha256",
+                    "description": "The version of the latest firmaware suitable for the adapter.  This\nversion should match the version installed in the adapter before it continues.\nIf it does noe, the adapter should retrieve the new version from the url in\nthis message, program that and restart the connection.",
+                    "minLength": 43,
+                    "maxLength": 43
+                  },
+                  "firmware": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "The firmware url.  This is the location where the latest firmware may be\ndownloaded.  If the adapter detects that a firmware update is required it\ndownloads the firmware from this URL.  If the firmware can not be downloaded\nor the image downloaded does not match the **version** hash, then the firmware\nin the adapter must not be changed, and an error should be logged to the\nbackend."
+                  },
+                  "loglevel": {
+                    "type": "string",
+                    "description": "The Minimum level of messages which should be logged to the backend.",
+                    "enum": [
+                      "NONE",
+                      "ERROR",
+                      "WARNING",
+                      "DEBUG"
+                    ]
+                  }
+                },
+                "example": {
+                  "message": "initial cfg",
+                  "tstamp": 1592217870123,
+                  "version": "uDHqOfzVFgcldv41fTTAOVtJSLVxn8M36ufxrEnWtzg",
+                  "firmware": "https://dl.privacyhero.com/firmware/adapter_v107.fw",
+                  "loglevel": "DEBUG"
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "version",
+                  "firmware",
+                  "loglevel"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      }
     }
   },
   "tags": [
@@ -642,6 +794,10 @@
     {
       "name": "Adapter Diagnostics",
       "description": "Adapter Diagnostic Messages."
+    },
+    {
+      "name": "Adapter Messages",
+      "description": "Messages relating to the Adapter and its global state/configuration."
     }
   ]
 }

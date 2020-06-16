@@ -1,7 +1,17 @@
 """Standard Message Schemas and Fields."""
+import hashlib
+from base64 import urlsafe_b64encode
 
 from .util import mls
 from .tags import TAGS
+
+# =====================================================================
+
+
+def sha256_example(text):
+    """Generate a proper base64url encoded sha256 hash."""
+    return urlsafe_b64encode(hashlib.sha256(text.encode()).digest()).decode()[:-1]
+
 
 # =====================================================================
 
@@ -16,7 +26,7 @@ class Field:
             This is the name of the message.  The operation that is to be performed
             and the further fields contained within the message can be identified
             based solely on this message type string.
-            """
+        """
         if desc is None:
             desc = description
         value_str = ""
@@ -50,8 +60,14 @@ class Field:
             """
         if desc is None:
             desc = description
+        return Field.timestamp_ms("tstamp", desc)
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def timestamp_ms(name="timestamp_ms", desc="A Millisecond Timestamp"):
+        """Return the definition of the standard tstamp field."""
         return f"""
-            "tstamp" : {{
+            "{name}" : {{
                 "type" : "int",
                 "format": "int64",
                 "description" :{mls(desc)}
@@ -67,6 +83,20 @@ class Field:
                 "type" : "string",
                 "format": "url",
                 "description" :{mls(desc)}
+            }}
+        """
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def sha256(name="sha256", desc="A Base64-URL Encoded SHA256 hash"):
+        """Return the definition of the standard sha256 type field."""
+        return f"""
+            "{name}" : {{
+                "type" : "string",
+                "format": "bas64-url-sha256",
+                "description" :{mls(desc)},
+                "minLength": 43,
+                "maxLength": 43
             }}
         """
 
