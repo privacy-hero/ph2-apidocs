@@ -19,7 +19,7 @@ info:
     be https.
 
     This API Documentation may be viewed at:
-      - [PrivacyHero2 API - Swagger UI](./index-browser-extension.html)
+      - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)
       - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)
 
   license:
