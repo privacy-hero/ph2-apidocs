@@ -1,0 +1,329 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Privacy Hero 2 - Browser Extension API",
+    "version": "0.0.1",
+    "description": "This API is only used by browser extensions.\n\nBrowser extensions perform operations through the router/adapter directly\nthis api allows those functions and browser extensions to operate and behave\nreliably.\n\nIf the devices browser is not behind the adapter/router a server will reply\nto these messages and the browser extension can detect this state from the\nreply.\n\nNote, when the adapter is handling the api, the connection will be over\nhttp.  However when connected to the backend server the connection will\nbe https.\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-browser-extension.html)\n  - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)",
+    "license": {
+      "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
+      "url": "http://privacy-hero.github.io/ph2-apidocs/LICENSE.html"
+    },
+    "contact": {
+      "name": "API Support (Steven Johnson)",
+      "url": "http://www.example.com/support",
+      "email": "sakurainds@gmail.com"
+    }
+  },
+  "servers": [
+    {
+      "url": "ph2ext.privacyhero.com",
+      "description": "The API deployment URL."
+    },
+    {
+      "url": "ph2ext-mocked.privacyhero.com",
+      "description": "A simple mocked implementation only for browser extension testing."
+    },
+    {
+      "url": "https://{awsid}.execute-api.{region}.amazonaws.com/{stage}",
+      "description": "Development URL",
+      "variables": {
+        "awsid": {
+          "default": "rsf12bcyml",
+          "description": "The ID for the dev AWS deployment"
+        },
+        "region": {
+          "enum": [
+            "us-east-1"
+          ],
+          "default": "us-east-1",
+          "description": "Deployment Regions"
+        },
+        "stage": {
+          "enum": [
+            "dev",
+            "qa",
+            "prod"
+          ],
+          "default": "prod",
+          "description": "Deployment Stages"
+        }
+      }
+    }
+  ],
+  "components": {
+    "schemas": {
+      "adblocking-cmd": {
+        "type": "object",
+        "required": [
+          "message",
+          "state"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": [
+              "adblocking"
+            ],
+            "description": "The name of the command to perform.  Must be \"**adblocking**\""
+          },
+          "state": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "The state to set \"**adblocking**\" for the calling device to.\n* true = adblocking is enabled (ads will be blocked).\n* false = adblocking is disabled (ads will NOT be blocked).\n* null = no change to the adblocking state, simply report current\nstate."
+          }
+        }
+      },
+      "adblocking-reply": {
+        "type": "object",
+        "required": [
+          "message",
+          "state"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string",
+            "enum": [
+              "adblocking"
+            ],
+            "description": "The name of the command performed.  Must be \"**adblocking**\""
+          },
+          "state": {
+            "type": "boolean",
+            "nullable": true,
+            "description": "The current state of \"**adblocking**\" for the calling device.\n* true = adblocking is enabled (ads will be blocked).\n* false = adblocking is disabled (ads will NOT be blocked).\n* null = Not behind the adapter. It is not possible to set or get the adblocking state,\nthe current state has not been changed and is unknown."
+          }
+        }
+      },
+      "Nack": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "type": "string",
+            "format": "Text Message",
+            "nullable": true,
+            "minLength": 0,
+            "maxLength": 1024,
+            "pattern": "^([\\w\\W])*$",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "GW_InternalError": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "message": {
+            "type": "string",
+            "format": "Text Message",
+            "nullable": true,
+            "minLength": 0,
+            "maxLength": 1024,
+            "pattern": "^([\\w\\W])*$",
+            "example": null
+          }
+        }
+      }
+    },
+    "responses": {
+      "404": {
+        "description": "Not found",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Nack"
+            },
+            "example": {
+              "error": "Not Found"
+            }
+          }
+        }
+      },
+      "415": {
+        "description": "Unsupported Media Type",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Nack"
+            },
+            "example": {
+              "error": "Unsupported Media Type"
+            }
+          }
+        }
+      },
+      "429": {
+        "description": "Too many requests",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Nack"
+            },
+            "example": {
+              "error": "Too many requests"
+            }
+          }
+        }
+      },
+      "500": {
+        "description": "An Internal server error occurred.  Operation failed.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GW_InternalError"
+            }
+          }
+        }
+      },
+      "default": {
+        "description": "Unspecified Error",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Nack"
+            },
+            "example": {
+              "error": "Unspecified Error"
+            }
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Browser Extension",
+      "description": "Browser Extension Operations"
+    }
+  ],
+  "paths": {
+    "/": {
+      "post": {
+        "operationId": "browser-ext",
+        "tags": [
+          "Browser Extension"
+        ],
+        "summary": "Perform a Browser Extension operation.",
+        "description": "# Usage\nAll Browser extension API calls are performed with a post.  The json\nbody of the post determines the operation which will be performed. A\njson body will be returned in the 200 reply with the result of the\ncommand.\n\nAll operations are synchronous.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/adblocking-cmd"
+                  }
+                ],
+                "discriminator": {
+                  "propertyName": "message"
+                }
+              },
+              "examples": {
+                "get-adblocking": {
+                  "summary": "Query the current adblocking state",
+                  "value": {
+                    "message": "adblocking",
+                    "state": null
+                  }
+                },
+                "adblocking-on": {
+                  "summary": "Turn adblocking **on** for the device.",
+                  "value": {
+                    "message": "adblocking",
+                    "state": true
+                  }
+                },
+                "adblocking-off": {
+                  "summary": "Turn adblocking **of** for the device.",
+                  "value": {
+                    "message": "adblocking",
+                    "state": false
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The reply always advises the current state, after taking any\nnecessary action from the command.  So, if the command was to enable\nadblocking then the result will be true.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "#/components/schemas/adblocking-reply"
+                    }
+                  ],
+                  "discriminator": {
+                    "propertyName": "message"
+                  }
+                },
+                "examples": {
+                  "no-connection": {
+                    "summary": "No connection to the adapter (can not enable/disable adblocking.)",
+                    "value": {
+                      "message": "adblocking",
+                      "state": null
+                    }
+                  },
+                  "adblocking-on": {
+                    "summary": "adblocking is currently enabled.",
+                    "value": {
+                      "message": "adblocking",
+                      "state": true
+                    }
+                  },
+                  "adblocking-off": {
+                    "summary": "adblocking is currently disabled.",
+                    "value": {
+                      "message": "adblocking",
+                      "state": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    }
+  }
+}
