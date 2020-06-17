@@ -3,7 +3,7 @@
   "info": {
     "title": "Privacy Hero 2 - Browser Extension API",
     "version": "0.0.1",
-    "description": "This API is only used by browser extensions.\n\nBrowser extensions perform operations through the router/adapter directly\nthis api allows those functions and browser extensions to operate and behave\nreliably.\n\nIf the devices browser is not behind the adapter/router a server will reply\nto these messages and the browser extension can detect this state from the\nreply.\n\nNote, when the adapter is handling the api, the connection will be over\nhttp.  However when connected to the backend server the connection will\nbe https.\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-browser-extension.html)\n  - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)",
+    "description": "This API is only used by browser extensions.\n\nBrowser extensions perform operations through the router/adapter directly\nthis api allows those functions and browser extensions to operate and behave\nreliably.\n\nIf the devices browser is not behind the adapter/router a server will reply\nto these messages and the browser extension can detect this state from the\nreply.\n\nNote, when the adapter is handling the api, the connection will be over\nhttp.  However when connected to the backend server the connection will\nbe https.\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)\n  - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
       "url": "http://privacy-hero.github.io/ph2-apidocs/LICENSE.html"
