@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Browser Extension API"
-  version: "0.0.1"
+  version: "0.0.2"
   description: |-
     This API is only used by browser extensions.
 
@@ -40,7 +40,7 @@ servers:
     description: Development URL
     variables:
       awsid:
-        default: "rsf12bcyml"
+        default: "3tmmjf4w01"
         description: The ID for the dev AWS deployment
       region:
         enum:
@@ -138,12 +138,12 @@ paths:
                   message: "adblocking"
                   state: null
               adblocking-on:
-                summary: Turn adblocking **on** for the device.
+                summary: Turn adblocking ON for the device.
                 value:
                   message: "adblocking"
                   state: true
               adblocking-off:
-                summary: Turn adblocking **of** for the device.
+                summary: Turn adblocking OFF for the device.
                 value:
                   message: "adblocking"
                   state: false
@@ -167,12 +167,12 @@ paths:
                     message: "adblocking"
                     state: null
                 adblocking-on:
-                  summary: adblocking is currently enabled.
+                  summary: adblocking is currently ENABLED.
                   value:
                     message: "adblocking"
                     state: true
                 adblocking-off:
-                  summary: adblocking is currently disabled.
+                  summary: adblocking is currently DISABLED.
                   value:
                     message: "adblocking"
                     state: false
