@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.17",
+    "version": "0.0.18",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -713,10 +713,11 @@
       "health-days": {
         "type": "integer",
         "format": "int16",
-        "minimum": 1,
+        "minimum": 0,
         "maximum": 90,
+        "default": 0,
         "example": 10,
-        "description": "The number of days into the past to provide adapter health records for.\n1 is today, 90 is up to 90 days ago."
+        "description": "The number of days into the past to provide adapter health records for.\n1 is today, 90 is up to 90 days ago. 0 = The most recent result only\nfrom the WAN."
       },
       "latency-ms": {
         "type": "integer",
@@ -744,7 +745,7 @@
       },
       "health-results": {
         "type": "object",
-        "description": "Health result Records.\n* **timestamp** - The timestamp of the time the test was conducted.\n* **location-server** - The location of the server the test was\nconducted against.\n* **provider** - The ISP or Network operator who manages the server.\n* **distance** - The estimated distance to the test server (in miles).  A\nNegative number is to be represented as < (less than) this value.  A\npositive number is an estimated distance.\n* **latency** - The average latency (ping time) to the test URL.\n* **latency-completion** - The percentage of latency checks which\ncompleted successfully. (whole number, 85 = 85%, 100=100%)\n* **speed-rx** - Bits per second result of the Receive speed test.\n* **speed-tx** - Bits per second result of the Transmit speed test.\n* **connection** - The internet connection the speed test was completed on.",
+        "description": "Health result Records.\n* **timestamp** - The timestamp of the time the test was conducted.\n* **location-server** - The location of the server the test was\nconducted against.\n* **provider** - The ISP or Network operator who manages the server.\n* **distance** - The estimated distance to the test server (in miles).  A\nNegative number is to be represented as < (less than) this value.  A\npositive number is an estimated distance.\n* **latency** - The average latency (ping time) to the test URL.\n* **latency-completion** - The percentage of latency checks which\ncompleted successfully. (whole number, 85 = 85%, 100=100%)\n* **speed-rx** - Bits per second result of the Receive speed test.\n* **speed-tx** - Bits per second result of the Transmit speed test.\n* **connection** - The internet connection the speed test was\ncompleted on.\n* **quality** - This is the system derived synthetic \"QUALITY\" of the\nlink, which is derived from historical records of the adapters health.\n  * HIGH - The Link meets or exceeds historical precedence.\n  * POOR - The Link is no meeting historical precedence, and normally\n  does better.\n  * LOW - The Link is very low quality, and/or has failed all together.",
         "additionalProperties": false,
         "properties": {
           "timestamp": {
@@ -779,6 +780,14 @@
             "enum": [
               "VPN",
               "WAN"
+            ]
+          },
+          "quality": {
+            "type": "string",
+            "enum": [
+              "HIGH",
+              "POOR",
+              "LOW"
             ]
           }
         }
@@ -1180,9 +1189,6 @@
         "additionalProperties": false,
         "properties": {
           "id": {
-            "$ref": "#/components/schemas/uuid"
-          },
-          "adapter": {
             "$ref": "#/components/schemas/uuid"
           },
           "country": {
@@ -3206,7 +3212,7 @@
           "Adapter Management"
         ],
         "summary": "Query the result of adapter diagnostics.",
-        "description": "# Usage\n\nWhen an adapter health diagnostic is running (or at any time) this api\ncall may be made to get the current status of any running tests. AND to\nget the historical diagnostic/health results.\n\n## Parameters\n  - **id**: The id of the adapter to retrieve diagnostic health status\n  from.\n  - **days**: The maximum number of previous days to report. 1 = today.",
+        "description": "# Usage\n\nWhen an adapter health diagnostic is running (or at any time) this api\ncall may be made to get the current status of any running tests. AND to\nget the historical diagnostic/health results.\n\n## Parameters\n  - **id**: The id of the adapter to retrieve diagnostic health status\n  from.\n  - **days**: The maximum number of previous days to report. 1 = today.\n  0 = The most recent \"WAN\" result only. (Note, if this parameter is not\n  present, it defaults to 0.)",
         "parameters": [
           {
             "in": "query",
@@ -3226,7 +3232,7 @@
               "$ref": "#/components/schemas/health-days"
             },
             "example": 1,
-            "description": "The number of days of health history to provide. 1 is the most\nrecent day."
+            "description": "The number of days of health history to provide. 1 is the most\nrecent day.  0 = the most recent WAN Record. (Default)"
           }
         ],
         "responses": {
@@ -3247,7 +3253,8 @@
                     "latency-completion": 100,
                     "speed-rx": 185608437,
                     "speed-tx": 282140344,
-                    "connection": "WAN"
+                    "connection": "WAN",
+                    "quality": "HIGH"
                   },
                   {
                     "timestamp": 1591884008,
@@ -3258,7 +3265,8 @@
                     "latency-completion": 90,
                     "speed-rx": 185608437,
                     "speed-tx": 282140344,
-                    "connection": "VPN"
+                    "connection": "VPN",
+                    "quality": "HIGH"
                   },
                   {
                     "timestamp": 1591799408,
@@ -3269,7 +3277,8 @@
                     "latency-completion": 100,
                     "speed-rx": 185608437,
                     "speed-tx": 282140344,
-                    "connection": "WAN"
+                    "connection": "WAN",
+                    "quality": "POOR"
                   },
                   {
                     "timestamp": 1591797608,
@@ -3280,7 +3289,8 @@
                     "latency-completion": 90,
                     "speed-rx": 185608437,
                     "speed-tx": 282140344,
-                    "connection": "VPN"
+                    "connection": "VPN",
+                    "quality": "LOW"
                   }
                 ]
               }
@@ -3526,12 +3536,13 @@
               "enum": [
                 "All",
                 "Portable",
-                "Non-Portable"
+                "Non-Portable",
+                "Summary"
               ],
               "default": "All"
             },
             "example": "All",
-            "description": "The filter to apply to the service list, the list can contain ALL\nservices, or only Portable or Non-Portable services.\nIf the parameter is missing the call will return ALL services."
+            "description": "The filter to apply to the service list, the list can contain ALL\nservices, or only Portable or Non-Portable services.\nIf the parameter is missing the call will return ALL services.\ntype **\"Summary\"** will return a list of ALL services, excluding the\ncountries lists for each service."
           }
         ],
         "responses": {
@@ -3638,7 +3649,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success, Streaming Service Configuration Returned.  This is an array\nof all streaming services, and their current configuration on the\nadapter.\n\n- **id**: the id of the streaming service\n- **adapter**: The id of the adapter the setting realates to.\n- **country**: the country the streaming service is directed from.\n- **since**: The timestamp when the streaming service last changed.",
+            "description": "Success, Streaming Service Configuration Returned.  This is an array\nof all streaming services, and their current configuration on the\nadapter.\n\n- **id**: the id of the streaming service\n- **country**: the country the streaming service is directed from.\n- **since**: The timestamp when the streaming service last changed.",
             "content": {
               "application/json": {
                 "schema": {
@@ -3647,7 +3658,6 @@
                 "example": [
                   {
                     "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
-                    "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
                     "country": "US",
                     "since": 1590834650124
                   }
@@ -4426,7 +4436,7 @@
         "tags": [
           "Profile Management"
         ],
-        "summary": "Get device data usage.",
+        "summary": "Get profile data usage.",
         "description": "# Usage\n\nGenerates a list of data usage values for a profile, at a specified\nresolution.  Profile usage is a synthetic aggregate of all device usage,\nso, for example, if a high volume device is moved between profiles, the\nold profiles usage will decrease by the devices usage, and the new profile\nof the device will increase its usage by the same amount.\n\n## Parameters\n  - **id**: The Unique profile ID.",
         "parameters": [
           {
@@ -4472,7 +4482,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success, The device data usage is returned.",
+            "description": "Success, The profile data usage is returned.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4584,7 +4594,7 @@
         "tags": [
           "Device Management"
         ],
-        "summary": "Create a new user profile.",
+        "summary": "Assign a device to a Profile.",
         "description": "# Usage\n\nAssigns a device to a profile.  Can only assign devices to profiles that\nexist associated with the same adapter.\n\n## Parameters\n  - **id**: The unique id of the device we are associating with the profile.\n  - **profile**: The unique id of the profile we are assigning the\n  device to.",
         "requestBody": {
           "required": true,
