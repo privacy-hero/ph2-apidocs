@@ -1,0 +1,200 @@
+###### HEADER INFO ##################
+openapi: "3.0.2"
+info:
+  title: "Privacy Hero 2 - Browser Extension API"
+  version: "0.0.1"
+  description: |-
+    This API is only used by browser extensions.
+
+    Browser extensions perform operations through the router/adapter directly
+    this api allows those functions and browser extensions to operate and behave
+    reliably.
+
+    If the devices browser is not behind the adapter/router a server will reply
+    to these messages and the browser extension can detect this state from the
+    reply.
+
+    Note, when the adapter is handling the api, the connection will be over
+    http.  However when connected to the backend server the connection will
+    be https.
+
+    This API Documentation may be viewed at:
+      - [PrivacyHero2 API - Swagger UI](./index-browser-extension.html)
+      - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)
+
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: "http://privacy-hero.github.io/ph2-apidocs/LICENSE.html"
+  contact:
+    name: API Support (Steven Johnson)
+    url: http://www.example.com/support
+    email: sakurainds@gmail.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: ph2ext.privacyhero.com
+    description: The API deployment URL.
+  - url: ph2ext-mocked.privacyhero.com
+    description: A simple mocked implementation only for browser extension testing.
+  - url: https://{awsid}.execute-api.{region}.amazonaws.com/{stage}
+    description: Development URL
+    variables:
+      awsid:
+        default: "rsf12bcyml"
+        description: The ID for the dev AWS deployment
+      region:
+        enum:
+          - us-east-1
+        default: us-east-1
+        description: Deployment Regions
+      stage:
+        enum:
+          - dev
+          - qa
+          - prod
+        default: prod
+        description: Deployment Stages
+
+#########################################################
+# Components are preformatted data that can be reused in definitions.
+components:
+  schemas:
+    adblocking-cmd:
+      type: object
+      required:
+        - message
+        - state
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          enum: ["adblocking"]
+          description: |-
+            The name of the command to perform.  Must be "**adblocking**"
+        state:
+          type: boolean
+          nullable: true
+          description: |-
+            The state to set "**adblocking**" for the calling device to.
+            * true = adblocking is enabled (ads will be blocked).
+            * false = adblocking is disabled (ads will NOT be blocked).
+            * null = no change to the adblocking state, simply report current
+            state.
+
+    adblocking-reply:
+      type: object
+      required:
+        - message
+        - state
+      additionalProperties: false
+      properties:
+        message:
+          type: string
+          enum: ["adblocking"]
+          description: |-
+            The name of the command performed.  Must be "**adblocking**"
+        state:
+          type: boolean
+          nullable: true
+          description: |-
+            The current state of "**adblocking**" for the calling device.
+            * true = adblocking is enabled (ads will be blocked).
+            * false = adblocking is disabled (ads will NOT be blocked).
+            * null = Not behind the adapter. It is not possible to set or get the adblocking state,
+            the current state has not been changed and is unknown.
+
+tags:
+  - name: Browser Extension
+    description: Browser Extension Operations
+
+paths:
+  /: # All API calls are made to the root path.
+    post:
+      operationId: browser-ext
+      tags:
+        - Browser Extension
+      summary: Perform a Browser Extension operation.
+      description: |-
+        # Usage
+        All Browser extension API calls are performed with a post.  The json
+        body of the post determines the operation which will be performed. A
+        json body will be returned in the 200 reply with the result of the
+        command.
+
+        All operations are synchronous.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              oneOf:
+                - $ref: "#/components/schemas/adblocking-cmd"
+              discriminator:
+                propertyName: message
+            examples:
+              get-adblocking:
+                summary: Query the current adblocking state
+                value:
+                  message: "adblocking"
+                  state: null
+              adblocking-on:
+                summary: Turn adblocking **on** for the device.
+                value:
+                  message: "adblocking"
+                  state: true
+              adblocking-off:
+                summary: Turn adblocking **of** for the device.
+                value:
+                  message: "adblocking"
+                  state: false
+      responses:
+        "200":
+          description: |-
+            The reply always advises the current state, after taking any
+            necessary action from the command.  So, if the command was to enable
+            adblocking then the result will be true.
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/adblocking-reply"
+                discriminator:
+                  propertyName: message
+              examples:
+                no-connection:
+                  summary: No connection to the adapter (can not enable/disable adblocking.)
+                  value:
+                    message: "adblocking"
+                    state: null
+                adblocking-on:
+                  summary: adblocking is currently enabled.
+                  value:
+                    message: "adblocking"
+                    state: true
+                adblocking-off:
+                  summary: adblocking is currently disabled.
+                  value:
+                    message: "adblocking"
+                    state: false
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "404":
+          $ref: "inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "inc/response.oas3.yml#/components/responses/default"
