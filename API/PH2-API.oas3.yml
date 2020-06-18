@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.18"
+  version: "0.0.19"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -12,6 +12,10 @@ info:
       - [PrivacyHero2 API - Swagger UI](./index-swui.html)
       - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)
       - [Download API JSON](./API/PH2-API.oas3.json)
+
+    The Browser Extension API is maintained in a separate document and may be
+    viewed at:
+      - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)
 
   license:
     name: Copyright © 2020 HelpOn Inc. All Rights Reserved
