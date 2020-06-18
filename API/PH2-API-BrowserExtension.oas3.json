@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Browser Extension API",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "description": "This API is only used by browser extensions.\n\nBrowser extensions perform operations through the router/adapter directly\nthis api allows those functions and browser extensions to operate and behave\nreliably.\n\nIf the devices browser is not behind the adapter/router a server will reply\nto these messages and the browser extension can detect this state from the\nreply.\n\nNote, when the adapter is handling the api, the connection will be over\nhttp.  However when connected to the backend server the connection will\nbe https.\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)\n  - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -16,11 +16,15 @@
   },
   "servers": [
     {
-      "url": "ph2ext.privacyhero.com",
-      "description": "The API deployment URL."
+      "url": "https://ph2ext.privacyhero.com",
+      "description": "The API deployment URL. - Not behind Adapter."
     },
     {
-      "url": "ph2ext-mocked.privacyhero.com",
+      "url": "http://ph2ext.privacyhero.com",
+      "description": "The API deployment URL. - Behind Adapter."
+    },
+    {
+      "url": "https://ph2ext-mocked.privacyhero.com",
       "description": "A simple mocked implementation only for browser extension testing."
     },
     {
@@ -28,7 +32,7 @@
       "description": "Development URL",
       "variables": {
         "awsid": {
-          "default": "rsf12bcyml",
+          "default": "3tmmjf4w01",
           "description": "The ID for the dev AWS deployment"
         },
         "region": {
@@ -236,14 +240,14 @@
                   }
                 },
                 "adblocking-on": {
-                  "summary": "Turn adblocking **on** for the device.",
+                  "summary": "Turn adblocking ON for the device.",
                   "value": {
                     "message": "adblocking",
                     "state": true
                   }
                 },
                 "adblocking-off": {
-                  "summary": "Turn adblocking **of** for the device.",
+                  "summary": "Turn adblocking OFF for the device.",
                   "value": {
                     "message": "adblocking",
                     "state": false
@@ -277,14 +281,14 @@
                     }
                   },
                   "adblocking-on": {
-                    "summary": "adblocking is currently enabled.",
+                    "summary": "adblocking is currently ENABLED.",
                     "value": {
                       "message": "adblocking",
                       "state": true
                     }
                   },
                   "adblocking-off": {
-                    "summary": "adblocking is currently disabled.",
+                    "summary": "adblocking is currently DISABLED.",
                     "value": {
                       "message": "adblocking",
                       "state": false
