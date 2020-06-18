@@ -83,19 +83,6 @@ def adapter_speedtest_results():
         The distance is measured in whole MILES.
     """
 
-    ping_desc = """
-        The ping result is an array with a minimum of 10 entries, that represent
-        the results from at least 10 consecutive pings to the server.
-        The ping result is a positive integer which represents the number of
-        whole milliseconds (rounded up) it took for the ping to the server to
-        be replied to.
-
-        IF a ping fails, the position in the array where the result would be is set
-        to null.
-
-        There can be more than 10 results, but there can not be less than 10.
-    """
-
     connection_desc = """
         The connection which was tested.
 
