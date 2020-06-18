@@ -4452,154 +4452,6 @@ the distance stated, or CLOSE TO the distance stated.</p>
 
 <div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">ping</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-array&lt;int&gt;
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">>= 10 items</span>
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The ping result is an array with a minimum of 10 entries, that represent
-the results from at least 10 consecutive pings to the server.
-The ping result is a positive integer which represents the number of
-whole milliseconds (rounded up) it took for the ping to the server to
-be replied to.</p>
-<p>IF a ping fails, the position in the array where the result would be is set
-to null.</p>
-<p>There can be more than 10 results, but there can not be less than 10.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-
-        
-        
-
-        
-          
-            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
-            
-              
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">0</span>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-int
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">uint64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>number of milliseconds the ping took to reply, or null if no reply.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-            
-          
-
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
-          
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">rx</span>
@@ -4774,6 +4626,128 @@ string
 
 
           
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv4</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv4 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 15</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 7</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Connections Internet IPv4 Address</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv6</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv6 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Connections Internet IPv6 Address</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -4849,21 +4823,10 @@ string
   "location": "Phuket, Thailand",
   "provider": "3BB",
   "distance": -50,
-  "ping": [
-    10,
-    null,
-    7,
-    9,
-    2,
-    5,
-    10,
-    12,
-    5,
-    3
-  ],
   "rx": 185608437,
   "tx": 282140344,
-  "connection": "WAN"
+  "connection": "WAN",
+  "ipv4": "183.89.198.67"
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
         
@@ -8332,154 +8295,6 @@ the distance stated, or CLOSE TO the distance stated.</p>
 
 <div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">ping</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-array&lt;int&gt;
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">>= 10 items</span>
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The ping result is an array with a minimum of 10 entries, that represent
-the results from at least 10 consecutive pings to the server.
-The ping result is a positive integer which represents the number of
-whole milliseconds (rounded up) it took for the ping to the server to
-be replied to.</p>
-<p>IF a ping fails, the position in the array where the result would be is set
-to null.</p>
-<p>There can be more than 10 results, but there can not be less than 10.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-
-        
-        
-
-        
-          
-            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
-            
-              
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class=" flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">0</span>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-int
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">uint64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>number of milliseconds the ping took to reply, or null if no reply.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-  </div>
-</div>
-
-
-            
-          
-
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
-          
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">rx</span>
@@ -8643,6 +8458,128 @@ string
               <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
             
           </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv4</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv4 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 15</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 7</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Connections Internet IPv4 Address</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv6</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv6 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Connections Internet IPv6 Address</p>
+</div>
+        
+        
+        
         
         
       </div>

@@ -116,21 +116,21 @@ def adapter_speedtest_results():
         {Field.string("provider",
             "The name of the ISP/Network operator managing the speedtest server.")},
         {Field.int64("distance", distance_desc)},
-        {Field.int_array("ping",ping_desc,"uint64",
-            "number of milliseconds the ping took to reply, or null if no reply.",10)},
         {Field.int("rx", "Result in bits per second of the receive speed test.")},
         {Field.int("tx", "Result in bits per second of the transmit speed test.")},
-        {Field.enum("connection",connection_desc, ["WAN","VPN"])}
+        {Field.enum("connection",connection_desc, ["WAN","VPN"])},
+        {Field.ipv4("ipv4", "The Connections Internet IPv4 Address")},
+        {Field.ipv6("ipv6", "The Connections Internet IPv6 Address")}
     """
     extra_example = """
         "url": "http://www.3bb.com/speedtest",
         "location": "Phuket, Thailand",
         "provider": "3BB",
         "distance": -50,
-        "ping": [10, null, 7, 9, 2, 5, 10, 12, 5, 3],
         "rx": 185608437,
         "tx": 282140344,
-        "connection": "WAN"
+        "connection": "WAN",
+        "ipv4": "183.89.198.67"
     """
     extra_required = """
         "tstamp",
@@ -138,10 +138,10 @@ def adapter_speedtest_results():
         "location",
         "provider",
         "distance",
-        "ping",
         "rx",
         "tx",
-        "connection"
+        "connection",
+        "ipv4"
     """
 
     return base_message(

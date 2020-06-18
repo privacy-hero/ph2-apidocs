@@ -487,16 +487,6 @@
                     "format": "int64",
                     "description": "The distance is the approximate distance from the adapter to the speedtest\nserver.  The distance can be either a value that is estimated to be LESS THAN\nthe distance stated, or CLOSE TO the distance stated.\n\n* -VE = The estimate is a LESS THAN this estimate.\n* +VE = The estimate is a CLOSE TO this estimate.\n\nThe distance is measured in whole MILES."
                   },
-                  "ping": {
-                    "type": "array",
-                    "description": "The ping result is an array with a minimum of 10 entries, that represent\nthe results from at least 10 consecutive pings to the server.\nThe ping result is a positive integer which represents the number of\nwhole milliseconds (rounded up) it took for the ping to the server to\nbe replied to.\n\nIF a ping fails, the position in the array where the result would be is set\nto null.\n\nThere can be more than 10 results, but there can not be less than 10.",
-                    "items": {
-                      "type": "int",
-                      "format": "uint64",
-                      "description": "number of milliseconds the ping took to reply, or null if no reply."
-                    },
-                    "minItems": 10
-                  },
                   "rx": {
                     "type": "int",
                     "format": "Result in bits per second of the receive speed test.",
@@ -514,6 +504,20 @@
                       "WAN",
                       "VPN"
                     ]
+                  },
+                  "ipv4": {
+                    "type": "string",
+                    "format": "IPv4 Address",
+                    "description": "The Connections Internet IPv4 Address",
+                    "minLength": 7,
+                    "maxLength": 15
+                  },
+                  "ipv6": {
+                    "type": "string",
+                    "format": "IPv6 Address",
+                    "description": "The Connections Internet IPv6 Address",
+                    "minLength": 2,
+                    "maxLength": 39
                   }
                 },
                 "example": {
@@ -523,21 +527,10 @@
                   "location": "Phuket, Thailand",
                   "provider": "3BB",
                   "distance": -50,
-                  "ping": [
-                    10,
-                    null,
-                    7,
-                    9,
-                    2,
-                    5,
-                    10,
-                    12,
-                    5,
-                    3
-                  ],
                   "rx": 185608437,
                   "tx": 282140344,
-                  "connection": "WAN"
+                  "connection": "WAN",
+                  "ipv4": "183.89.198.67"
                 },
                 "required": [
                   "message",
@@ -546,10 +539,10 @@
                   "location",
                   "provider",
                   "distance",
-                  "ping",
                   "rx",
                   "tx",
-                  "connection"
+                  "connection",
+                  "ipv4"
                 ],
                 "additionalProperties": false
               }

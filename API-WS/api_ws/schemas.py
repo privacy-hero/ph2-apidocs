@@ -88,6 +88,34 @@ class Field:
 
     # -------------------------------------------------------------------------
     @staticmethod
+    def ipv4(name="ipv4", desc="A IPv4 Address"):
+        """Return the definition of the standard IPv4 type field."""
+        return f"""
+            "{name}" : {{
+                "type" : "string",
+                "format": "IPv4 Address",
+                "description" :{mls(desc)},
+                "minLength": {len("0.0.0.0")},
+                "maxLength": {len("255.255.255.255")}
+            }}
+        """
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def ipv6(name="ipv4", desc="A IPv6 Address"):
+        """Return the definition of the standard IPv4 type field."""
+        return f"""
+            "{name}" : {{
+                "type" : "string",
+                "format": "IPv6 Address",
+                "description" :{mls(desc)},
+                "minLength": {len("::")},
+                "maxLength": {len("FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF")}
+            }}
+        """
+
+    # -------------------------------------------------------------------------
+    @staticmethod
     def sha256(name="sha256", desc="A Base64-URL Encoded SHA256 hash"):
         """Return the definition of the standard sha256 type field."""
         return f"""
