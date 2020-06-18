@@ -32,9 +32,11 @@ info:
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
-  - url: ph2ext.privacyhero.com
-    description: The API deployment URL.
-  - url: ph2ext-mocked.privacyhero.com
+  - url: https://ph2ext.privacyhero.com
+    description: The API deployment URL. - Not behind Adapter.
+  - url: http://ph2ext.privacyhero.com
+    description: The API deployment URL. - Behind Adapter.
+  - url: https://ph2ext-mocked.privacyhero.com
     description: A simple mocked implementation only for browser extension testing.
   - url: https://{awsid}.execute-api.{region}.amazonaws.com/{stage}
     description: Development URL
