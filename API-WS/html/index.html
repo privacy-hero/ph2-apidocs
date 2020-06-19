@@ -187,7 +187,7 @@
 
             
             <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-              href="#operation-subscribe-ADAPTER_DIAGS">
+              href="#operation-subscribe-ADAPTER_DIAGNOSTICS">
               
               <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
                 style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
@@ -343,7 +343,7 @@
 
             
             <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-              href="#operation-subscribe-DEVICE_DISC">
+              href="#operation-subscribe-DEVICE_DISCOVERY">
               
               <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
                 style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
@@ -357,7 +357,7 @@
           
              
               <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-                href="#operation-publish-DEVICE_CONF">
+                href="#operation-publish-DEVICE_CONFIGURATION">
                 <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
                   style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
                 
@@ -368,6 +368,18 @@
               </a>
             
 
+            
+            <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+              href="#operation-subscribe-DEVICE_CONFIGURATION">
+              
+              <span class="bg-green-dark font-bold no-underline text-white uppercase p-1 mr-2 rounded"
+                style="height: 21px;font-size: 11px;" title="Subscribe">Sub</span>
+              
+              <span style="padding-top: 2px;">
+                Device Configuration
+              </span>
+              
+            </a>
             
           
         </div>
@@ -472,10 +484,19 @@
         </a>
       
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
-          href="#message-DeviceStateChange">
+          href="#message-ChangeDeviceState">
           <div style="display:inline-block;">
             
-<span class="string-chunk" style="padding-top: 2px;">DeviceStateChange</span>
+<span class="string-chunk" style="padding-top: 2px;">ChangeDeviceState</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-DeviceStateChanged">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">DeviceStateChanged</span>
 
           </div>
         </a>
@@ -3249,7 +3270,7 @@ string
     
       
 
-<a name="operation-subscribe-ADAPTER_DIAGS"></a>
+<a name="operation-subscribe-ADAPTER_DIAGNOSTICS"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
@@ -3259,7 +3280,7 @@ string
         title="Subscribe">Sub</span>
       
       
-<span class="string-chunk" >ADAPTER_DIAGS</span>
+<span class="string-chunk" >ADAPTER_DIAGNOSTICS</span>
 
     </h3>
 
@@ -6061,7 +6082,7 @@ since power on, this field is omitted.</p>
     
       
 
-<a name="operation-subscribe-DEVICE_DISC"></a>
+<a name="operation-subscribe-DEVICE_DISCOVERY"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
@@ -6071,7 +6092,7 @@ since power on, this field is omitted.</p>
         title="Subscribe">Sub</span>
       
       
-<span class="string-chunk" >DEVICE_DISC</span>
+<span class="string-chunk" >DEVICE_DISCOVERY</span>
 
     </h3>
 
@@ -6870,7 +6891,7 @@ be sent.</p>
     
       
 
-<a name="operation-publish-DEVICE_CONF"></a>
+<a name="operation-publish-DEVICE_CONFIGURATION"></a>
 <div class="center-block p-8">
   <div class="operation pt-8 pb-8">
     <h3 class="font-mono text-base">
@@ -6879,7 +6900,7 @@ be sent.</p>
       
       
       
-<span class="string-chunk" >DEVICE_CONF</span>
+<span class="string-chunk" >DEVICE_CONFIGURATION</span>
 
     </h3>
 
@@ -6903,9 +6924,9 @@ be sent.</p>
   <div class="text-sm text-grey-darker mb-2">
     
     
-      Device State Change
+      Change Device State
       
-        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">DeviceStateChange</span>
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">ChangeDeviceState</span>
       
     
   </div>
@@ -7030,7 +7051,7 @@ string
         
         
         
-          <div class="text-xs">Const: &quot;device state change&quot;</div>
+          <div class="text-xs">Const: &quot;change device state&quot;</div>
         
         
         
@@ -7501,6 +7522,8 @@ accordingly.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
             
+              <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
+            
           </div>
         
         
@@ -7669,7 +7692,7 @@ boolean
   
 
 <form>
-  <h5 class="examples-uid text-orange mt-4">DeviceStateChange</h5>
+  <h5 class="examples-uid text-orange mt-4">ChangeDeviceState</h5>
   
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
@@ -7684,7 +7707,7 @@ boolean
       <div class="children payload-examples mt-4">
         
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
-  "message": "device state change",
+  "message": "change device state",
   "tstamp": 1592217870123,
   "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
   "devices": [
@@ -7725,6 +7748,868 @@ boolean
     
   </div>
   <div class="responsive-container">
+    
+      
+
+<a name="operation-subscribe-DEVICE_CONFIGURATION"></a>
+<div class="center-block p-8">
+  <div class="operation pt-8 pb-8">
+    <h3 class="font-mono text-base">
+      
+      
+      <span class="font-mono border border-green-dark text-green-dark uppercase p-1 rounded"
+        title="Subscribe">Sub</span>
+      
+      
+<span class="string-chunk" >DEVICE_CONFIGURATION</span>
+
+    </h3>
+
+    <div class="mt-4 mb-4 markdown"><p>These are messages related to the configuration of known devices.</p>
+</div>
+
+    <p class="text-grey text-sm">Device Configuration</p>
+    <div class="mt-4 mb-4 markdown"><p>Device Configuration messages.</p>
+</div>
+
+
+
+    
+
+
+    
+    <p>Accepts the following message:</p>
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    
+      Device State Changed
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">DeviceStateChanged</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Advise the Adapter to change the state of the devices.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend and either confirms
+the adapters request to set state, OR advises that the state changed
+asynchronously without being requested by the backend.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="is-open">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 20</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 20</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Advise the Adapter to change the state of the devices.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;device state changed&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>IF this is a reply to the backend setting the device state, this must equal the
+tstamp in the original request.
+IF this is an advice that a state changed asynchronously, this is the time the
+adapter changed/detected the state.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">UUID</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 36</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 36</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  This field is only set as a reply to a Change Device
+State command, if that command included an ID Field.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of Device MAC addresses the state changes were applied to.  All
+devices listed had the same state change made as listed in this message.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.  Assumed unique per adapter.  Eg. &quot;00:11:22:33:44:55&quot;
+Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">states</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;object&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The array of services and states that change.  If this is a reply to the
+Change Device State command from the backend, then it lists the same states
+that were requested by the backend.  If asynchronous state changes occur, the
+actual changes that ocurred are listed only.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Service State</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">service</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The service/filter on the device which changed state.
+- <strong>ad-blocking</strong> - Ad Blocking is Enabled on the device when True.
+- <strong>device-protection</strong> - Device Protection is Enabled on the device when True.
+- <strong>internet-pause</strong> - Internet is paused for the device when True.
+- <strong>youtube-restricted</strong> - Youtube returns restricted search results when True.
+- <strong>safesearch</strong> - Search Engines return &quot;safe&quot; results when True.</p>
+<ul>
+<li>
+<p><strong>online</strong> - If the device is online or not. Only an asynchronous state change.&quot;</p>
+<p>Note: <strong>internet-pause</strong> also has a timed mode.  The boolean option in this
+message terminates any timed-pause current on the device and sets the state
+accordingly.</p>
+<pre><code>  **online** is only an asynchronous state change.  it is only ever sent as
+  a result of the adapter detecting a device coming online or falling offline.</code></pre>
+</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"ad-blocking"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"device-protection"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"internet-pause"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"youtube-restricted"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">state</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><ul>
+<li><strong>true</strong> - The service/filter is enabled.</li>
+<li><strong>false</strong> - The service/filter is disabled.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+
+    
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the devices connected to an Adapter and their state/configuration.">Device Messages</span>
+      
+  
+</div>
+
+
+
+  </div>
+</div>
+
+<div class="right-block p-8">
+  <h4 class="text-lg text-white mb-4">Examples</h4>
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">DeviceStateChanged</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "device state changed",
+  "tstamp": 1592217870123,
+  "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+  "devices": [
+    "53:CB:12:79:E5:F6",
+    "DD:0F:91:FE:9E:00",
+    "54:A4:33:F5:D8:A4"
+  ],
+  "states": [
+    {
+      "service": "ad-blocking",
+      "state": false
+    },
+    {
+      "service": "internet-pause",
+      "state": false
+    },
+    {
+      "service": "safe-search",
+      "state": true
+    }
+  ]
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+</div>
+
+
+
     
   </div>
 
@@ -12059,7 +12944,7 @@ be sent.</p>
 
 
       
-      <a name="message-DeviceStateChange"></a>
+      <a name="message-ChangeDeviceState"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
@@ -12068,9 +12953,9 @@ be sent.</p>
     <span class="text-grey-darker font-bold mr-2">#11</span>
     
     
-      Device State Change
+      Change Device State
       
-        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">DeviceStateChange</span>
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">ChangeDeviceState</span>
       
     
   </div>
@@ -12195,7 +13080,7 @@ string
         
         
         
-          <div class="text-xs">Const: &quot;device state change&quot;</div>
+          <div class="text-xs">Const: &quot;change device state&quot;</div>
         
         
         
@@ -12665,6 +13550,766 @@ accordingly.</p>
               <span class="border text-orange rounded ml-1 py-0 px-2">"youtube-restricted"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">state</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><ul>
+<li><strong>true</strong> - The service/filter is enabled.</li>
+<li><strong>false</strong> - The service/filter is disabled.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-DeviceStateChanged"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#12</span>
+    
+    
+      Device State Changed
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">DeviceStateChanged</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Advise the Adapter to change the state of the devices.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend and either confirms
+the adapters request to set state, OR advises that the state changed
+asynchronously without being requested by the backend.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 20</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 20</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Advise the Adapter to change the state of the devices.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;device state changed&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>IF this is a reply to the backend setting the device state, this must equal the
+tstamp in the original request.
+IF this is an advice that a state changed asynchronously, this is the time the
+adapter changed/detected the state.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">UUID</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 36</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 36</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  This field is only set as a reply to a Change Device
+State command, if that command included an ID Field.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of Device MAC addresses the state changes were applied to.  All
+devices listed had the same state change made as listed in this message.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.  Assumed unique per adapter.  Eg. &quot;00:11:22:33:44:55&quot;
+Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">states</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;object&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The array of services and states that change.  If this is a reply to the
+Change Device State command from the backend, then it lists the same states
+that were requested by the backend.  If asynchronous state changes occur, the
+actual changes that ocurred are listed only.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Service State</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">service</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The service/filter on the device which changed state.
+- <strong>ad-blocking</strong> - Ad Blocking is Enabled on the device when True.
+- <strong>device-protection</strong> - Device Protection is Enabled on the device when True.
+- <strong>internet-pause</strong> - Internet is paused for the device when True.
+- <strong>youtube-restricted</strong> - Youtube returns restricted search results when True.
+- <strong>safesearch</strong> - Search Engines return &quot;safe&quot; results when True.</p>
+<ul>
+<li>
+<p><strong>online</strong> - If the device is online or not. Only an asynchronous state change.&quot;</p>
+<p>Note: <strong>internet-pause</strong> also has a timed mode.  The boolean option in this
+message terminates any timed-pause current on the device and sets the state
+accordingly.</p>
+<pre><code>  **online** is only an asynchronous state change.  it is only ever sent as
+  a result of the adapter detecting a device coming online or falling offline.</code></pre>
+</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"ad-blocking"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"device-protection"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"internet-pause"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"youtube-restricted"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
             
           </div>
         

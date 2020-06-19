@@ -375,7 +375,7 @@
         ]
       }
     },
-    "ADAPTER_DIAGS": {
+    "ADAPTER_DIAGNOSTICS": {
       "description": "These are messages related to the diagnostic processes of the adapter.\n\nDiagnostics are performed as required by the adapter, and also as a result of\nexplicit command from the backend.\n\nIf the adapter requested a diagnostic check, the tstamp in the reply MUST match\nthe tstamp in the request.",
       "subscribe": {
         "summary": "Adapter Diagnostics",
@@ -792,7 +792,7 @@
         ]
       }
     },
-    "DEVICE_DISC": {
+    "DEVICE_DISCOVERY": {
       "description": "These are messages related to the discovery of new devices or changed\ndevices.",
       "subscribe": {
         "summary": "Device Discovery",
@@ -902,16 +902,141 @@
         ]
       }
     },
-    "DEVICE_CONF": {
+    "DEVICE_CONFIGURATION": {
       "description": "These are messages related to the configuration of known devices.",
+      "subscribe": {
+        "summary": "Device Configuration",
+        "description": "Device Configuration messages.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "DeviceStateChanged",
+              "title": "Device State Changed",
+              "summary": "Advise the Adapter to change the state of the devices.",
+              "description": "This message is sent from the Adapter to the Backend and either confirms\nthe adapters request to set state, OR advises that the state changed\nasynchronously without being requested by the backend.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Adapter to change the state of the devices.",
+                    "const": "device state changed",
+                    "minLength": 20,
+                    "maxLength": 20
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "IF this is a reply to the backend setting the device state, this must equal the\ntstamp in the original request.\nIF this is an advice that a state changed asynchronously, this is the time the\nadapter changed/detected the state."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  This field is only set as a reply to a Change Device\nState command, if that command included an ID Field.",
+                    "minLength": 36,
+                    "maxLength": 36,
+                    "format": "UUID"
+                  },
+                  "devices": {
+                    "type": "array",
+                    "description": "An array of Device MAC addresses the state changes were applied to.  All\ndevices listed had the same state change made as listed in this message.",
+                    "items": {
+                      "type": "string",
+                      "format": "Mac EUI",
+                      "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
+                      "minLength": 1,
+                      "maxLength": 17
+                    },
+                    "minItems": 1
+                  },
+                  "states": {
+                    "type": "array",
+                    "description": "The array of services and states that change.  If this is a reply to the\nChange Device State command from the backend, then it lists the same states\nthat were requested by the backend.  If asynchronous state changes occur, the\nactual changes that ocurred are listed only.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "service",
+                        "state"
+                      ],
+                      "description": "Service State",
+                      "properties": {
+                        "service": {
+                          "type": "string",
+                          "description": "The service/filter on the device which changed state.\n    - **ad-blocking** - Ad Blocking is Enabled on the device when True.\n    - **device-protection** - Device Protection is Enabled on the device when True.\n    - **internet-pause** - Internet is paused for the device when True.\n    - **youtube-restricted** - Youtube returns restricted search results when True.\n    - **safesearch** - Search Engines return \"safe\" results when True.\n\n- **online** - If the device is online or not. Only an asynchronous state change.\"\n\n\n    Note: **internet-pause** also has a timed mode.  The boolean option in this\n    message terminates any timed-pause current on the device and sets the state\n    accordingly.\n\n        **online** is only an asynchronous state change.  it is only ever sent as\n        a result of the adapter detecting a device coming online or falling offline.",
+                          "enum": [
+                            "ad-blocking",
+                            "device-protection",
+                            "internet-pause",
+                            "youtube-restricted",
+                            "safesearch",
+                            "online"
+                          ]
+                        },
+                        "state": {
+                          "type": "boolean",
+                          "description": "- **true** - The service/filter is enabled.\n- **false** - The service/filter is disabled."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "device state changed",
+                  "tstamp": 1592217870123,
+                  "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+                  "devices": [
+                    "53:CB:12:79:E5:F6",
+                    "DD:0F:91:FE:9E:00",
+                    "54:A4:33:F5:D8:A4"
+                  ],
+                  "states": [
+                    {
+                      "service": "ad-blocking",
+                      "state": false
+                    },
+                    {
+                      "service": "internet-pause",
+                      "state": false
+                    },
+                    {
+                      "service": "safe-search",
+                      "state": true
+                    }
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "devices",
+                  "states"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Device Messages",
+            "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+          }
+        ]
+      },
       "publish": {
         "summary": "Device Configuration",
         "description": "Device Configuration messages.",
         "message": {
           "oneOf": [
             {
-              "name": "DeviceStateChange",
-              "title": "Device State Change",
+              "name": "ChangeDeviceState",
+              "title": "Change Device State",
               "summary": "Advise the Adapter to change the state of the devices.",
               "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto make the listed state changes to the listed devices.  The message can\ncontain multiple state changes, and multiple devices.  The devices listed are\nall triggered with the same state changes.",
               "tags": [
@@ -926,7 +1051,7 @@
                   "message": {
                     "type": "string",
                     "description": "Advise the Adapter to change the state of the devices.",
-                    "const": "device state change",
+                    "const": "change device state",
                     "minLength": 19,
                     "maxLength": 19
                   },
@@ -967,13 +1092,14 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The service/filter on the device which we wish to change the state of.\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
+                          "description": "The service/filter on the device which we wish to change the state of.\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
                           "enum": [
                             "ad-blocking",
                             "device-protection",
                             "internet-pause",
                             "youtube-restricted",
-                            "safesearch"
+                            "safesearch",
+                            "online"
                           ]
                         },
                         "state": {
@@ -987,7 +1113,7 @@
                   }
                 },
                 "example": {
-                  "message": "device state change",
+                  "message": "change device state",
                   "tstamp": 1592217870123,
                   "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
                   "devices": [
