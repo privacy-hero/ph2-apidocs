@@ -15,7 +15,7 @@ VPN On-Off:
 """
 
 # from .util import mls
-from .schemas import base_message, channel, Field
+from .schemas import base_message, channel, Field, sha256_example
 from .tags import TAGS
 
 
@@ -125,6 +125,126 @@ def device_info():
     )
 
 
+def known_devices():
+    """Known Devices message
+
+    Sent from Backend to Adapter after successful connection.
+    """
+
+    description = """
+        This message is sent by the Backend after initial adapter configuration
+        upon successful connection of an adapter to the backend.  It tells the adapter
+        all devices known by the backend.  If a device is not in this list of devices
+        that the adapter knows about, and the device is currently offline, the device
+        is deleted. If the device is Online, a new Device Info for the device is queued
+        to the backend to update the backends knowledge of all the connected devices.
+        IF any of the known device data differs to the data the adapter knows about
+        the device, a new device info message is queued to update the backends knowledge
+        of the device.
+    """
+
+    tstamp_desc = """
+        The time the device was discovered/changed.
+    """
+
+    mac_desc = """
+        The Devices MAC address."""
+
+    ipv4_desc = """
+        The IPv4 Address assigned to this Device."""
+
+    ipv6_desc = """
+        **Optional:** The IPv6 Address assigned to this Device."""
+
+    dhcp_hostname_desc = """
+        The Hostname the Device declared itself as."""
+
+    dhcp_class_desc = """
+        **Optional.** The class of device discovered from DHCP."""
+
+    dhcp_clientid_desc = """
+        **Optional.** The client id of device discovered from DHCP."""
+
+    upnp_desc = """
+        **Optional.** IF a upnp xml device metadata record has been sent to
+        the backend for the device, this field will contain the sha256 (base64 encoded)
+        hash of the xml metadata file, so that the adapter can confirm the metadata
+        held by the backend is accurate.  If it is not accurate, a device info message
+        with the correct data is queued for the device.
+    """
+
+    online_desc = """
+        The current Online state the backend believes is valid for the device.  IF it
+        is not valid, a device info message is not sent to the backend to correct it,
+        but a "Device State Changed" message is.
+    """
+
+    devices_desc = """
+        An array of all devices known by the backend for the adapter.
+    """
+
+    cmd = "known devices"
+    name = "KnownDevices"
+    title = "Known Device Information"
+    summary = "Configures the Adapter with all devices known by the backend."
+
+    device_fields = f"""
+    {{
+
+        {Field.mac(desc=mac_desc)},
+        {Field.ipv4(desc=ipv4_desc)},
+        {Field.ipv6(desc=ipv6_desc)},
+        {Field.string("dhcp-hostname",dhcp_hostname_desc, minlength=1, maxlength=255)},
+        {Field.string("dhcp-class", dhcp_class_desc)},
+        {Field.string("dhcp-clientid", dhcp_clientid_desc)},
+        {Field.sha256("upnp.csum", upnp_desc)},
+        {Field.boolean("online", online_desc)}
+    }}
+    """
+
+    extra_fields = f"""
+        {Field.array("devices", devices_desc,
+            Field.object(None, "Device Info",
+                ["mac", "ipv4", "dhcp-hostname", "online"],
+                device_fields))}
+    """
+
+    extra_example = f"""
+        "devices" : [
+            {{
+                "mac"       : "00:11:22:33:44:55",
+                "ipv4"      : "192.168.0.96",
+                "ipv6"      : "::ffff:c0a8:60",
+                "dhcp-hostname" : "MyPS5.lan",
+                "online" : true
+            }},
+            {{
+                "mac"       : "26:C7:71:4C:97:37",
+                "ipv4"      : "192.168.0.18",
+                "ipv6"      : "::ffff:c0a8:12",
+                "dhcp-hostname" : "OnkyoAmp.lan",
+                "upnp.csum" : "{sha256_example("UPNP XML Example")}",
+                "online" : true
+            }}
+        ]
+    """
+
+    extra_required = '"tstamp", "mac", "ipv4", "dhcp-hostname", "online"'
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def device_discovery_channel():
     """Device Discovery messages."""
     description = """
@@ -134,10 +254,13 @@ def device_discovery_channel():
 
     subscribe_desc = "Device Discovery messages."
     subscribe_msgs = [device_info()]
+    publish_msgs = [known_devices()]
 
     return channel(
         description,
         "Device Discovery",
+        pub_desc=subscribe_desc,
+        pub_msgs=publish_msgs,
         sub_desc=subscribe_desc,
         sub_msgs=subscribe_msgs,
         tags=TAGS.DEVICE_MSGS,

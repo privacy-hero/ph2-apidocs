@@ -340,6 +340,17 @@
             
           
              
+              <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+                href="#operation-publish-DEVICE_DISCOVERY">
+                <span class="bg-blue-dark font-bold h-6 no-underline text-white uppercase p-1 mr-2 rounded"
+                  style="height: 21px;font-size: 11px;" title="Publish">Pub</span>
+                
+                <span style="padding-top: 2px;">
+                  Device Discovery
+                </span>
+                
+              </a>
+            
 
             
             <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
@@ -470,6 +481,15 @@
           <div style="display:inline-block;">
             
 <span class="string-chunk" style="padding-top: 2px;">LinkEstablished</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-KnownDevices">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">KnownDevices</span>
 
           </div>
         </a>
@@ -6076,6 +6096,976 @@ since power on, this field is omitted.</p>
   </div>
 
   <div class="responsive-container">
+    
+      
+
+<a name="operation-publish-DEVICE_DISCOVERY"></a>
+<div class="center-block p-8">
+  <div class="operation pt-8 pb-8">
+    <h3 class="font-mono text-base">
+      
+      <span class="font-mono border border-blue text-blue uppercase p-1 rounded" title="Publish">Pub</span>
+      
+      
+      
+<span class="string-chunk" >DEVICE_DISCOVERY</span>
+
+    </h3>
+
+    <div class="mt-4 mb-4 markdown"><p>These are messages related to the discovery of new devices or changed
+devices.</p>
+</div>
+
+    <p class="text-grey text-sm">Device Discovery</p>
+    <div class="mt-4 mb-4 markdown"><p>Device Discovery messages.</p>
+</div>
+
+
+
+    
+
+
+    
+    <p>Accepts the following message:</p>
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    
+      Known Device Information
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">KnownDevices</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Configures the Adapter with all devices known by the backend.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent by the Backend after initial adapter configuration
+upon successful connection of an adapter to the backend.  It tells the adapter
+all devices known by the backend.  If a device is not in this list of devices
+that the adapter knows about, and the device is currently offline, the device
+is deleted. If the device is Online, a new Device Info for the device is queued
+to the backend to update the backends knowledge of all the connected devices.
+IF any of the known device data differs to the data the adapter knows about
+the device, a new device info message is queued to update the backends knowledge
+of the device.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="is-open">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 13</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 13</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Configures the Adapter with all devices known by the backend.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;known devices&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The time the device was discovered/changed.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;object&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of all devices known by the backend for the adapter.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Device Info</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">mac</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv4</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv4 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 15</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 7</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The IPv4 Address assigned to this Device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv6</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv6 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional:</strong> The IPv6 Address assigned to this Device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">dhcp-hostname</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 255</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Hostname the Device declared itself as.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">dhcp-class</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional.</strong> The class of device discovered from DHCP.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">dhcp-clientid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional.</strong> The client id of device discovered from DHCP.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">upnp.csum</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">bas64-url-sha256</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 43</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 43</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional.</strong> IF a upnp xml device metadata record has been sent to
+the backend for the device, this field will contain the sha256 (base64 encoded)
+hash of the xml metadata file, so that the adapter can confirm the metadata
+held by the backend is accurate.  If it is not accurate, a device info message
+with the correct data is queued for the device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">online</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The current Online state the backend believes is valid for the device.  IF it
+is not valid, a device info message is not sent to the backend to correct it,
+but a &quot;Device State Changed&quot; message is.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+
+    
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the devices connected to an Adapter and their state/configuration.">Device Messages</span>
+      
+  
+</div>
+
+
+
+  </div>
+</div>
+
+<div class="right-block p-8">
+  <h4 class="text-lg text-white mb-4">Examples</h4>
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">KnownDevices</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "known devices",
+  "tstamp": 1592217870123,
+  "devices": [
+    {
+      "mac": "00:11:22:33:44:55",
+      "ipv4": "192.168.0.96",
+      "ipv6": "::ffff:c0a8:60",
+      "dhcp-hostname": "MyPS5.lan",
+      "online": true
+    },
+    {
+      "mac": "26:C7:71:4C:97:37",
+      "ipv4": "192.168.0.18",
+      "ipv6": "::ffff:c0a8:12",
+      "dhcp-hostname": "OnkyoAmp.lan",
+      "upnp.csum": "FR981aXusJxMO_uB6IQdGYjnP4xiyCBsp-J00mcX55E",
+      "online": true
+    }
+  ]
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+</div>
+
+
+
     
   </div>
   <div class="responsive-container">
@@ -12229,13 +13219,882 @@ since power on, this field is omitted.</p>
 
 
       
-      <a name="message-DeviceInformation"></a>
+      <a name="message-KnownDevices"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
     <span class="text-grey-darker font-bold mr-2">#10</span>
+    
+    
+      Known Device Information
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">KnownDevices</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Configures the Adapter with all devices known by the backend.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent by the Backend after initial adapter configuration
+upon successful connection of an adapter to the backend.  It tells the adapter
+all devices known by the backend.  If a device is not in this list of devices
+that the adapter knows about, and the device is currently offline, the device
+is deleted. If the device is Online, a new Device Info for the device is queued
+to the backend to update the backends knowledge of all the connected devices.
+IF any of the known device data differs to the data the adapter knows about
+the device, a new device info message is queued to update the backends knowledge
+of the device.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 13</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 13</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Configures the Adapter with all devices known by the backend.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;known devices&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The time the device was discovered/changed.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;object&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of all devices known by the backend for the adapter.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Device Info</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">mac</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv4</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv4 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 15</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 7</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The IPv4 Address assigned to this Device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv6</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv6 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional:</strong> The IPv6 Address assigned to this Device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">dhcp-hostname</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 255</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Hostname the Device declared itself as.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">dhcp-class</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional.</strong> The class of device discovered from DHCP.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">dhcp-clientid</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional.</strong> The client id of device discovered from DHCP.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">upnp.csum</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">bas64-url-sha256</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 43</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 43</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional.</strong> IF a upnp xml device metadata record has been sent to
+the backend for the device, this field will contain the sha256 (base64 encoded)
+hash of the xml metadata file, so that the adapter can confirm the metadata
+held by the backend is accurate.  If it is not accurate, a device info message
+with the correct data is queued for the device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">online</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The current Online state the backend believes is valid for the device.  IF it
+is not valid, a device info message is not sent to the backend to correct it,
+but a &quot;Device State Changed&quot; message is.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-DeviceInformation"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#11</span>
     
     
       Device Information
@@ -12950,7 +14809,7 @@ be sent.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#11</span>
+    <span class="text-grey-darker font-bold mr-2">#12</span>
     
     
       Change Device State
@@ -13704,7 +15563,7 @@ boolean
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#12</span>
+    <span class="text-grey-darker font-bold mr-2">#13</span>
     
     
       Device State Changed
