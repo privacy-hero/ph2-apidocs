@@ -104,7 +104,9 @@
                   "message": {
                     "type": "string",
                     "description": "Multiple Message Packet.",
-                    "const": "multi"
+                    "const": "multi",
+                    "minLength": 5,
+                    "maxLength": 5
                   },
                   "tstamp": {
                     "type": "int",
@@ -216,7 +218,9 @@
                   "message": {
                     "type": "string",
                     "description": "Multiple Message Packet.",
-                    "const": "multi"
+                    "const": "multi",
+                    "minLength": 5,
+                    "maxLength": 5
                   },
                   "tstamp": {
                     "type": "int",
@@ -298,7 +302,9 @@
                   "message": {
                     "type": "string",
                     "description": "An internal server error, AWS Generated",
-                    "const": "Internal server error"
+                    "const": "Internal server error",
+                    "minLength": 21,
+                    "maxLength": 21
                   },
                   "connectionId": {
                     "type": "string",
@@ -339,7 +345,9 @@
                   "message": {
                     "type": "string",
                     "description": "A general server error, AWS Generated",
-                    "const": "Error"
+                    "const": "Error",
+                    "minLength": 5,
+                    "maxLength": 5
                   },
                   "error": {
                     "type": "string",
@@ -391,7 +399,9 @@
                   "message": {
                     "type": "string",
                     "description": "Log Message to Backend",
-                    "const": "log"
+                    "const": "log",
+                    "minLength": 3,
+                    "maxLength": 3
                   },
                   "tstamp": {
                     "type": "int",
@@ -462,7 +472,9 @@
                   "message": {
                     "type": "string",
                     "description": "Report of Speed Test Results",
-                    "const": "speedtest"
+                    "const": "speedtest",
+                    "minLength": 9,
+                    "maxLength": 9
                   },
                   "tstamp": {
                     "type": "int",
@@ -578,7 +590,9 @@
                   "message": {
                     "type": "string",
                     "description": "Run a Speed Test and Report the Results",
-                    "const": "run-speedtest"
+                    "const": "run-speedtest",
+                    "minLength": 13,
+                    "maxLength": 13
                   },
                   "tstamp": {
                     "type": "int",
@@ -646,7 +660,9 @@
                   "message": {
                     "type": "string",
                     "description": "Advise the Backend that the Adapter has connected to a new websocket",
-                    "const": "link established"
+                    "const": "link established",
+                    "minLength": 16,
+                    "maxLength": 16
                   },
                   "tstamp": {
                     "type": "int",
@@ -717,7 +733,9 @@
                   "message": {
                     "type": "string",
                     "description": "Initial Highest Level Configuration",
-                    "const": "initial cfg"
+                    "const": "initial cfg",
+                    "minLength": 11,
+                    "maxLength": 11
                   },
                   "tstamp": {
                     "type": "int",
@@ -773,6 +791,243 @@
           }
         ]
       }
+    },
+    "DEVICE_DISC": {
+      "description": "These are messages related to the discovery of new devices or changed\ndevices.",
+      "subscribe": {
+        "summary": "Device Discovery",
+        "description": "Device Discovery messages.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "DeviceInformation",
+              "title": "Device Information",
+              "summary": "Advise the Backend that the Device has been discovered or has changed.",
+              "description": "This message is sent from the Adapter to the Backend whenever a new device\nis discovered, or if any of the data fields (excluding the online status)\nwithin this message about the device changes.  There is not difference between\na new device or updating a pre-existing device.  Devices are identified by their\nMAC address and MAC is assumed to be unique on a single adapter.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Backend that the Device has been discovered or has changed.",
+                    "const": "device info",
+                    "minLength": 11,
+                    "maxLength": 11
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time the device was discovered/changed."
+                  },
+                  "mac": {
+                    "type": "string",
+                    "format": "Mac EUI",
+                    "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
+                    "minLength": 1,
+                    "maxLength": 17
+                  },
+                  "ipv4": {
+                    "type": "string",
+                    "format": "IPv4 Address",
+                    "description": "The IPv4 Address assigned to this Device. Alternatively, if the device is using\na fixed IP and not one assigned by DHCP, the IP address it was discovered to be\nusing.",
+                    "minLength": 7,
+                    "maxLength": 15
+                  },
+                  "ipv6": {
+                    "type": "string",
+                    "format": "IPv6 Address",
+                    "description": "**Optional:** The IPv6 Address assigned to this Device. Alternatively, if the\ndevice is using a fixed IPv6 and not one assigned by DHCP, the IP address it was\ndiscovered to be using.",
+                    "minLength": 2,
+                    "maxLength": 39
+                  },
+                  "dhcp-hostname": {
+                    "type": "string",
+                    "description": "The Hostname the Device declared itself as.  IF the device did not declare\nitself with a hostname, the adapter should synthesize a hostname for it.\nThis hostname supplied to the backend should be fully qualified and include\nthe local network suffix (if any) ie, the device declared itself as \"MyPS5\" and\nthe local lan suffix is \"lan\" the hostname sent should be \"MyPS5.lan\"",
+                    "minLength": 1,
+                    "maxLength": 255
+                  },
+                  "dhcp-class": {
+                    "type": "string",
+                    "description": "**Optional.** The class of device discovered from DHCP.  Can be omitted from\nthe message if no class was provided by the device."
+                  },
+                  "dhcp-clientid": {
+                    "type": "string",
+                    "description": "**Optional.** The client id of device discovered from DHCP.  Can be omitted from\nthe message if no client id was provided by the device."
+                  },
+                  "upnp.gz": {
+                    "type": "string",
+                    "format": "bas64-url-binary",
+                    "description": "**Optional.** IF a upnp xml device metadata can be retrieved from a device then\nit is to be gz compressed, base64-url encoded and sent in this field.  The\nmaximum size of the ENCODED field may not exceed 120KB.  IF upnp data exists\nfor a device, but it can not be sent because it would exceed the 120KB limit,\nthen the field must be omitted and a message Logged to the backend stating how\nbig the upnp payload was that could not be sent.  IF no upnp data can be\nobtained for a device, this field is omitted.",
+                    "minLength": 1,
+                    "maxLength": 122880
+                  },
+                  "online": {
+                    "type": "boolean",
+                    "description": "Current known Online state for the device.  This is the ONLY field whose change\nof value would not cause a new **\"device info\"** message to be sent.  If a\ndevice falls offline or comes back online, the **\"device state\"** message should\nbe sent."
+                  }
+                },
+                "example": {
+                  "message": "device info",
+                  "tstamp": 1592217870123,
+                  "mac": "00:11:22:33:44:55",
+                  "ipv4": "192.168.0.96",
+                  "ipv6": "::ffff:c0a8:60",
+                  "dhcp-hostname": "MyPS5.lan",
+                  "online": true
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "mac",
+                  "ipv4",
+                  "dhcp-hostname",
+                  "online"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Device Messages",
+            "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+          }
+        ]
+      }
+    },
+    "DEVICE_CONF": {
+      "description": "These are messages related to the configuration of known devices.",
+      "publish": {
+        "summary": "Device Configuration",
+        "description": "Device Configuration messages.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "DeviceStateChange",
+              "title": "Device State Change",
+              "summary": "Advise the Adapter to change the state of the devices.",
+              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto make the listed state changes to the listed devices.  The message can\ncontain multiple state changes, and multiple devices.  The devices listed are\nall triggered with the same state changes.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Adapter to change the state of the devices.",
+                    "const": "device state change",
+                    "minLength": 19,
+                    "maxLength": 19
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time the backend decided the state should change.  To be returned in the\npaired reply."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or verification\nof the ID field, if it is set, it must be returned verbatim in the paired reply.",
+                    "minLength": 36,
+                    "maxLength": 36,
+                    "format": "UUID"
+                  },
+                  "devices": {
+                    "type": "array",
+                    "description": "An array of Device MAC addresses the state changes are to be applied to.  All\ndevices listed are to have the same state change made as listed in this message.\nOnly after all devices states have been changed does the adapter send the paired\nreply.",
+                    "items": {
+                      "type": "string",
+                      "format": "Mac EUI",
+                      "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
+                      "minLength": 1,
+                      "maxLength": 17
+                    },
+                    "minItems": 1
+                  },
+                  "states": {
+                    "type": "array",
+                    "description": "The array of services and states to change.  If the service already has the\nrequested state on the device no change is made but the reply includes this\nstate.  If the service is not present in the states array, its state is not\nchanged, and its current state is NOT returned to the paired reply.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "service",
+                        "state"
+                      ],
+                      "description": "Service State",
+                      "properties": {
+                        "service": {
+                          "type": "string",
+                          "description": "The service/filter on the device which we wish to change the state of.\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
+                          "enum": [
+                            "ad-blocking",
+                            "device-protection",
+                            "internet-pause",
+                            "youtube-restricted",
+                            "safesearch"
+                          ]
+                        },
+                        "state": {
+                          "type": "boolean",
+                          "description": "- **true** - The service/filter is enabled.\n- **false** - The service/filter is disabled."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "device state change",
+                  "tstamp": 1592217870123,
+                  "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+                  "devices": [
+                    "53:CB:12:79:E5:F6",
+                    "DD:0F:91:FE:9E:00",
+                    "54:A4:33:F5:D8:A4"
+                  ],
+                  "states": [
+                    {
+                      "service": "ad-blocking",
+                      "state": false
+                    },
+                    {
+                      "service": "internet-pause",
+                      "state": false
+                    },
+                    {
+                      "service": "safe-search",
+                      "state": true
+                    }
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "devices",
+                  "states"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Device Messages",
+            "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+          }
+        ]
+      }
     }
   },
   "tags": [
@@ -791,6 +1046,10 @@
     {
       "name": "Adapter Messages",
       "description": "Messages relating to the Adapter and its global state/configuration."
+    },
+    {
+      "name": "Device Messages",
+      "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
     }
   ]
 }

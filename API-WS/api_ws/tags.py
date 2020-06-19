@@ -11,6 +11,7 @@ class TAGS:
     AWS_ERRORS = "AWS Errors"
     ADAPTER_DIAGS = "Adapter Diagnostics"
     ADAPTER_MSGS = "Adapter Messages"
+    DEVICE_MSGS = "Device Messages"
 
     descriptions = {
         MSG_FORMATS: "Generic Message Formats.",
@@ -18,6 +19,8 @@ class TAGS:
         ADAPTER_DIAGS: "Adapter Diagnostic Messages.",
         ADAPTER_MSGS: "Messages relating to the Adapter and its global "
         + "state/configuration.",
+        DEVICE_MSGS: "Messages relating to the devices connected to an Adapter and"
+        + " their state/configuration.",
     }
 
     @classmethod

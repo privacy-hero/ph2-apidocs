@@ -1,8 +1,9 @@
 """Standard Message Schemas and Fields."""
+import json
 import hashlib
 from base64 import urlsafe_b64encode
 
-from .util import mls
+from .util import mls, KB
 from .tags import TAGS
 
 # =====================================================================
@@ -20,7 +21,31 @@ class Field:
     """A collection of standard field we can re-use."""
 
     @staticmethod
-    def message_type(value=None, desc=None):
+    def named(name=None, field=""):
+        """Warp a field with a name, if it has one."""
+        if name is None:
+            return field
+        return f"""
+            "{name}" : {{
+                {field}
+            }}
+        """
+
+    # -------------------------------------------------------------------------
+
+    @staticmethod
+    def optional(name="optional", value=None, omitif=None, quote='"'):
+        """Omit optional fields if they are not relevant."""
+        if (omitif is None) and (value is None):
+            return ""
+        if value == omitif:
+            return ""
+        return f',\n "{name}": {quote}{value}{quote}'
+
+    # -------------------------------------------------------------------------
+
+    @staticmethod
+    def message_type(value="message", desc=None):
         """Return the definition of the standard message type field."""
         description = """
             This is the name of the message.  The operation that is to be performed
@@ -29,16 +54,9 @@ class Field:
         """
         if desc is None:
             desc = description
-        value_str = ""
-        if value is not None:
-            value_str = f',"const" : "{value}"'
-        return f"""
-            "message" : {{
-                "type" : "string",
-                "description" :{mls(desc)}
-                {value_str}
-            }}
-        """
+        if value is None:  # if no message type is specified, don't emit a constant
+            return Field.string("message", desc)
+        return Field.const_string("message", desc, value)
 
     # -------------------------------------------------------------------------
     @staticmethod
@@ -66,87 +84,132 @@ class Field:
     @staticmethod
     def timestamp_ms(name="timestamp_ms", desc="A Millisecond Timestamp"):
         """Return the definition of the standard tstamp field."""
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "int",
                 "format": "int64",
                 "description" :{mls(desc)}
-            }}
-        """
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
     def url(name="url", desc="A URL"):
         """Return the definition of the standard URL type field."""
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "string",
                 "format": "url",
                 "description" :{mls(desc)}
-            }}
-        """
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
     def ipv4(name="ipv4", desc="A IPv4 Address"):
         """Return the definition of the standard IPv4 type field."""
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "string",
                 "format": "IPv4 Address",
                 "description" :{mls(desc)},
                 "minLength": {len("0.0.0.0")},
                 "maxLength": {len("255.255.255.255")}
-            }}
-        """
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
-    def ipv6(name="ipv4", desc="A IPv6 Address"):
+    def ipv6(name="ipv6", desc="A IPv6 Address"):
         """Return the definition of the standard IPv4 type field."""
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "string",
                 "format": "IPv6 Address",
                 "description" :{mls(desc)},
                 "minLength": {len("::")},
                 "maxLength": {len("FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF")}
-            }}
-        """
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def mac(name="mac", desc="A Mac Address"):
+        """Return the definition of the standard Mac type field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "string",
+                "format": "Mac EUI",
+                "description" :{mls(desc)},
+                "minLength": 1,
+                "maxLength": {len("00:11:22:33:44:55")}
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
     def sha256(name="sha256", desc="A Base64-URL Encoded SHA256 hash"):
         """Return the definition of the standard sha256 type field."""
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "string",
                 "format": "bas64-url-sha256",
                 "description" :{mls(desc)},
                 "minLength": 43,
                 "maxLength": 43
-            }}
-        """
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
-    def string(name="string", desc="A STRING", minlength=0, maxlength=0):
-        """Return the definition of the standard string field."""
-        minlen = ""
-        maxlen = ""
-        if minlength > 0:
-            minlen = f',\n "minLength": {minlength}'
-        if maxlength > 0:
-            maxlen = f',\n "maxLength": {maxlength}'
+    def binary(name="binary", desc="A Base64-URL Encoded binary blob"):
+        """Return the definition of the standard base64-url binary type field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "string",
+                "format": "bas64-url-binary",
+                "description" :{mls(desc)},
+                "minLength": 1,
+                "maxLength": {KB(120)}
+            """,
+        )
 
-        return f"""
-            "{name}" : {{
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def const_string(name="string", desc="A CONSTANT", value="const"):
+        """Return the definition of the standard constant string field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "string",
+                "description" :{mls(desc)},
+                "const" : "{value}",
+                "minLength": {len(value)},
+                "maxLength": {len(value)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def string(name="string", desc="A STRING", minlength=0, maxlength=0, fmat=None):
+        """Return the definition of the standard string field."""
+        return Field.named(
+            name,
+            f"""
                 "type" : "string",
                 "description" :{mls(desc)}
-                {minlen}
-                {maxlen}
-            }}
-        """
+                {Field.optional("minLength", minlength, 0, "")}
+                {Field.optional("maxLength", maxlength, 0, "")}
+                {Field.optional("format", fmat)}
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
@@ -161,34 +224,29 @@ class Field:
             sep = ","
         enum_string += "]"
 
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "string",
                 "description" :{mls(desc)},
                 "enum": {enum_string}
-            }}
-        """
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
     def int(name="int", inttype="int", desc="A INT", minvalue=None, maxvalue=None):
         """Return the definition of the standard int field."""
-        minval = ""
-        maxval = ""
-        if minvalue is not None:
-            minval = f',\n "minValue": {minvalue}'
-        if maxvalue is not None:
-            maxval = f',\n "maxLength": {maxvalue}'
-
-        return f"""
-            "{name}" : {{
+        return Field.named(
+            name,
+            f"""
                 "type" : "int",
                 "format" : "{inttype}",
                 "description" :{mls(desc)}
-                {minval}
-                {maxval}
-            }}
-        """
+                {Field.optional("minValue", minvalue, quote="")}
+                {Field.optional("maxValue", maxvalue, quote="")}
+            """,
+        )
 
     # -------------------------------------------------------------------------
     @staticmethod
@@ -204,48 +262,59 @@ class Field:
 
     # -------------------------------------------------------------------------
     @staticmethod
-    def int_array(
-        name="int",
-        desc="A INT",
-        inttype="int64",
-        item_desc=None,
-        minitems=1,
-        maxitems=None,
-        minvalue=None,
-        maxvalue=None,
+    def array(
+        name="array", desc="AN ARRAY", items="{}", minitems=1, maxitems=None,
     ):
-        """Return the definition of the standard int array field."""
-        minval = ""
-        maxval = ""
-        maxit = ""
-        minit = ""
-        itdesc = ""
-        if minvalue is not None:
-            minval = f',\n "minValue": {minvalue}'
-        if maxvalue is not None:
-            maxval = f',\n "maxValue": {maxvalue}'
-        if minitems is not None:
-            minit = f',\n "minItems": {minitems}'
-        if maxitems is not None:
-            maxit = f',\n "maxItems": {maxitems}'
-        if item_desc is not None:
-            itdesc = f',\n"description": {mls(item_desc)}'
-
-        return f"""
-            "{name}" : {{
+        """Return the definition of the standard array field."""
+        return Field.named(
+            name,
+            f"""
                 "type" : "array",
                 "description" :{mls(desc)},
                 "items" : {{
-                    "type": "int",
-                    "format" : "{inttype}"
-                    {itdesc}
-                    {minval}
-                    {maxval}
+                    {items}
                 }}
-                {minit}
-                {maxit}
-            }}
-        """
+                {Field.optional("minItems",minitems, quote="")}
+                {Field.optional("maxItems",maxitems, quote="")}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def boolean(name="boolean", desc="A BOOL"):
+        """Return the definition of the standard boolean field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "boolean",
+                "description" :{mls(desc)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def uuid(name="uuid", desc="A UUID"):
+        """Return the definition of the standard boolean field."""
+        uuidlen = len("85647580-68ec-44da-8bc8-3e7b8cf7b0e6")
+        return Field.string(name, desc, uuidlen, uuidlen, "UUID")
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def object(
+        name="object", desc="A OBJECT", required=[], fields="{}", additional=False
+    ):  # pylint: disable=dangerous-default-value
+        """Return a object."""
+        additional = str(additional).lower()
+        return Field.named(
+            name,
+            f"""
+                "type" : "object",
+                "required": {json.dumps(required)},
+                "description" :{mls(desc)},
+                "properties" : {fields}
+                {Field.optional("additionalProperties", additional, "true", quote="")}
+            """,
+        )
 
 
 # =====================================================================
