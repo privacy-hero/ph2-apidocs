@@ -126,11 +126,10 @@ def device_info():
 
 
 def known_devices():
-    """Known Devices message
+    """Known Devices message.
 
     Sent from Backend to Adapter after successful connection.
     """
-
     description = """
         This message is sent by the Backend after initial adapter configuration
         upon successful connection of an adapter to the backend.  It tells the adapter

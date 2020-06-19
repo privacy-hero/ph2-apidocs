@@ -25,6 +25,7 @@ DEVICE_SERVICES = [
     "internet-pause",
     "youtube-restricted",
     "safesearch",
+    "adultcontent",
 ]
 
 
@@ -54,6 +55,7 @@ def device_states(reply=False):
         - **internet-pause** - Internet is paused for the device when True.
         - **youtube-restricted** - Youtube returns restricted search results when True.
         - **safesearch** - Search Engines return "safe" results when True.
+        - **adultcontent** - Adult Content is "blocked" when True.
         {online}
 
         Note: **internet-pause** also has a timed mode.  The boolean option in this
