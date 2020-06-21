@@ -20,6 +20,7 @@ from .tags import TAGS
 
 
 DEVICE_SERVICES = [
+    "vpn",
     "ad-blocking",
     "device-protection",
     "internet-pause",
@@ -50,6 +51,7 @@ def device_states(reply=False):
 
     service_desc = f"""
         {intro}
+        - **vpn** - The Device will route through the VPN when True (if VPN is enabled)
         - **ad-blocking** - Ad Blocking is Enabled on the device when True.
         - **device-protection** - Device Protection is Enabled on the device when True.
         - **internet-pause** - Internet is paused for the device when True.

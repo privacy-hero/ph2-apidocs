@@ -8,7 +8,7 @@ Internet Pause timed:
     id - Just returned in the reply, ignored otherwise
     [List of device macs to pause]
 
-VPN On-Off:
+VPN On-Off: (This should be for adapter.  Device is just on/off)
     URL - Optional - URL to establish VPN connection to.
     Method - VPN Method Openvpn / wireguard
 
