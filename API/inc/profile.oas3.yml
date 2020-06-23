@@ -25,14 +25,14 @@ paths:
         "200":
           description: dummy response to silence lint errors in this file
           content:
-              application/json:
-                schema:
-                  oneOf:
-                    - $ref: "#/components/schemas/Profile"
-                    - $ref: "#/components/schemas/Profiles"
-                    - $ref: "#/components/schemas/ProfileDevices"
-                    - $ref: "#/components/schemas/ProfilesDevices"
-                    - $ref: "#/components/schemas/school-nights"
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Profile"
+                  - $ref: "#/components/schemas/Profiles"
+                  - $ref: "#/components/schemas/ProfileDevices"
+                  - $ref: "#/components/schemas/ProfilesDevices"
+                  - $ref: "#/components/schemas/school-nights"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -50,9 +50,7 @@ tags:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-
   schemas:
-
     Profile:
       description: |-
         A device settings profile.  Profiles define common settings for all
@@ -138,6 +136,7 @@ components:
         - **safesearch**: If search engines are forced to return safe results.
         - **internet-pause**: Internet will be paused until this time passes. If
           the value is negative, internet is paused indefinitely.
+        - **adult-block**: If adult content is blocked or not.
         - **bedtime**: A list of bedtimes, one for each day of a week.
         - **bedtime-delay**: A once off delay for the current days bedtime
         start.  Note, this does not change bedtime end.  This will automatically
@@ -153,6 +152,10 @@ components:
           type: boolean
           default: false
           description: If search providers are forced to safe search.
+        adult-block:
+          type: boolean
+          default: false
+          description: If adult content is blocked or not.
         internet-pause:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
         bedtime:
@@ -181,4 +184,3 @@ components:
       type: array
       items:
         $ref: "#/components/schemas/ProfileDevices"
-
