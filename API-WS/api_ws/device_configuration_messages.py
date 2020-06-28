@@ -37,7 +37,8 @@ def device_states(reply=False):
     if reply:
         intro = "The service/filter on the device which changed state."
         online = """
-    - **online** - If the device is online or not. Only an asynchronous state change."
+            - **online** - If the device is online or not. Only an asynchronous
+              state change.
         """
         online_note = """
             **online** is only an asynchronous state change.  it is only ever sent as
@@ -58,12 +59,12 @@ def device_states(reply=False):
         - **youtube-restricted** - Youtube returns restricted search results when True.
         - **safesearch** - Search Engines return "safe" results when True.
         - **adultcontent** - Adult Content is "blocked" when True.
-        {online}
+        {online.strip()}
 
         Note: **internet-pause** also has a timed mode.  The boolean option in this
         message terminates any timed-pause current on the device and sets the state
         accordingly.
-        {online_note}
+        {online_note.strip()}
     """
 
     state_desc = """

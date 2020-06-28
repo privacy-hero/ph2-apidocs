@@ -15,7 +15,7 @@ VPN On-Off: (This should be for adapter.  Device is just on/off)
 """
 
 # from .util import mls
-from .schemas import base_message, channel, Field, sha256_example
+from .schemas import base_message, channel, Field
 from .tags import TAGS
 
 
@@ -442,17 +442,17 @@ def known_devices():
                 device_fields, additional=True))}
     """
 
-    extra_example = f"""
+    extra_example = """
         "devices" : [
-            {{
+            {
                 "mac"       : "00:11:22:33:44:55",
                 "ipv4"      : "192.168.0.96",
                 "ipv6"      : "::ffff:c0a8:60",
                 "hostname"  : "PS5-Lounge",
                 "online"    : true,
                 "dhcp"      : true
-            }},
-            {{
+            },
+            {
                 "mac"       : "26:C7:71:4C:97:37",
                 "ipv4"      : "192.168.0.18",
                 "ipv6"      : "::ffff:c0a8:12",
@@ -460,7 +460,7 @@ def known_devices():
                 "online"    : true,
                 "dhcp"      : true,
                 "upnp"      : true
-            }}
+            }
         ]
     """
 
