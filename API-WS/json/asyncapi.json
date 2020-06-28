@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.0.3",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Convertions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations."
+    "version": "0.0.4",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations."
   },
   "servers": {
     "development": {
@@ -846,30 +846,179 @@
                     "minLength": 2,
                     "maxLength": 39
                   },
-                  "dhcp-hostname": {
-                    "type": "string",
-                    "description": "The Hostname the Device declared itself as.  IF the device did not declare\nitself with a hostname, the adapter should synthesize a hostname for it.\nThis hostname supplied to the backend should be fully qualified and include\nthe local network suffix (if any) ie, the device declared itself as \"MyPS5\" and\nthe local lan suffix is \"lan\" the hostname sent should be \"MyPS5.lan\"",
-                    "minLength": 1,
-                    "maxLength": 255
-                  },
-                  "dhcp-class": {
-                    "type": "string",
-                    "description": "**Optional.** The class of device discovered from DHCP.  Can be omitted from\nthe message if no class was provided by the device."
-                  },
-                  "dhcp-clientid": {
-                    "type": "string",
-                    "description": "**Optional.** The client id of device discovered from DHCP.  Can be omitted from\nthe message if no client id was provided by the device."
-                  },
-                  "upnp.gz": {
-                    "type": "string",
-                    "format": "bas64-url-binary",
-                    "description": "**Optional.** IF a upnp xml device metadata can be retrieved from a device then\nit is to be gz compressed, base64-url encoded and sent in this field.  The\nmaximum size of the ENCODED field may not exceed 120KB.  IF upnp data exists\nfor a device, but it can not be sent because it would exceed the 120KB limit,\nthen the field must be omitted and a message Logged to the backend stating how\nbig the upnp payload was that could not be sent.  IF no upnp data can be\nobtained for a device, this field is omitted.",
-                    "minLength": 1,
-                    "maxLength": 122880
-                  },
                   "online": {
                     "type": "boolean",
                     "description": "Current known Online state for the device.  This is the ONLY field whose change\nof value would not cause a new **\"device info\"** message to be sent.  If a\ndevice falls offline or comes back online, the **\"device state\"** message should\nbe sent."
+                  },
+                  "dhcp": {
+                    "type": "object",
+                    "required": [
+                      "hostname"
+                    ],
+                    "description": "DHCP Data discovered about the device.",
+                    "properties": {
+                      "hostname": {
+                        "type": "string",
+                        "description": "The Hostname the Device declared itself as.  IF the device did not declare\nitself with a hostname, the adapter should synthesize a hostname for it.\nThis hostname supplied to the backend should be the hostname only part\nand not include the network suffix. ie, if the device declared itself as\n\"MyPS5\" and the local lan suffix is \"lan\" the hostname sent should be\n\"MyPS5\".  This is Option 12 from the DHCP Request.",
+                        "minLength": 1,
+                        "maxLength": 255
+                      },
+                      "class": {
+                        "type": "string",
+                        "description": "**Optional.** The class of device discovered from DHCP.  Can be omitted from\nthe message if no class was provided by the device.  This is option 60\nfrom the DHCP Request."
+                      },
+                      "clientid": {
+                        "type": "string",
+                        "description": "**Optional.** The client id of device discovered from DHCP.  Can be omitted from\nthe message if no client id was provided by the device. This is option\n61 from the DHCP Request."
+                      },
+                      "parameters": {
+                        "type": "string",
+                        "description": "**Optional.** The Parameter list the client requested be returned to\nit's dhcp request.  This is option 55 from the DHCP Request."
+                      }
+                    }
+                  },
+                  "upnp": {
+                    "type": "array",
+                    "description": "**Optional.** IF a upnp xml device metadata can be retrieved from a device then\nit is to be sent in this sub field, otherwise it is omitted.  It is\npossible for a single physical device to report as multiple internal\nupnp devices.  Each discovered internal upnp device is reported in this array.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "deviceType"
+                      ],
+                      "description": "UPNP Device Description",
+                      "properties": {
+                        "deviceType": {
+                          "type": "string",
+                          "description": "The Device type reported by the UPNP Data of this internal device.\n*eg: urn:schemas-upnp-org:device:InternetGatewayDevice:1*"
+                        },
+                        "manufacturer": {
+                          "type": "string",
+                          "description": "The Device manufacturer reported by the UPNP Data of this internal device.\n*eg: Samsung*"
+                        },
+                        "modelName": {
+                          "type": "string",
+                          "description": "The Model Name reported by the UPNP Data of this internal device.\n*eg: QN82Q80RAFXZA*"
+                        },
+                        "friendlyName": {
+                          "type": "string",
+                          "description": "The Friendly Name reported by the UPNP Data of this internal device.\n*eg: 80\" 4k QLED Flatscreen TV*"
+                        },
+                        "serviceTypeList": {
+                          "type": "array",
+                          "description": "The List of service types reported by the UPNP Data of this internal\ndevice.\n*eg: [\"urn:schemas-upnp-org:service:Layer3Forwarding:1\"]*",
+                          "items": {
+                            "type": "string",
+                            "description": "Individual Service Type Entry"
+                          },
+                          "minItems": 1
+                        }
+                      }
+                    },
+                    "minItems": 1
+                  },
+                  "snmp": {
+                    "type": "object",
+                    "required": [
+                      "sysoid"
+                    ],
+                    "description": "**Optional.** If SNMP metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
+                    "properties": {
+                      "sysoid": {
+                        "type": "string",
+                        "description": "The System OID of the Device."
+                      },
+                      "name": {
+                        "type": "string",
+                        "description": "The name the device reports via snmp."
+                      },
+                      "description": {
+                        "type": "string",
+                        "description": "The description the device reports via snmp."
+                      },
+                      "contact": {
+                        "type": "string",
+                        "description": "The contact the device reports via snmp."
+                      },
+                      "location": {
+                        "type": "string",
+                        "description": "The location the device reports via snmp."
+                      }
+                    }
+                  },
+                  "bonjour": {
+                    "type": "object",
+                    "required": [
+                      "name"
+                    ],
+                    "description": "**Optional.** If BONJOUR metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "The name of a device discovered via Bonjour."
+                      },
+                      "services": {
+                        "type": "array",
+                        "description": "The list of services exposed via Bonjour.",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "name"
+                          ],
+                          "description": "The list of services exposed via Bonjour.",
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "The name of a service discovered on the device via Bonjour."
+                            },
+                            "txt": {
+                              "type": "array",
+                              "description": "The TXT record from Answers or Additional records.",
+                              "items": {
+                                "type": "string",
+                                "description": "The TXT record from Answers or Additional records."
+                              },
+                              "minItems": 1
+                            }
+                          }
+                        },
+                        "minItems": 1
+                      }
+                    }
+                  },
+                  "smb": {
+                    "type": "object",
+                    "required": [
+                      "name"
+                    ],
+                    "description": "**Optional.** If SMB/Netbios metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "description": "If the SMB/Netbios reported Name of the device can be determined, it is\nsent in this field."
+                      },
+                      "domain": {
+                        "type": "string",
+                        "description": "If the SMB/Netbios reported Domain of the device can be determined, it is\nsent in this field."
+                      }
+                    }
+                  },
+                  "hua": {
+                    "type": "array",
+                    "description": "**Optional.** HTTP User Agents discovered for the device, otherwise\nit is omitted.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "userAgent"
+                      ],
+                      "description": "HTTP User Agent List",
+                      "properties": {
+                        "userAgent": {
+                          "type": "string",
+                          "description": "This is the host user agent sniffed from http traffic from the device.\nThis data can not be obtained from https, only http connections.  As\nthere may be more than one userAgent string detected, this is a list of\nthe detected useragents."
+                        }
+                      }
+                    },
+                    "minItems": 1
                   }
                 },
                 "example": {
@@ -878,7 +1027,9 @@
                   "mac": "00:11:22:33:44:55",
                   "ipv4": "192.168.0.96",
                   "ipv6": "::ffff:c0a8:60",
-                  "dhcp-hostname": "MyPS5.lan",
+                  "dhcp": {
+                    "hostname": "MyPS5"
+                  },
                   "online": true
                 },
                 "required": [
@@ -966,33 +1117,41 @@
                           "minLength": 2,
                           "maxLength": 39
                         },
-                        "dhcp-hostname": {
+                        "hostname": {
                           "type": "string",
-                          "description": "The Hostname the Device declared itself as.",
+                          "description": "The Hostname to use for the device (overrides the devices self declared\nhostname *option 12 from the dhcp request*).",
                           "minLength": 1,
                           "maxLength": 255
-                        },
-                        "dhcp-class": {
-                          "type": "string",
-                          "description": "**Optional.** The class of device discovered from DHCP."
-                        },
-                        "dhcp-clientid": {
-                          "type": "string",
-                          "description": "**Optional.** The client id of device discovered from DHCP."
-                        },
-                        "upnp.csum": {
-                          "type": "string",
-                          "format": "bas64-url-sha256",
-                          "description": "**Optional.** IF a upnp xml device metadata record has been sent to\nthe backend for the device, this field will contain the sha256 (base64 encoded)\nhash of the xml metadata file, so that the adapter can confirm the metadata\nheld by the backend is accurate.  If it is not accurate, a device info message\nwith the correct data is queued for the device.",
-                          "minLength": 43,
-                          "maxLength": 43
                         },
                         "online": {
                           "type": "boolean",
                           "description": "The current Online state the backend believes is valid for the device.  IF it\nis not valid, a device info message is not sent to the backend to correct it,\nbut a \"Device State Changed\" message is."
+                        },
+                        "dhcp": {
+                          "type": "boolean",
+                          "description": "DHCP Metadata already recorded about the device.\nDefault to *false* if not present."
+                        },
+                        "upnp": {
+                          "type": "boolean",
+                          "description": "UPNP Metadata already recorded about the device.\nDefault to *false* if not present."
+                        },
+                        "snmp": {
+                          "type": "boolean",
+                          "description": "SNMP Metadata already recorded about the device.\nDefault to *false* if not present."
+                        },
+                        "bonjour": {
+                          "type": "boolean",
+                          "description": "BONJOUR Metadata already recorded about the device.\nDefault to *false* if not present."
+                        },
+                        "smb": {
+                          "type": "boolean",
+                          "description": "SMB/Netbios Metadata already recorded about the device.\nDefault to *false* if not present."
+                        },
+                        "hua": {
+                          "type": "boolean",
+                          "description": "HTTP User Agent Metadata already recorded about the device.\nDefault to *false* if not present."
                         }
-                      },
-                      "additionalProperties": false
+                      }
                     },
                     "minItems": 1
                   }
@@ -1005,16 +1164,18 @@
                       "mac": "00:11:22:33:44:55",
                       "ipv4": "192.168.0.96",
                       "ipv6": "::ffff:c0a8:60",
-                      "dhcp-hostname": "MyPS5.lan",
-                      "online": true
+                      "hostname": "PS5-Lounge",
+                      "online": true,
+                      "dhcp": true
                     },
                     {
                       "mac": "26:C7:71:4C:97:37",
                       "ipv4": "192.168.0.18",
                       "ipv6": "::ffff:c0a8:12",
-                      "dhcp-hostname": "OnkyoAmp.lan",
-                      "upnp.csum": "FR981aXusJxMO_uB6IQdGYjnP4xiyCBsp-J00mcX55E",
-                      "online": true
+                      "hostname": "OnkyoAmp",
+                      "online": true,
+                      "dhcp": true,
+                      "upnp": true
                     }
                   ]
                 },
@@ -1023,7 +1184,6 @@
                   "tstamp",
                   "mac",
                   "ipv4",
-                  "dhcp-hostname",
                   "online"
                 ],
                 "additionalProperties": false
@@ -1104,8 +1264,9 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The service/filter on the device which changed state.\n    - **ad-blocking** - Ad Blocking is Enabled on the device when True.\n    - **device-protection** - Device Protection is Enabled on the device when True.\n    - **internet-pause** - Internet is paused for the device when True.\n    - **youtube-restricted** - Youtube returns restricted search results when True.\n    - **safesearch** - Search Engines return \"safe\" results when True.\n    - **adultcontent** - Adult Content is \"blocked\" when True.\n\n- **online** - If the device is online or not. Only an asynchronous state change.\"\n\n\n    Note: **internet-pause** also has a timed mode.  The boolean option in this\n    message terminates any timed-pause current on the device and sets the state\n    accordingly.\n\n        **online** is only an asynchronous state change.  it is only ever sent as\n        a result of the adapter detecting a device coming online or falling offline.",
+                          "description": "The service/filter on the device which changed state.\n    - **vpn** - The Device will route through the VPN when True (if VPN is enabled)\n    - **ad-blocking** - Ad Blocking is Enabled on the device when True.\n    - **device-protection** - Device Protection is Enabled on the device when True.\n    - **internet-pause** - Internet is paused for the device when True.\n    - **youtube-restricted** - Youtube returns restricted search results when True.\n    - **safesearch** - Search Engines return \"safe\" results when True.\n    - **adultcontent** - Adult Content is \"blocked\" when True.\n\n- **online** - If the device is online or not. Only an asynchronous state change.\"\n\n\n    Note: **internet-pause** also has a timed mode.  The boolean option in this\n    message terminates any timed-pause current on the device and sets the state\n    accordingly.\n\n        **online** is only an asynchronous state change.  it is only ever sent as\n        a result of the adapter detecting a device coming online or falling offline.",
                           "enum": [
+                            "vpn",
                             "ad-blocking",
                             "device-protection",
                             "internet-pause",
@@ -1230,8 +1391,9 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The service/filter on the device which we wish to change the state of.\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n- **adultcontent** - Adult Content is \"blocked\" when True.\n\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
+                          "description": "The service/filter on the device which we wish to change the state of.\n- **vpn** - The Device will route through the VPN when True (if VPN is enabled)\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n- **adultcontent** - Adult Content is \"blocked\" when True.\n\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
                           "enum": [
+                            "vpn",
                             "ad-blocking",
                             "device-protection",
                             "internet-pause",

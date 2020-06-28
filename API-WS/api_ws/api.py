@@ -23,7 +23,7 @@ from .device_configuration_messages import device_configuration_channel
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.0.3"
+VERSION = "0.0.4"
 DESC = mls(
     """
     # The API for Adapter to Backend communication.
@@ -41,7 +41,7 @@ DESC = mls(
 
     The API is broken down by operation, and message type/source.
 
-    ### Documentation Convertions:
+    ### Documentation Conventions:
 
     * **SUB** [Subscribe] messages are messages which are sent to the Backend from the
     Adapter.
