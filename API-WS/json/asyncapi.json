@@ -3,7 +3,7 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations."
   },
   "servers": {
@@ -1449,6 +1449,125 @@
           ]
         },
         "tags": [
+          {
+            "name": "Device Messages",
+            "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+          }
+        ]
+      }
+    },
+    "DATA_USAGE": {
+      "description": "These are messages related to the periodic reporting of data usage.",
+      "subscribe": {
+        "summary": "Data Usage",
+        "description": "Data Usage messages.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "DataUsage",
+              "title": "Data Usage",
+              "summary": "Advise the Backend of the data usage for the hour.",
+              "description": "This message is sent from the Adapter to the Backend every hour and is\nsynchronized to the top of each hour.  It reports the data usage for\nboth the Adapter as a whole, and each ACTIVE device within that hour.\n\nIn order to prevent spikes of data hitting the backend at the end of\nevery hour, this message should be delayed to be sent for a random\ninterval up to 10 minutes, after the end of each hour.  However, the\ntstamp field should reflect the hour that is being reported, and NOT the\ntime the message was actually sent.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Backend of the data usage for the hour.",
+                    "const": "data usage",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time of the Adapter/Device Data Usage Report, this should be\nsynchronized to the top of each hour."
+                  },
+                  "tx": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "This is the total number of bytes sent by the Adapter to the internet in\nthe hour."
+                  },
+                  "rx": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "This is the total number of bytes received by the Adapter from the internet in\nthe hour."
+                  },
+                  "devices": {
+                    "type": "array",
+                    "description": "The list of all devices which were active during the hour and\ntransmitted or received data from the internet.  Devices which were\nonline, but only transmitted locally are NOT listed.  If there were no\nactive devices, this field is omitted.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "mac",
+                        "tx",
+                        "rx"
+                      ],
+                      "description": "The list of all devices which were active during the hour and\ntransmitted or received data from the internet.  Devices which were\nonline, but only transmitted locally are NOT listed.  If there were no\nactive devices, this field is omitted.",
+                      "properties": {
+                        "mac": {
+                          "type": "string",
+                          "format": "Mac EUI",
+                          "description": "The mac address of the active device being reported.",
+                          "minLength": 1,
+                          "maxLength": 17
+                        },
+                        "tx": {
+                          "type": "int",
+                          "format": "int64",
+                          "description": "This is the total number of bytes sent by the Device to the internet in\nthe hour.  Data which was sent locally is not included, only data routed\nout to the public internet is included."
+                        },
+                        "rx": {
+                          "type": "int",
+                          "format": "int64",
+                          "description": "This is the total number of bytes received by the Device from the internet in\nthe hour.  Data which was received locally is not included, only data routed\nin from the public internet to the device is included."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "data usage",
+                  "tstamp": 1592217870123,
+                  "tx": 9876543,
+                  "rx": 1234567,
+                  "devices": [
+                    {
+                      "mac": "54:67:D5:97:97:F0",
+                      "tx": 63472,
+                      "rx": 23452
+                    },
+                    {
+                      "mac": "70:9A:63:CA:31:FC",
+                      "tx": 82453,
+                      "rx": 89783
+                    }
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "tx",
+                  "rx"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          },
           {
             "name": "Device Messages",
             "description": "Messages relating to the devices connected to an Adapter and their state/configuration."

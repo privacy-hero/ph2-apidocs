@@ -19,11 +19,12 @@ from .adapter_diagnostics import adapter_diagnostics_channel, speedtest_channel
 from .adapter_messages import connection_channel
 from .device_discovery_messages import device_discovery_channel
 from .device_configuration_messages import device_configuration_channel
+from .data_usage_messages import data_usage_channel
 
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.0.4"
+VERSION = "0.0.5"
 DESC = mls(
     """
     # The API for Adapter to Backend communication.
@@ -133,7 +134,8 @@ def channels():
         "SPEEDTEST"           : {{ {speedtest_channel()} }},
         "CONNECTION"          : {{ {connection_channel()} }},
         "DEVICE_DISCOVERY"    : {{ {device_discovery_channel()} }},
-        "DEVICE_CONFIGURATION": {{ {device_configuration_channel()} }}
+        "DEVICE_CONFIGURATION": {{ {device_configuration_channel()} }},
+        "DATA_USAGE"          : {{ {data_usage_channel()} }}
     """
 
 
