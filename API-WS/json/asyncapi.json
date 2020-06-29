@@ -1472,6 +1472,10 @@
                 {
                   "name": "Adapter Messages",
                   "description": "Messages relating to the Adapter and its global state/configuration."
+                },
+                {
+                  "name": "Device Messages",
+                  "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
                 }
               ],
               "payload": {

@@ -106,7 +106,7 @@ def data_usage():
         title,
         summary,
         description,
-        TAGS.ADAPTER_MSGS,
+        [TAGS.ADAPTER_MSGS, TAGS.DEVICE_MSGS],
         tstamp_desc,
         extra_fields,
         extra_example,
