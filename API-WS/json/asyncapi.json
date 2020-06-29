@@ -3,7 +3,7 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations."
   },
   "servers": {
@@ -850,175 +850,182 @@
                     "type": "boolean",
                     "description": "Current known Online state for the device.  This is the ONLY field whose change\nof value would not cause a new **\"device info\"** message to be sent.  If a\ndevice falls offline or comes back online, the **\"device state\"** message should\nbe sent."
                   },
-                  "dhcp": {
+                  "meta": {
                     "type": "object",
-                    "required": [
-                      "hostname"
-                    ],
-                    "description": "DHCP Data discovered about the device.",
+                    "required": [],
+                    "description": "metadata discovered about the device.",
                     "properties": {
-                      "hostname": {
-                        "type": "string",
-                        "description": "The Hostname the Device declared itself as.  IF the device did not declare\nitself with a hostname, the adapter should synthesize a hostname for it.\nThis hostname supplied to the backend should be the hostname only part\nand not include the network suffix. ie, if the device declared itself as\n\"MyPS5\" and the local lan suffix is \"lan\" the hostname sent should be\n\"MyPS5\".  This is Option 12 from the DHCP Request.",
-                        "minLength": 1,
-                        "maxLength": 255
-                      },
-                      "class": {
-                        "type": "string",
-                        "description": "**Optional.** The class of device discovered from DHCP.  Can be omitted from\nthe message if no class was provided by the device.  This is option 60\nfrom the DHCP Request."
-                      },
-                      "clientid": {
-                        "type": "string",
-                        "description": "**Optional.** The client id of device discovered from DHCP.  Can be omitted from\nthe message if no client id was provided by the device. This is option\n61 from the DHCP Request."
-                      },
-                      "parameters": {
-                        "type": "string",
-                        "description": "**Optional.** The Parameter list the client requested be returned to\nit's dhcp request.  This is option 55 from the DHCP Request."
-                      }
-                    }
-                  },
-                  "upnp": {
-                    "type": "array",
-                    "description": "**Optional.** IF a upnp xml device metadata can be retrieved from a device then\nit is to be sent in this sub field, otherwise it is omitted.  It is\npossible for a single physical device to report as multiple internal\nupnp devices.  Each discovered internal upnp device is reported in this array.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "deviceType"
-                      ],
-                      "description": "UPNP Device Description",
-                      "properties": {
-                        "deviceType": {
-                          "type": "string",
-                          "description": "The Device type reported by the UPNP Data of this internal device.\n*eg: urn:schemas-upnp-org:device:InternetGatewayDevice:1*"
-                        },
-                        "manufacturer": {
-                          "type": "string",
-                          "description": "The Device manufacturer reported by the UPNP Data of this internal device.\n*eg: Samsung*"
-                        },
-                        "modelName": {
-                          "type": "string",
-                          "description": "The Model Name reported by the UPNP Data of this internal device.\n*eg: QN82Q80RAFXZA*"
-                        },
-                        "friendlyName": {
-                          "type": "string",
-                          "description": "The Friendly Name reported by the UPNP Data of this internal device.\n*eg: 80\" 4k QLED Flatscreen TV*"
-                        },
-                        "serviceTypeList": {
-                          "type": "array",
-                          "description": "The List of service types reported by the UPNP Data of this internal\ndevice.\n*eg: [\"urn:schemas-upnp-org:service:Layer3Forwarding:1\"]*",
-                          "items": {
+                      "dhcp": {
+                        "type": "object",
+                        "required": [
+                          "hostname"
+                        ],
+                        "description": "DHCP Data discovered about the device.",
+                        "properties": {
+                          "hostname": {
                             "type": "string",
-                            "description": "Individual Service Type Entry"
+                            "description": "The Hostname the Device declared itself as.  IF the device did not declare\nitself with a hostname, the adapter should synthesize a hostname for it.\nThis hostname supplied to the backend should be the hostname only part\nand not include the network suffix. ie, if the device declared itself as\n\"MyPS5\" and the local lan suffix is \"lan\" the hostname sent should be\n\"MyPS5\".  This is Option 12 from the DHCP Request.",
+                            "minLength": 1,
+                            "maxLength": 255
                           },
-                          "minItems": 1
+                          "class": {
+                            "type": "string",
+                            "description": "**Optional.** The class of device discovered from DHCP.  Can be omitted from\nthe message if no class was provided by the device.  This is option 60\nfrom the DHCP Request."
+                          },
+                          "clientid": {
+                            "type": "string",
+                            "description": "**Optional.** The client id of device discovered from DHCP.  Can be omitted from\nthe message if no client id was provided by the device. This is option\n61 from the DHCP Request."
+                          },
+                          "parameters": {
+                            "type": "string",
+                            "description": "**Optional.** The Parameter list the client requested be returned to\nit's dhcp request.  This is option 55 from the DHCP Request."
+                          }
                         }
-                      }
-                    },
-                    "minItems": 1
-                  },
-                  "snmp": {
-                    "type": "object",
-                    "required": [
-                      "sysoid"
-                    ],
-                    "description": "**Optional.** If SNMP metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
-                    "properties": {
-                      "sysoid": {
-                        "type": "string",
-                        "description": "The System OID of the Device."
                       },
-                      "name": {
-                        "type": "string",
-                        "description": "The name the device reports via snmp."
-                      },
-                      "description": {
-                        "type": "string",
-                        "description": "The description the device reports via snmp."
-                      },
-                      "contact": {
-                        "type": "string",
-                        "description": "The contact the device reports via snmp."
-                      },
-                      "location": {
-                        "type": "string",
-                        "description": "The location the device reports via snmp."
-                      }
-                    }
-                  },
-                  "bonjour": {
-                    "type": "object",
-                    "required": [
-                      "name"
-                    ],
-                    "description": "**Optional.** If BONJOUR metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "description": "The name of a device discovered via Bonjour."
-                      },
-                      "services": {
+                      "upnp": {
                         "type": "array",
-                        "description": "The list of services exposed via Bonjour.",
+                        "description": "**Optional.** IF a upnp xml device metadata can be retrieved from a device then\nit is to be sent in this sub field, otherwise it is omitted.  It is\npossible for a single physical device to report as multiple internal\nupnp devices.  Each discovered internal upnp device is reported in this array.",
                         "items": {
                           "type": "object",
                           "required": [
-                            "name"
+                            "deviceType"
                           ],
-                          "description": "The list of services exposed via Bonjour.",
+                          "description": "UPNP Device Description",
                           "properties": {
-                            "name": {
+                            "deviceType": {
                               "type": "string",
-                              "description": "The name of a service discovered on the device via Bonjour."
+                              "description": "The Device type reported by the UPNP Data of this internal device.\n*eg: urn:schemas-upnp-org:device:InternetGatewayDevice:1*"
                             },
-                            "txt": {
+                            "manufacturer": {
+                              "type": "string",
+                              "description": "The Device manufacturer reported by the UPNP Data of this internal device.\n*eg: Samsung*"
+                            },
+                            "modelName": {
+                              "type": "string",
+                              "description": "The Model Name reported by the UPNP Data of this internal device.\n*eg: QN82Q80RAFXZA*"
+                            },
+                            "friendlyName": {
+                              "type": "string",
+                              "description": "The Friendly Name reported by the UPNP Data of this internal device.\n*eg: 80\" 4k QLED Flatscreen TV*"
+                            },
+                            "serviceTypeList": {
                               "type": "array",
-                              "description": "The TXT record from Answers or Additional records.",
+                              "description": "The List of service types reported by the UPNP Data of this internal\ndevice.\n*eg: [\"urn:schemas-upnp-org:service:Layer3Forwarding:1\"]*",
                               "items": {
                                 "type": "string",
-                                "description": "The TXT record from Answers or Additional records."
+                                "description": "Individual Service Type Entry"
                               },
                               "minItems": 1
                             }
                           }
                         },
                         "minItems": 1
-                      }
-                    }
-                  },
-                  "smb": {
-                    "type": "object",
-                    "required": [
-                      "name"
-                    ],
-                    "description": "**Optional.** If SMB/Netbios metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
-                    "properties": {
-                      "name": {
-                        "type": "string",
-                        "description": "If the SMB/Netbios reported Name of the device can be determined, it is\nsent in this field."
                       },
-                      "domain": {
-                        "type": "string",
-                        "description": "If the SMB/Netbios reported Domain of the device can be determined, it is\nsent in this field."
+                      "snmp": {
+                        "type": "object",
+                        "required": [
+                          "sysoid"
+                        ],
+                        "description": "**Optional.** If SNMP metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
+                        "properties": {
+                          "sysoid": {
+                            "type": "string",
+                            "description": "The System OID of the Device."
+                          },
+                          "name": {
+                            "type": "string",
+                            "description": "The name the device reports via snmp."
+                          },
+                          "description": {
+                            "type": "string",
+                            "description": "The description the device reports via snmp."
+                          },
+                          "contact": {
+                            "type": "string",
+                            "description": "The contact the device reports via snmp."
+                          },
+                          "location": {
+                            "type": "string",
+                            "description": "The location the device reports via snmp."
+                          }
+                        }
+                      },
+                      "bonjour": {
+                        "type": "object",
+                        "required": [
+                          "name"
+                        ],
+                        "description": "**Optional.** If BONJOUR metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "The name of a device discovered via Bonjour."
+                          },
+                          "services": {
+                            "type": "array",
+                            "description": "The list of services exposed via Bonjour.",
+                            "items": {
+                              "type": "object",
+                              "required": [
+                                "name"
+                              ],
+                              "description": "The list of services exposed via Bonjour.",
+                              "properties": {
+                                "name": {
+                                  "type": "string",
+                                  "description": "The name of a service discovered on the device via Bonjour."
+                                },
+                                "txt": {
+                                  "type": "array",
+                                  "description": "The TXT record from Answers or Additional records.",
+                                  "items": {
+                                    "type": "string",
+                                    "description": "The TXT record from Answers or Additional records."
+                                  },
+                                  "minItems": 1
+                                }
+                              }
+                            },
+                            "minItems": 1
+                          }
+                        }
+                      },
+                      "smb": {
+                        "type": "object",
+                        "required": [
+                          "name"
+                        ],
+                        "description": "**Optional.** If SMB/Netbios metadata can be obtained/probed for a device,\nit is sent in this field, otherwise it is omitted.",
+                        "properties": {
+                          "name": {
+                            "type": "string",
+                            "description": "If the SMB/Netbios reported Name of the device can be determined, it is\nsent in this field."
+                          },
+                          "domain": {
+                            "type": "string",
+                            "description": "If the SMB/Netbios reported Domain of the device can be determined, it is\nsent in this field."
+                          }
+                        }
+                      },
+                      "hua": {
+                        "type": "array",
+                        "description": "**Optional.** HTTP User Agents discovered for the device, otherwise\nit is omitted.",
+                        "items": {
+                          "type": "object",
+                          "required": [
+                            "userAgent"
+                          ],
+                          "description": "HTTP User Agent List",
+                          "properties": {
+                            "userAgent": {
+                              "type": "string",
+                              "description": "This is the host user agent sniffed from http traffic from the device.\nThis data can not be obtained from https, only http connections.  As\nthere may be more than one userAgent string detected, this is a list of\nthe detected useragents."
+                            }
+                          }
+                        },
+                        "minItems": 1
                       }
                     }
-                  },
-                  "hua": {
-                    "type": "array",
-                    "description": "**Optional.** HTTP User Agents discovered for the device, otherwise\nit is omitted.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "userAgent"
-                      ],
-                      "description": "HTTP User Agent List",
-                      "properties": {
-                        "userAgent": {
-                          "type": "string",
-                          "description": "This is the host user agent sniffed from http traffic from the device.\nThis data can not be obtained from https, only http connections.  As\nthere may be more than one userAgent string detected, this is a list of\nthe detected useragents."
-                        }
-                      }
-                    },
-                    "minItems": 1
                   }
                 },
                 "example": {
@@ -1117,7 +1124,7 @@
                           "minLength": 2,
                           "maxLength": 39
                         },
-                        "hostname": {
+                        "user-hostname": {
                           "type": "string",
                           "description": "The Hostname to use for the device (overrides the devices self declared\nhostname *option 12 from the dhcp request*).",
                           "minLength": 1,
@@ -1164,7 +1171,7 @@
                       "mac": "00:11:22:33:44:55",
                       "ipv4": "192.168.0.96",
                       "ipv6": "::ffff:c0a8:60",
-                      "hostname": "PS5-Lounge",
+                      "user-hostname": "PS5-Lounge",
                       "online": true,
                       "dhcp": true
                     },
@@ -1172,7 +1179,7 @@
                       "mac": "26:C7:71:4C:97:37",
                       "ipv4": "192.168.0.18",
                       "ipv6": "::ffff:c0a8:12",
-                      "hostname": "OnkyoAmp",
+                      "user-hostname": "OnkyoAmp",
                       "online": true,
                       "dhcp": true,
                       "upnp": true

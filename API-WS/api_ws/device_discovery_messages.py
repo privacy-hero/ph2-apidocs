@@ -321,18 +321,25 @@ def device_info():
     title = "Device Information"
     summary = "Advise the Backend that the Device has been discovered or has changed."
 
-    extra_fields = f"""
-        {Field.mac(desc=mac_desc)},
-        {Field.ipv4(desc=ipv4_desc)},
-        {Field.ipv6(desc=ipv6_desc)},
-        {Field.boolean("online", online_desc)},
-
+    meta_fields = f"""
+    {{
         {dhcp_device_info(dhcp_desc)},
         {upnp_device_info(upnp_desc)},
         {snmp_device_info(snmp_desc)},
         {bonjour_device_info(bonjour_desc)},
         {smb_device_info(smb_desc)},
         {hua_device_info(hua_desc)}
+    }}
+    """
+
+    extra_fields = f"""
+        {Field.mac(desc=mac_desc)},
+        {Field.ipv4(desc=ipv4_desc)},
+        {Field.ipv6(desc=ipv6_desc)},
+        {Field.boolean("online", online_desc)},
+
+        {Field.object("meta", "metadata discovered about the device.",
+            fields=meta_fields, additional=True)}
     """
 
     extra_example = """
@@ -424,7 +431,7 @@ def known_devices():
         {Field.mac(desc=mac_desc)},
         {Field.ipv4(desc=ipv4_desc)},
         {Field.ipv6(desc=ipv6_desc)},
-        {Field.string("hostname", hostname_desc, minlength=1, maxlength=255)},
+        {Field.string("user-hostname", hostname_desc, minlength=1, maxlength=255)},
         {Field.boolean("online", online_desc)},
         {Field.boolean("dhcp", flag_desc("DHCP"))},
         {Field.boolean("upnp", flag_desc("UPNP"))},
@@ -448,7 +455,7 @@ def known_devices():
                 "mac"       : "00:11:22:33:44:55",
                 "ipv4"      : "192.168.0.96",
                 "ipv6"      : "::ffff:c0a8:60",
-                "hostname"  : "PS5-Lounge",
+                "user-hostname"  : "PS5-Lounge",
                 "online"    : true,
                 "dhcp"      : true
             },
@@ -456,7 +463,7 @@ def known_devices():
                 "mac"       : "26:C7:71:4C:97:37",
                 "ipv4"      : "192.168.0.18",
                 "ipv6"      : "::ffff:c0a8:12",
-                "hostname"  : "OnkyoAmp",
+                "user-hostname"  : "OnkyoAmp",
                 "online"    : true,
                 "dhcp"      : true,
                 "upnp"      : true

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.0.5 documentation</title>
+  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.0.6 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/atom-one-dark.min.css" />
@@ -24,7 +24,7 @@
 <div class="sidebar-panel fixed pin-t pin-l pin-b w-64 bg-grey-lighter font-sans pt-8 pr-4 pb-4 pl-4">
   <div class="sidebar-panel__content">
     
-    <h1 class="text-2xl font-thin">Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.0.5</h1>
+    <h1 class="text-2xl font-thin">Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.0.6</h1>
     
     <ul class="text-sm mt-10 list-reset mt-2">
       <li class="mb-3">
@@ -582,7 +582,7 @@
     <div class="content-panel flex-1 leading-loose z-10">
       <div class="center-block p-8">
   <a name="introduction"></a>
-  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.0.5</h1>
+  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.0.6</h1>
   <div class="leading-normal mb-4">
     
     
@@ -6695,7 +6695,7 @@ string
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">hostname</span>
+        <span class="text-sm" style="word-break: break-word;">user-hostname</span>
         
         
         
@@ -7236,7 +7236,7 @@ Default to <em>false</em> if not present.</p>
       "mac": "00:11:22:33:44:55",
       "ipv4": "192.168.0.96",
       "ipv6": "::ffff:c0a8:60",
-      "hostname": "PS5-Lounge",
+      "user-hostname": "PS5-Lounge",
       "online": true,
       "dhcp": true
     },
@@ -7244,7 +7244,7 @@ Default to <em>false</em> if not present.</p>
       "mac": "26:C7:71:4C:97:37",
       "ipv4": "192.168.0.18",
       "ipv6": "::ffff:c0a8:12",
-      "hostname": "OnkyoAmp",
+      "user-hostname": "OnkyoAmp",
       "online": true,
       "dhcp": true,
       "upnp": true
@@ -7755,6 +7755,60 @@ be sent.</p>
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">meta</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>metadata discovered about the device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">dhcp</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
@@ -7800,12 +7854,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -7869,7 +7923,7 @@ and not include the network suffix. ie, if the device declared itself as
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -7922,7 +7976,7 @@ from the DHCP Request.</p>
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -7975,7 +8029,7 @@ the message if no client id was provided by the device. This is option
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8052,7 +8106,7 @@ it's dhcp request.  This is option 55 from the DHCP Request.</p>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8107,7 +8161,7 @@ upnp devices.  Each discovered internal upnp device is reported in this array.</
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
 
         
@@ -8119,7 +8173,7 @@ upnp devices.  Each discovered internal upnp device is reported in this array.</
             
               
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8168,12 +8222,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8227,7 +8281,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8279,7 +8333,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8331,7 +8385,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8383,7 +8437,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8437,7 +8491,7 @@ device.
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
 
         
@@ -8449,7 +8503,7 @@ device.
             
               
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8567,7 +8621,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8617,12 +8671,12 @@ it is sent in this field, otherwise it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8675,7 +8729,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8726,7 +8780,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8777,7 +8831,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8828,7 +8882,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8904,7 +8958,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8954,12 +9008,12 @@ it is sent in this field, otherwise it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9012,7 +9066,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9064,7 +9118,7 @@ array&lt;object&gt;
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
 
         
@@ -9076,7 +9130,7 @@ array&lt;object&gt;
             
               
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9125,12 +9179,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9183,7 +9237,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9235,7 +9289,7 @@ array&lt;string&gt;
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
 
         
@@ -9247,7 +9301,7 @@ array&lt;string&gt;
             
               
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9390,7 +9444,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9440,12 +9494,12 @@ it is sent in this field, otherwise it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9499,7 +9553,7 @@ sent in this field.</p>
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9576,7 +9630,7 @@ sent in this field.</p>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9629,7 +9683,7 @@ it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
 
         
@@ -9641,7 +9695,7 @@ it is omitted.</p>
             
               
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9690,12 +9744,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9781,6 +9835,31 @@ the detected useragents.</p>
           
         
 
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
         
 
         
@@ -16579,7 +16658,7 @@ string
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">hostname</span>
+        <span class="text-sm" style="word-break: break-word;">user-hostname</span>
         
         
         
@@ -17532,6 +17611,60 @@ be sent.</p>
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">meta</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>metadata discovered about the device.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">dhcp</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
@@ -17577,12 +17710,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -17646,7 +17779,7 @@ and not include the network suffix. ie, if the device declared itself as
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -17699,7 +17832,7 @@ from the DHCP Request.</p>
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -17752,7 +17885,7 @@ the message if no client id was provided by the device. This is option
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -17829,7 +17962,7 @@ it's dhcp request.  This is option 55 from the DHCP Request.</p>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -17884,7 +18017,7 @@ upnp devices.  Each discovered internal upnp device is reported in this array.</
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
 
         
@@ -17896,7 +18029,7 @@ upnp devices.  Each discovered internal upnp device is reported in this array.</
             
               
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -17945,12 +18078,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18004,7 +18137,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18056,7 +18189,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18108,7 +18241,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18160,7 +18293,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18214,7 +18347,7 @@ device.
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
 
         
@@ -18226,7 +18359,7 @@ device.
             
               
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18344,7 +18477,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18394,12 +18527,12 @@ it is sent in this field, otherwise it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18452,7 +18585,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18503,7 +18636,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18554,7 +18687,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18605,7 +18738,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18681,7 +18814,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18731,12 +18864,12 @@ it is sent in this field, otherwise it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18789,7 +18922,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18841,7 +18974,7 @@ array&lt;object&gt;
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
 
         
@@ -18853,7 +18986,7 @@ array&lt;object&gt;
             
               
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18902,12 +19035,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -18960,7 +19093,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19012,7 +19145,7 @@ array&lt;string&gt;
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
 
         
@@ -19024,7 +19157,7 @@ array&lt;string&gt;
             
               
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19167,7 +19300,7 @@ string
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19217,12 +19350,12 @@ it is sent in this field, otherwise it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19276,7 +19409,7 @@ sent in this field.</p>
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19353,7 +19486,7 @@ sent in this field.</p>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19406,7 +19539,7 @@ it is omitted.</p>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
 
         
@@ -19418,7 +19551,7 @@ it is omitted.</p>
             
               
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19467,12 +19600,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class=" flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -19558,6 +19691,31 @@ the detected useragents.</p>
           
         
 
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
+          
         
 
         

@@ -24,7 +24,7 @@ from .data_usage_messages import data_usage_channel
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.0.5"
+VERSION = "0.0.6"
 DESC = mls(
     """
     # The API for Adapter to Backend communication.
