@@ -152,13 +152,13 @@ def change_device_state():
     """
 
     extra_fields = f"""
-        {Field.uuid("id", id_desc)},
+        {Field.string("id", id_desc, minlength=1, maxlength=256)},
         {Field.array("devices", devices_desc, Field.mac(None, mac_desc))},
         {Field.array("states", states_desc, device_states())}
     """
 
     extra_example = """
-        "id"       : "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+        "id"       : "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
         "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
         "states" : [
             {"service": "ad-blocking", "state":false },

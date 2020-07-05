@@ -3,7 +3,7 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations."
   },
   "servers": {
@@ -1374,9 +1374,8 @@
                   "id": {
                     "type": "string",
                     "description": "**Optional**, ID Field.  The Adapter does not do any processing or verification\nof the ID field, if it is set, it must be returned verbatim in the paired reply.",
-                    "minLength": 36,
-                    "maxLength": 36,
-                    "format": "UUID"
+                    "minLength": 1,
+                    "maxLength": 256
                   },
                   "devices": {
                     "type": "array",
@@ -1433,7 +1432,7 @@
                 "example": {
                   "message": "change device state",
                   "tstamp": 1592217870123,
-                  "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+                  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
                   "devices": [
                     "53:CB:12:79:E5:F6",
                     "DD:0F:91:FE:9E:00",
