@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Browser Extension API"
-  version: "0.0.2"
+  version: "0.0.3"
   description: |-
     This API is only used by browser extensions.
 
