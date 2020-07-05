@@ -29,49 +29,50 @@ paths:
         "200":
           description: dummy response to silence lint errors in this file
           content:
-              application/json:
-                schema:
-                  additionalProperties: false
-                  oneOf:
-                    - $ref: "#/components/schemas/health-days"
-                    - $ref: "#/components/schemas/password"
-                    - $ref: "#/components/schemas/ip4"
-                    - $ref: "#/components/schemas/ip6"
-                    - $ref: "#/components/schemas/cidr4"
-                    - $ref: "#/components/schemas/cidr6"
-                    - $ref: "#/components/schemas/mac"
-                    - $ref: "#/components/schemas/uuid"
-                    - $ref: "#/components/schemas/url"
-                    - $ref: "#/components/schemas/url-http-s"
-                    - $ref: "#/components/schemas/url-absolute"
-                    - $ref: "#/components/schemas/url-clean-path"
-                    - $ref: "#/components/schemas/url-callback"
-                    - $ref: "#/components/schemas/activation-code"
-                    - $ref: "#/components/schemas/adapter-type"
-                    - $ref: "#/components/schemas/epoch-timestamp"
-                    - $ref: "#/components/schemas/epoch-timestamp-nonull"
-                    - $ref: "#/components/schemas/epoch-timestamp-pause"
-                    - $ref: "#/components/schemas/iso3166-country"
-                    - $ref: "#/components/schemas/iana-timezone"
-                    - $ref: "#/components/schemas/ph2-bearer-token"
-                    - $ref: "#/components/schemas/adapter-name"
-                    - $ref: "#/components/schemas/email-address"
-                    - $ref: "#/components/schemas/admin-as-email-address"
-                    - $ref: "#/components/schemas/speed-bps"
-                    - $ref: "#/components/schemas/latency-ms"
-                    - $ref: "#/components/schemas/latency-percentage"
-                    - $ref: "#/components/schemas/adapter-services"
-                    - $ref: "#/components/schemas/adapter-state"
-                    - $ref: "#/components/schemas/datacap"
-                    - $ref: "#/components/schemas/datacap-reset"
-                    - $ref: "#/components/schemas/datausage"
-                    - $ref: "#/components/schemas/profile-name"
-                    - $ref: "#/components/schemas/time-of-day"
-                    - $ref: "#/components/schemas/time-of-day-mins"
-                    - $ref: "#/components/schemas/time-delay"
-                    - $ref: "#/components/schemas/device-name"
-                    - $ref: "#/components/schemas/datausage-predictable"
-
+            application/json:
+              schema:
+                additionalProperties: false
+                oneOf:
+                  - $ref: "#/components/schemas/health-days"
+                  - $ref: "#/components/schemas/password"
+                  - $ref: "#/components/schemas/ip4"
+                  - $ref: "#/components/schemas/ip6"
+                  - $ref: "#/components/schemas/cidr4"
+                  - $ref: "#/components/schemas/cidr6"
+                  - $ref: "#/components/schemas/mac"
+                  - $ref: "#/components/schemas/uuid"
+                  - $ref: "#/components/schemas/url"
+                  - $ref: "#/components/schemas/url-http-s"
+                  - $ref: "#/components/schemas/url-absolute"
+                  - $ref: "#/components/schemas/url-clean-path"
+                  - $ref: "#/components/schemas/url-callback"
+                  - $ref: "#/components/schemas/activation-code"
+                  - $ref: "#/components/schemas/adapter-type"
+                  - $ref: "#/components/schemas/epoch-timestamp"
+                  - $ref: "#/components/schemas/epoch-timestamp-nonull"
+                  - $ref: "#/components/schemas/epoch-timestamp-pause"
+                  - $ref: "#/components/schemas/iso3166-country"
+                  - $ref: "#/components/schemas/iana-timezone"
+                  - $ref: "#/components/schemas/ph2-bearer-token"
+                  - $ref: "#/components/schemas/adapter-name"
+                  - $ref: "#/components/schemas/email-address"
+                  - $ref: "#/components/schemas/admin-as-email-address"
+                  - $ref: "#/components/schemas/speed-bps"
+                  - $ref: "#/components/schemas/latency-ms"
+                  - $ref: "#/components/schemas/latency-percentage"
+                  - $ref: "#/components/schemas/adapter-services"
+                  - $ref: "#/components/schemas/adapter-state"
+                  - $ref: "#/components/schemas/datacap"
+                  - $ref: "#/components/schemas/datacap-reset"
+                  - $ref: "#/components/schemas/datausage"
+                  - $ref: "#/components/schemas/profile-name"
+                  - $ref: "#/components/schemas/time-of-day"
+                  - $ref: "#/components/schemas/time-of-day-mins"
+                  - $ref: "#/components/schemas/time-delay"
+                  - $ref: "#/components/schemas/device-name"
+                  - $ref: "#/components/schemas/device-type"
+                  - $ref: "#/components/schemas/device-group"
+                  - $ref: "#/components/schemas/datausage-predictable"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -89,12 +90,10 @@ tags:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-
   securitySchemes:
     $ref: "../PH2-API.oas3.yml#/components/securitySchemes"
 
   schemas:
-
     health-days:
       type: integer
       format: int16
@@ -107,7 +106,6 @@ components:
         1 is today, 90 is up to 90 days ago. 0 = The most recent result only
         from the WAN.
 
-
     password:
       type: string
       format: password
@@ -115,7 +113,6 @@ components:
       maxLength: 64
       example: "my p455w0rd"
       pattern: "^[\u0020-\u007e]*$"
-
 
     # IP4 IP Address
     ip4:
@@ -291,7 +288,6 @@ components:
         A Time, expressed as seconds since Jan 01 1970. (UTC). -1 = Indefinite unpause
       example: 1587732975
 
-
     # ISO 3166 Country Codes
     iso3166-country:
       type: string
@@ -301,20 +297,257 @@ components:
       #minLength: 2
       #maxLength: 2
       enum:
-        ["AF","AX","AL","DZ","AS","AD","AO","AI","AQ","AG","AR","AM","AW","AU","AT","AZ","BS","BH",
-        "BD","BB","BY","BE","BZ","BJ","BM","BT","BO","BQ","BA","BW","BV","BR","IO","BN","BG",
-        "BF","BI","CV","KH","CM","CA","KY","CF","TD","CL","CN","CX","CC","CO","KM","CG","CD","CK",
-        "CR","CI","HR","CU","CW","CY","CZ","DK","DJ","DM","DO","EC","EG","SV","GQ","ER","EE","SZ",
-        "ET","FK","FO","FJ","FI","FR","GF","PF","TF","GA","GM","GE","DE","GH","GI","GR","GL","GD",
-        "GP","GU","GT","GG","GN","GW","GY","HT","HM","VA","HN","HK","HU","IS","IN","ID","IR","IQ",
-        "IE","IM","IL","IT","JM","JP","JE","JO","KZ","KE","KI","KP","KR","KW","KG","LA","LV","LB",
-        "LS","LR","LY","LI","LT","LU","MO","MG","MW","MY","MV","ML","MT","MH","MQ","MR","MU","YT",
-        "MX","FM","MD","MC","MN","ME","MS","MA","MZ","MM","NA","NR","NP","NL","NC","NZ","NI","NE",
-        "NG","NU","NF","MK","MP","NO","OM","PK","PW","PS","PA","PG","PY","PE","PH","PN","PL","PT",
-        "PR","QA","RE","RO","RU","RW","BL","SH","KN","LC","MF","PM","VC","WS","SM","ST","SA","SN",
-        "RS","SC","SL","SG","SX","SK","SI","SB","SO","ZA","GS","SS","ES","LK","SD","SR","SJ","SE",
-        "CH","SY","TW","TJ","TZ","TH","TL","TG","TK","TO","TT","TN","TR","TM","TC","TV","UG","UA",
-        "AE","GB","US","UM","UY","UZ","VU","VE","VN","VG","VI","WF","EH","YE","ZM","ZW"]
+        [
+          "AF",
+          "AX",
+          "AL",
+          "DZ",
+          "AS",
+          "AD",
+          "AO",
+          "AI",
+          "AQ",
+          "AG",
+          "AR",
+          "AM",
+          "AW",
+          "AU",
+          "AT",
+          "AZ",
+          "BS",
+          "BH",
+          "BD",
+          "BB",
+          "BY",
+          "BE",
+          "BZ",
+          "BJ",
+          "BM",
+          "BT",
+          "BO",
+          "BQ",
+          "BA",
+          "BW",
+          "BV",
+          "BR",
+          "IO",
+          "BN",
+          "BG",
+          "BF",
+          "BI",
+          "CV",
+          "KH",
+          "CM",
+          "CA",
+          "KY",
+          "CF",
+          "TD",
+          "CL",
+          "CN",
+          "CX",
+          "CC",
+          "CO",
+          "KM",
+          "CG",
+          "CD",
+          "CK",
+          "CR",
+          "CI",
+          "HR",
+          "CU",
+          "CW",
+          "CY",
+          "CZ",
+          "DK",
+          "DJ",
+          "DM",
+          "DO",
+          "EC",
+          "EG",
+          "SV",
+          "GQ",
+          "ER",
+          "EE",
+          "SZ",
+          "ET",
+          "FK",
+          "FO",
+          "FJ",
+          "FI",
+          "FR",
+          "GF",
+          "PF",
+          "TF",
+          "GA",
+          "GM",
+          "GE",
+          "DE",
+          "GH",
+          "GI",
+          "GR",
+          "GL",
+          "GD",
+          "GP",
+          "GU",
+          "GT",
+          "GG",
+          "GN",
+          "GW",
+          "GY",
+          "HT",
+          "HM",
+          "VA",
+          "HN",
+          "HK",
+          "HU",
+          "IS",
+          "IN",
+          "ID",
+          "IR",
+          "IQ",
+          "IE",
+          "IM",
+          "IL",
+          "IT",
+          "JM",
+          "JP",
+          "JE",
+          "JO",
+          "KZ",
+          "KE",
+          "KI",
+          "KP",
+          "KR",
+          "KW",
+          "KG",
+          "LA",
+          "LV",
+          "LB",
+          "LS",
+          "LR",
+          "LY",
+          "LI",
+          "LT",
+          "LU",
+          "MO",
+          "MG",
+          "MW",
+          "MY",
+          "MV",
+          "ML",
+          "MT",
+          "MH",
+          "MQ",
+          "MR",
+          "MU",
+          "YT",
+          "MX",
+          "FM",
+          "MD",
+          "MC",
+          "MN",
+          "ME",
+          "MS",
+          "MA",
+          "MZ",
+          "MM",
+          "NA",
+          "NR",
+          "NP",
+          "NL",
+          "NC",
+          "NZ",
+          "NI",
+          "NE",
+          "NG",
+          "NU",
+          "NF",
+          "MK",
+          "MP",
+          "NO",
+          "OM",
+          "PK",
+          "PW",
+          "PS",
+          "PA",
+          "PG",
+          "PY",
+          "PE",
+          "PH",
+          "PN",
+          "PL",
+          "PT",
+          "PR",
+          "QA",
+          "RE",
+          "RO",
+          "RU",
+          "RW",
+          "BL",
+          "SH",
+          "KN",
+          "LC",
+          "MF",
+          "PM",
+          "VC",
+          "WS",
+          "SM",
+          "ST",
+          "SA",
+          "SN",
+          "RS",
+          "SC",
+          "SL",
+          "SG",
+          "SX",
+          "SK",
+          "SI",
+          "SB",
+          "SO",
+          "ZA",
+          "GS",
+          "SS",
+          "ES",
+          "LK",
+          "SD",
+          "SR",
+          "SJ",
+          "SE",
+          "CH",
+          "SY",
+          "TW",
+          "TJ",
+          "TZ",
+          "TH",
+          "TL",
+          "TG",
+          "TK",
+          "TO",
+          "TT",
+          "TN",
+          "TR",
+          "TM",
+          "TC",
+          "TV",
+          "UG",
+          "UA",
+          "AE",
+          "GB",
+          "US",
+          "UM",
+          "UY",
+          "UZ",
+          "VU",
+          "VE",
+          "VN",
+          "VG",
+          "VI",
+          "WF",
+          "EH",
+          "YE",
+          "ZM",
+          "ZW",
+        ]
       description: |-
         an ISO3166 country code
 
@@ -367,6 +600,26 @@ components:
       maxLength: 64
       pattern: "^[\\w\\W]+$"
       example: "Granpa's Nokia"
+
+    device-type:
+      type: string
+      format: text
+      nullable: true
+      description: The type of the device.
+      minLength: 0
+      maxLength: 64
+      pattern: "^[\\w\\W]+$"
+      example: "Smart Watch"
+
+    device-group:
+      type: string
+      format: text
+      nullable: true
+      description: The device type group.
+      minLength: 0
+      maxLength: 64
+      pattern: "^[\\w\\W]+$"
+      example: "Mobile"
 
     email-address:
       type: string
@@ -436,15 +689,15 @@ components:
       type: integer
       format: uint64
       minimum: 0
-      maximum: 1073741824  # 1 Pebibyte maximum data cap.
+      maximum: 1073741824 # 1 Pebibyte maximum data cap.
       description: |-
         Data Cap in MegaBytes (1048576 bytes) per month. 0 = no data cap
 
     datacap-reset:
       type: integer
       format: uint8
-      minimum: 1    # First day of month
-      maximum: 31   # Maximum Possible last day of the month.
+      minimum: 1 # First day of month
+      maximum: 31 # Maximum Possible last day of the month.
       description: |-
         Day of the month, which the datacap resets at the start of.
 
@@ -452,7 +705,7 @@ components:
       type: integer
       format: uint64
       minimum: 0
-      maximum: 1000000000000000000  # 1 Exabyte maximum data cap.
+      maximum: 1000000000000000000 # 1 Exabyte maximum data cap.
       description: |-
         Data Usage in Bytes.
 
@@ -460,7 +713,7 @@ components:
       type: integer
       format: uint64
       minimum: -1000000000000000000
-      maximum: 1000000000000000000  # 1 Exabyte maximum data usage.
+      maximum: 1000000000000000000 # 1 Exabyte maximum data usage.
       description: |-
         Data Usage in Bytes.
 

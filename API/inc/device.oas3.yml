@@ -25,16 +25,17 @@ paths:
         "200":
           description: dummy response to silence lint errors in this file
           content:
-              application/json:
-                schema:
-                  oneOf:
-                    - $ref: "#/components/schemas/Device"
-                    - $ref: "#/components/schemas/Devices"
-                    - $ref: "#/components/schemas/DeviceUsageHistory"
-                    - $ref: "#/components/schemas/Device-Settings"
-                    - $ref: "#/components/schemas/Device-Settings-Reply"
-                    - $ref: "#/components/schemas/DeviceSetBooleanCfg"
-                    - $ref: "#/components/schemas/DeviceSetPauseCfg"
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Device"
+                  - $ref: "#/components/schemas/Devices"
+                  - $ref: "#/components/schemas/DeviceUsageHistory"
+                  - $ref: "#/components/schemas/Device-Settings"
+                  - $ref: "#/components/schemas/Device-Settings-Reply"
+                  - $ref: "#/components/schemas/DeviceSetBooleanCfg"
+                  - $ref: "#/components/schemas/DeviceSetPauseCfg"
+                  - $ref: "#/components/schemas/Device_Types"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -52,9 +53,7 @@ tags:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-
   schemas:
-
     DeviceIP:
       type: object
       required:
@@ -138,7 +137,7 @@ components:
         name:
           $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
         type:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-type"
         manufacturer:
           $ref: "./simpletypes.oas3.yml#/components/schemas/device-name"
         ip:
@@ -152,41 +151,28 @@ components:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
         cfg:
           $ref: "#/components/schemas/DeviceConfig"
-      example: {
-        "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
-        "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
-        "profile": "66f7346a-48af-4614-bd7b-6c17093d75e3",
-        "mac": "00-00-5E-DF-98-EB",
-        "name": "Nokia N78",
-        "type": "Smartphone",
-        "manufacturer": "Nokia",
-        "ip": {
-          "ip4": "192.168.0.55",
-          "ip6": "2001:db8:85a3::8a2e:370:7334"
-        },
-        "online": true,
-        "online_since": 1587732975,
-        "discovered": 1587732975,
-        "cfg": {
-          "vpn": {
-            "state": false,
-            "since": 1587732975
-          },
-          "ad-blocking": {
-            "state": false,
-            "since": 1587732975
-          },
-          "device-protection": {
-            "state": false,
-            "since": 1587732975
-          },
-          "internet-pause": {
-            "state": 0,
-            "since": 1587732975
-          }
-        },
-      }
-
+      example:
+        {
+          "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
+          "adapter": "cd73b915-89a4-4971-9d86-bce91786b12a",
+          "profile": "66f7346a-48af-4614-bd7b-6c17093d75e3",
+          "mac": "00-00-5E-DF-98-EB",
+          "name": "Nokia N78",
+          "type": "Smartphone",
+          "manufacturer": "Nokia",
+          "ip":
+            { "ip4": "192.168.0.55", "ip6": "2001:db8:85a3::8a2e:370:7334" },
+          "online": true,
+          "online_since": 1587732975,
+          "discovered": 1587732975,
+          "cfg":
+            {
+              "vpn": { "state": false, "since": 1587732975 },
+              "ad-blocking": { "state": false, "since": 1587732975 },
+              "device-protection": { "state": false, "since": 1587732975 },
+              "internet-pause": { "state": 0, "since": 1587732975 },
+            },
+        }
 
     Devices:
       description: An array of known devices
@@ -227,7 +213,6 @@ components:
             state: False
             since: 1589978803
             pending: 1590583603
-
 
     Device-Settings-Reply:
       type: object
@@ -292,3 +277,26 @@ components:
             - "InternetPause"
         setting:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-pause"
+
+    Device_Type:
+      type: object
+      required:
+        - name
+        - icon
+        - group
+      additionalProperties: false
+      properties:
+        name:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-type"
+        icon:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/url"
+        group:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/device-group"
+
+    Device_Types:
+      description: An array of known device types
+      type: array
+      minItems: 1
+      maxItems: 512
+      items:
+        $ref: "#/components/schemas/Device_Type"

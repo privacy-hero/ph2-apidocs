@@ -1,0 +1,84 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /device/types"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    List all known device types.
+
+    `/device/types`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Device Management
+    description: Operations related to Device Management
+
+paths:
+  /device/types:
+    get:
+      operationId: deviceTypes
+      tags:
+        - Device Management
+      summary: Lists all device types and their icons.
+      description: |-
+        # Usage
+
+        Generates a list of all known device types along with their icons and
+        a device type group classifier.
+
+        ## Parameters
+          None.
+
+      responses:
+        "200":
+          description: |-
+            Success, The device types list.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/device.oas3.yml#/components/schemas/Device_Types"
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        "default":
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

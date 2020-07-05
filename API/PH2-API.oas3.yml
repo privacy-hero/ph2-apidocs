@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.19"
+  version: "0.0.20"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -224,3 +224,6 @@ paths:
 
   /v1/device/setting:
     $ref: "v1/device/setting.oas3.yml#/paths/~1device~1setting"
+
+  /v1/device/types:
+    $ref: "v1/device/types.oas3.yml#/paths/~1device~1types"
