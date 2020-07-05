@@ -45,10 +45,33 @@ def device_states(reply=False):
             a result of the adapter detecting a device coming online or falling offline.
         """
         services.append("online")
+
+        finishes_desc = """
+            **OPTIONAL**, and **ONLY INCLUDED** when a timeout is supplied for the
+            state, this field in the reply specifies when the timed operation
+            will complete.  It is the Unix Epoch Date/Time as seconds since
+            midnight 1970 UTC.
+        """
+
+        timeout_field = Field.unixepoch("finishes", finishes_desc)
     else:
         intro = "The service/filter on the device which we wish to change the state of."
         online = ""
         online_note = ""
+
+        timeout_desc = """
+            **OPTIONAL**, specifies a duration for the state to be set before it
+            changes to the opposite state.  It is specified as the number of
+            seconds follwing the receipt and processing of this message.  IF
+            this message is present, the reply will have the "finishes" field
+            set, which is the time NOW + this timeout, NOW is determined by the
+            internal clock of the adapter.
+
+            NOTE: Currently this field will ONLY be sent if required for the
+            **internet-pause** state.
+        """
+
+        timeout_field = Field.unixepoch("timeout", timeout_desc)
 
     service_desc = f"""
         {intro}
@@ -75,7 +98,8 @@ def device_states(reply=False):
     fields = f"""
         {{
             {Field.enum("service",service_desc,services)},
-            {Field.boolean("state", state_desc)}
+            {Field.boolean("state", state_desc)},
+            {timeout_field}
         }}
     """
 

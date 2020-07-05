@@ -10682,6 +10682,67 @@ boolean
 
 
           
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">timeout</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>OPTIONAL</strong>, specifies a duration for the state to be set before it
+changes to the opposite state.  It is specified as the number of
+seconds follwing the receipt and processing of this message.  IF
+this message is present, the reply will have the &quot;finishes&quot; field
+set, which is the time NOW + this timeout, NOW is determined by the
+internal clock of the adapter.</p>
+<p>NOTE: Currently this field will ONLY be sent if required for the
+<strong>internet-pause</strong> state.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -11537,6 +11598,63 @@ boolean
 <li><strong>true</strong> - The service/filter is enabled.</li>
 <li><strong>false</strong> - The service/filter is disabled.</li>
 </ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">finishes</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>OPTIONAL</strong>, and <strong>ONLY INCLUDED</strong> when a timeout is supplied for the
+state, this field in the reply specifies when the timed operation
+will complete.  It is the Unix Epoch Date/Time as seconds since
+midnight 1970 UTC.</p>
 </div>
         
         
@@ -20444,6 +20562,67 @@ boolean
 
 
           
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">timeout</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>OPTIONAL</strong>, specifies a duration for the state to be set before it
+changes to the opposite state.  It is specified as the number of
+seconds follwing the receipt and processing of this message.  IF
+this message is present, the reply will have the &quot;finishes&quot; field
+set, which is the time NOW + this timeout, NOW is determined by the
+internal clock of the adapter.</p>
+<p>NOTE: Currently this field will ONLY be sent if required for the
+<strong>internet-pause</strong> state.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -21192,6 +21371,63 @@ boolean
 <li><strong>true</strong> - The service/filter is enabled.</li>
 <li><strong>false</strong> - The service/filter is disabled.</li>
 </ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">finishes</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>OPTIONAL</strong>, and <strong>ONLY INCLUDED</strong> when a timeout is supplied for the
+state, this field in the reply specifies when the timed operation
+will complete.  It is the Unix Epoch Date/Time as seconds since
+midnight 1970 UTC.</p>
 </div>
         
         

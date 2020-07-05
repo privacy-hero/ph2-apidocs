@@ -18,7 +18,7 @@ def sha256_example(text):
 # =====================================================================
 
 
-class Field:
+class Field:  # pylint: disable=too-many-public-methods
     """A collection of standard field we can re-use."""
 
     @staticmethod
@@ -85,6 +85,32 @@ class Field:
     @staticmethod
     def timestamp_ms(name="timestamp_ms", desc="A Millisecond Timestamp"):
         """Return the definition of the standard tstamp field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "int",
+                "format": "int64",
+                "description" :{mls(desc)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def unixepoch(name="epoch", desc="A Date/Time as the Unix Epoch in seconds"):
+        """Return the definition of the standard timestamp field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "int",
+                "format": "int64",
+                "description" :{mls(desc)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def timeout(name="timeout", desc="The number of seconds an operation goes for."):
+        """Return the definition of the standard timeout field."""
         return Field.named(
             name,
             f"""
@@ -263,9 +289,7 @@ class Field:
 
     # -------------------------------------------------------------------------
     @staticmethod
-    def array(
-        name="array", desc="AN ARRAY", items="{}", minitems=1, maxitems=None,
-    ):
+    def array(name="array", desc="AN ARRAY", items="{}", minitems=1, maxitems=None):
         """Return the definition of the standard array field."""
         return Field.named(
             name,
@@ -302,9 +326,12 @@ class Field:
     # -------------------------------------------------------------------------
     @staticmethod
     def object(
-        name="object", desc="A OBJECT", required=[], fields="{}", additional=False
-    ):  # pylint: disable=dangerous-default-value
+        name="object", desc="A OBJECT", required=None, fields="{}", additional=False
+    ):
         """Return a object."""
+        if required is None:
+            required = []
+
         additional = str(additional).lower()
         return Field.named(
             name,
@@ -328,7 +355,7 @@ def base_message_schema(
     extra_fields=None,
     extra_example=None,
     extra_required=None,
-):
+):  # pylint: disable=too-many-arguments
     """Return the base message schema."""
     exf = ""
     if extra_fields is not None:
@@ -402,7 +429,7 @@ def base_message(  # pylint: disable=too-many-arguments
 
 def channel(
     desc, name, sub_desc=None, sub_msgs=None, pub_desc=None, pub_msgs=None, tags=None
-):
+):  # pylint: disable=too-many-arguments
     """Generate a channel field.
 
     Args:

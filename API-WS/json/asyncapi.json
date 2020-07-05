@@ -1286,6 +1286,11 @@
                         "state": {
                           "type": "boolean",
                           "description": "- **true** - The service/filter is enabled.\n- **false** - The service/filter is disabled."
+                        },
+                        "finishes": {
+                          "type": "int",
+                          "format": "int64",
+                          "description": "**OPTIONAL**, and **ONLY INCLUDED** when a timeout is supplied for the\nstate, this field in the reply specifies when the timed operation\nwill complete.  It is the Unix Epoch Date/Time as seconds since\nmidnight 1970 UTC."
                         }
                       },
                       "additionalProperties": false
@@ -1413,6 +1418,11 @@
                         "state": {
                           "type": "boolean",
                           "description": "- **true** - The service/filter is enabled.\n- **false** - The service/filter is disabled."
+                        },
+                        "timeout": {
+                          "type": "int",
+                          "format": "int64",
+                          "description": "**OPTIONAL**, specifies a duration for the state to be set before it\nchanges to the opposite state.  It is specified as the number of\nseconds follwing the receipt and processing of this message.  IF\nthis message is present, the reply will have the \"finishes\" field\nset, which is the time NOW + this timeout, NOW is determined by the\ninternal clock of the adapter.\n\nNOTE: Currently this field will ONLY be sent if required for the\n**internet-pause** state."
                         }
                       },
                       "additionalProperties": false
