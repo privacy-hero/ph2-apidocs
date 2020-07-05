@@ -1307,7 +1307,7 @@
         "example": -30
       },
       "ProfileSettings": {
-        "description": "The settings for a profile.\n- **youtube-restricted**: If youtube is restricted or normal.\n- **safesearch**: If search engines are forced to return safe results.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is negative, internet is paused indefinitely.\n- **bedtime**: A list of bedtimes, one for each day of a week.\n- **bedtime-delay**: A once off delay for the current days bedtime\nstart.  Note, this does not change bedtime end.  This will automatically\nbe reset back to zero when bedtime ends.",
+        "description": "The settings for a profile.\n- **youtube-restricted**: If youtube is restricted or normal.\n- **safesearch**: If search engines are forced to return safe results.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is negative, internet is paused indefinitely.\n- **adult-block**: If adult content is blocked or not.\n- **bedtime**: A list of bedtimes, one for each day of a week.\n- **bedtime-delay**: A once off delay for the current days bedtime\nstart.  Note, this does not change bedtime end.  This will automatically\nbe reset back to zero when bedtime ends.",
         "type": "object",
         "additionalProperties": false,
         "properties": {
@@ -1320,6 +1320,11 @@
             "type": "boolean",
             "default": false,
             "description": "If search providers are forced to safe search."
+          },
+          "adult-block": {
+            "type": "boolean",
+            "default": false,
+            "description": "If adult content is blocked or not."
           },
           "internet-pause": {
             "$ref": "#/components/schemas/epoch-timestamp"
@@ -4326,7 +4331,7 @@
           "Profile Management"
         ],
         "summary": "Change a Configuration Setting on a profile.",
-        "description": "# Usage\n\nAllows all devices, associated to a profile, access to the internet to\nbe paused.  Either for a timed period, or indefinitely, or for\nsafesearch to be enforced, or youtube to be restricted, as required.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **restrict-youtube**: True, youtube is restricted.  False,\n  unrestricted.\n  - **safe-search**: True, search engine safe search enforced.  False,\n  unrestricted.\n  - **internet-paused**: The time when we \"unpause\" internet.  If this is in the\n  past, then by definition internet is enabled.  To pause indefinitely,\n  set to -1.",
+        "description": "# Usage\n\nAllows all devices, associated to a profile, access to the internet to\nbe paused.  Either for a timed period, or indefinitely, or for\nsafesearch to be enforced, or youtube to be restricted, as required.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **restrict-youtube**: True, youtube is restricted.  False,\n  unrestricted.\n  - **safe-search**: True, search engine safe search enforced.  False,\n  unrestricted.\n  - **internet-paused**: The time when we \"unpause\" internet.  If this is in the\n  past, then by definition internet is enabled.  To pause indefinitely,\n  set to -1.\n  - **adult-block**: True, adult content is blocked. False, it is not blocked.",
         "requestBody": {
           "required": true,
           "content": {
@@ -4347,6 +4352,11 @@
                     "default": false
                   },
                   "safe-search": {
+                    "type": "boolean",
+                    "nullable": true,
+                    "default": false
+                  },
+                  "adult-block": {
                     "type": "boolean",
                     "nullable": true,
                     "default": false
@@ -4376,6 +4386,13 @@
                   "value": {
                     "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
                     "safesearch": true
+                  }
+                },
+                "adult-block": {
+                  "summary": "Block Adult Content",
+                  "value": {
+                    "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                    "adult-block": true
                   }
                 }
               }
