@@ -161,6 +161,18 @@ paths:
                 value:
                   message: "adblocking"
                   state: false
+              adblocking-off-timed:
+                summary: Turn adblocking OFF for 5 minutes, and then back ON.
+                value:
+                  message: "adblocking"
+                  state: false
+                  timeout: 300
+              adblocking-on-timed:
+                summary: Turn adblocking ON for 10 minutes, and then back OFF.
+                value:
+                  message: "adblocking"
+                  state: true
+                  timeout: 600
       responses:
         "200":
           description: |-
@@ -190,6 +202,20 @@ paths:
                   value:
                     message: "adblocking"
                     state: false
+                adblocking-on-timed:
+                  summary: |-
+                    adblocking is currently ENABLED, and will timeout in 2.5 minutes.
+                  value:
+                    message: "adblocking"
+                    state: true
+                    timeout: 150
+                adblocking-off-timed:
+                  summary: |-
+                    adblocking is currently DISABLED, and will timeout in 4:10 minutes.
+                  value:
+                    message: "adblocking"
+                    state: false
+                    timeout: 250
         "400":
           description: |-
             General Request processing error.  Possible errors are:
