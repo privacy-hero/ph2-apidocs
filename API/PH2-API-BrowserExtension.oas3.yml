@@ -82,6 +82,12 @@ components:
             * false = adblocking is disabled (ads will NOT be blocked).
             * null = no change to the adblocking state, simply report current
             state.
+        timeout:
+          type: number
+          description: |-
+            The Number of seconds to set the state for, before automatically
+            switching to the opposite state.  This is optional, if not included
+            the state will be set permanently.
 
     adblocking-reply:
       type: object
@@ -104,6 +110,12 @@ components:
             * false = adblocking is disabled (ads will NOT be blocked).
             * null = Not behind the adapter. It is not possible to set or get the adblocking state,
             the current state has not been changed and is unknown.
+        timeout:
+          type: number
+          description: |-
+            The Number of seconds remaining in a timed state before it will
+            switch.  This is optional, it is NOT included if there is no timer
+            running for the state.
 
 tags:
   - name: Browser Extension
