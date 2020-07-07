@@ -142,6 +142,9 @@ paths:
   /v1/client/notify:
     $ref: "v1/client/notify.oas3.yml#/paths/~1client~1notify"
 
+  /v1/client/send:
+    $ref: "v1/client/send.oas3.yml#/paths/~1client~1send"
+
   ######### ADAPTER  MANAGEMENT API CALLS ######################
 
   /v1/adapter/find:

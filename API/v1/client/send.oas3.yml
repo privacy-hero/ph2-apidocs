@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /client/send"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Send a json payload to all registered notifications for the client.
+
+    `/client/send`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /client/send:
+    post:
+      operationId: clientSend
+      tags:
+        - Client Management
+      summary: Send json payload to all registered notifications.
+      description: |-
+        # Usage
+        Allows the client to send all configured notifications for the client
+        the json payload sent to this end point.
+
+        The payload is not processed in any way and is sent verbatim.
+
+        This function is designed for testing purposes ONLY.  It is not present
+        in production and only available for development and qa.
+
+        NOTE: A successful 200 reply from this message does not indicate that
+        all registered notification endpoints were sent the message, only that
+        the message has been received and dispatched in the normal way.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              additionalProperties: true
+      responses:
+        "200":
+          description: |-
+            Success, Notifications sent.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "Notifications Sent OK."
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

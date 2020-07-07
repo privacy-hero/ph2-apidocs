@@ -76,8 +76,8 @@ paths:
                   format: WebPush Client Token
                   pattern: "^[\\w]+$"
                   minLength: 8
-                  maxLength: 256  # TODO: Find out the true range of token sizes.
-                  example: "124FDSDGSDFG23452345FGsrfgsdf235" # TODO: A proper example
+                  maxLength: 256 # TODO: Find out the true range of token sizes.
+                  example: "f1R3Rk5uTiIvC1prMTr7ue:APA91bGPPasEn7wqi2ZnArJsXKlbk9OCZ6jweCsWVPXA"
                   description: |-
                     The clients notification token for their service.  Also known as the
                     "Registration Id".
