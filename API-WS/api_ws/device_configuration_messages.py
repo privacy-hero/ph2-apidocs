@@ -375,6 +375,9 @@ def set_device_bedtime(reply=False):
         IF no schedule is to be set for the specified devices, the schedule
         field will be present, and will be set to null.  This means that no
         schedule is to apply to the listed devices.
+
+        IF any single day does not have a bed time, but other days do, then both
+        the "start" and "end" will be set to 0 (zero).
     """
 
     extra_fields = f"""
