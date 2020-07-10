@@ -1377,7 +1377,7 @@
                   },
                   "schedule": {
                     "type": "array",
-                    "description": "This is an array for a rotating weeks worth of bedtime schedules.\nThe first element is Monday, the second Tuesday, Wednesday and so on\ntill Sunday.  There will ALWAYS be 7 days present if a schedule is set.\n\nIF no schedule is to be set for the specified devices, the schedule\nfield will be present, and will be set to null.  This means that no\nschedule is to apply to the listed devices.",
+                    "description": "This is an array for a rotating weeks worth of bedtime schedules.\nThe first element is Monday, the second Tuesday, Wednesday and so on\ntill Sunday.  There will ALWAYS be 7 days present if a schedule is set.\n\nIF no schedule is to be set for the specified devices, the schedule\nfield will be present, and will be set to null.  This means that no\nschedule is to apply to the listed devices.\n\nIF any single day does not have a bed time, but other days do, then both\nthe \"start\" and \"end\" will be set to 0 (zero).",
                     "items": {
                       "type": "field",
                       "required": [
@@ -1708,7 +1708,7 @@
                   },
                   "schedule": {
                     "type": "array",
-                    "description": "This is an array for a rotating weeks worth of bedtime schedules.\nThe first element is Monday, the second Tuesday, Wednesday and so on\ntill Sunday.  There will ALWAYS be 7 days present if a schedule is set.\n\nIF no schedule is to be set for the specified devices, the schedule\nfield will be present, and will be set to null.  This means that no\nschedule is to apply to the listed devices.",
+                    "description": "This is an array for a rotating weeks worth of bedtime schedules.\nThe first element is Monday, the second Tuesday, Wednesday and so on\ntill Sunday.  There will ALWAYS be 7 days present if a schedule is set.\n\nIF no schedule is to be set for the specified devices, the schedule\nfield will be present, and will be set to null.  This means that no\nschedule is to apply to the listed devices.\n\nIF any single day does not have a bed time, but other days do, then both\nthe \"start\" and \"end\" will be set to 0 (zero).",
                     "items": {
                       "type": "field",
                       "required": [
