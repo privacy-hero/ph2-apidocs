@@ -413,6 +413,131 @@ def set_device_bedtime(reply=False):
     )
 
 
+def set_device_bedtime_delay(reply=False):
+    """Delay Bedtime."""
+
+    if not reply:
+        cmd = "delay bedtime"
+        name = "DelayBedtime"
+        title = "Delay Bedtime"
+        summary = "Advise the Adapter to delay the next (or currently active) bedtime for the listed devices."
+
+        description = """
+            This message causes the adapter to delay the bedtime for the listed
+            devices by the specified number of minutes.  It is a one-shot delay
+            and once expired is not repeated.
+
+            IF bedtime has not yet commenced for the day, the delay applies to
+            the bedtime which is next to occur.  The delay then causes the start
+            to delay by the specified number of minutes.
+
+            IF the bedtime has started but not yet finished, the delay applies
+            to the currently active bedtime, and will delay it from its start
+            time by the specified number of minutes.  So, for example, if
+            started at 10pm and at 10:15pm a delay of 45 minutes was received,
+            the devices internet would unpause and would re-pause at 10:45.
+        """
+
+        devices_desc = """
+            An array of Device MAC addresses the bedtime delay applies to. All
+            devices listed are to have the same bedtime delay applied to
+            them.  Only after all listed devices have the bedtime delay
+            applied does the adapter send the paired reply.
+        """
+
+        delay_desc = """
+            The number of minutes we are to delay bedtime for the listed devices
+            for.  A delay of zero terminates any currently running delay.  Delay
+            time is absolute, from the start of the next/current bedtime.  A
+            subsequent delay is NOT an additional delay, it replaces the current delay.
+        """
+    else:
+        cmd = "bedtime delayed"
+        name = "BedtimeDelayed"
+        title = "Bedtime Delayed"
+        summary = (
+            "Advise the Adapter that Bedtime has been Delayed for the listed devices."
+        )
+
+        description = """
+            This message advises that a bedtime delay has been applied to the
+            devices, and the absolute UTC time when the delay will complete.
+        """
+
+        devices_desc = """
+            An array of Device MAC addresses the bedtime delay applies to. All
+            devices listed have had the same bedtime delay applied to
+            them.  Only after all listed devices have the bedtime delay
+            applied does the adapter send the paired reply.
+        """
+
+        delay_desc = """
+            The number of minutes we are to delay bedtime for the listed devices
+            for.  A delay of zero terminates any currently running delay.  Delay
+            time is absolute, from the start of the next/current bedtime.  A
+            subsequent delay is NOT an additional delay, it replaces the current delay.
+        """
+
+        delay_end_desc = """
+            This is the absolute unix epoch time when the delay will finish on
+            the adapter for the listed devices.
+        """
+
+    tstamp_desc = """
+        The time the backend decided to set the bedtime delay.  To be returned in the
+        paired reply.
+    """
+
+    id_desc = """
+        ID Field.  The Adapter does not do any processing or verification
+        of the ID field, it must be returned verbatim in the paired reply.
+    """
+
+    mac_desc = """
+        The Devices MAC address.  Assumed unique per adapter.  Eg. "00:11:22:33:44:55"
+        Also accepts "001122334455" or "00-11-22-33-44-55"
+    """
+
+    extra_fields = f"""
+        {Field.string("id", id_desc, minlength=1, maxlength=256)},
+        {Field.array("devices", devices_desc, Field.mac(None, mac_desc))},
+        {Field.daytime("delay", delay_desc)}
+    """
+
+    extra_example = """
+        "id"       : "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+        "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
+        "pause" : 45
+    """
+
+    extra_required = '"tstamp", "id", "devices", "delay"'
+
+    if reply:
+        extra_fields += f"""
+        ,
+        {Field.unixepoch("ends", delay_end_desc)}
+        """
+
+        extra_example += """
+            , "ends":  1594391720
+        """
+
+        extra_required += ',"ends"'
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def device_configuration_channel():
     """Device Configuration messages."""
     description = """
@@ -420,10 +545,18 @@ def device_configuration_channel():
     """
 
     subscribe_desc = "Device Configuration messages."
-    subscribe_msgs = [device_state_changed(), set_device_bedtime(reply=True)]
+    subscribe_msgs = [
+        device_state_changed(),
+        set_device_bedtime(reply=True),
+        set_device_bedtime_delay(reply=True),
+    ]
 
     publish_desc = "Device Configuration messages."
-    publish_msgs = [change_device_state(), set_device_bedtime()]
+    publish_msgs = [
+        change_device_state(),
+        set_device_bedtime(),
+        set_device_bedtime_delay(),
+    ]
 
     return channel(
         description,
