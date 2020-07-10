@@ -557,10 +557,28 @@
         </a>
       
         <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-SetBedtime">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">SetBedtime</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
           href="#message-DeviceStateChanged">
           <div style="display:inline-block;">
             
 <span class="string-chunk" style="padding-top: 2px;">DeviceStateChanged</span>
+
+          </div>
+        </a>
+      
+        <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3"
+          href="#message-BedtimeSet">
+          <div style="display:inline-block;">
+            
+<span class="string-chunk" style="padding-top: 2px;">BedtimeSet</span>
 
           </div>
         </a>
@@ -6407,7 +6425,7 @@ int
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -6471,7 +6489,7 @@ array&lt;object&gt;
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -7122,10 +7140,6 @@ Default to <em>false</em> if not present.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -7769,7 +7783,7 @@ be sent.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -7823,7 +7837,7 @@ object
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -8087,10 +8101,6 @@ it's dhcp request.  This is option 55 from the DHCP Request.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -8124,7 +8134,7 @@ it's dhcp request.  This is option 55 from the DHCP Request.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -8191,7 +8201,7 @@ upnp devices.  Each discovered internal upnp device is reported in this array.</
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -8581,10 +8591,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -8639,7 +8645,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -8939,10 +8945,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -8976,7 +8978,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -9084,7 +9086,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -9148,7 +9150,7 @@ array&lt;object&gt;
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -9379,10 +9381,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -9425,10 +9423,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -9462,7 +9456,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -9611,10 +9605,6 @@ sent in this field.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -9648,7 +9638,7 @@ sent in this field.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -9713,7 +9703,7 @@ it is omitted.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -9811,10 +9801,6 @@ the detected useragents.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -9856,10 +9842,6 @@ the detected useragents.</p>
 
         
 
-        
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
         
 
         
@@ -10001,11 +9983,14 @@ the detected useragents.</p>
 
 
     
-    <p>Accepts the following message:</p>
+    <p>Accepts <strong>one of</strong> the following messages:</p>
+    
     
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#1</span>
     
     
       Change Device State
@@ -10039,7 +10024,7 @@ all triggered with the same state changes.</p>
   
 
 <div class="bg-grey-lighter  rounded">
-  <div class="is-open">
+  <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">Payload</span>
@@ -10436,7 +10421,7 @@ Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -10503,7 +10488,7 @@ changed, and its current state is NOT returned to the paired reply.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -10748,9 +10733,758 @@ internal clock of the adapter.</p>
         
 
         
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
           
             <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
           
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#2</span>
+    
+    
+      Set Device Bedtime
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">SetBedtime</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Advise the Adapter to set the bedtime schedule for the listed devices.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs the adapter
+to set the listed bedtime schedule for the listed devices.  The devices listed are
+all set to the same bedtime schedule.  The Adapter will receive
+multiple &quot;set bedtime&quot; messages to set the schedules of all known
+devices.  If the Adapter knows a device, but has not received a
+bedtime schedule for it, it must assume there is no bedtime schedule
+that applies to it.  The full set of bedtime schedules are sent
+during initial configuration and also as required to reflect
+configuration changes as they occur.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 11</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 11</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Advise the Adapter to set the bedtime schedule for the listed devices.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;set bedtime&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The time the backend decided to set the bedtime schedule.  To be returned in the
+paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
+of the ID field, it must be returned verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of Device MAC addresses the bedtime schedule applies to. All
+devices listed are to have the same bedtime schedule applied to
+them.  Only after all listed devices have the bedtime schedule
+applied does the adapter send the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.  Assumed unique per adapter.  Eg. &quot;00:11:22:33:44:55&quot;
+Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">schedule</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;field&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 7 items</span>
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;"><= 7 items</span>
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is an array for a rotating weeks worth of bedtime schedules.
+The first element is Monday, the second Tuesday, Wednesday and so on
+till Sunday.  There will ALWAYS be 7 days present if a schedule is set.</p>
+<p>IF no schedule is to be set for the specified devices, the schedule
+field will be present, and will be set to null.  This means that no
+schedule is to apply to the listed devices.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+field
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Bedtime Schedule</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">start</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime starts on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>IF bedtime starts after the subsequent midnight of the specified day,
+then this time will be greater than 1,440.</p>
+<p>Assuming the specified day is Monday. Example Start Times:</p>
+<ul>
+<li>600 = 10am Monday Morning.</li>
+<li>1,260 = 9pm Monday Night.</li>
+<li>1,350 = 10:30pm Monday Night.</li>
+<li>1,530 = 1:30am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">end</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime ends on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>Bedtime typically always ends after the subsequent midnight of the
+specified day, so typically this time will be greater than 1,440.</p>
+<p>start is always &lt; end.  If it is not the schedule is in error and should
+be rejected.</p>
+<p>Assuming the specified day is Monday. Example End Times:</p>
+<ul>
+<li>1,800 = 6am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
         
 
         
@@ -10817,6 +11551,7 @@ internal clock of the adapter.</p>
 
 
     
+    
 
     
 
@@ -10836,6 +11571,7 @@ internal clock of the adapter.</p>
 <div class="right-block p-8">
   <h4 class="text-lg text-white mb-4">Examples</h4>
 
+  
   
   
 
@@ -10889,6 +11625,75 @@ internal clock of the adapter.</p>
 
 
   
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">SetBedtime</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "set bedtime",
+  "tstamp": 1592217870123,
+  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+  "devices": [
+    "53:CB:12:79:E5:F6",
+    "DD:0F:91:FE:9E:00",
+    "54:A4:33:F5:D8:A4"
+  ],
+  "schedule": [
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1350,
+      "end": 1800
+    },
+    {
+      "start": 1350,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    }
+  ]
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+  
 </div>
 
 
@@ -10926,11 +11731,14 @@ internal clock of the adapter.</p>
 
 
     
-    <p>Accepts the following message:</p>
+    <p>Accepts <strong>one of</strong> the following messages:</p>
+    
     
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#1</span>
     
     
       Device State Changed
@@ -10963,7 +11771,7 @@ asynchronously without being requested by the backend.</p>
   
 
 <div class="bg-grey-lighter  rounded">
-  <div class="is-open">
+  <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">Payload</span>
@@ -11363,7 +12171,7 @@ Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -11430,7 +12238,7 @@ actual changes that ocurred are listed only.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -11675,9 +12483,751 @@ midnight 1970 UTC.</p>
         
 
         
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
           
             <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
           
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#2</span>
+    
+    
+      Device Bedtime Set
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">BedtimeSet</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Advise the Backend that the bedtime schedule has been set.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend to acknowledge
+that the listed devices bedtime schedule was set as required.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 11</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 11</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Advise the Backend that the bedtime schedule has been set.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;bedtime set&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The tstamp, as received in the message which triggered this reply to
+be sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
+of the ID field, it must be returned verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of Device MAC addresses the bedtime schedule applied to. All
+devices listed had the same bedtime schedule applied to
+them.  The list must have the same number of devices and same
+device mac addresses as the original request to set the schedule.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.  Assumed unique per adapter.  Eg. &quot;00:11:22:33:44:55&quot;
+Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">schedule</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;field&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 7 items</span>
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;"><= 7 items</span>
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is an array for a rotating weeks worth of bedtime schedules.
+The first element is Monday, the second Tuesday, Wednesday and so on
+till Sunday.  There will ALWAYS be 7 days present if a schedule is set.</p>
+<p>IF no schedule is to be set for the specified devices, the schedule
+field will be present, and will be set to null.  This means that no
+schedule is to apply to the listed devices.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+field
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Bedtime Schedule</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">start</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime starts on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>IF bedtime starts after the subsequent midnight of the specified day,
+then this time will be greater than 1,440.</p>
+<p>Assuming the specified day is Monday. Example Start Times:</p>
+<ul>
+<li>600 = 10am Monday Morning.</li>
+<li>1,260 = 9pm Monday Night.</li>
+<li>1,350 = 10:30pm Monday Night.</li>
+<li>1,530 = 1:30am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">end</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime ends on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>Bedtime typically always ends after the subsequent midnight of the
+specified day, so typically this time will be greater than 1,440.</p>
+<p>start is always &lt; end.  If it is not the schedule is in error and should
+be rejected.</p>
+<p>Assuming the specified day is Monday. Example End Times:</p>
+<ul>
+<li>1,800 = 6am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
         
 
         
@@ -11744,6 +13294,7 @@ midnight 1970 UTC.</p>
 
 
     
+    
 
     
 
@@ -11763,6 +13314,7 @@ midnight 1970 UTC.</p>
 <div class="right-block p-8">
   <h4 class="text-lg text-white mb-4">Examples</h4>
 
+  
   
   
 
@@ -11815,6 +13367,75 @@ midnight 1970 UTC.</p>
 </form>
 
 
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">BedtimeSet</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "bedtime set",
+  "tstamp": 1592217870123,
+  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+  "devices": [
+    "53:CB:12:79:E5:F6",
+    "DD:0F:91:FE:9E:00",
+    "54:A4:33:F5:D8:A4"
+  ],
+  "schedule": [
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    },
+    {
+      "start": 1350,
+      "end": 1800
+    },
+    {
+      "start": 1350,
+      "end": 1800
+    },
+    {
+      "start": 1260,
+      "end": 1800
+    }
+  ]
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
   
 </div>
 
@@ -12203,7 +13824,7 @@ the hour.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -12270,7 +13891,7 @@ active devices, this field is omitted.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -12492,10 +14113,6 @@ in from the public internet to the device is included.</p>
 
         
 
-        
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
-          
         
 
         
@@ -16485,7 +18102,7 @@ int
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -16549,7 +18166,7 @@ array&lt;object&gt;
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -17200,10 +18817,6 @@ Default to <em>false</em> if not present.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -17740,7 +19353,7 @@ be sent.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -17794,7 +19407,7 @@ object
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -18058,10 +19671,6 @@ it's dhcp request.  This is option 55 from the DHCP Request.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -18095,7 +19704,7 @@ it's dhcp request.  This is option 55 from the DHCP Request.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -18162,7 +19771,7 @@ upnp devices.  Each discovered internal upnp device is reported in this array.</
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -18552,10 +20161,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -18610,7 +20215,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -18910,10 +20515,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -18947,7 +20548,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -19055,7 +20656,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -19119,7 +20720,7 @@ array&lt;object&gt;
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -19350,10 +20951,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -19396,10 +20993,6 @@ string
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -19433,7 +21026,7 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -19582,10 +21175,6 @@ sent in this field.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -19619,7 +21208,7 @@ sent in this field.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -19684,7 +21273,7 @@ it is omitted.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -19782,10 +21371,6 @@ the detected useragents.</p>
         
 
         
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
-        
 
         
 
@@ -19827,10 +21412,6 @@ the detected useragents.</p>
 
         
 
-        
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are allowed.</p>
-          
         
 
         
@@ -20313,7 +21894,7 @@ Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -20380,7 +21961,7 @@ changed, and its current state is NOT returned to the paired reply.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -20625,9 +22206,759 @@ internal clock of the adapter.</p>
         
 
         
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
           
             <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
           
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-SetBedtime"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#13</span>
+    
+    
+      Set Device Bedtime
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">SetBedtime</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Advise the Adapter to set the bedtime schedule for the listed devices.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs the adapter
+to set the listed bedtime schedule for the listed devices.  The devices listed are
+all set to the same bedtime schedule.  The Adapter will receive
+multiple &quot;set bedtime&quot; messages to set the schedules of all known
+devices.  If the Adapter knows a device, but has not received a
+bedtime schedule for it, it must assume there is no bedtime schedule
+that applies to it.  The full set of bedtime schedules are sent
+during initial configuration and also as required to reflect
+configuration changes as they occur.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 11</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 11</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Advise the Adapter to set the bedtime schedule for the listed devices.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;set bedtime&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The time the backend decided to set the bedtime schedule.  To be returned in the
+paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
+of the ID field, it must be returned verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of Device MAC addresses the bedtime schedule applies to. All
+devices listed are to have the same bedtime schedule applied to
+them.  Only after all listed devices have the bedtime schedule
+applied does the adapter send the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.  Assumed unique per adapter.  Eg. &quot;00:11:22:33:44:55&quot;
+Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">schedule</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;field&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 7 items</span>
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;"><= 7 items</span>
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is an array for a rotating weeks worth of bedtime schedules.
+The first element is Monday, the second Tuesday, Wednesday and so on
+till Sunday.  There will ALWAYS be 7 days present if a schedule is set.</p>
+<p>IF no schedule is to be set for the specified devices, the schedule
+field will be present, and will be set to null.  This means that no
+schedule is to apply to the listed devices.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+field
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Bedtime Schedule</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">start</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime starts on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>IF bedtime starts after the subsequent midnight of the specified day,
+then this time will be greater than 1,440.</p>
+<p>Assuming the specified day is Monday. Example Start Times:</p>
+<ul>
+<li>600 = 10am Monday Morning.</li>
+<li>1,260 = 9pm Monday Night.</li>
+<li>1,350 = 10:30pm Monday Night.</li>
+<li>1,530 = 1:30am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">end</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime ends on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>Bedtime typically always ends after the subsequent midnight of the
+specified day, so typically this time will be greater than 1,440.</p>
+<p>start is always &lt; end.  If it is not the schedule is in error and should
+be rejected.</p>
+<p>Assuming the specified day is Monday. Example End Times:</p>
+<ul>
+<li>1,800 = 6am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
         
 
         
@@ -20700,7 +23031,7 @@ internal clock of the adapter.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#13</span>
+    <span class="text-grey-darker font-bold mr-2">#14</span>
     
     
       Device State Changed
@@ -21133,7 +23464,7 @@ Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -21200,7 +23531,7 @@ actual changes that ocurred are listed only.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -21445,9 +23776,752 @@ midnight 1970 UTC.</p>
         
 
         
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
           
             <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
           
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-BedtimeSet"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#15</span>
+    
+    
+      Device Bedtime Set
+      
+        <span class="border text-orange rounded text-xs ml-3 py-0 px-2">BedtimeSet</span>
+      
+    
+  </div>
+  <p class="text-grey-dark text-sm">Advise the Backend that the bedtime schedule has been set.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend to acknowledge
+that the listed devices bedtime schedule was set as required.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 11</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 11</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Advise the Backend that the bedtime schedule has been set.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;bedtime set&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The tstamp, as received in the message which triggered this reply to
+be sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
+of the ID field, it must be returned verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">devices</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>An array of Device MAC addresses the bedtime schedule applied to. All
+devices listed had the same bedtime schedule applied to
+them.  The list must have the same number of devices and same
+device mac addresses as the original request to set the schedule.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">Mac EUI</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 17</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The Devices MAC address.  Assumed unique per adapter.  Eg. &quot;00:11:22:33:44:55&quot;
+Also accepts &quot;001122334455&quot; or &quot;00-11-22-33-44-55&quot;</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">schedule</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;field&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 7 items</span>
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;"><= 7 items</span>
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is an array for a rotating weeks worth of bedtime schedules.
+The first element is Monday, the second Tuesday, Wednesday and so on
+till Sunday.  There will ALWAYS be 7 days present if a schedule is set.</p>
+<p>IF no schedule is to be set for the specified devices, the schedule
+field will be present, and will be set to null.  This means that no
+schedule is to apply to the listed devices.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+field
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Bedtime Schedule</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">start</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime starts on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>IF bedtime starts after the subsequent midnight of the specified day,
+then this time will be greater than 1,440.</p>
+<p>Assuming the specified day is Monday. Example Start Times:</p>
+<ul>
+<li>600 = 10am Monday Morning.</li>
+<li>1,260 = 9pm Monday Night.</li>
+<li>1,350 = 10:30pm Monday Night.</li>
+<li>1,530 = 1:30am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">end</span>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+int
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int16</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>This is the time bedtime ends on the specificed day.</p>
+<p>This time is minutes since midnight of the specified day.</p>
+<p>Bedtime typically always ends after the subsequent midnight of the
+specified day, so typically this time will be greater than 1,440.</p>
+<p>start is always &lt; end.  If it is not the schedule is in error and should
+be rejected.</p>
+<p>Assuming the specified day is Monday. Example End Times:</p>
+<ul>
+<li>1,800 = 6am Tuesday Morning.</li>
+</ul>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
         
 
         
@@ -21520,7 +24594,7 @@ midnight 1970 UTC.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#14</span>
+    <span class="text-grey-darker font-bold mr-2">#16</span>
     
     
       Data Usage
@@ -21862,7 +24936,7 @@ the hour.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;field&gt;
           
           
           
@@ -21929,7 +25003,7 @@ active devices, this field is omitted.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-object
+field
           
           
           
@@ -22151,10 +25225,6 @@ in from the public internet to the device is included.</p>
 
         
 
-        
-          
-            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
-          
         
 
         

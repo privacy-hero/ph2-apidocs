@@ -122,6 +122,25 @@ class Field:  # pylint: disable=too-many-public-methods
 
     # -------------------------------------------------------------------------
     @staticmethod
+    def daytime(
+        name="daytime",
+        desc=(
+            "The number of minutes after Midnight local time an operation "
+            "starts or ends on a particular day."
+        ),
+    ):
+        """Return the definition of the standard daytime field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "int",
+                "format": "int16",
+                "description" :{mls(desc)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
     def url(name="url", desc="A URL"):
         """Return the definition of the standard URL type field."""
         return Field.named(
@@ -326,8 +345,13 @@ class Field:  # pylint: disable=too-many-public-methods
     # -------------------------------------------------------------------------
     @staticmethod
     def object(
-        name="object", desc="A OBJECT", required=None, fields="{}", additional=False
-    ):
+        name="object",
+        desc="A OBJECT",
+        required=None,
+        fields="{}",
+        additional=False,
+        nullable=False,
+    ):  # pylint: disable=too-many-arguments
         """Return a object."""
         if required is None:
             required = []
@@ -336,13 +360,39 @@ class Field:  # pylint: disable=too-many-public-methods
         return Field.named(
             name,
             f"""
-                "type" : "object",
+                "type" : {Field.nullable("object", nullable)},
                 "required": {json.dumps(required)},
                 "description" :{mls(desc)},
                 "properties" : {fields}
                 {Field.optional("additionalProperties", additional, "true", quote="")}
             """,
         )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def one_of(objects):
+        """Return a optional object."""
+        elements = ""
+        first = True
+        for obj in objects:
+            if not first:
+                elements += ","
+            elements += obj
+            first = False
+
+        return f"""
+            "oneOf" : [
+                {elements}
+            ]
+        """
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def nullable(field, nullable=False):
+        """Return an optional nullable type."""
+        if not nullable:
+            return '"field"'
+        return f'["null", "{field}"]'
 
 
 # =====================================================================

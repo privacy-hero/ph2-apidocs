@@ -851,12 +851,12 @@
                     "description": "Current known Online state for the device.  This is the ONLY field whose change\nof value would not cause a new **\"device info\"** message to be sent.  If a\ndevice falls offline or comes back online, the **\"device state\"** message should\nbe sent."
                   },
                   "meta": {
-                    "type": "object",
+                    "type": "field",
                     "required": [],
                     "description": "metadata discovered about the device.",
                     "properties": {
                       "dhcp": {
-                        "type": "object",
+                        "type": "field",
                         "required": [
                           "hostname"
                         ],
@@ -886,7 +886,7 @@
                         "type": "array",
                         "description": "**Optional.** IF a upnp xml device metadata can be retrieved from a device then\nit is to be sent in this sub field, otherwise it is omitted.  It is\npossible for a single physical device to report as multiple internal\nupnp devices.  Each discovered internal upnp device is reported in this array.",
                         "items": {
-                          "type": "object",
+                          "type": "field",
                           "required": [
                             "deviceType"
                           ],
@@ -922,7 +922,7 @@
                         "minItems": 1
                       },
                       "snmp": {
-                        "type": "object",
+                        "type": "field",
                         "required": [
                           "sysoid"
                         ],
@@ -951,7 +951,7 @@
                         }
                       },
                       "bonjour": {
-                        "type": "object",
+                        "type": "field",
                         "required": [
                           "name"
                         ],
@@ -965,7 +965,7 @@
                             "type": "array",
                             "description": "The list of services exposed via Bonjour.",
                             "items": {
-                              "type": "object",
+                              "type": "field",
                               "required": [
                                 "name"
                               ],
@@ -991,7 +991,7 @@
                         }
                       },
                       "smb": {
-                        "type": "object",
+                        "type": "field",
                         "required": [
                           "name"
                         ],
@@ -1011,7 +1011,7 @@
                         "type": "array",
                         "description": "**Optional.** HTTP User Agents discovered for the device, otherwise\nit is omitted.",
                         "items": {
-                          "type": "object",
+                          "type": "field",
                           "required": [
                             "userAgent"
                           ],
@@ -1094,7 +1094,7 @@
                     "type": "array",
                     "description": "An array of all devices known by the backend for the adapter.",
                     "items": {
-                      "type": "object",
+                      "type": "field",
                       "required": [
                         "mac",
                         "ipv4",
@@ -1262,7 +1262,7 @@
                     "type": "array",
                     "description": "The array of services and states that change.  If this is a reply to the\nChange Device State command from the backend, then it lists the same states\nthat were requested by the backend.  If asynchronous state changes occur, the\nactual changes that ocurred are listed only.",
                     "items": {
-                      "type": "object",
+                      "type": "field",
                       "required": [
                         "service",
                         "state"
@@ -1330,6 +1330,128 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "BedtimeSet",
+              "title": "Device Bedtime Set",
+              "summary": "Advise the Backend that the bedtime schedule has been set.",
+              "description": "This message is sent from the Adapter to the Backend to acknowledge\nthat the listed devices bedtime schedule was set as required.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Backend that the bedtime schedule has been set.",
+                    "const": "bedtime set",
+                    "minLength": 11,
+                    "maxLength": 11
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The tstamp, as received in the message which triggered this reply to\nbe sent."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "ID Field.  The Adapter does not do any processing or verification\nof the ID field, it must be returned verbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "devices": {
+                    "type": "array",
+                    "description": "An array of Device MAC addresses the bedtime schedule applied to. All\ndevices listed had the same bedtime schedule applied to\nthem.  The list must have the same number of devices and same\ndevice mac addresses as the original request to set the schedule.",
+                    "items": {
+                      "type": "string",
+                      "format": "Mac EUI",
+                      "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
+                      "minLength": 1,
+                      "maxLength": 17
+                    },
+                    "minItems": 1
+                  },
+                  "schedule": {
+                    "type": "array",
+                    "description": "This is an array for a rotating weeks worth of bedtime schedules.\nThe first element is Monday, the second Tuesday, Wednesday and so on\ntill Sunday.  There will ALWAYS be 7 days present if a schedule is set.\n\nIF no schedule is to be set for the specified devices, the schedule\nfield will be present, and will be set to null.  This means that no\nschedule is to apply to the listed devices.",
+                    "items": {
+                      "type": "field",
+                      "required": [
+                        "start",
+                        "end"
+                      ],
+                      "description": "Bedtime Schedule",
+                      "properties": {
+                        "start": {
+                          "type": "int",
+                          "format": "int16",
+                          "description": "This is the time bedtime starts on the specificed day.\n\nThis time is minutes since midnight of the specified day.\n\nIF bedtime starts after the subsequent midnight of the specified day,\nthen this time will be greater than 1,440.\n\nAssuming the specified day is Monday. Example Start Times:\n * 600 = 10am Monday Morning.\n * 1,260 = 9pm Monday Night.\n * 1,350 = 10:30pm Monday Night.\n * 1,530 = 1:30am Tuesday Morning."
+                        },
+                        "end": {
+                          "type": "int",
+                          "format": "int16",
+                          "description": "This is the time bedtime ends on the specificed day.\n\nThis time is minutes since midnight of the specified day.\n\nBedtime typically always ends after the subsequent midnight of the\nspecified day, so typically this time will be greater than 1,440.\n\nstart is always < end.  If it is not the schedule is in error and should\nbe rejected.\n\nAssuming the specified day is Monday. Example End Times:\n * 1,800 = 6am Tuesday Morning."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 7,
+                    "maxItems": 7
+                  }
+                },
+                "example": {
+                  "message": "bedtime set",
+                  "tstamp": 1592217870123,
+                  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+                  "devices": [
+                    "53:CB:12:79:E5:F6",
+                    "DD:0F:91:FE:9E:00",
+                    "54:A4:33:F5:D8:A4"
+                  ],
+                  "schedule": [
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1350,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1350,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    }
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "id",
+                  "devices",
+                  "schedule"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -1393,7 +1515,7 @@
                     "type": "array",
                     "description": "The array of services and states to change.  If the service already has the\nrequested state on the device no change is made but the reply includes this\nstate.  If the service is not present in the states array, its state is not\nchanged, and its current state is NOT returned to the paired reply.",
                     "items": {
-                      "type": "object",
+                      "type": "field",
                       "required": [
                         "service",
                         "state"
@@ -1461,6 +1583,128 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "SetBedtime",
+              "title": "Set Device Bedtime",
+              "summary": "Advise the Adapter to set the bedtime schedule for the listed devices.",
+              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto set the listed bedtime schedule for the listed devices.  The devices listed are\nall set to the same bedtime schedule.  The Adapter will receive\nmultiple \"set bedtime\" messages to set the schedules of all known\ndevices.  If the Adapter knows a device, but has not received a\nbedtime schedule for it, it must assume there is no bedtime schedule\nthat applies to it.  The full set of bedtime schedules are sent\nduring initial configuration and also as required to reflect\nconfiguration changes as they occur.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Adapter to set the bedtime schedule for the listed devices.",
+                    "const": "set bedtime",
+                    "minLength": 11,
+                    "maxLength": 11
+                  },
+                  "tstamp": {
+                    "type": "int",
+                    "format": "int64",
+                    "description": "The time the backend decided to set the bedtime schedule.  To be returned in the\npaired reply."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "ID Field.  The Adapter does not do any processing or verification\nof the ID field, it must be returned verbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "devices": {
+                    "type": "array",
+                    "description": "An array of Device MAC addresses the bedtime schedule applies to. All\ndevices listed are to have the same bedtime schedule applied to\nthem.  Only after all listed devices have the bedtime schedule\napplied does the adapter send the paired reply.",
+                    "items": {
+                      "type": "string",
+                      "format": "Mac EUI",
+                      "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
+                      "minLength": 1,
+                      "maxLength": 17
+                    },
+                    "minItems": 1
+                  },
+                  "schedule": {
+                    "type": "array",
+                    "description": "This is an array for a rotating weeks worth of bedtime schedules.\nThe first element is Monday, the second Tuesday, Wednesday and so on\ntill Sunday.  There will ALWAYS be 7 days present if a schedule is set.\n\nIF no schedule is to be set for the specified devices, the schedule\nfield will be present, and will be set to null.  This means that no\nschedule is to apply to the listed devices.",
+                    "items": {
+                      "type": "field",
+                      "required": [
+                        "start",
+                        "end"
+                      ],
+                      "description": "Bedtime Schedule",
+                      "properties": {
+                        "start": {
+                          "type": "int",
+                          "format": "int16",
+                          "description": "This is the time bedtime starts on the specificed day.\n\nThis time is minutes since midnight of the specified day.\n\nIF bedtime starts after the subsequent midnight of the specified day,\nthen this time will be greater than 1,440.\n\nAssuming the specified day is Monday. Example Start Times:\n * 600 = 10am Monday Morning.\n * 1,260 = 9pm Monday Night.\n * 1,350 = 10:30pm Monday Night.\n * 1,530 = 1:30am Tuesday Morning."
+                        },
+                        "end": {
+                          "type": "int",
+                          "format": "int16",
+                          "description": "This is the time bedtime ends on the specificed day.\n\nThis time is minutes since midnight of the specified day.\n\nBedtime typically always ends after the subsequent midnight of the\nspecified day, so typically this time will be greater than 1,440.\n\nstart is always < end.  If it is not the schedule is in error and should\nbe rejected.\n\nAssuming the specified day is Monday. Example End Times:\n * 1,800 = 6am Tuesday Morning."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 7,
+                    "maxItems": 7
+                  }
+                },
+                "example": {
+                  "message": "set bedtime",
+                  "tstamp": 1592217870123,
+                  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+                  "devices": [
+                    "53:CB:12:79:E5:F6",
+                    "DD:0F:91:FE:9E:00",
+                    "54:A4:33:F5:D8:A4"
+                  ],
+                  "schedule": [
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1350,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1350,
+                      "end": 1800
+                    },
+                    {
+                      "start": 1260,
+                      "end": 1800
+                    }
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "id",
+                  "devices",
+                  "schedule"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -1523,7 +1767,7 @@
                     "type": "array",
                     "description": "The list of all devices which were active during the hour and\ntransmitted or received data from the internet.  Devices which were\nonline, but only transmitted locally are NOT listed.  If there were no\nactive devices, this field is omitted.",
                     "items": {
-                      "type": "object",
+                      "type": "field",
                       "required": [
                         "mac",
                         "tx",

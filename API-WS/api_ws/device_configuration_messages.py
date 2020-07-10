@@ -257,6 +257,162 @@ def device_state_changed():
     )
 
 
+def bedtime_schedule(reply=False):  # pylint: disable=unused-argument
+    """Individual Bedtime schedule record."""
+    start_desc = """
+        This is the time bedtime starts on the specificed day.
+
+        This time is minutes since midnight of the specified day.
+
+        IF bedtime starts after the subsequent midnight of the specified day,
+        then this time will be greater than 1,440.
+
+        Assuming the specified day is Monday. Example Start Times:
+         * 600 = 10am Monday Morning.
+         * 1,260 = 9pm Monday Night.
+         * 1,350 = 10:30pm Monday Night.
+         * 1,530 = 1:30am Tuesday Morning.
+    """
+
+    end_desc = """
+        This is the time bedtime ends on the specificed day.
+
+        This time is minutes since midnight of the specified day.
+
+        Bedtime typically always ends after the subsequent midnight of the
+        specified day, so typically this time will be greater than 1,440.
+
+        start is always < end.  If it is not the schedule is in error and should
+        be rejected.
+
+        Assuming the specified day is Monday. Example End Times:
+         * 1,800 = 6am Tuesday Morning.
+    """
+
+    fields = f"""
+        {{
+            {Field.daytime("start",start_desc)},
+            {Field.daytime("end", end_desc)}
+        }}
+    """
+
+    return f"""
+        {Field.object(None, "Bedtime Schedule", ["start","end"], fields)}
+    """
+
+
+def set_device_bedtime(reply=False):
+    """Set Device Bedtime."""
+    if not reply:
+        cmd = "set bedtime"
+        name = "SetBedtime"
+        title = "Set Device Bedtime"
+        summary = (
+            "Advise the Adapter to set the bedtime schedule for the listed devices."
+        )
+
+        description = """
+            This message is sent from the Backend to the adapter and instructs the adapter
+            to set the listed bedtime schedule for the listed devices.  The devices listed are
+            all set to the same bedtime schedule.  The Adapter will receive
+            multiple "set bedtime" messages to set the schedules of all known
+            devices.  If the Adapter knows a device, but has not received a
+            bedtime schedule for it, it must assume there is no bedtime schedule
+            that applies to it.  The full set of bedtime schedules are sent
+            during initial configuration and also as required to reflect
+            configuration changes as they occur.
+        """
+
+        tstamp_desc = """
+            The time the backend decided to set the bedtime schedule.  To be returned in the
+            paired reply.
+        """
+
+        devices_desc = """
+            An array of Device MAC addresses the bedtime schedule applies to. All
+            devices listed are to have the same bedtime schedule applied to
+            them.  Only after all listed devices have the bedtime schedule
+            applied does the adapter send the paired reply.
+        """
+    else:
+        cmd = "bedtime set"
+        name = "BedtimeSet"
+        title = "Device Bedtime Set"
+        summary = "Advise the Backend that the bedtime schedule has been set."
+
+        description = """
+            This message is sent from the Adapter to the Backend to acknowledge
+            that the listed devices bedtime schedule was set as required.
+        """
+
+        tstamp_desc = """
+            The tstamp, as received in the message which triggered this reply to
+            be sent.
+        """
+
+        devices_desc = """
+            An array of Device MAC addresses the bedtime schedule applied to. All
+            devices listed had the same bedtime schedule applied to
+            them.  The list must have the same number of devices and same
+            device mac addresses as the original request to set the schedule.
+        """
+
+    id_desc = """
+        ID Field.  The Adapter does not do any processing or verification
+        of the ID field, it must be returned verbatim in the paired reply.
+    """
+
+    mac_desc = """
+        The Devices MAC address.  Assumed unique per adapter.  Eg. "00:11:22:33:44:55"
+        Also accepts "001122334455" or "00-11-22-33-44-55"
+    """
+
+    schedule_desc = """
+        This is an array for a rotating weeks worth of bedtime schedules.
+        The first element is Monday, the second Tuesday, Wednesday and so on
+        till Sunday.  There will ALWAYS be 7 days present if a schedule is set.
+
+        IF no schedule is to be set for the specified devices, the schedule
+        field will be present, and will be set to null.  This means that no
+        schedule is to apply to the listed devices.
+    """
+
+    extra_fields = f"""
+        {Field.string("id", id_desc, minlength=1, maxlength=256)},
+        {Field.array("devices", devices_desc, Field.mac(None, mac_desc))},
+        {Field.array("schedule", schedule_desc, bedtime_schedule(reply), 7, 7)}
+    """
+
+    extra_example = """
+        "id"       : "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+        "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
+        "schedule" : [
+            {"start" : 1260, "end" : 1800},
+            {"start" : 1260, "end" : 1800},
+            {"start" : 1260, "end" : 1800},
+            {"start" : 1260, "end" : 1800},
+            {"start" : 1350, "end" : 1800},
+            {"start" : 1350, "end" : 1800},
+            {"start" : 1260, "end" : 1800}
+        ]
+    """
+
+    extra_required = '"tstamp", "id", "devices", "schedule"'
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def device_configuration_channel():
     """Device Configuration messages."""
     description = """
@@ -264,10 +420,10 @@ def device_configuration_channel():
     """
 
     subscribe_desc = "Device Configuration messages."
-    subscribe_msgs = [device_state_changed()]
+    subscribe_msgs = [device_state_changed(), set_device_bedtime(reply=True)]
 
     publish_desc = "Device Configuration messages."
-    publish_msgs = [change_device_state()]
+    publish_msgs = [change_device_state(), set_device_bedtime()]
 
     return channel(
         description,

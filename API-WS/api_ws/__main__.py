@@ -53,6 +53,9 @@ def cli():
     """Remains empty, just for the command line option parser."""
 
 
+CONTEXT_LINES = 10
+
+
 def print_file_linenos(dump, lineno, col, msg):
     """Print the file in the multi-line dump string with line numbers."""
     linecount = 1
@@ -60,7 +63,7 @@ def print_file_linenos(dump, lineno, col, msg):
     for line in dump.splitlines():
         if linecount == lineno:
             this = "->"
-        if (lineno - 6) >= linecount <= (lineno + 6):
+        if (lineno - CONTEXT_LINES) <= linecount <= (lineno + CONTEXT_LINES):
             print(f"{this} {linecount:5} : {line}")
         if linecount == lineno:
             print(f'{" "*(col+11)}^ {msg}')
