@@ -626,6 +626,8 @@ components:
           $ref: "#/components/schemas/state"
         malware-phishing:
           $ref: "#/components/schemas/state"
+        upnp:
+          $ref: "#/components/schemas/state"
 
     Adapter-Usage-Record:
       type: object
