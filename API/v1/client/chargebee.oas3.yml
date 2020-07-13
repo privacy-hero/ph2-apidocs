@@ -1,0 +1,185 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /client/chargebee"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Manage the Chargebee portal session.
+
+    `/client/chargebee`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /client/chargebee:
+    post:
+      operationId: clientChargebee
+      tags:
+        - Client Management
+      summary: Manage Clients chargebee portal session.
+      description: |-
+        # Usage
+        Allows the front end applications to manage a portal session for the
+        client without needing to store the security tokens for general
+        chargebee access.
+
+        ## Parameters
+          - **operation**: the Portal Operation.
+          - **redirect_url**: Optional parameter for the operation. URL to
+            redirect when the user logs out from the portal.
+          - **forward_url**: Optional parameter for the operation. By default
+            access_url redirects the customer to the portal home page. If you
+            would like to redirect the customer to a different URL, you can use
+            this parameter to do so.
+          - **session_id**: Optional portal session id for the operation.
+          - **token**: Optional Unique pre-authenticated portal session token
+            to access customer portal directly.
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - operation
+              additionalProperties: false
+              properties:
+                operation:
+                  type: string
+                  format: Chargebee Operation
+                  enum:
+                    - "start"
+                    - "retrieve"
+                    - "logout"
+                    - "activate"
+                  example: "start"
+                  description: |-
+                    The operation to perform on the portal session.  different
+                    operations require different parameters.
+                    * **start**:
+                      * redirect_url (required)
+                      * forward_url (optional)
+                    * **retrieve**:
+                      * session_id (required)
+                    * **logout**:
+                      * session_id (required)
+                    * **activate**:
+                      * token (required)
+                redirect_url:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
+                forward_url:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
+                session_id:
+                  type: string
+                  format: Chargebee Session ID
+                  example: portal___test__KyVnJjRnFZCdn6FF
+                  minLength: 1
+                  maxLength: 256 # TODO: Find out the true range of token sizes.
+                  description: |-
+                    The current portal session id.
+                token:
+                  type: string
+                  format: Chargebee Token
+                  minLength: 1
+                  maxLength: 256 # TODO: Find out the true range of token sizes.
+                  example: "f1R3Rk5uTiIvC1prMTr7ue:APA91bGPPasEn7wqi2ZnArJsXKlbk9OCZ6jweCsWVPXA"
+                  description: |-
+                    The chargebee token.
+
+      responses:
+        "200":
+          description: |-
+            The response to this message is the full json chargebee
+            portal_session object as returned by the chargebee api.  A full
+            reference of it can be read here:
+            <https://apidocs.chargebee.com/docs/api/portal_sessions>
+
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  portal_session:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                    additionalProperties: true
+                additionalProperties: true
+                example:
+                  {
+                    "portal_session":
+                      {
+                        "access_url": "https://yourapp.chargebeeportal.com/portal/access/__test__8pN2A5m5PhZUZ9xwBAR8hvpM7dcuHnVPN",
+                        "created_at": 1517469304,
+                        "customer_id": "__test__KyVnJjRnFZCd66FD",
+                        "expires_at": 1517472904,
+                        "id": "portal___test__KyVnJjRnFZCdn6FF",
+                        "linked_customers":
+                          [
+                            {
+                              "customer_id": "__test__KyVnJjRnFZCd66FD",
+                              "has_active_subscription": false,
+                              "has_billing_address": false,
+                              "has_payment_method": false,
+                              "object": "linked_customer",
+                            },
+                            { .. },
+                          ],
+                        "object": "portal_session",
+                        "redirect_url": "https://yourdomain.com/users/3490343",
+                        "status": "created",
+                        "token": "__test__8pN2A5m5PhZUZ9xwBAR8hvpM7dcuHnVPN",
+                      },
+                  }
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Invalid Service"` - Password failed security strength check.
+            * `"Invalid WebPush Token"` - Token is not valid.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
