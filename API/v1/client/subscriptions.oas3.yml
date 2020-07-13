@@ -1,0 +1,129 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /client/subscriptions"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Manage the Chargebee Adapter Subscriptions.
+
+    `/client/subscriptions`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /client/subscriptions:
+    get:
+      operationId: clientSubscriptions
+      tags:
+        - Client Management
+      summary: List Chargebee subscriptions for all adapters.
+      description: |-
+        # Usage
+        Returns a list of all current subscriptions, their state and the
+        adapter they are associated with, if any.  The ID of any adapter
+        that does not have a subscription is also returned.
+
+      responses:
+        "200":
+          description: |-
+            The response to this message is the list of all current
+            subscriptions of the account, and their associated adapter, as well
+            as a list of the id of all adapters without a current subscription.
+
+            The subscription list contains ALL subscriptions for the client, and
+            their status.  IF the subscription is associated with an adapter,
+            the adapter_id will be set to the adapters unique id.  Otherwise the
+            adapter_id will be null or not present.
+
+            unassigned_adapters is a list of all adapter id's which do not
+            currently have a subscription associated with them.
+
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - subscriptions
+                  - unassigned_adapters
+                properties:
+                  subscriptions:
+                    type: array
+                    minItems: 0
+                    items:
+                      type: object
+                      required:
+                        - subscription_id
+                        - status
+                      properties:
+                        subscription_id:
+                          type: string
+                          format: Chargebee Subscription ID
+                          example: __test__KyVnJjRnFcymP8oz
+                        status:
+                          type: string
+                          format: Chargebee Subscription status
+                          enum:
+                            - future
+                            - in_trial
+                            - active
+                            - non_renewing
+                            - paused
+                            - cancelled
+                        adapter_id:
+                          $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid_optional"
+                  unassigned_adapters:
+                    type: array
+                    minItems: 0
+                    items:
+                      $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Invalid Service"` - Password failed security strength check.
+            * `"Invalid WebPush Token"` - Token is not valid.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
