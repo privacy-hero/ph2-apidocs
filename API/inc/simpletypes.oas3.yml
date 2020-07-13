@@ -41,6 +41,7 @@ paths:
                   - $ref: "#/components/schemas/cidr6"
                   - $ref: "#/components/schemas/mac"
                   - $ref: "#/components/schemas/uuid"
+                  - $ref: "#/components/schemas/uuid_optional"
                   - $ref: "#/components/schemas/url"
                   - $ref: "#/components/schemas/url-http-s"
                   - $ref: "#/components/schemas/url-absolute"
@@ -179,6 +180,19 @@ components:
       minLength: 36
       pattern: "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
       example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+
+    # Universally Unique ID
+    uuid_optional:
+      type: string
+      format: UUID
+      description: |-
+        Optional Unique Identifier, null = not set.
+      maxLength: 36
+      minLength: 36
+      pattern: "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$"
+      example: "bbfbaba3-1839-4ea3-b6b7-673238b15361"
+      nullable: true
+      default: null
 
     url:
       type: string
