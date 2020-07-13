@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.0.20"
+  version: "0.0.21"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -144,6 +144,12 @@ paths:
 
   /v1/client/send:
     $ref: "v1/client/send.oas3.yml#/paths/~1client~1send"
+
+  /v1/client/chargebee:
+    $ref: "v1/client/chargebee.oas3.yml#/paths/~1client~1chargebee"
+
+  /v1/client/subscriptions:
+    $ref: "v1/client/subscriptions.oas3.yml#/paths/~1client~1subscriptions"
 
   ######### ADAPTER  MANAGEMENT API CALLS ######################
 
