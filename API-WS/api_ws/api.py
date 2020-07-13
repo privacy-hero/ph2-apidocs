@@ -17,6 +17,7 @@ from .common_channel import common_channel
 from .aws_errors import aws_errors_channel
 from .adapter_diagnostics import adapter_diagnostics_channel, speedtest_channel
 from .adapter_messages import connection_channel
+from .adapter_configuration import adapter_configuration_channel
 from .device_discovery_messages import device_discovery_channel
 from .device_configuration_messages import device_configuration_channel
 from .data_usage_messages import data_usage_channel
@@ -130,9 +131,10 @@ def channels():
     return f"""
         "COMMON"              : {{ {common_channel()} }},
         "AWS_ERRORS"          : {{ {aws_errors_channel()} }},
+        "CONNECTION"          : {{ {connection_channel()} }},
+        "CONFIGURATION"       : {{ {adapter_configuration_channel()} }},
         "ADAPTER_DIAGNOSTICS" : {{ {adapter_diagnostics_channel()} }},
         "SPEEDTEST"           : {{ {speedtest_channel()} }},
-        "CONNECTION"          : {{ {connection_channel()} }},
         "DEVICE_DISCOVERY"    : {{ {device_discovery_channel()} }},
         "DEVICE_CONFIGURATION": {{ {device_configuration_channel()} }},
         "DATA_USAGE"          : {{ {data_usage_channel()} }}
