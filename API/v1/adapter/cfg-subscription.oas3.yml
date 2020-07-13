@@ -1,0 +1,116 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/cfg/subscription"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Set subscription for an adapter.
+
+    `/adapter/cfg/subscription`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/cfg/subscription:
+    post:
+      operationId: adapterSubscription
+      tags:
+        - Adapter Management
+      summary: Set the current subscription for an Adapter.
+      description: |-
+        # Usage
+
+        This message allows the chargebee subscription to be set for an adapter.
+
+        IF the subscription ID is not known, or already assigned to an adapter
+        the call will fail with an error, otherwise the listed adapter will have
+        its subscription set.
+
+        To clear the subscription from an adapter, set the subscription ID to null.
+
+        ## Parameters
+        - **id**: The adapters ID.
+        - **subscription**: The Chargebee subscription ID.  Set to null to clear
+          the subscription from the adapter.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+                - subscription
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+                subscription:
+                  type: string
+                  format: Chargebee Subscription ID
+                  example: __test__KyVnJjRnFcymP8oz
+              example:
+                id: "cd73b915-89a4-4971-9d86-bce91786b12a"
+                subscription: "__test__KyVnJjRnFcymP8oz"
+
+      responses:
+        "200":
+          description: |-
+            Success, Subscription set.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Ack"
+              example:
+                msg: "Success, Adapter Subscription set."
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+            * `"Subscription Already Assigned to an Adapter"`
+            * `"Unknown Subscription ID"`
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

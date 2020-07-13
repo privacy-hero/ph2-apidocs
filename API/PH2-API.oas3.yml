@@ -171,6 +171,9 @@ paths:
   /v1/adapter/cfg/locale:
     $ref: "v1/adapter/cfg-locale.oas3.yml#/paths/~1adapter~1cfg~1locale"
 
+  /v1/adapter/cfg/subscription:
+    $ref: "v1/adapter/cfg-subscription.oas3.yml#/paths/~1adapter~1cfg~1subscription"
+
   /v1/adapter/cfg/datacap:
     $ref: "v1/adapter/cfg-datacap.oas3.yml#/paths/~1adapter~1cfg~1datacap"
 
