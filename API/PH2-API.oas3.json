@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.19",
+    "version": "0.0.20",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -582,7 +582,8 @@
           "VPN",
           "AdBlocking",
           "StreamRelocation",
-          "Malware"
+          "Malware",
+          "UPNP"
         ],
         "example": "VPN",
         "description": "A service running on the adapter."
@@ -1425,6 +1426,16 @@
         "pattern": "^[\\w\\W]+$",
         "example": "Granpa's Nokia"
       },
+      "device-type": {
+        "type": "string",
+        "format": "text",
+        "nullable": true,
+        "description": "The type of the device.",
+        "minLength": 0,
+        "maxLength": 64,
+        "pattern": "^[\\w\\W]+$",
+        "example": "Smart Watch"
+      },
       "DeviceIP": {
         "type": "object",
         "required": [
@@ -1515,7 +1526,7 @@
             "$ref": "#/components/schemas/device-name"
           },
           "type": {
-            "$ref": "#/components/schemas/device-name"
+            "$ref": "#/components/schemas/device-type"
           },
           "manufacturer": {
             "$ref": "#/components/schemas/device-name"
@@ -1654,6 +1665,45 @@
           "state": false,
           "since": 1589978803,
           "pending": 1590583603
+        }
+      },
+      "device-group": {
+        "type": "string",
+        "format": "text",
+        "nullable": true,
+        "description": "The device type group.",
+        "minLength": 0,
+        "maxLength": 64,
+        "pattern": "^[\\w\\W]+$",
+        "example": "Mobile"
+      },
+      "Device_Type": {
+        "type": "object",
+        "required": [
+          "name",
+          "icon",
+          "group"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "$ref": "#/components/schemas/device-type"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/url"
+          },
+          "group": {
+            "$ref": "#/components/schemas/device-group"
+          }
+        }
+      },
+      "Device_Types": {
+        "description": "An array of known device types",
+        "type": "array",
+        "minItems": 1,
+        "maxItems": 512,
+        "items": {
+          "$ref": "#/components/schemas/Device_Type"
         }
       }
     },
@@ -2514,7 +2564,7 @@
                     "pattern": "^[\\w]+$",
                     "minLength": 8,
                     "maxLength": 256,
-                    "example": "124FDSDGSDFG23452345FGsrfgsdf235",
+                    "example": "f1R3Rk5uTiIvC1prMTr7ue:APA91bGPPasEn7wqi2ZnArJsXKlbk9OCZ6jweCsWVPXA",
                     "description": "The clients notification token for their service.  Also known as the\n\"Registration Id\"."
                   },
                   "service": {
@@ -2555,6 +2605,73 @@
           },
           "400": {
             "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.\n* `\"Invalid Service\"` - Password failed security strength check.\n* `\"Invalid WebPush Token\"` - Token is not valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/v1/client/send": {
+      "post": {
+        "operationId": "clientSend",
+        "tags": [
+          "Client Management"
+        ],
+        "summary": "Send json payload to all registered notifications.",
+        "description": "# Usage\nAllows the client to send all configured notifications for the client\nthe json payload sent to this end point.\n\nThe payload is not processed in any way and is sent verbatim.\n\nThis function is designed for testing purposes ONLY.  It is not present\nin production and only available for development and qa.\n\nNOTE: A successful 200 reply from this message does not indicate that\nall registered notification endpoints were sent the message, only that\nthe message has been received and dispatched in the normal way.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": true
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success, Notifications sent.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ack"
+                },
+                "example": {
+                  "msg": "Notifications Sent OK."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4979,6 +5096,59 @@
           },
           "415": {
             "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/v1/device/types": {
+      "get": {
+        "operationId": "deviceTypes",
+        "tags": [
+          "Device Management"
+        ],
+        "summary": "Lists all device types and their icons.",
+        "description": "# Usage\n\nGenerates a list of all known device types along with their icons and\na device type group classifier.\n\n## Parameters\n  None.",
+        "responses": {
+          "200": {
+            "description": "Success, The device types list.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Device_Types"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "429": {
             "$ref": "#/components/responses/429"

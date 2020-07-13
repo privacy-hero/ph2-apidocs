@@ -673,6 +673,7 @@ components:
         - "AdBlocking"
         - "StreamRelocation"
         - "Malware"
+        - "UPNP"
       example: "VPN"
       description: |-
         A service running on the adapter.
