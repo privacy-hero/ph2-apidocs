@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.20",
+    "version": "0.0.22",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -202,13 +202,26 @@
           }
         }
       },
-      "activation-code": {
+      "url": {
         "type": "string",
-        "pattern": "^....-....$",
-        "minLength": 9,
-        "maxLength": 9,
-        "description": "Adapter/Router activation code. Note: pattern and length are\nplaceholders until the format is finalized.",
-        "example": "????-????"
+        "format": "URL",
+        "minLength": 1,
+        "maxLength": 2000,
+        "nullable": true,
+        "pattern": "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
+        "description": "A URL, including relative references.  Will only accept https or\nrelative urls.",
+        "example": "./relative.url"
+      },
+      "uuid_optional": {
+        "type": "string",
+        "format": "UUID",
+        "description": "Optional Unique Identifier, null = not set.",
+        "maxLength": 36,
+        "minLength": 36,
+        "pattern": "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$",
+        "example": "bbfbaba3-1839-4ea3-b6b7-673238b15361",
+        "nullable": true,
+        "default": null
       },
       "uuid": {
         "type": "string",
@@ -218,6 +231,14 @@
         "minLength": 36,
         "pattern": "^[0-9a-fA-F]{8}(-[0-9a-fA-F]{4}){3}-[0-9a-fA-F]{12}$",
         "example": "cd73b915-89a4-4971-9d86-bce91786b12a"
+      },
+      "activation-code": {
+        "type": "string",
+        "pattern": "^....-....$",
+        "minLength": 9,
+        "maxLength": 9,
+        "description": "Adapter/Router activation code. Note: pattern and length are\nplaceholders until the format is finalized.",
+        "example": "????-????"
       },
       "mac": {
         "type": "string",
@@ -368,6 +389,9 @@
             "$ref": "#/components/schemas/state"
           },
           "malware-phishing": {
+            "$ref": "#/components/schemas/state"
+          },
+          "upnp": {
             "$ref": "#/components/schemas/state"
           }
         }
@@ -853,16 +877,6 @@
         "items": {
           "$ref": "#/components/schemas/Adapter-Usage-Record"
         }
-      },
-      "url": {
-        "type": "string",
-        "format": "URL",
-        "minLength": 1,
-        "maxLength": 2000,
-        "nullable": true,
-        "pattern": "^(?:(?:https:\\/\\/)|(?:\\./))?[\\w.-]+(?:\\.[\\w\\.-]+)+[\\w\\-\\._~:/?#[\\]@!\\$&'\\(\\)\\*\\+,;=.]+$",
-        "description": "A URL, including relative references.  Will only accept https or\nrelative urls.",
-        "example": "./relative.url"
       },
       "iso3166-country": {
         "type": "string",
@@ -2704,6 +2718,245 @@
         }
       }
     },
+    "/v1/client/chargebee": {
+      "post": {
+        "operationId": "clientChargebee",
+        "tags": [
+          "Client Management"
+        ],
+        "summary": "Manage Clients chargebee portal session.",
+        "description": "# Usage\nAllows the front end applications to manage a portal session for the\nclient without needing to store the security tokens for general\nchargebee access.\n\n## Parameters\n  - **operation**: the Portal Operation.\n  - **redirect_url**: Optional parameter for the operation. URL to\n    redirect when the user logs out from the portal.\n  - **forward_url**: Optional parameter for the operation. By default\n    access_url redirects the customer to the portal home page. If you\n    would like to redirect the customer to a different URL, you can use\n    this parameter to do so.\n  - **session_id**: Optional portal session id for the operation.\n  - **token**: Optional Unique pre-authenticated portal session token\n    to access customer portal directly.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "operation"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "format": "Chargebee Operation",
+                    "enum": [
+                      "start",
+                      "retrieve",
+                      "logout",
+                      "activate"
+                    ],
+                    "example": "start",
+                    "description": "The operation to perform on the portal session.  different\noperations require different parameters.\n* **start**:\n  * redirect_url (required)\n  * forward_url (optional)\n* **retrieve**:\n  * session_id (required)\n* **logout**:\n  * session_id (required)\n* **activate**:\n  * session_id (required)\n  * token (required)"
+                  },
+                  "redirect_url": {
+                    "$ref": "#/components/schemas/url"
+                  },
+                  "forward_url": {
+                    "$ref": "#/components/schemas/url"
+                  },
+                  "session_id": {
+                    "type": "string",
+                    "format": "Chargebee Session ID",
+                    "example": "portal___test__KyVnJjRnFZCdn6FF",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "description": "The current portal session id."
+                  },
+                  "token": {
+                    "type": "string",
+                    "format": "Chargebee Token",
+                    "minLength": 1,
+                    "maxLength": 256,
+                    "example": "f1R3Rk5uTiIvC1prMTr7ue:APA91bGPPasEn7wqi2ZnArJsXKlbk9OCZ6jweCsWVPXA",
+                    "description": "The chargebee token."
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The response to this message is the full json chargebee\nportal_session object as returned by the chargebee api.  A full\nreference of it can be read here:\n<https://apidocs.chargebee.com/docs/api/portal_sessions>",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "portal_session": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        }
+                      },
+                      "additionalProperties": true
+                    }
+                  },
+                  "additionalProperties": true,
+                  "example": {
+                    "portal_session": {
+                      "access_url": "https://yourapp.chargebeeportal.com/portal/access/__test__8pN2A5m5PhZUZ9xwBAR8hvpM7dcuHnVPN",
+                      "created_at": 1517469304,
+                      "customer_id": "__test__KyVnJjRnFZCd66FD",
+                      "expires_at": 1517472904,
+                      "id": "portal___test__KyVnJjRnFZCdn6FF",
+                      "linked_customers": [
+                        {
+                          "customer_id": "__test__KyVnJjRnFZCd66FD",
+                          "has_active_subscription": false,
+                          "has_billing_address": false,
+                          "has_payment_method": false,
+                          "object": "linked_customer"
+                        },
+                        {
+                          "..": null
+                        }
+                      ],
+                      "object": "portal_session",
+                      "redirect_url": "https://yourdomain.com/users/3490343",
+                      "status": "created",
+                      "token": "__test__8pN2A5m5PhZUZ9xwBAR8hvpM7dcuHnVPN"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.\n* `\"Invalid Service\"` - Password failed security strength check.\n* `\"Invalid WebPush Token\"` - Token is not valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/v1/client/subscriptions": {
+      "get": {
+        "operationId": "clientSubscriptions",
+        "tags": [
+          "Client Management"
+        ],
+        "summary": "List Chargebee subscriptions for all adapters.",
+        "description": "# Usage\nReturns a list of all current subscriptions, their state and the\nadapter they are associated with, if any.  The ID of any adapter\nthat does not have a subscription is also returned.",
+        "responses": {
+          "200": {
+            "description": "The response to this message is the list of all current\nsubscriptions of the account, and their associated adapter, as well\nas a list of the id of all adapters without a current subscription.\n\nThe subscription list contains ALL subscriptions for the client, and\ntheir status.  IF the subscription is associated with an adapter,\nthe adapter_id will be set to the adapters unique id.  Otherwise the\nadapter_id will be null or not present.\n\nunassigned_adapters is a list of all adapter id's which do not\ncurrently have a subscription associated with them.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "subscriptions",
+                    "unassigned_adapters"
+                  ],
+                  "properties": {
+                    "subscriptions": {
+                      "type": "array",
+                      "minItems": 0,
+                      "items": {
+                        "type": "object",
+                        "required": [
+                          "subscription_id",
+                          "status"
+                        ],
+                        "properties": {
+                          "subscription_id": {
+                            "type": "string",
+                            "format": "Chargebee Subscription ID",
+                            "example": "__test__KyVnJjRnFcymP8oz"
+                          },
+                          "status": {
+                            "type": "string",
+                            "format": "Chargebee Subscription status",
+                            "enum": [
+                              "future",
+                              "in_trial",
+                              "active",
+                              "non_renewing",
+                              "paused",
+                              "cancelled"
+                            ]
+                          },
+                          "adapter_id": {
+                            "$ref": "#/components/schemas/uuid_optional"
+                          }
+                        }
+                      }
+                    },
+                    "unassigned_adapters": {
+                      "type": "array",
+                      "minItems": 0,
+                      "items": {
+                        "$ref": "#/components/schemas/uuid"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.\n* `\"Invalid Service\"` - Password failed security strength check.\n* `\"Invalid WebPush Token\"` - Token is not valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
     "/v1/adapter/find": {
       "get": {
         "operationId": "adapterFind",
@@ -3142,6 +3395,91 @@
           },
           "400": {
             "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/v1/adapter/cfg/subscription": {
+      "post": {
+        "operationId": "adapterSubscription",
+        "tags": [
+          "Adapter Management"
+        ],
+        "summary": "Set the current subscription for an Adapter.",
+        "description": "# Usage\n\nThis message allows the chargebee subscription to be set for an adapter.\n\nIF the subscription ID is not known, or already assigned to an adapter\nthe call will fail with an error, otherwise the listed adapter will have\nits subscription set.\n\nTo clear the subscription from an adapter, set the subscription ID to null.\n\n## Parameters\n- **id**: The adapters ID.\n- **subscription**: The Chargebee subscription ID.  Set to null to clear\n  the subscription from the adapter.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "subscription"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/uuid"
+                  },
+                  "subscription": {
+                    "type": "string",
+                    "format": "Chargebee Subscription ID",
+                    "example": "__test__KyVnJjRnFcymP8oz"
+                  }
+                },
+                "example": {
+                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "subscription": "__test__KyVnJjRnFcymP8oz"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success, Subscription set.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Ack"
+                },
+                "example": {
+                  "msg": "Success, Adapter Subscription set."
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.\n* `\"Subscription Already Assigned to an Adapter\"`\n* `\"Unknown Subscription ID\"`",
             "content": {
               "application/json": {
                 "schema": {

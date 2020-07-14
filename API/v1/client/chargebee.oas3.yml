@@ -87,6 +87,7 @@ paths:
                     * **logout**:
                       * session_id (required)
                     * **activate**:
+                      * session_id (required)
                       * token (required)
                 redirect_url:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
