@@ -147,7 +147,7 @@ def adapter_speedtest_results():
 
 def adapter_service_state():
     """Individual Service State Record."""
-    service_list = ["VPN", "AdBlocking", "StreamRelocation", "Malware", "UPNP"]
+    service_list = ["VPN", "AdBlocking", "StreamRelocation", "Malware", "UPNP", "WIFI"]
 
     service_state_desc = """
         An individual service state.

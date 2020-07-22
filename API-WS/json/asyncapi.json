@@ -583,7 +583,8 @@
                             "AdBlocking",
                             "StreamRelocation",
                             "Malware",
-                            "UPNP"
+                            "UPNP",
+                            "WIFI"
                           ]
                         },
                         "state": {
@@ -677,7 +678,8 @@
                             "AdBlocking",
                             "StreamRelocation",
                             "Malware",
-                            "UPNP"
+                            "UPNP",
+                            "WIFI"
                           ]
                         },
                         "state": {
