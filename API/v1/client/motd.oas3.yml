@@ -1,0 +1,106 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /client/motd"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Get the list of client "Messages of the Day" to be presented in a carousel.
+
+    `/client/motd`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /client/motd:
+    get:
+      operationId: clientMotd
+      tags:
+        - Client Management
+      summary: Get the clients "Messages of the Day".
+      description: |-
+        # Usage
+        Supply parameters which can customize the MOTD response, and then
+        retrieve the list of all MOTD messages to be presented to the customer.
+      parameters:
+        - in: query
+          name: page
+          schema:
+            type: integer
+            minimum: 0
+            example: 0
+          required: true
+          description: |-
+            The page number to retrieve. 0 is the first page.  Pages are
+            sequential, and without gaps in the sequence.
+            After the last page all requests will return 404.
+        - in: query
+          name: deepurl
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/url"
+          description: |-
+            The Deep Link URL to use in the returned HTML, if the page has any
+            links internal to the application.
+          required: true
+
+      responses:
+        "200":
+          description: |-
+            HTML Content to display within the MOTD Carousel for the requested page.
+          content:
+            text/html:
+              schema:
+                type: string
+              example: |-
+                <!DOCTYPE html><body>
+                  <h1>Carousel Page</h1>
+                  Carousel Content Goes Here.
+                </body></html>
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

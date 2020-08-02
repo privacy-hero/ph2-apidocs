@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.22",
+    "version": "0.0.23",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -2925,6 +2925,82 @@
           },
           "400": {
             "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.\n* `\"Invalid Service\"` - Password failed security strength check.\n* `\"Invalid WebPush Token\"` - Token is not valid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/v1/client/motd": {
+      "get": {
+        "operationId": "clientMotd",
+        "tags": [
+          "Client Management"
+        ],
+        "summary": "Get the clients \"Messages of the Day\".",
+        "description": "# Usage\nSupply parameters which can customize the MOTD response, and then\nretrieve the list of all MOTD messages to be presented to the customer.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "minimum": 0,
+              "example": 0
+            },
+            "required": true,
+            "description": "The page number to retrieve. 0 is the first page.  Pages are\nsequential, and without gaps in the sequence.\nAfter the last page all requests will return 404."
+          },
+          {
+            "in": "query",
+            "name": "deepurl",
+            "schema": {
+              "$ref": "#/components/schemas/url"
+            },
+            "description": "The Deep Link URL to use in the returned HTML, if the page has any\nlinks internal to the application.",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "HTML Content to display within the MOTD Carousel for the requested page.",
+            "content": {
+              "text/html": {
+                "schema": {
+                  "type": "string"
+                },
+                "example": "<!DOCTYPE html><body>\n  <h1>Carousel Page</h1>\n  Carousel Content Goes Here.\n</body></html>"
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
             "content": {
               "application/json": {
                 "schema": {
