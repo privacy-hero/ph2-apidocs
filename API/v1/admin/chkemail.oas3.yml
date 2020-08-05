@@ -1,0 +1,107 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /admin/chkemail"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Check if the given email address is an account.
+
+    `/admin/chkemail`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /admin/chkemail:
+    get:
+      operationId: chkEmail
+      tags:
+        - Admin Management
+      summary: Check the given email address is valid.
+      description: |-
+        # Usage
+        Check if the given email address is valid and supply basic information
+        about the account.
+      parameters:
+        - in: query
+          name: email
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email"
+          description: |-
+            The Email address to check.
+          required: true
+
+      responses:
+        "200":
+          description: |-
+            If the clients email address is valid, a 200 response will be
+            returned with basic information about the client.  IF the clients
+            email address is not a valid client, the response will be 404.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - first_name
+                  - last_name
+                properties:
+                  first_name:
+                    type: string
+                    description: The Clients first name.  Null if not known.
+                    example: "Karen"
+                    nullable: true
+                  last_name:
+                    type: string
+                    description: The Clients last name. Null if not known.
+                    example: "Jones"
+                    nullable: true
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
