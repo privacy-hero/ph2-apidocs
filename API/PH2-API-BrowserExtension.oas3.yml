@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Browser Extension API"
-  version: "0.0.3"
+  version: "0.0.4"
   description: |-
     This API is only used by browser extensions.
 
@@ -38,7 +38,7 @@ servers:
     description: The API deployment URL. - Behind Adapter.
   - url: https://ph2ext-mocked.privacyhero.com
     description: A simple mocked implementation only for browser extension testing.
-  - url: https://{awsid}.execute-api.{region}.amazonaws.com/{stage}
+  - url: https://{awsid}.execute-api.{region}.amazonaws.com
     description: Development URL
     variables:
       awsid:
@@ -47,15 +47,9 @@ servers:
       region:
         enum:
           - us-east-1
-        default: us-east-1
+          - us-east-2
+        default: us-east-2
         description: Deployment Regions
-      stage:
-        enum:
-          - dev
-          - qa
-          - prod
-        default: prod
-        description: Deployment Stages
 
 #########################################################
 # Components are preformatted data that can be reused in definitions.
