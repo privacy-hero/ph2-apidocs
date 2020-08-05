@@ -27,10 +27,10 @@ paths:
         "200":
           description: dummy response to silence lint errors in this file
           content:
-              application/json:
-                schema:
-                  oneOf:
-                    - $ref: "#/components/schemas/Authorized"
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Authorized"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -48,9 +48,7 @@ tags:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-
   schemas:
-
     Authorized:
       type: object
       description: |-
@@ -67,6 +65,14 @@ components:
           - **exp**: The Epoch Time, at which the token will completely expire
           and may not be used for renewal.  After this time the user must
           re-authenticate to get a new bearer token.
+          - **admin**: Present only when the logged in client is an admin user,
+          and set to True.  It is not present when Admin is logged in as a
+          client (impersonating the client).
+          - **impersonator**: Present only when this client is being
+          impersonated by an administrator. It is the email address of the admin
+          user performing the impersonation.  Note, in all other regards this
+          login is to be treated like a standard client login.
+
       required:
         - bearer
         - renew
@@ -79,3 +85,13 @@ components:
           $ref: "simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
         exp:
           $ref: "simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
+        admin:
+          type: boolean
+          nullable: true
+          default: false
+          description: |-
+            **true**=The logged in user is an Admin user.
+            If not present, the client is a normal user.  This field is only
+            present and must be **true** IF the user is an Admin.
+        impersonator:
+          $ref: "simpletypes.oas3.yml#/components/schemas/email-address"

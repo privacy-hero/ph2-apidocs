@@ -39,28 +39,37 @@ paths:
       summary: Log a Client in to their account.
       description: |-
         # Usage
-        Logs a client in to their account, by validating their credentials
-        and returning a Bearer token for API access.
-
-        Must have a valid appKey for the request to be processed.
+        Logs a client/admin in to their account, by validating their credentials
+        and returning a Bearer token for API access.  Can also be used by an
+        admin to impersonate the login of a client.
 
         This API call is only made for applications that use a password for
         authorization validation.  Other applications need to do account
         recovery if the access token is lost or expired.
 
         ## Security Requirements
-          The Authorization Bearer token sent to authenticate for this message
-          is the Application unique and pre-distributed App Token.
+          For a normal client/admin login, the Authorization Bearer token sent
+          to authenticate for this message is the Application unique and
+          pre-distributed App Token.
+
+          However, if the client is an Admin user, this message can be called to
+          impersonate a non admin client.  In this case the Authorization Bearer
+          token must be the Admins Authorization Bearer token AND the password
+          in the message must be the Administrators password.
 
         ## Parameters
           - **id**: The clients ID,  different clients will present different ID.
             - Customer: Their email address
             - Admin: Their email address
-            - Admin as Customer: \<admin email\>:\<customer email\>
-            - Router: MAC Address
-          - **pwd**: The shared secret used to identify the client.  Typically this
-        is a password.  It is sent unencrypted/unhashed because the link is
-        protected from eaves dropping with https.
+            - Impersonation: The email address of the client the administrator
+            wishes to impersonate.
+          - **pwd**: The shared secret used to identify the client.  This is the
+          Clients or Administrators password.  However, in the case of
+          Impersonation, this password MUST be the administrators password and
+          it must match the administrator identified by their Authorization
+          Bearer Token.  It is sent unencrypted/unhashed because the link is
+          protected from eaves dropping with https.  Admins can ONLY log in
+          through this call.
       requestBody:
         required: true
         content:
@@ -73,13 +82,7 @@ paths:
                 - pwd
               properties:
                 id:
-                  type: string
-                  format: email | admin-as-client | mac
-                  pattern: "^.+$" # Regex far too complex.
-                  minLength: 6
-                  maxLength: 768
-                  description: |-
-                    One of the three valid login id formats.
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email-address"
                 pwd:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
             examples:
@@ -93,16 +96,11 @@ paths:
                   id: "admin@privacyhero.com"
                   pwd: "iNBi5tRE"
                 description: An Example Admin login
-              admin-as-client:
+              impersonation:
                 value:
-                  id: "admin@privacyhero.com:client@email.com"
+                  id: "client@email.com"
                   pwd: "iNBi5tRE"
-                description: An Example Admin logging in as a client.
-              adapter:
-                value:
-                  id: "00-00-5E-DF-98-EB"
-                  pwd: "nfhggkjebkqw413basbkJHGlkgqfrg"
-                description: An Example of an adapter logging in.
+                description: An Example Impersonated login
 
       responses:
         "200":
