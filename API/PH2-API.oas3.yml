@@ -29,9 +29,9 @@ info:
 servers:
   - url: https://api2.privacyhero.com
     description: The API deployment URL.
-  - url: https://api2-dev.privacyhero.com
+  - url: https://dev-api2.privacyhero.com
     description: API2 Dev Endpoint
-  - url: https://api2-qa.privacyhero.com
+  - url: https://qa-api2.privacyhero.com
     description: API2 QA Endpoint
   - url: https://{awsid}.execute-api.{region}.amazonaws.com/{stage}
     description: Development URL
