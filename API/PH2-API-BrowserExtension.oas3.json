@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Browser Extension API",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "This API is only used by browser extensions.\n\nBrowser extensions perform operations through the router/adapter directly\nthis api allows those functions and browser extensions to operate and behave\nreliably.\n\nIf the devices browser is not behind the adapter/router a server will reply\nto these messages and the browser extension can detect this state from the\nreply.\n\nNote, when the adapter is handling the api, the connection will be over\nhttp.  However when connected to the backend server the connection will\nbe https.\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)\n  - [Download API JSON](./API/PH2-API-BrowserExtension.oas3.json)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -28,7 +28,7 @@
       "description": "A simple mocked implementation only for browser extension testing."
     },
     {
-      "url": "https://{awsid}.execute-api.{region}.amazonaws.com/{stage}",
+      "url": "https://{awsid}.execute-api.{region}.amazonaws.com",
       "description": "Development URL",
       "variables": {
         "awsid": {
@@ -37,19 +37,11 @@
         },
         "region": {
           "enum": [
-            "us-east-1"
+            "us-east-1",
+            "us-east-2"
           ],
-          "default": "us-east-1",
+          "default": "us-east-2",
           "description": "Deployment Regions"
-        },
-        "stage": {
-          "enum": [
-            "dev",
-            "qa",
-            "prod"
-          ],
-          "default": "prod",
-          "description": "Deployment Stages"
         }
       }
     }

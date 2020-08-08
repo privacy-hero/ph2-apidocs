@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.23",
+    "version": "0.0.24",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -20,8 +20,12 @@
       "description": "The API deployment URL."
     },
     {
-      "url": "https://pics2jpj4b.execute-api.us-east-1.amazonaws.com/dev",
-      "description": "API2 Raw Dev Endpoint"
+      "url": "https://api2-dev.privacyhero.com",
+      "description": "API2 Dev Endpoint"
+    },
+    {
+      "url": "https://api2-qa.privacyhero.com",
+      "description": "API2 QA Endpoint"
     },
     {
       "url": "https://{awsid}.execute-api.{region}.amazonaws.com/{stage}",
@@ -34,16 +38,13 @@
         "region": {
           "enum": [
             "us-east-1",
-            "ap-southeast-1"
+            "us-east-2"
           ],
-          "default": "ap-southeast-1",
+          "default": "us-east-1",
           "description": "Deployment Regions"
         },
         "stage": {
           "enum": [
-            "remote-dev",
-            "remote-qa",
-            "remote-prod",
             "dev",
             "qa",
             "prod"
@@ -183,7 +184,7 @@
       },
       "Authorized": {
         "type": "object",
-        "description": "This response contains the clients credentials to use on subsequent API\ncalls relating to the client.  These credentials uniquely identify the\nclient and their account.\n\n  - **bearer**: The Client Authorization Bearer token required to be\n  sent in the **Authorization: Bearer** header of all API calls that are\n  called on behalf of the Client.\n  - **renew**: The Epoch Time, at which user access will expire with\n  this token. Renew before this time, for uninterrupted access.  Renewal\n  may occur up until **exp** time.\n  - **exp**: The Epoch Time, at which the token will completely expire\n  and may not be used for renewal.  After this time the user must\n  re-authenticate to get a new bearer token.",
+        "description": "This response contains the clients credentials to use on subsequent API\ncalls relating to the client.  These credentials uniquely identify the\nclient and their account.\n\n  - **bearer**: The Client Authorization Bearer token required to be\n  sent in the **Authorization: Bearer** header of all API calls that are\n  called on behalf of the Client.\n  - **renew**: The Epoch Time, at which user access will expire with\n  this token. Renew before this time, for uninterrupted access.  Renewal\n  may occur up until **exp** time.\n  - **exp**: The Epoch Time, at which the token will completely expire\n  and may not be used for renewal.  After this time the user must\n  re-authenticate to get a new bearer token.\n  - **admin**: Present only when the logged in client is an admin user,\n  and set to True.  It is not present when Admin is logged in as a\n  client (impersonating the client).\n  - **impersonator**: Present only when this client is being\n  impersonated by an administrator. It is the email address of the admin\n  user performing the impersonation.  Note, in all other regards this\n  login is to be treated like a standard client login.",
         "required": [
           "bearer",
           "renew",
@@ -199,6 +200,15 @@
           },
           "exp": {
             "$ref": "#/components/schemas/epoch-timestamp-nonull"
+          },
+          "admin": {
+            "type": "boolean",
+            "nullable": true,
+            "default": false,
+            "description": "**true**=The logged in user is an Admin user.\nIf not present, the client is a normal user.  This field is only\npresent and must be **true** IF the user is an Admin."
+          },
+          "impersonator": {
+            "$ref": "#/components/schemas/email-address"
           }
         }
       },
@@ -1895,6 +1905,10 @@
   ],
   "tags": [
     {
+      "name": "Admin Management",
+      "description": "Operations related to Admin Management"
+    },
+    {
       "name": "Account Management",
       "description": "Operations related to Account Creation and Management"
     },
@@ -2159,7 +2173,7 @@
           "Account Management"
         ],
         "summary": "Log a Client in to their account.",
-        "description": "# Usage\nLogs a client in to their account, by validating their credentials\nand returning a Bearer token for API access.\n\nMust have a valid appKey for the request to be processed.\n\nThis API call is only made for applications that use a password for\nauthorization validation.  Other applications need to do account\nrecovery if the access token is lost or expired.\n\n## Security Requirements\n  The Authorization Bearer token sent to authenticate for this message\n  is the Application unique and pre-distributed App Token.\n\n## Parameters\n  - **id**: The clients ID,  different clients will present different ID.\n    - Customer: Their email address\n    - Admin: Their email address\n    - Admin as Customer: \\<admin email\\>:\\<customer email\\>\n    - Router: MAC Address\n  - **pwd**: The shared secret used to identify the client.  Typically this\nis a password.  It is sent unencrypted/unhashed because the link is\nprotected from eaves dropping with https.",
+        "description": "# Usage\nLogs a client/admin in to their account, by validating their credentials\nand returning a Bearer token for API access.  Can also be used by an\nadmin to impersonate the login of a client.\n\nThis API call is only made for applications that use a password for\nauthorization validation.  Other applications need to do account\nrecovery if the access token is lost or expired.\n\n## Security Requirements\n  For a normal client/admin login, the Authorization Bearer token sent\n  to authenticate for this message is the Application unique and\n  pre-distributed App Token.\n\n  However, if the client is an Admin user, this message can be called to\n  impersonate a non admin client.  In this case the Authorization Bearer\n  token must be the Admins Authorization Bearer token AND the password\n  in the message must be the Administrators password.\n\n## Parameters\n  - **id**: The clients ID,  different clients will present different ID.\n    - Customer: Their email address\n    - Admin: Their email address\n    - Impersonation: The email address of the client the administrator\n    wishes to impersonate.\n  - **pwd**: The shared secret used to identify the client.  This is the\n  Clients or Administrators password.  However, in the case of\n  Impersonation, this password MUST be the administrators password and\n  it must match the administrator identified by their Authorization\n  Bearer Token.  It is sent unencrypted/unhashed because the link is\n  protected from eaves dropping with https.  Admins can ONLY log in\n  through this call.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2173,12 +2187,7 @@
                 ],
                 "properties": {
                   "id": {
-                    "type": "string",
-                    "format": "email | admin-as-client | mac",
-                    "pattern": "^.+$",
-                    "minLength": 6,
-                    "maxLength": 768,
-                    "description": "One of the three valid login id formats."
+                    "$ref": "#/components/schemas/email-address"
                   },
                   "pwd": {
                     "$ref": "#/components/schemas/password"
@@ -2200,19 +2209,12 @@
                   },
                   "description": "An Example Admin login"
                 },
-                "admin-as-client": {
+                "impersonation": {
                   "value": {
-                    "id": "admin@privacyhero.com:client@email.com",
+                    "id": "client@email.com",
                     "pwd": "iNBi5tRE"
                   },
-                  "description": "An Example Admin logging in as a client."
-                },
-                "adapter": {
-                  "value": {
-                    "id": "00-00-5E-DF-98-EB",
-                    "pwd": "nfhggkjebkqw413basbkJHGlkgqfrg"
-                  },
-                  "description": "An Example of an adapter logging in."
+                  "description": "An Example Impersonated login"
                 }
               }
             }
@@ -2536,6 +2538,91 @@
           },
           "403": {
             "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
+    "/v1/admin/chkemail": {
+      "get": {
+        "operationId": "chkEmail",
+        "tags": [
+          "Admin Management"
+        ],
+        "summary": "Check the given email address is valid.",
+        "description": "# Usage\nCheck if the given email address is valid and supply basic information\nabout the account.",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "email",
+            "schema": {
+              "$ref": "#/components/schemas/email-address"
+            },
+            "description": "The Email address to check.",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "If the clients email address is valid, a 200 response will be\nreturned with basic information about the client.  IF the clients\nemail address is not a valid client, the response will be 404.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "first_name",
+                    "last_name"
+                  ],
+                  "properties": {
+                    "first_name": {
+                      "type": "string",
+                      "description": "The Clients first name.  Null if not known.",
+                      "example": "Karen",
+                      "nullable": true
+                    },
+                    "last_name": {
+                      "type": "string",
+                      "description": "The Clients last name. Null if not known.",
+                      "example": "Jones",
+                      "nullable": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
           },
           "415": {
             "$ref": "#/components/responses/415"

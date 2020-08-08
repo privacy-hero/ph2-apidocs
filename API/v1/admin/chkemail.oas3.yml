@@ -30,8 +30,8 @@ components:
     $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
 
 tags:
-  - name: Client Management
-    description: Operations related to Client Management
+  - name: Admin Management
+    description: Operations related to Admin Management
 
 paths:
   /admin/chkemail:
@@ -48,7 +48,7 @@ paths:
         - in: query
           name: email
           schema:
-            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email"
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/email-address"
           description: |-
             The Email address to check.
           required: true
