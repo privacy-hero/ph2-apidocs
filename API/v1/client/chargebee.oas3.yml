@@ -48,14 +48,14 @@ paths:
 
         ## Parameters
           - **operation**: the Portal Operation.
-          - **redirect_url**: Optional parameter for the operation. URL to
+          - **redirect_url**: Required for start operation. URL to
             redirect when the user logs out from the portal.
-          - **forward_url**: Optional parameter for the operation. By default
+          - **forward_url**: Optional parameter for the start operation. By default
             access_url redirects the customer to the portal home page. If you
             would like to redirect the customer to a different URL, you can use
             this parameter to do so.
-          - **session_id**: Optional portal session id for the operation.
-          - **token**: Optional Unique pre-authenticated portal session token
+          - **session_id**: Required for retreive, logout, and activate operations.
+          - **token**:  Required for activate operation. Unique pre-authenticated portal session token.
             to access customer portal directly.
       requestBody:
         required: true
