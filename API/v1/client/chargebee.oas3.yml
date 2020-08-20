@@ -57,6 +57,7 @@ paths:
             this parameter to do so.
           - **session_id**: Optional portal session id for the operation.
           - **token**: Optional Unique pre-authenticated portal session token
+            to access customer portal directly.
       requestBody:
         required: true
         content:
