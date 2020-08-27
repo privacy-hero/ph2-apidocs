@@ -48,10 +48,11 @@ paths:
 
         ## Parameters
           - **operation**: the Portal Operation.
+          - **operation**: the Portal Operation.
           - **redirect_url**: Optional parameter for the operation. URL to
             redirect when the user logs out from the portal.
           - **forward_url**: Optional parameter for the operation. By default
-            access_url redirects the customer to the portal home page. If you
+            access_url redirects the customer to the portal home page. If you  
             would like to redirect the customer to a different URL, you can use
             this parameter to do so.
           - **session_id**: Optional portal session id for the operation.
