@@ -3,6 +3,7 @@ import json
 import hashlib
 from base64 import urlsafe_b64encode
 from enum import Enum
+from typing import List
 
 from .util import mls, KB
 from .tags import TAGS
@@ -164,6 +165,19 @@ class Field:  # pylint: disable=too-many-public-methods
 
     # -------------------------------------------------------------------------
     @staticmethod
+    def regex_url(name="regex_url", desc="A REGEX URL Pattern"):
+        """Return the definition of the standard Regex pattern URL type field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "string",
+                "format": "regex",
+                "description" :{mls(desc)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
     def ipv4(name="ipv4", desc="A IPv4 Address"):
         """Return the definition of the standard IPv4 type field."""
         return Field.named(
@@ -193,6 +207,29 @@ class Field:  # pylint: disable=too-many-public-methods
         )
 
     # -------------------------------------------------------------------------
+    @staticmethod
+    def ip(name="ip", desc="An IPv4 or IPv6 Address"):  # pylint:disable=invalid-name
+        """Return the definition of the standard IP Address field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "string",
+                "format": "IP Address",
+                "description" :{mls(desc)},
+                "minLength": {len("::")},
+                "maxLength": {len("FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF:FFFF")}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+
+    @staticmethod
+    def port(name="port", desc="A network port", minvalue=1, maxvalue=65535):
+        """Return the definition of the standard int64 field."""
+        return Field.int(name, "int", desc, minvalue, maxvalue)
+
+    # -------------------------------------------------------------------------
+
     @staticmethod
     def mac(name="mac", desc="A Mac Address"):
         """Return the definition of the standard Mac type field."""
@@ -380,7 +417,7 @@ class Field:  # pylint: disable=too-many-public-methods
 
     # -------------------------------------------------------------------------
     @staticmethod
-    def one_of(objects):
+    def one_of(objects: List):
         """Return a optional object."""
         elements = ""
         first = True

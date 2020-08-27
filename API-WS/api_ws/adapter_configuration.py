@@ -6,6 +6,7 @@ Privacy Hero 2 - Websocket API - Adapter Diagnostic Message Definitions.
 # from .util import mls
 from .schemas import base_message, channel, Field
 from .tags import TAGS
+from .xref import Xref
 
 
 def log_level_field(none_ok=True, name="level", desc="The level of the log messages."):
@@ -83,11 +84,15 @@ def adapter_speedtest_results():
         The distance is measured in whole MILES.
     """
 
-    vpn_desc = """
-        IF and ONLY IF this speedtest is through the VPN Tunnel, the URL of the
+    vpn_desc = f"""
+        IF and ONLY IF this speedtest is through the VPN Tunnel, the URL/IP address of the
         VPN Server tested will be returned in the vpn field.  The backend will
         assume the speedtest result is for a WAN if this field is missing,
-        therefore it is optional and must only be included in VPN Speedtest results.
+        therefore it is optional and must only be included in VPN Speedtest
+        results. If the tunnel tested was a wireguard tunnel, this is the value
+        from the *"server"* field in the servers vpn configuration.  And for
+        strongSwan it is the *"right"* field in the servers vpn configuration.
+        See {Xref.vpn_server_connect}.
     """
 
     cmd = "speedtest"
@@ -146,7 +151,6 @@ def adapter_speedtest_results():
 def adapter_service_state():
     """Individual Service State Record."""
     service_list = [
-        "VPN",
         "AdBlocking",
         "StreamRelocation",
         "Malware",
@@ -160,18 +164,18 @@ def adapter_service_state():
         An individual service state.
     """
 
-    service_desc = """
+    service_desc = f"""
         The name of the service being configured.
-        - VPN = Turn the VPN Tunnel On/Off
         - AdBlocking = Globally Enable/Disable AdBlocking
         - StreamRelocation = Globally Enable/Disabe Stream Relocation
         - UPNP = Enable a UPNP server to manage port forwarding for lan clients.
         - WIFI = Globally Enable/Disbale the Wifi on the Router.
         - WPS = Enable/Disable the WPS Button. This does not enable the WPS
-          function, only allows the button to operate normally or not.
+          function, only allows the button to operate normally or not. Active
+          WPS State changes are reported using the {Xref.wps_status} message
         - Subscribed = True - Normal Operation.  False - Subscription captive
           portal mode.  In captive portal mode only whitelisted domains have
-          access to the internet. See "CaptivePortalWhiteList" message.
+          access to the internet. See {Xref.unsubscribed_whitelist} message.
     """
 
     state_desc = """
@@ -219,7 +223,7 @@ def configure_service_state(reply=False):
             state as *false*.  If other states may also fail to configure, they too
             must be replied with their actual state, and not the requested
             state.
-            """
+        """
 
         services_desc = """
             A List of services and the states to set on the adapter.
@@ -232,7 +236,6 @@ def configure_service_state(reply=False):
 
         extra_example = """
             "services": [
-                {"service": "VPN", "state": true},
                 {"service": "AdBlocking", "state": true},
                 {"service": "UPNP", "state": false},
                 {"service": "WPS", "state": false},
@@ -245,27 +248,30 @@ def configure_service_state(reply=False):
         title = "Adapter Services State"
         summary = "Report current state of a service on the Adapter."
 
-        description = """
-            This is the reply to setting the adapter service states.
-
+        description = f"""
+            This is the reply to setting the adapter service states from the
+            {Xref.adapter_services} message.
+            \\
             If the configuration command contained multiple services, the reply
             may also contain multiple services, or services may be responded to
             in a group or individual, depending on how long the service takes to
-            start on the adapter and the adapters implementation.  However, each reply
-            must contain the tstamp from the original command from the backend.
-
+            start on the adapter and the adapters implementation.  However, each
+            reply must contain the tstamp from the original command from the
+            backend, and the ID if present.
+            \\
             This reply informs the backend of the final state of the service,
-            ie, if VPN was commanded to turn on, but fails, the reply will be
-            sent as a result of the failure AND will have its state set to
-            false.  The tstamp will still reflect the tstamp in the original command.
-
-            See the "vpn_status_update" message which allows progressive and
-            detailed vpn startup/shutdown state to be reported to the Backend asynchronously.
-
+            ie, if UPNP server was commanded to turn on, but fails, the reply
+            will be sent as a result of the failure AND will have its state set
+            to false.  The tstamp will still reflect the tstamp in the original
+            command, as will the ID if present.
+            \\
+            VPN status updates are not reported using this message. See the
+            {Xref.vpn_connection_status} message for details.
+            \\
             IF a service state can change without command from the backend, this
             message is sent unsolicited with the changed state for the service.
             in that case, the tstamp MUST be set to the tstamp of the time the
-            state changed on the adapter.
+            state changed on the adapter, and there must be no ID field.
         """
 
         services_desc = """
@@ -307,24 +313,111 @@ def configure_service_state(reply=False):
     )
 
 
-def configure_vpn_servers():
+def vpn_server_strongswan_config():
+    """Strongswan VPN Server Configuration."""
+    cfg_desc = """
+        The configuration for an individual strongswan server.
+    """
+
+    cfg_fields = f"""
+    {{
+        {Field.const_string("type","VPN Server Type","strongswan")},
+        {Field.url("right",
+        "Servers IP Address, may be an IPv4 or IPv6 address or a Server URL")},
+        {Field.string("rightid","Servers ID")},
+        {Field.string("rightsubnet","The servers subnet")},
+        {Field.string("rightauth","The servers authentication protocol")},
+        {Field.string("leftsourceip","Clients Source IP")},
+        {Field.string("leftauth","The authentication protocol")},
+        {Field.string("leftid","Clients ID")},
+        {Field.string("secret","Authentication Credential")},
+        {Field.int64("speed", "Current rated bandwidth for the tunnel.")},
+        {Field.int64("latency", "Current rated latency for the tunnel.")}
+    }}
+    """
+
+    cfg_required = ["type", "right", "rightid", "leftid", "secret"]
+
+    return f"{{ {Field.object(None, cfg_desc, cfg_required, cfg_fields)} }}"
+
+
+def vpn_server_wireguard_config():
+    """Wireguard VPN Server Configuration."""
+    cfg_desc = """
+        The configuration for an individual wireguard server.
+    """
+
+    cfg_fields = f"""
+    {{
+        {Field.const_string("type","VPN Server Type","wireguard")},
+        {Field.ip("server","Servers IP Address, may be IPv4 or IPv6")},
+        {Field.port("port","Servers Port")},
+        {Field.ipv4("ipv4","Clients IPV4 Address through the tunnel.")},
+        {Field.ipv6("ipv6","Clients IPV6 Address through the tunnel.")},
+        {Field.string("publickey","Public authentication key.", minlength=1)},
+        {Field.string("privatekey","Private authentication key.", minlength=1)},
+        {Field.int64("speed", "Current rated bandwidth for the tunnel.")},
+        {Field.int64("latency", "Current rated latency for the tunnel.")}
+    }}
+    """
+
+    cfg_required = ["type", "server", "port", "ipv4", "ipv6", "publickey", "privatekey"]
+
+    return f"{{ {Field.object(None, cfg_desc, cfg_required, cfg_fields)} }}"
+
+
+def vpn_connect():
     """Configure the VPN Servers the Router will communicate with."""
-    cmd = "vpn-servers"
-    name = "VPNServers"
-    title = "VPN Server List"
-    summary = "Configure VPN Server list for use by the Router."
+    cmd = "vpn-connect"
+    name = "VPNConnect"
+    title = "VPN Server Connect"
+    summary = "Connect to a listed VPN Server."
 
-    description = """
-        This message causes the router to configure its list of VPN Servers.
-
-        The router may begin testing them to find the best VPN connection but
-        should not establish a permament connection unless it has been told to
-        turn the VPN on via the adapter-services message.
-
-        IF the router has already established a VPN connection, it will not
+    description = f"""
+        This message causes the router to attempt to connect to one of the
+        listed VPN servers.
+        \\
+        If there are untested servers in the list (servers without either the
+        "speed" or "latency" fields in their configuration), the router will
+        test them, and send the result back to the backend.  After testing is
+        completed, the router will sort them, in order of fatest/lowest latency
+        and then attempt to connect in that order.  Sorting is done as follows,
+        the fastest server speed in the list is taken.  Of all servers that are
+        within 10% of that speed, the one with the smallest latency is assumed
+        to be the fastest.  The remaining servers are then sorted with the same
+        rules, until no servers remain to be sorted.
+        \\
+        If there are no servers to be tested, then they are attempted to be
+        connected in the order presented.
+        \\
+        IF the router has already established a VPN connection, AND the VPN
+        server connected is present in the list (regardless of whether it has
+        test data or not), then no reconnection will occur and it will not
         disconnect or attempt to reconnect as a result of receiving this
-        message.  It will simply remember the server list and apply it on the
-        next VPN connection.
+        message.  It will simply reply with the {Xref.vpn_connection_status}
+        Message indicating the current server is connected.
+        \\
+        However, if the current VPN server connected IS NOT in the list, then
+        the connection will be dropped and the list will be processed as if
+        there was no connection to begin with.
+        \\
+        IF the server list is empty, and the VPN is connected, the Router will
+        immediately drop the connection and report the connection is down using
+        the {Xref.vpn_connection_status} message.
+        \\
+        This message is sent when a client requests the VPN connection be
+        established, OR the Router has requested a {Xref.vpn_server_reconnect}.
+        \\
+        Because the router can ONLY rely on the credentials it was presented at
+        the time the vpn-connect message was received, if for any reason the VPN
+        tunnel disconnects, the router can try to immediately reconnect to the
+        same tunnel with the same credentials.  If that fails, it can not use
+        the credentials presented for any other tunnel as they may have expired
+        or have been assigned to a different client.  In that case, the router
+        can send a {Xref.vpn_server_reconnect} message to the backend to be
+        provided with a fresh list of VPN servers and credentials with wish to
+        re-establish VPN connection.  The backend will then reply with this
+        {Xref.vpn_server_connect} message.
     """
 
     tstamp_desc = """
@@ -351,7 +444,7 @@ def configure_vpn_servers():
     """
 
     extra_fields = f"""
-        {Field.array("servers", server_desc, adapter_service_state())}
+        {Field.array("servers", server_desc, Field.one_of([vpn_server_wireguard_config(), vpn_server_strongswan_config()]) )}
     """
 
     extra_required = """
@@ -385,7 +478,7 @@ def adapter_configuration_channel():
     subscribe_msgs = [configure_service_state(reply=True)]
 
     publish_desc = "Commands to set the Adapter Configuration."
-    publish_msgs = [configure_service_state(), configure_vpn_servers()]
+    publish_msgs = [configure_service_state(), vpn_connect()]
 
     return channel(
         description,

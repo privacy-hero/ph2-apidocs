@@ -4,7 +4,7 @@
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
     "version": "0.1.0",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to\n   [*\"adapter-services\"*](#message-AdapterServices) message (and\n   [reply](#message-AdapterServicesState)).\n3. Added Subscribed service enable to\n   [*\"adapter-services\"*](#message-AdapterServices) message (and\n   [reply]([reply]#message-AdapterServicesState)).\n4. Added VPN Server configuration message\n   [*\"vpn-servers\"*](#message-VPNServers)\n5. Made ID field optional but present in every message by including in the\n   [*base message*](#message-BaseMsg) specification."
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices)\n5. Added [*VPN Server Connect*]() message.\n5. Made ID field optional but present in every message by including in the\n   [*base message*](#message-BaseMsg) specification.\n6. Created [*unsubscribed-whitelist*](#message-UnsubscribedWhitelist) msg to\n   set configuration whitelist of domains which are still accessible when\n   the router subscription is invalid."
   },
   "servers": {
     "development": {
@@ -414,7 +414,7 @@
               "name": "LinkEstablished",
               "title": "Link Established",
               "summary": "Advise the Backend that the Adapter has connected to a new websocket",
-              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Config*](#message-InitialConfig)",
+              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist)",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -548,6 +548,59 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "UnsubscribedWhitelist",
+              "title": "Unsubscribed Whitelist",
+              "summary": "List of all urls that may be accessed when the router is not subscribed.",
+              "description": "This message contains the list of urls devices may access when there is\nno active subscription for the router.  It is sent in response to a\n[*Link Established*](#message-LinkEstablished) message from the Adapter.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "List of all urls that may be accessed when the router is not subscribed.",
+                    "const": "unsubscribed-whitelist",
+                    "minLength": 22,
+                    "maxLength": 22
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
+                  },
+                  "whitelist": {
+                    "type": "array",
+                    "description": "A list of regex url domains which, if matched, are allowed to be\naccessed even when the router is unsubscribed. All other domains are to\nbe forwarded to a url provided by the backend [*Account Portal*]() message\nwhich redirects the user to their chargebee account portal so that they\ncan correct their outstanding account.\n\nThe router should serve any dns request which does not match the regex,\nan ip answered by the router itself.  Upon receipt of an http request to\nthe routers captured portal endpoint, the router will call the backend\nand retrieve the redirection URL specific to the clients account, and\nthen send a 307 redirect reply to the device.  The domain in the\nredirection should already be in the whitelist and so should pass\nunimpeded to the upstream server.  This functionality is ONLY active if\nthe [*Adapter Services*](#message-AdapterServices) \"Subscribed\" service state is False.",
+                    "items": {
+                      "type": "string",
+                      "format": "regex",
+                      "description": "A URL Regex to match."
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "unsubscribed-whitelist",
+                  "tstamp": 1592217870123,
+                  "whitelist": [
+                    "^(.*\\.)?privacyhero.com$",
+                    "^.*\\.chargebee.com$"
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "whitelist"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -570,7 +623,7 @@
               "name": "AdapterServicesState",
               "title": "Adapter Services State",
               "summary": "Report current state of a service on the Adapter.",
-              "description": "This is the reply to setting the adapter service states.\n\nIf the configuration command contained multiple services, the reply\nmay also contain multiple services, or services may be responded to\nin a group or individual, depending on how long the service takes to\nstart on the adapter and the adapters implementation.  However, each reply\nmust contain the tstamp from the original command from the backend.\n\nThis reply informs the backend of the final state of the service,\nie, if VPN was commanded to turn on, but fails, the reply will be\nsent as a result of the failure AND will have its state set to\nfalse.  The tstamp will still reflect the tstamp in the original command.\n\nSee the \"vpn_status_update\" message which allows progressive and\ndetailed vpn startup/shutdown state to be reported to the Backend asynchronously.\n\nIF a service state can change without command from the backend, this\nmessage is sent unsolicited with the changed state for the service.\nin that case, the tstamp MUST be set to the tstamp of the time the\nstate changed on the adapter.",
+              "description": "This is the reply to setting the adapter service states from the\n[*Adapter Services*](#message-AdapterServices) message.\n\nIf the configuration command contained multiple services, the reply\nmay also contain multiple services, or services may be responded to\nin a group or individual, depending on how long the service takes to\nstart on the adapter and the adapters implementation.  However, each\nreply must contain the tstamp from the original command from the\nbackend, and the ID if present.\n\nThis reply informs the backend of the final state of the service,\nie, if UPNP server was commanded to turn on, but fails, the reply\nwill be sent as a result of the failure AND will have its state set\nto false.  The tstamp will still reflect the tstamp in the original\ncommand, as will the ID if present.\n\nVPN status updates are not reported using this message. See the\n[*VPN Connection Status*]() message for details.\n\nIF a service state can change without command from the backend, this\nmessage is sent unsolicited with the changed state for the service.\nin that case, the tstamp MUST be set to the tstamp of the time the\nstate changed on the adapter, and there must be no ID field.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -611,9 +664,8 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The name of the service being configured.\n- VPN = Turn the VPN Tunnel On/Off\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not.\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See \"CaptivePortalWhiteList\" message.",
+                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*]() message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
                           "enum": [
-                            "VPN",
                             "AdBlocking",
                             "StreamRelocation",
                             "Malware",
@@ -715,9 +767,8 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The name of the service being configured.\n- VPN = Turn the VPN Tunnel On/Off\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not.\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See \"CaptivePortalWhiteList\" message.",
+                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*]() message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
                           "enum": [
-                            "VPN",
                             "AdBlocking",
                             "StreamRelocation",
                             "Malware",
@@ -742,10 +793,6 @@
                   "tstamp": 1592217870123,
                   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "services": [
-                    {
-                      "service": "VPN",
-                      "state": true
-                    },
                     {
                       "service": "AdBlocking",
                       "state": true
@@ -773,10 +820,10 @@
               }
             },
             {
-              "name": "VPNServers",
-              "title": "VPN Server List",
-              "summary": "Configure VPN Server list for use by the Router.",
-              "description": "This message causes the router to configure its list of VPN Servers.\n\nThe router may begin testing them to find the best VPN connection but\nshould not establish a permament connection unless it has been told to\nturn the VPN on via the adapter-services message.\n\nIF the router has already established a VPN connection, it will not\ndisconnect or attempt to reconnect as a result of receiving this\nmessage.  It will simply remember the server list and apply it on the\nnext VPN connection.",
+              "name": "VPNConnect",
+              "title": "VPN Server Connect",
+              "summary": "Connect to a listed VPN Server.",
+              "description": "This message causes the router to attempt to connect to one of the\nlisted VPN servers.\n\nIf there are untested servers in the list (servers without either the\n\"speed\" or \"latency\" fields in their configuration), the router will\ntest them, and send the result back to the backend.  After testing is\ncompleted, the router will sort them, in order of fatest/lowest latency\nand then attempt to connect in that order.  Sorting is done as follows,\nthe fastest server speed in the list is taken.  Of all servers that are\nwithin 10% of that speed, the one with the smallest latency is assumed\nto be the fastest.  The remaining servers are then sorted with the same\nrules, until no servers remain to be sorted.\n\nIf there are no servers to be tested, then they are attempted to be\nconnected in the order presented.\n\nIF the router has already established a VPN connection, AND the VPN\nserver connected is present in the list (regardless of whether it has\ntest data or not), then no reconnection will occur and it will not\ndisconnect or attempt to reconnect as a result of receiving this\nmessage.  It will simply reply with the [*VPN Connection Status*]()\nMessage indicating the current server is connected.\n\nHowever, if the current VPN server connected IS NOT in the list, then\nthe connection will be dropped and the list will be processed as if\nthere was no connection to begin with.\n\nIF the server list is empty, and the VPN is connected, the Router will\nimmediately drop the connection and report the connection is down using\nthe [*VPN Connection Status*]() message.\n\nThis message is sent when a client requests the VPN connection be\nestablished, OR the Router has requested a [*VPN Server Reconnect*]().\n\nBecause the router can ONLY rely on the credentials it was presented at\nthe time the vpn-connect message was received, if for any reason the VPN\ntunnel disconnects, the router can try to immediately reconnect to the\nsame tunnel with the same credentials.  If that fails, it can not use\nthe credentials presented for any other tunnel as they may have expired\nor have been assigned to a different client.  In that case, the router\ncan send a [*VPN Server Reconnect*]() message to the backend to be\nprovided with a fresh list of VPN servers and credentials with wish to\nre-establish VPN connection.  The backend will then reply with this\n[*VPN Server Connect*]() message.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -788,8 +835,8 @@
                 "properties": {
                   "message": {
                     "type": "string",
-                    "description": "Configure VPN Server list for use by the Router.",
-                    "const": "vpn-servers",
+                    "description": "Connect to a listed VPN Server.",
+                    "const": "vpn-connect",
                     "minLength": 11,
                     "maxLength": 11
                   },
@@ -808,39 +855,149 @@
                     "type": "array",
                     "description": "The message will contain a list of viable pre-selected servers.\n\nThe highest priority entires (and therefore the first listed) will be\nthose servers which require testing, in order of test priority.  There may be\nno servers of this type listed if there are no servers that REQUIRE\ntesting.\n\nFollowing this will be a list of servers in priority order.  When\nconnecting to the VPN, the router is to use this list and try to connect\nin the order presented.  IF the router is unable to establish a\nconnection after trying all servers, it gives up attempting to connect.",
                     "items": {
-                      "type": "object",
-                      "required": [
-                        "service",
-                        "state"
-                      ],
-                      "description": "An individual service state.",
-                      "properties": {
-                        "service": {
-                          "type": "string",
-                          "description": "The name of the service being configured.\n- VPN = Turn the VPN Tunnel On/Off\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not.\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See \"CaptivePortalWhiteList\" message.",
-                          "enum": [
-                            "VPN",
-                            "AdBlocking",
-                            "StreamRelocation",
-                            "Malware",
-                            "UPNP",
-                            "WIFI",
-                            "WPS",
-                            "Subscribed"
-                          ]
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "server",
+                            "port",
+                            "ipv4",
+                            "ipv6",
+                            "publickey",
+                            "privatekey"
+                          ],
+                          "description": "The configuration for an individual wireguard server.",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "description": "VPN Server Type",
+                              "const": "wireguard",
+                              "minLength": 9,
+                              "maxLength": 9
+                            },
+                            "server": {
+                              "type": "string",
+                              "format": "IP Address",
+                              "description": "Servers IP Address, may be IPv4 or IPv6",
+                              "minLength": 2,
+                              "maxLength": 39
+                            },
+                            "port": {
+                              "type": "integer",
+                              "format": "int",
+                              "description": "Servers Port",
+                              "minValue": 1,
+                              "maxValue": 65535
+                            },
+                            "ipv4": {
+                              "type": "string",
+                              "format": "IPv4 Address",
+                              "description": "Clients IPV4 Address through the tunnel.",
+                              "minLength": 7,
+                              "maxLength": 15
+                            },
+                            "ipv6": {
+                              "type": "string",
+                              "format": "IPv6 Address",
+                              "description": "Clients IPV6 Address through the tunnel.",
+                              "minLength": 2,
+                              "maxLength": 39
+                            },
+                            "publickey": {
+                              "type": "string",
+                              "description": "Public authentication key.",
+                              "minLength": 1
+                            },
+                            "privatekey": {
+                              "type": "string",
+                              "description": "Private authentication key.",
+                              "minLength": 1
+                            },
+                            "speed": {
+                              "type": "integer",
+                              "format": "int64",
+                              "description": "Current rated bandwidth for the tunnel."
+                            },
+                            "latency": {
+                              "type": "integer",
+                              "format": "int64",
+                              "description": "Current rated latency for the tunnel."
+                            }
+                          },
+                          "additionalProperties": false
                         },
-                        "state": {
-                          "type": "boolean",
-                          "description": "The state to set the service to.\n* true = Turn the service ON.\n* false = Turn the service OFF."
+                        {
+                          "type": "object",
+                          "required": [
+                            "type",
+                            "right",
+                            "rightid",
+                            "leftid",
+                            "secret"
+                          ],
+                          "description": "The configuration for an individual strongswan server.",
+                          "properties": {
+                            "type": {
+                              "type": "string",
+                              "description": "VPN Server Type",
+                              "const": "strongswan",
+                              "minLength": 10,
+                              "maxLength": 10
+                            },
+                            "right": {
+                              "type": "string",
+                              "format": "url",
+                              "description": "Servers IP Address, may be an IPv4 or IPv6 address or a Server URL"
+                            },
+                            "rightid": {
+                              "type": "string",
+                              "description": "Servers ID"
+                            },
+                            "rightsubnet": {
+                              "type": "string",
+                              "description": "The servers subnet"
+                            },
+                            "rightauth": {
+                              "type": "string",
+                              "description": "The servers authentication protocol"
+                            },
+                            "leftsourceip": {
+                              "type": "string",
+                              "description": "Clients Source IP"
+                            },
+                            "leftauth": {
+                              "type": "string",
+                              "description": "The authentication protocol"
+                            },
+                            "leftid": {
+                              "type": "string",
+                              "description": "Clients ID"
+                            },
+                            "secret": {
+                              "type": "string",
+                              "description": "Authentication Credential"
+                            },
+                            "speed": {
+                              "type": "integer",
+                              "format": "int64",
+                              "description": "Current rated bandwidth for the tunnel."
+                            },
+                            "latency": {
+                              "type": "integer",
+                              "format": "int64",
+                              "description": "Current rated latency for the tunnel."
+                            }
+                          },
+                          "additionalProperties": false
                         }
-                      },
-                      "additionalProperties": false
+                      ]
                     },
                     "minItems": 1
                   }
                 },
                 "example": {
-                  "message": "vpn-servers",
+                  "message": "vpn-connect",
                   "tstamp": 1592217870123,
                   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "servers": []

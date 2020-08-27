@@ -541,6 +541,14 @@
             </div>
           </a>
         
+          <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-UnsubscribedWhitelist">
+            <div style="display:inline-block;">
+              
+<span class="string-chunk" style="padding-top: 2px;">UnsubscribedWhitelist</span>
+
+            </div>
+          </a>
+        
           <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-LinkEstablished">
             <div style="display:inline-block;">
               
@@ -557,10 +565,10 @@
             </div>
           </a>
         
-          <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-VPNServers">
+          <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-VPNConnect">
             <div style="display:inline-block;">
               
-<span class="string-chunk" style="padding-top: 2px;">VPNServers</span>
+<span class="string-chunk" style="padding-top: 2px;">VPNConnect</span>
 
             </div>
           </a>
@@ -707,16 +715,17 @@ documentation convention only.</p>
 <h3>V0.1.0</h3>
 <ol>
 <li>Added hyperlinks between messages to ease navigation.</li>
-<li>Added WPS service enable to
-<a href="#message-AdapterServices"><em>&quot;adapter-services&quot;</em></a> message (and
-<a href="#message-AdapterServicesState">reply</a>).</li>
-<li>Added Subscribed service enable to
-<a href="#message-AdapterServices"><em>&quot;adapter-services&quot;</em></a> message (and
-<a href="%5Breply%5D#message-AdapterServicesState">reply</a>).</li>
-<li>Added VPN Server configuration message
-<a href="#message-VPNServers"><em>&quot;vpn-servers&quot;</em></a></li>
+<li>Added WPS service enable to <a href="#message-AdapterServices"><em>Adapter Services</em></a> message (and reply
+<a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>).</li>
+<li>Added Subscribed service enable to <a href="#message-AdapterServices"><em>Adapter Services</em></a> message (and
+reply <a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>).</li>
+<li>Removed &quot;VPN&quot; from <a href="#message-AdapterServices"><em>Adapter Services</em></a></li>
+<li>Added <a href=""><em>VPN Server Connect</em></a> message.</li>
 <li>Made ID field optional but present in every message by including in the
 <a href="#message-BaseMsg"><em>base message</em></a> specification.</li>
+<li>Created <a href="#message-UnsubscribedWhitelist"><em>unsubscribed-whitelist</em></a> msg to
+set configuration whitelist of domains which are still accessible when
+the router subscription is invalid.</li>
 </ol>
 
   </div>
@@ -4229,11 +4238,14 @@ This timeout needs to be tested.</p>
 
 
     
-    <p>Accepts the following message:</p>
+    <p>Accepts <strong>one of</strong> the following messages:</p>
+    
     
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#1</span>
     
     
       Initial Configuration
@@ -4264,7 +4276,7 @@ backend after a link is established, and the backend receives the
   
 
 <div class="bg-grey-lighter  rounded">
-  <div class="is-open">
+  <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">Payload</span>
@@ -4773,6 +4785,467 @@ string
 
 
     
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#2</span>
+    
+    
+      Unsubscribed Whitelist
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">UnsubscribedWhitelist</span>
+    
+  </div>
+  <p class="text-grey-dark text-sm">List of all urls that may be accessed when the router is not subscribed.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message contains the list of urls devices may access when there is
+no active subscription for the router.  It is sent in response to a
+<a href="#message-LinkEstablished"><em>Link Established</em></a> message from the Adapter.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 22</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 22</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>List of all urls that may be accessed when the router is not subscribed.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;unsubscribed-whitelist&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The tstamp in this message is the same tstamp sent in the <em>Link Established</em>
+message from the adapter which triggered it to be sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">whitelist</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A list of regex url domains which, if matched, are allowed to be
+accessed even when the router is unsubscribed. All other domains are to
+be forwarded to a url provided by the backend <a href=""><em>Account Portal</em></a> message
+which redirects the user to their chargebee account portal so that they
+can correct their outstanding account.</p>
+<p>The router should serve any dns request which does not match the regex,
+an ip answered by the router itself.  Upon receipt of an http request to
+the routers captured portal endpoint, the router will call the backend
+and retrieve the redirection URL specific to the clients account, and
+then send a 307 redirect reply to the device.  The domain in the
+redirection should already be in the whitelist and so should pass
+unimpeded to the upstream server.  This functionality is ONLY active if
+the <a href="#message-AdapterServices"><em>Adapter Services</em></a> &quot;Subscribed&quot; service state is False.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">regex</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A URL Regex to match.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+    
 
     
 
@@ -4792,6 +5265,7 @@ string
 <div class="right-block p-8">
   <h4 class="text-lg text-white mb-4">Examples</h4>
 
+  
   
   
 
@@ -4827,6 +5301,43 @@ string
 </form>
 
 
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">UnsubscribedWhitelist</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "unsubscribed-whitelist",
+  "tstamp": 1592217870123,
+  "whitelist": [
+    "^(.*\\.)?privacyhero.com$",
+    "^.*\\.chargebee.com$"
+  ]
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
   
 </div>
 
@@ -4912,7 +5423,8 @@ for the adapter, which is necessary for proper operation.</p>
 <p>Upon receipt, the Backend will queue the initial configuration for the
 router in the following order:</p>
 <ol>
-<li><a href="#message-InitialConfig"><em>Initial Config</em></a></li>
+<li><a href="#message-InitialConfig"><em>Initial Configuration</em></a></li>
+<li><a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a></li>
 </ol>
 </div>
   
@@ -6021,16 +6533,16 @@ string
         
           <div class="text-sm markdown"><p>The name of the service being configured.</p>
 <ul>
-<li>VPN = Turn the VPN Tunnel On/Off</li>
 <li>AdBlocking = Globally Enable/Disable AdBlocking</li>
 <li>StreamRelocation = Globally Enable/Disabe Stream Relocation</li>
 <li>UPNP = Enable a UPNP server to manage port forwarding for lan clients.</li>
 <li>WIFI = Globally Enable/Disbale the Wifi on the Router.</li>
 <li>WPS = Enable/Disable the WPS Button. This does not enable the WPS
-function, only allows the button to operate normally or not.</li>
+function, only allows the button to operate normally or not. Active
+WPS State changes are reported using the <a href=""><em>WPS Status</em></a> message</li>
 <li>Subscribed = True - Normal Operation.  False - Subscription captive
 portal mode.  In captive portal mode only whitelisted domains have
-access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
+access to the internet. See <a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a> message.</li>
 </ul>
 </div>
         
@@ -6039,8 +6551,6 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
         
           <div class="text-xs">
             Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"AdBlocking"</span>
             
@@ -6253,11 +6763,11 @@ boolean
     <span class="text-grey-darker font-bold mr-2">#2</span>
     
     
-      VPN Server List
-      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNServers</span>
+      VPN Server Connect
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNConnect</span>
     
   </div>
-  <p class="text-grey-dark text-sm">Configure VPN Server list for use by the Router.</p>
+  <p class="text-grey-dark text-sm">Connect to a listed VPN Server.</p>
   
   
 
@@ -6272,14 +6782,43 @@ boolean
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>This message causes the router to configure its list of VPN Servers.</p>
-<p>The router may begin testing them to find the best VPN connection but
-should not establish a permament connection unless it has been told to
-turn the VPN on via the adapter-services message.</p>
-<p>IF the router has already established a VPN connection, it will not
+  <div class="mt-4 mb-4 markdown"><p>This message causes the router to attempt to connect to one of the
+listed VPN servers.</p>
+<p>If there are untested servers in the list (servers without either the
+&quot;speed&quot; or &quot;latency&quot; fields in their configuration), the router will
+test them, and send the result back to the backend.  After testing is
+completed, the router will sort them, in order of fatest/lowest latency
+and then attempt to connect in that order.  Sorting is done as follows,
+the fastest server speed in the list is taken.  Of all servers that are
+within 10% of that speed, the one with the smallest latency is assumed
+to be the fastest.  The remaining servers are then sorted with the same
+rules, until no servers remain to be sorted.</p>
+<p>If there are no servers to be tested, then they are attempted to be
+connected in the order presented.</p>
+<p>IF the router has already established a VPN connection, AND the VPN
+server connected is present in the list (regardless of whether it has
+test data or not), then no reconnection will occur and it will not
 disconnect or attempt to reconnect as a result of receiving this
-message.  It will simply remember the server list and apply it on the
-next VPN connection.</p>
+message.  It will simply reply with the <a href=""><em>VPN Connection Status</em></a>
+Message indicating the current server is connected.</p>
+<p>However, if the current VPN server connected IS NOT in the list, then
+the connection will be dropped and the list will be processed as if
+there was no connection to begin with.</p>
+<p>IF the server list is empty, and the VPN is connected, the Router will
+immediately drop the connection and report the connection is down using
+the <a href=""><em>VPN Connection Status</em></a> message.</p>
+<p>This message is sent when a client requests the VPN connection be
+established, OR the Router has requested a <a href=""><em>VPN Server Reconnect</em></a>.</p>
+<p>Because the router can ONLY rely on the credentials it was presented at
+the time the vpn-connect message was received, if for any reason the VPN
+tunnel disconnects, the router can try to immediately reconnect to the
+same tunnel with the same credentials.  If that fails, it can not use
+the credentials presented for any other tunnel as they may have expired
+or have been assigned to a different client.  In that case, the router
+can send a <a href=""><em>VPN Server Reconnect</em></a> message to the backend to be
+provided with a fresh list of VPN servers and credentials with wish to
+re-establish VPN connection.  The backend will then reply with this
+<a href=""><em>VPN Server Connect</em></a> message.</p>
 </div>
   
 <div>
@@ -6382,12 +6921,12 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>Configure VPN Server list for use by the Router.</p>
+          <div class="text-sm markdown"><p>Connect to a listed VPN Server.</p>
 </div>
         
         
         
-          <div class="text-xs">Const: &quot;vpn-servers&quot;</div>
+          <div class="text-xs">Const: &quot;vpn-connect&quot;</div>
         
         
         
@@ -6604,7 +7143,7 @@ verbatim in the paired reply.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;Unknown&gt;
           
           
           
@@ -6678,6 +7217,68 @@ connection after trying all servers, it gives up attempting to connect.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
+
+          
+          oneOf
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
 object
           
           
@@ -6698,7 +7299,157 @@ object
         </div>
 
         
-          <div class="text-sm markdown"><p>An individual service state.</p>
+          <div class="text-sm markdown"><p>The configuration for an individual wireguard server.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 9</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 9</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>VPN Server Type</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;wireguard&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">server</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IP Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers IP Address, may be IPv4 or IPv6</p>
 </div>
         
         
@@ -6712,13 +7463,286 @@ object
       <div class="children bg-grey-lightest py-4 rounded">
         
           
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">service</span>
+        <span class="text-sm" style="word-break: break-word;">port</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers Port</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv4</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv4 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 15</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 7</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients IPV4 Address through the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv6</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv6 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients IPV6 Address through the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">publickey</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -6748,57 +7772,27 @@ string
             
             
             
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
             
             
           </div>
         </div>
 
         
-          <div class="text-sm markdown"><p>The name of the service being configured.</p>
-<ul>
-<li>VPN = Turn the VPN Tunnel On/Off</li>
-<li>AdBlocking = Globally Enable/Disable AdBlocking</li>
-<li>StreamRelocation = Globally Enable/Disabe Stream Relocation</li>
-<li>UPNP = Enable a UPNP server to manage port forwarding for lan clients.</li>
-<li>WIFI = Globally Enable/Disbale the Wifi on the Router.</li>
-<li>WPS = Enable/Disable the WPS Button. This does not enable the WPS
-function, only allows the button to operate normally or not.</li>
-<li>Subscribed = True - Normal Operation.  False - Subscription captive
-portal mode.  In captive portal mode only whitelisted domains have
-access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
-</ul>
+          <div class="text-sm markdown"><p>Public authentication key.</p>
 </div>
         
         
         
-        
-          <div class="text-xs">
-            Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"AdBlocking"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"StreamRelocation"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"Malware"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"UPNP"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"WIFI"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"WPS"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"Subscribed"</span>
-            
-          </div>
         
         
       </div>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
         
@@ -6824,11 +7818,11 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">state</span>
+        <span class="text-sm" style="word-break: break-word;">privatekey</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -6844,11 +7838,92 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-boolean
+string
           
           
           
           <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Private authentication key.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">speed</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
             
             
             
@@ -6864,11 +7939,7 @@ boolean
         </div>
 
         
-          <div class="text-sm markdown"><p>The state to set the service to.</p>
-<ul>
-<li>true = Turn the service ON.</li>
-<li>false = Turn the service OFF.</li>
-</ul>
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
 </div>
         
         
@@ -6879,7 +7950,85 @@ boolean
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
         
@@ -6916,6 +8065,949 @@ boolean
           
         
 
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The configuration for an individual strongswan server.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 10</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 10</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>VPN Server Type</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;strongswan&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">right</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers IP Address, may be an IPv4 or IPv6 address or a Server URL</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightid</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers ID</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightsubnet</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The servers subnet</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightauth</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The servers authentication protocol</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">leftsourceip</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients Source IP</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">leftauth</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The authentication protocol</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">leftid</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients ID</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">secret</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Authentication Credential</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">speed</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -7025,10 +9117,6 @@ boolean
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "services": [
     {
-      "service": "VPN",
-      "state": true
-    },
-    {
       "service": "AdBlocking",
       "state": true
     },
@@ -7060,7 +9148,7 @@ boolean
   
 
 <form>
-  <h5 class="examples-uid text-orange mt-4">VPNServers</h5>
+  <h5 class="examples-uid text-orange mt-4">VPNConnect</h5>
   
     <div class="payload-examples mb-4 ">
       <div class="js-prop cursor-pointer  flex property">
@@ -7075,7 +9163,7 @@ boolean
       <div class="children payload-examples mt-4">
         
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
-  "message": "vpn-servers",
+  "message": "vpn-connect",
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "servers": []
@@ -7157,22 +9245,25 @@ required to reflect user changes in the configuration.</p>
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>This is the reply to setting the adapter service states.</p>
+  <div class="mt-4 mb-4 markdown"><p>This is the reply to setting the adapter service states from the
+<a href="#message-AdapterServices"><em>Adapter Services</em></a> message.</p>
 <p>If the configuration command contained multiple services, the reply
 may also contain multiple services, or services may be responded to
 in a group or individual, depending on how long the service takes to
-start on the adapter and the adapters implementation.  However, each reply
-must contain the tstamp from the original command from the backend.</p>
+start on the adapter and the adapters implementation.  However, each
+reply must contain the tstamp from the original command from the
+backend, and the ID if present.</p>
 <p>This reply informs the backend of the final state of the service,
-ie, if VPN was commanded to turn on, but fails, the reply will be
-sent as a result of the failure AND will have its state set to
-false.  The tstamp will still reflect the tstamp in the original command.</p>
-<p>See the &quot;vpn_status_update&quot; message which allows progressive and
-detailed vpn startup/shutdown state to be reported to the Backend asynchronously.</p>
+ie, if UPNP server was commanded to turn on, but fails, the reply
+will be sent as a result of the failure AND will have its state set
+to false.  The tstamp will still reflect the tstamp in the original
+command, as will the ID if present.</p>
+<p>VPN status updates are not reported using this message. See the
+<a href=""><em>VPN Connection Status</em></a> message for details.</p>
 <p>IF a service state can change without command from the backend, this
 message is sent unsolicited with the changed state for the service.
 in that case, the tstamp MUST be set to the tstamp of the time the
-state changed on the adapter.</p>
+state changed on the adapter, and there must be no ID field.</p>
 </div>
   
 <div>
@@ -7643,16 +9734,16 @@ string
         
           <div class="text-sm markdown"><p>The name of the service being configured.</p>
 <ul>
-<li>VPN = Turn the VPN Tunnel On/Off</li>
 <li>AdBlocking = Globally Enable/Disable AdBlocking</li>
 <li>StreamRelocation = Globally Enable/Disabe Stream Relocation</li>
 <li>UPNP = Enable a UPNP server to manage port forwarding for lan clients.</li>
 <li>WIFI = Globally Enable/Disbale the Wifi on the Router.</li>
 <li>WPS = Enable/Disable the WPS Button. This does not enable the WPS
-function, only allows the button to operate normally or not.</li>
+function, only allows the button to operate normally or not. Active
+WPS State changes are reported using the <a href=""><em>WPS Status</em></a> message</li>
 <li>Subscribed = True - Normal Operation.  False - Subscription captive
 portal mode.  In captive portal mode only whitelisted domains have
-access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
+access to the internet. See <a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a> message.</li>
 </ul>
 </div>
         
@@ -7661,8 +9752,6 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
         
           <div class="text-xs">
             Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"AdBlocking"</span>
             
@@ -24238,13 +26327,474 @@ string
 
 
       
-      <a name="message-LinkEstablished"></a>
+      <a name="message-UnsubscribedWhitelist"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
     <span class="text-grey-darker font-bold mr-2">#6</span>
+    
+    
+      Unsubscribed Whitelist
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">UnsubscribedWhitelist</span>
+    
+  </div>
+  <p class="text-grey-dark text-sm">List of all urls that may be accessed when the router is not subscribed.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message contains the list of urls devices may access when there is
+no active subscription for the router.  It is sent in response to a
+<a href="#message-LinkEstablished"><em>Link Established</em></a> message from the Adapter.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 22</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 22</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>List of all urls that may be accessed when the router is not subscribed.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;unsubscribed-whitelist&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The tstamp in this message is the same tstamp sent in the <em>Link Established</em>
+message from the adapter which triggered it to be sent.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">whitelist</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;string&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 1 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A list of regex url domains which, if matched, are allowed to be
+accessed even when the router is unsubscribed. All other domains are to
+be forwarded to a url provided by the backend <a href=""><em>Account Portal</em></a> message
+which redirects the user to their chargebee account portal so that they
+can correct their outstanding account.</p>
+<p>The router should serve any dns request which does not match the regex,
+an ip answered by the router itself.  Upon receipt of an http request to
+the routers captured portal endpoint, the router will call the backend
+and retrieve the redirection URL specific to the clients account, and
+then send a 307 redirect reply to the device.  The domain in the
+redirection should already be in the whitelist and so should pass
+unimpeded to the upstream server.  This functionality is ONLY active if
+the <a href="#message-AdapterServices"><em>Adapter Services</em></a> &quot;Subscribed&quot; service state is False.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">regex</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>A URL Regex to match.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-LinkEstablished"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#7</span>
     
     
       Link Established
@@ -24273,7 +26823,8 @@ for the adapter, which is necessary for proper operation.</p>
 <p>Upon receipt, the Backend will queue the initial configuration for the
 router in the following order:</p>
 <ol>
-<li><a href="#message-InitialConfig"><em>Initial Config</em></a></li>
+<li><a href="#message-InitialConfig"><em>Initial Configuration</em></a></li>
+<li><a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a></li>
 </ol>
 </div>
   
@@ -24781,7 +27332,7 @@ since power on, this field is omitted.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#7</span>
+    <span class="text-grey-darker font-bold mr-2">#8</span>
     
     
       Adapter Services
@@ -25287,16 +27838,16 @@ string
         
           <div class="text-sm markdown"><p>The name of the service being configured.</p>
 <ul>
-<li>VPN = Turn the VPN Tunnel On/Off</li>
 <li>AdBlocking = Globally Enable/Disable AdBlocking</li>
 <li>StreamRelocation = Globally Enable/Disabe Stream Relocation</li>
 <li>UPNP = Enable a UPNP server to manage port forwarding for lan clients.</li>
 <li>WIFI = Globally Enable/Disbale the Wifi on the Router.</li>
 <li>WPS = Enable/Disable the WPS Button. This does not enable the WPS
-function, only allows the button to operate normally or not.</li>
+function, only allows the button to operate normally or not. Active
+WPS State changes are reported using the <a href=""><em>WPS Status</em></a> message</li>
 <li>Subscribed = True - Normal Operation.  False - Subscription captive
 portal mode.  In captive portal mode only whitelisted domains have
-access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
+access to the internet. See <a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a> message.</li>
 </ul>
 </div>
         
@@ -25305,8 +27856,6 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
         
           <div class="text-xs">
             Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"AdBlocking"</span>
             
@@ -25511,20 +28060,20 @@ boolean
 
 
       
-      <a name="message-VPNServers"></a>
+      <a name="message-VPNConnect"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#8</span>
+    <span class="text-grey-darker font-bold mr-2">#9</span>
     
     
-      VPN Server List
-      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNServers</span>
+      VPN Server Connect
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNConnect</span>
     
   </div>
-  <p class="text-grey-dark text-sm">Configure VPN Server list for use by the Router.</p>
+  <p class="text-grey-dark text-sm">Connect to a listed VPN Server.</p>
   
   
 
@@ -25539,14 +28088,43 @@ boolean
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>This message causes the router to configure its list of VPN Servers.</p>
-<p>The router may begin testing them to find the best VPN connection but
-should not establish a permament connection unless it has been told to
-turn the VPN on via the adapter-services message.</p>
-<p>IF the router has already established a VPN connection, it will not
+  <div class="mt-4 mb-4 markdown"><p>This message causes the router to attempt to connect to one of the
+listed VPN servers.</p>
+<p>If there are untested servers in the list (servers without either the
+&quot;speed&quot; or &quot;latency&quot; fields in their configuration), the router will
+test them, and send the result back to the backend.  After testing is
+completed, the router will sort them, in order of fatest/lowest latency
+and then attempt to connect in that order.  Sorting is done as follows,
+the fastest server speed in the list is taken.  Of all servers that are
+within 10% of that speed, the one with the smallest latency is assumed
+to be the fastest.  The remaining servers are then sorted with the same
+rules, until no servers remain to be sorted.</p>
+<p>If there are no servers to be tested, then they are attempted to be
+connected in the order presented.</p>
+<p>IF the router has already established a VPN connection, AND the VPN
+server connected is present in the list (regardless of whether it has
+test data or not), then no reconnection will occur and it will not
 disconnect or attempt to reconnect as a result of receiving this
-message.  It will simply remember the server list and apply it on the
-next VPN connection.</p>
+message.  It will simply reply with the <a href=""><em>VPN Connection Status</em></a>
+Message indicating the current server is connected.</p>
+<p>However, if the current VPN server connected IS NOT in the list, then
+the connection will be dropped and the list will be processed as if
+there was no connection to begin with.</p>
+<p>IF the server list is empty, and the VPN is connected, the Router will
+immediately drop the connection and report the connection is down using
+the <a href=""><em>VPN Connection Status</em></a> message.</p>
+<p>This message is sent when a client requests the VPN connection be
+established, OR the Router has requested a <a href=""><em>VPN Server Reconnect</em></a>.</p>
+<p>Because the router can ONLY rely on the credentials it was presented at
+the time the vpn-connect message was received, if for any reason the VPN
+tunnel disconnects, the router can try to immediately reconnect to the
+same tunnel with the same credentials.  If that fails, it can not use
+the credentials presented for any other tunnel as they may have expired
+or have been assigned to a different client.  In that case, the router
+can send a <a href=""><em>VPN Server Reconnect</em></a> message to the backend to be
+provided with a fresh list of VPN servers and credentials with wish to
+re-establish VPN connection.  The backend will then reply with this
+<a href=""><em>VPN Server Connect</em></a> message.</p>
 </div>
   
 <div>
@@ -25649,12 +28227,12 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>Configure VPN Server list for use by the Router.</p>
+          <div class="text-sm markdown"><p>Connect to a listed VPN Server.</p>
 </div>
         
         
         
-          <div class="text-xs">Const: &quot;vpn-servers&quot;</div>
+          <div class="text-xs">Const: &quot;vpn-connect&quot;</div>
         
         
         
@@ -25871,7 +28449,7 @@ verbatim in the paired reply.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;object&gt;
+array&lt;Unknown&gt;
           
           
           
@@ -25945,6 +28523,68 @@ connection after trying all servers, it gives up attempting to connect.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
+
+          
+          oneOf
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
 object
           
           
@@ -25965,7 +28605,157 @@ object
         </div>
 
         
-          <div class="text-sm markdown"><p>An individual service state.</p>
+          <div class="text-sm markdown"><p>The configuration for an individual wireguard server.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 9</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 9</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>VPN Server Type</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;wireguard&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">server</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IP Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers IP Address, may be IPv4 or IPv6</p>
 </div>
         
         
@@ -25979,13 +28769,286 @@ object
       <div class="children bg-grey-lightest py-4 rounded">
         
           
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">service</span>
+        <span class="text-sm" style="word-break: break-word;">port</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers Port</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv4</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv4 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 15</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 7</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients IPV4 Address through the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ipv6</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">IPv6 Address</span>
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients IPV6 Address through the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">publickey</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -26015,57 +29078,27 @@ string
             
             
             
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
             
             
           </div>
         </div>
 
         
-          <div class="text-sm markdown"><p>The name of the service being configured.</p>
-<ul>
-<li>VPN = Turn the VPN Tunnel On/Off</li>
-<li>AdBlocking = Globally Enable/Disable AdBlocking</li>
-<li>StreamRelocation = Globally Enable/Disabe Stream Relocation</li>
-<li>UPNP = Enable a UPNP server to manage port forwarding for lan clients.</li>
-<li>WIFI = Globally Enable/Disbale the Wifi on the Router.</li>
-<li>WPS = Enable/Disable the WPS Button. This does not enable the WPS
-function, only allows the button to operate normally or not.</li>
-<li>Subscribed = True - Normal Operation.  False - Subscription captive
-portal mode.  In captive portal mode only whitelisted domains have
-access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
-</ul>
+          <div class="text-sm markdown"><p>Public authentication key.</p>
 </div>
         
         
         
-        
-          <div class="text-xs">
-            Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"AdBlocking"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"StreamRelocation"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"Malware"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"UPNP"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"WIFI"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"WPS"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"Subscribed"</span>
-            
-          </div>
         
         
       </div>
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
         
@@ -26091,11 +29124,11 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">state</span>
+        <span class="text-sm" style="word-break: break-word;">privatekey</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -26111,11 +29144,92 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-boolean
+string
           
           
           
           <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Private authentication key.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">speed</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
             
             
             
@@ -26131,11 +29245,7 @@ boolean
         </div>
 
         
-          <div class="text-sm markdown"><p>The state to set the service to.</p>
-<ul>
-<li>true = Turn the service ON.</li>
-<li>false = Turn the service OFF.</li>
-</ul>
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
 </div>
         
         
@@ -26146,7 +29256,85 @@ boolean
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
         
@@ -26183,6 +29371,949 @@ boolean
           
         
 
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">1</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The configuration for an individual strongswan server.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">type</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 10</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 10</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>VPN Server Type</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;strongswan&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">right</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers IP Address, may be an IPv4 or IPv6 address or a Server URL</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightid</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Servers ID</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightsubnet</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The servers subnet</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rightauth</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The servers authentication protocol</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">leftsourceip</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients Source IP</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">leftauth</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The authentication protocol</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">leftid</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Clients ID</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">secret</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Authentication Credential</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">speed</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -26253,7 +30384,7 @@ boolean
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#9</span>
+    <span class="text-grey-darker font-bold mr-2">#10</span>
     
     
       Adapter Services State
@@ -26275,22 +30406,25 @@ boolean
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>This is the reply to setting the adapter service states.</p>
+  <div class="mt-4 mb-4 markdown"><p>This is the reply to setting the adapter service states from the
+<a href="#message-AdapterServices"><em>Adapter Services</em></a> message.</p>
 <p>If the configuration command contained multiple services, the reply
 may also contain multiple services, or services may be responded to
 in a group or individual, depending on how long the service takes to
-start on the adapter and the adapters implementation.  However, each reply
-must contain the tstamp from the original command from the backend.</p>
+start on the adapter and the adapters implementation.  However, each
+reply must contain the tstamp from the original command from the
+backend, and the ID if present.</p>
 <p>This reply informs the backend of the final state of the service,
-ie, if VPN was commanded to turn on, but fails, the reply will be
-sent as a result of the failure AND will have its state set to
-false.  The tstamp will still reflect the tstamp in the original command.</p>
-<p>See the &quot;vpn_status_update&quot; message which allows progressive and
-detailed vpn startup/shutdown state to be reported to the Backend asynchronously.</p>
+ie, if UPNP server was commanded to turn on, but fails, the reply
+will be sent as a result of the failure AND will have its state set
+to false.  The tstamp will still reflect the tstamp in the original
+command, as will the ID if present.</p>
+<p>VPN status updates are not reported using this message. See the
+<a href=""><em>VPN Connection Status</em></a> message for details.</p>
 <p>IF a service state can change without command from the backend, this
 message is sent unsolicited with the changed state for the service.
 in that case, the tstamp MUST be set to the tstamp of the time the
-state changed on the adapter.</p>
+state changed on the adapter, and there must be no ID field.</p>
 </div>
   
 <div>
@@ -26761,16 +30895,16 @@ string
         
           <div class="text-sm markdown"><p>The name of the service being configured.</p>
 <ul>
-<li>VPN = Turn the VPN Tunnel On/Off</li>
 <li>AdBlocking = Globally Enable/Disable AdBlocking</li>
 <li>StreamRelocation = Globally Enable/Disabe Stream Relocation</li>
 <li>UPNP = Enable a UPNP server to manage port forwarding for lan clients.</li>
 <li>WIFI = Globally Enable/Disbale the Wifi on the Router.</li>
 <li>WPS = Enable/Disable the WPS Button. This does not enable the WPS
-function, only allows the button to operate normally or not.</li>
+function, only allows the button to operate normally or not. Active
+WPS State changes are reported using the <a href=""><em>WPS Status</em></a> message</li>
 <li>Subscribed = True - Normal Operation.  False - Subscription captive
 portal mode.  In captive portal mode only whitelisted domains have
-access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
+access to the internet. See <a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a> message.</li>
 </ul>
 </div>
         
@@ -26779,8 +30913,6 @@ access to the internet. See &quot;CaptivePortalWhiteList&quot; message.</li>
         
           <div class="text-xs">
             Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"AdBlocking"</span>
             
@@ -26991,7 +31123,7 @@ boolean
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#10</span>
+    <span class="text-grey-darker font-bold mr-2">#11</span>
     
     
       Log Message
@@ -27524,7 +31656,7 @@ string
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#11</span>
+    <span class="text-grey-darker font-bold mr-2">#12</span>
     
     
       Run Speed Test
@@ -28056,7 +32188,7 @@ the best url probed from speedtest server lists.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#12</span>
+    <span class="text-grey-darker font-bold mr-2">#13</span>
     
     
       Speed Test
@@ -29163,7 +33295,7 @@ string
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#13</span>
+    <span class="text-grey-darker font-bold mr-2">#14</span>
     
     
       Known Device Information
@@ -30572,7 +34704,7 @@ Default to <em>false</em> if not present.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#14</span>
+    <span class="text-grey-darker font-bold mr-2">#15</span>
     
     
       Device Information
@@ -33894,7 +38026,7 @@ the detected useragents.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#15</span>
+    <span class="text-grey-darker font-bold mr-2">#16</span>
     
     
       Change Device State
@@ -34882,7 +39014,7 @@ internal clock of the adapter.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#16</span>
+    <span class="text-grey-darker font-bold mr-2">#17</span>
     
     
       Set Device Bedtime
@@ -35788,7 +39920,7 @@ be rejected.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#17</span>
+    <span class="text-grey-darker font-bold mr-2">#18</span>
     
     
       Delay Bedtime
@@ -36422,7 +40554,7 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#18</span>
+    <span class="text-grey-darker font-bold mr-2">#19</span>
     
     
       Device State Changed
@@ -37412,7 +41544,7 @@ midnight 1970 UTC.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#19</span>
+    <span class="text-grey-darker font-bold mr-2">#20</span>
     
     
       Device Bedtime Set
@@ -38311,7 +42443,7 @@ be rejected.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#20</span>
+    <span class="text-grey-darker font-bold mr-2">#21</span>
     
     
       Bedtime Delayed
@@ -39017,7 +43149,7 @@ the adapter for the listed devices.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#21</span>
+    <span class="text-grey-darker font-bold mr-2">#22</span>
     
     
       Data Usage

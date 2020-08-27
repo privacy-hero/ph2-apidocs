@@ -7,11 +7,12 @@ Privacy Hero 2 - Websocket API - Adapter Diagnostic Message Definitions.
 from .schemas import base_message, channel, Field, sha256_example, MsgDirection
 from .adapter_diagnostics import log_level_field
 from .tags import TAGS
+from .xref import Xref
 
 
 def link_established():
     """Adapter advice that the websocket link is established."""
-    description = """
+    description = f"""
         This message is sent from the Adapter to the Backend as the very first
         message it sends AFTER establishing any websocket connection to the
         backend.  It allows the backend to perform link connection housekeeping
@@ -20,7 +21,8 @@ def link_established():
         Upon receipt, the Backend will queue the initial configuration for the
         router in the following order:
 
-        1. [*Initial Config*](#message-InitialConfig)
+        1. {Xref.initial_config}
+        2. {Xref.unsubscribed_whitelist}
     """
 
     tstamp_desc = """
@@ -84,10 +86,10 @@ def link_established():
 
 def initial_config():
     """Return Initial configuration of the adapter."""
-    description = """
+    description = f"""
         This message contains the highest level configuration and is sent by the
         backend after a link is established, and the backend receives the
-        [*Link Established*](#message-LinkEstablished) message from the Adapter.
+        {Xref.link_established} message from the Adapter.
     """
 
     tstamp_desc = """
@@ -150,6 +152,71 @@ def initial_config():
     )
 
 
+def unsubscribed_whitelist():
+    """Return the list of URLs which a user may access when unsubscribed."""
+    description = f"""
+        This message contains the list of urls devices may access when there is
+        no active subscription for the router.  It is sent in response to a
+        {Xref.link_established} message from the Adapter.
+    """
+
+    tstamp_desc = """
+        The tstamp in this message is the same tstamp sent in the *Link Established*
+        message from the adapter which triggered it to be sent.
+    """
+
+    whitelist_desc = f"""
+        A list of regex url domains which, if matched, are allowed to be
+        accessed even when the router is unsubscribed. All other domains are to
+        be forwarded to a url provided by the backend {Xref.account_portal} message
+        which redirects the user to their chargebee account portal so that they
+        can correct their outstanding account.
+
+        The router should serve any dns request which does not match the regex,
+        an ip answered by the router itself.  Upon receipt of an http request to
+        the routers captured portal endpoint, the router will call the backend
+        and retrieve the redirection URL specific to the clients account, and
+        then send a 307 redirect reply to the device.  The domain in the
+        redirection should already be in the whitelist and so should pass
+        unimpeded to the upstream server.  This functionality is ONLY active if
+        the {Xref.adapter_services} "Subscribed" service state is False.
+    """
+
+    cmd = "unsubscribed-whitelist"
+    name = "UnsubscribedWhitelist"
+    title = "Unsubscribed Whitelist"
+    summary = "List of all urls that may be accessed when the router is not subscribed."
+
+    extra_fields = f"""
+        {Field.array("whitelist", whitelist_desc, Field.regex_url(None, "A URL Regex to match."))}
+    """
+    extra_example = r"""
+        "whitelist" : [
+            "^(.*\\.)?privacyhero.com$",
+            "^.*\\.chargebee.com$"
+        ]
+    """
+    extra_required = """
+        "tstamp",
+        "whitelist"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+        id_field=False,
+        direction=MsgDirection.TX_TO_ROUTER,
+    )
+
+
 def connection_channel():
     """Define Connection Management messages."""
     description = """
@@ -180,7 +247,7 @@ def connection_channel():
     subscribe_msgs = [link_established()]
 
     publish_desc = "Initial Configuration."
-    publish_msgs = [initial_config()]
+    publish_msgs = [initial_config(), unsubscribed_whitelist()]
 
     return channel(
         description,
