@@ -465,6 +465,50 @@ def vpn_connect():
     )
 
 
+def vpn_reconnect():
+    """Ask the Backend to reconnect the VPN and supply new server list/credentials."""
+    cmd = "vpn-reconnect"
+    name = "VPNReconnect"
+    title = "VPN Server Reconnect"
+    summary = "Reconnect to a listed VPN Server."
+
+    description = f"""
+        This message causes the backend to produce a new list of valid vpn
+        servers and credentials and return it to the requesting router by way of
+        a {Xref.vpn_server_connect} message.
+
+        This message is only sent once, if an established VPN connection drops,
+        and the Router is unable to re-establish a connection using the same
+        credentials as the last dropped link.  IF the router is unable to
+        establish a connection to any of the listed servers, the process
+        terminates and this message is not sent.  Instead the router sends a
+        {Xref.vpn_connection_status} message detailing the failure.
+    """
+
+    tstamp_desc = """
+        The request timestamp of the configuration.
+    """
+
+    extra_example = None
+
+    extra_fields = None
+
+    extra_required = '"tstamp"'
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def adapter_configuration_channel():
     """Adapter Config messages."""
     description = """
@@ -475,7 +519,7 @@ def adapter_configuration_channel():
     """
 
     subscribe_desc = "Configuration Acknowledgements from the Adapter"
-    subscribe_msgs = [configure_service_state(reply=True)]
+    subscribe_msgs = [configure_service_state(reply=True), vpn_reconnect()]
 
     publish_desc = "Commands to set the Adapter Configuration."
     publish_msgs = [configure_service_state(), vpn_connect()]

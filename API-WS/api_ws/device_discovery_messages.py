@@ -17,6 +17,7 @@ VPN On-Off: (This should be for adapter.  Device is just on/off)
 # from .util import mls
 from .schemas import base_message, channel, Field
 from .tags import TAGS
+from .xref import Xref
 
 
 def dhcp_device_info(desc):
@@ -252,7 +253,7 @@ def device_info():
     description = """
         This message is sent from the Adapter to the Backend whenever a new device
         is discovered, or if any of the data fields (excluding the online status)
-        within this message about the device changes.  There is not difference between
+        within this message about the device changes.  There is no difference between
         a new device or updating a pre-existing device.  Devices are identified by their
         MAC address and MAC is assumed to be unique on a single adapter.
     """
@@ -380,16 +381,17 @@ def known_devices():
             Default to *false* if not present.
         """
 
-    description = """
+    description = f"""
         This message is sent by the Backend after initial adapter configuration
-        upon successful connection of an adapter to the backend.  It tells the adapter
-        all devices known by the backend.  If a device is not in this list of devices
-        that the adapter knows about, and the device is currently offline, the device
-        is deleted. If the device is Online, a new Device Info for the device is queued
-        to the backend to update the backends knowledge of all the connected devices.
-        IF any of the known device data differs to the data the adapter knows about
-        the device, a new device info message is queued to update the backends knowledge
-        of the device.
+        upon successful connection of an adapter to the backend (after receipt
+        of the {Xref.link_established}) message.  It tells the adapter all
+        devices known by the backend.  If a device is not in this list of
+        devices that the adapter knows about, and the device is currently
+        offline, the device is deleted. If the device is Online, a new Device
+        Info for the device is queued to the backend to update the backends
+        knowledge of all the connected devices.  IF any of the known device data
+        differs to the data the adapter knows about the device, a new device
+        info message is queued to update the backends knowledge of the device.
     """
 
     tstamp_desc = """

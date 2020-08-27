@@ -28,12 +28,12 @@ class Xref:  # pylint: disable=too-few-public-methods
     bedtime_set = "[*Bedtime Set*](#message-BedtimeSet)"
     bedtime_delayed = "[*Bedtime Delayed*](#message-BedtimeDelayed)"
     data_usage = "[*Data Usage*](#message-DataUsage)"
+    vpn_server_connect = "[*VPN Server Connect*](#message-VPNConnect)"
+    vpn_server_reconnect = "[*VPN Server Reconnect*](#message-VPNReconnect)"
 
     # --------- Undefined links
 
     get_account_portal = "[*Get Account Portal*]()"
     account_portal = "[*Account Portal*]()"
-    vpn_server_connect = "[*VPN Server Connect*]()"
-    vpn_server_reconnect = "[*VPN Server Reconnect*]()"
     vpn_connection_status = "[*VPN Connection Status*]()"
     wps_status = "[*WPS Status*]()"

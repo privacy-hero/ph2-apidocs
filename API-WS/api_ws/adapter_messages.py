@@ -23,6 +23,8 @@ def link_established():
 
         1. {Xref.initial_config}
         2. {Xref.unsubscribed_whitelist}
+        3. {Xref.known_devices}
+        4. {Xref.set_bedtime} 1 message each for as many bedtime schedules exist.
     """
 
     tstamp_desc = """

@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.0",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices)\n5. Added [*VPN Server Connect*]() message.\n5. Made ID field optional but present in every message by including in the\n   [*base message*](#message-BaseMsg) specification.\n6. Created [*unsubscribed-whitelist*](#message-UnsubscribedWhitelist) msg to\n   set configuration whitelist of domains which are still accessible when\n   the router subscription is invalid."
+    "version": "0.1.0wip",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0wip\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Made ID field optional but present in every message by including in the\n   [*base message*](#message-BaseMsg) specification.\n7. Created [*unsubscribed-whitelist*](#message-UnsubscribedWhitelist) msg to\n   set configuration whitelist of domains which are still accessible when\n   the router subscription is invalid.\n8. Add list of config messages sent by backend as a result of initial\n   connection."
   },
   "servers": {
     "development": {
@@ -414,7 +414,7 @@
               "name": "LinkEstablished",
               "title": "Link Established",
               "summary": "Advise the Backend that the Adapter has connected to a new websocket",
-              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist)",
+              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist)\n3. [*Known Devices*](#message-KnownDevices)\n4. [*Set Bedtime*](#message-SetBedtime) 1 message each for as many bedtime schedules exist.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -707,6 +707,51 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "VPNReconnect",
+              "title": "VPN Server Reconnect",
+              "summary": "Reconnect to a listed VPN Server.",
+              "description": "This message causes the backend to produce a new list of valid vpn\nservers and credentials and return it to the requesting router by way of\na [*VPN Server Connect*](#message-VPNConnect) message.\n\nThis message is only sent once, if an established VPN connection drops,\nand the Router is unable to re-establish a connection using the same\ncredentials as the last dropped link.  IF the router is unable to\nestablish a connection to any of the listed servers, the process\nterminates and this message is not sent.  Instead the router sends a\n[*VPN Connection Status*]() message detailing the failure.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Reconnect to a listed VPN Server.",
+                    "const": "vpn-reconnect",
+                    "minLength": 13,
+                    "maxLength": 13
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "example": {
+                  "message": "vpn-reconnect",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"
+                },
+                "required": [
+                  "message",
+                  "tstamp"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -823,7 +868,7 @@
               "name": "VPNConnect",
               "title": "VPN Server Connect",
               "summary": "Connect to a listed VPN Server.",
-              "description": "This message causes the router to attempt to connect to one of the\nlisted VPN servers.\n\nIf there are untested servers in the list (servers without either the\n\"speed\" or \"latency\" fields in their configuration), the router will\ntest them, and send the result back to the backend.  After testing is\ncompleted, the router will sort them, in order of fatest/lowest latency\nand then attempt to connect in that order.  Sorting is done as follows,\nthe fastest server speed in the list is taken.  Of all servers that are\nwithin 10% of that speed, the one with the smallest latency is assumed\nto be the fastest.  The remaining servers are then sorted with the same\nrules, until no servers remain to be sorted.\n\nIf there are no servers to be tested, then they are attempted to be\nconnected in the order presented.\n\nIF the router has already established a VPN connection, AND the VPN\nserver connected is present in the list (regardless of whether it has\ntest data or not), then no reconnection will occur and it will not\ndisconnect or attempt to reconnect as a result of receiving this\nmessage.  It will simply reply with the [*VPN Connection Status*]()\nMessage indicating the current server is connected.\n\nHowever, if the current VPN server connected IS NOT in the list, then\nthe connection will be dropped and the list will be processed as if\nthere was no connection to begin with.\n\nIF the server list is empty, and the VPN is connected, the Router will\nimmediately drop the connection and report the connection is down using\nthe [*VPN Connection Status*]() message.\n\nThis message is sent when a client requests the VPN connection be\nestablished, OR the Router has requested a [*VPN Server Reconnect*]().\n\nBecause the router can ONLY rely on the credentials it was presented at\nthe time the vpn-connect message was received, if for any reason the VPN\ntunnel disconnects, the router can try to immediately reconnect to the\nsame tunnel with the same credentials.  If that fails, it can not use\nthe credentials presented for any other tunnel as they may have expired\nor have been assigned to a different client.  In that case, the router\ncan send a [*VPN Server Reconnect*]() message to the backend to be\nprovided with a fresh list of VPN servers and credentials with wish to\nre-establish VPN connection.  The backend will then reply with this\n[*VPN Server Connect*]() message.",
+              "description": "This message causes the router to attempt to connect to one of the\nlisted VPN servers.\n\nIf there are untested servers in the list (servers without either the\n\"speed\" or \"latency\" fields in their configuration), the router will\ntest them, and send the result back to the backend.  After testing is\ncompleted, the router will sort them, in order of fatest/lowest latency\nand then attempt to connect in that order.  Sorting is done as follows,\nthe fastest server speed in the list is taken.  Of all servers that are\nwithin 10% of that speed, the one with the smallest latency is assumed\nto be the fastest.  The remaining servers are then sorted with the same\nrules, until no servers remain to be sorted.\n\nIf there are no servers to be tested, then they are attempted to be\nconnected in the order presented.\n\nIF the router has already established a VPN connection, AND the VPN\nserver connected is present in the list (regardless of whether it has\ntest data or not), then no reconnection will occur and it will not\ndisconnect or attempt to reconnect as a result of receiving this\nmessage.  It will simply reply with the [*VPN Connection Status*]()\nMessage indicating the current server is connected.\n\nHowever, if the current VPN server connected IS NOT in the list, then\nthe connection will be dropped and the list will be processed as if\nthere was no connection to begin with.\n\nIF the server list is empty, and the VPN is connected, the Router will\nimmediately drop the connection and report the connection is down using\nthe [*VPN Connection Status*]() message.\n\nThis message is sent when a client requests the VPN connection be\nestablished, OR the Router has requested a [*VPN Server Reconnect*](#message-VPNReconnect).\n\nBecause the router can ONLY rely on the credentials it was presented at\nthe time the vpn-connect message was received, if for any reason the VPN\ntunnel disconnects, the router can try to immediately reconnect to the\nsame tunnel with the same credentials.  If that fails, it can not use\nthe credentials presented for any other tunnel as they may have expired\nor have been assigned to a different client.  In that case, the router\ncan send a [*VPN Server Reconnect*](#message-VPNReconnect) message to the backend to be\nprovided with a fresh list of VPN servers and credentials with wish to\nre-establish VPN connection.  The backend will then reply with this\n[*VPN Server Connect*](#message-VPNConnect) message.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -1313,7 +1358,7 @@
               "name": "DeviceInformation",
               "title": "Device Information",
               "summary": "Advise the Backend that the Device has been discovered or has changed.",
-              "description": "This message is sent from the Adapter to the Backend whenever a new device\nis discovered, or if any of the data fields (excluding the online status)\nwithin this message about the device changes.  There is not difference between\na new device or updating a pre-existing device.  Devices are identified by their\nMAC address and MAC is assumed to be unique on a single adapter.",
+              "description": "This message is sent from the Adapter to the Backend whenever a new device\nis discovered, or if any of the data fields (excluding the online status)\nwithin this message about the device changes.  There is no difference between\na new device or updating a pre-existing device.  Devices are identified by their\nMAC address and MAC is assumed to be unique on a single adapter.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -1585,7 +1630,7 @@
               "name": "KnownDevices",
               "title": "Known Device Information",
               "summary": "Configures the Adapter with all devices known by the backend.",
-              "description": "This message is sent by the Backend after initial adapter configuration\nupon successful connection of an adapter to the backend.  It tells the adapter\nall devices known by the backend.  If a device is not in this list of devices\nthat the adapter knows about, and the device is currently offline, the device\nis deleted. If the device is Online, a new Device Info for the device is queued\nto the backend to update the backends knowledge of all the connected devices.\nIF any of the known device data differs to the data the adapter knows about\nthe device, a new device info message is queued to update the backends knowledge\nof the device.",
+              "description": "This message is sent by the Backend after initial adapter configuration\nupon successful connection of an adapter to the backend (after receipt\nof the [*Link Established*](#message-LinkEstablished)) message.  It tells the adapter all\ndevices known by the backend.  If a device is not in this list of\ndevices that the adapter knows about, and the device is currently\noffline, the device is deleted. If the device is Online, a new Device\nInfo for the device is queued to the backend to update the backends\nknowledge of all the connected devices.  IF any of the known device data\ndiffers to the data the adapter knows about the device, a new device\ninfo message is queued to update the backends knowledge of the device.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -1741,7 +1786,7 @@
               "name": "DeviceStateChanged",
               "title": "Device State Changed",
               "summary": "Advise the Adapter to change the state of the devices.",
-              "description": "This message is sent from the Adapter to the Backend and either confirms\nthe adapters request to set state, OR advises that the state changed\nasynchronously without being requested by the backend.",
+              "description": "This message is sent from the Adapter to the Backend and either confirms\nthe adapters request to set state from the [*Change Device State*](#message-ChangeDeviceState)\nmessage, OR advises that the state changed asynchronously without being\nrequested by the backend.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -1765,10 +1810,9 @@
                   },
                   "id": {
                     "type": "string",
-                    "description": "**Optional**, ID Field.  This field is only set as a reply to a Change Device\nState command, if that command included an ID Field.",
-                    "minLength": 36,
-                    "maxLength": 36,
-                    "format": "UUID"
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
                   },
                   "devices": {
                     "type": "array",
@@ -1825,7 +1869,7 @@
                 "example": {
                   "message": "device state changed",
                   "tstamp": 1592217870123,
-                  "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "devices": [
                     "53:CB:12:79:E5:F6",
                     "DD:0F:91:FE:9E:00",
@@ -1981,7 +2025,7 @@
               "name": "BedtimeDelayed",
               "title": "Bedtime Delayed",
               "summary": "Advise the Adapter that Bedtime has been Delayed for the listed devices.",
-              "description": "This message advises that a bedtime delay has been applied to the\ndevices, and the absolute UTC time when the delay will complete.",
+              "description": "This message advises that a bedtime delay has been applied to the\ndevices, and the absolute UTC time when the delay will complete.  It\nis sent in response to a [*Set Bedtime*](#message-SetBedtime) message from the backend.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -2005,7 +2049,7 @@
                   },
                   "id": {
                     "type": "string",
-                    "description": "ID Field.  The Adapter does not do any processing or verification\nof the ID field, it must be returned verbatim in the paired reply.",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
                     "minLength": 1,
                     "maxLength": 256
                   },
@@ -2035,7 +2079,7 @@
                 "example": {
                   "message": "bedtime delayed",
                   "tstamp": 1592217870123,
-                  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "devices": [
                     "53:CB:12:79:E5:F6",
                     "DD:0F:91:FE:9E:00",
@@ -2073,7 +2117,7 @@
               "name": "ChangeDeviceState",
               "title": "Change Device State",
               "summary": "Advise the Adapter to change the state of the devices.",
-              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto make the listed state changes to the listed devices.  The message can\ncontain multiple state changes, and multiple devices.  The devices listed are\nall triggered with the same state changes.",
+              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto make the listed state changes to the listed devices.  The message can\ncontain multiple state changes, and multiple devices.  The devices listed are\nall triggered with the same state changes.  The router will reply with a\n[*Device State Changed*](#message-DeviceStateChanged) reply.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -2097,7 +2141,7 @@
                   },
                   "id": {
                     "type": "string",
-                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or verification\nof the ID field, if it is set, it must be returned verbatim in the paired reply.",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
                     "minLength": 1,
                     "maxLength": 256
                   },
@@ -2156,7 +2200,7 @@
                 "example": {
                   "message": "change device state",
                   "tstamp": 1592217870123,
-                  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "devices": [
                     "53:CB:12:79:E5:F6",
                     "DD:0F:91:FE:9E:00",
@@ -2190,7 +2234,7 @@
               "name": "SetBedtime",
               "title": "Set Device Bedtime",
               "summary": "Advise the Adapter to set the bedtime schedule for the listed devices.",
-              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto set the listed bedtime schedule for the listed devices.  The devices listed are\nall set to the same bedtime schedule.  The Adapter will receive\nmultiple \"set bedtime\" messages to set the schedules of all known\ndevices.  If the Adapter knows a device, but has not received a\nbedtime schedule for it, it must assume there is no bedtime schedule\nthat applies to it.  The full set of bedtime schedules are sent\nduring initial configuration and also as required to reflect\nconfiguration changes as they occur.",
+              "description": "This message is sent from the Backend to the adapter and instructs\nthe adapter to set the listed bedtime schedule for the listed\ndevices.  The devices listed are all set to the same bedtime\nschedule.  The Adapter will receive multiple \"set bedtime\" messages\nto set the schedules of all known devices.  If the Adapter knows a\ndevice, but has not received a bedtime schedule for it, it must\nassume there is no bedtime schedule that applies to it.  The full\nset of bedtime schedules are sent during initial configuration, in\nresponse to the backend receiving the [*Link Established*](#message-LinkEstablished)\nmessage. It is also sent as required to reflect configuration changes\nas they occur.  Once set, the backend replies with the\n[*Bedtime Set*](#message-BedtimeSet) message, with the tstamp and id (if present)\nmatching those same fields in this request.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -2311,8 +2355,8 @@
             {
               "name": "DelayBedtime",
               "title": "Delay Bedtime",
-              "summary": "Advise the Adapter to delay the next (or currently active) bedtime for the listed devices.",
-              "description": "This message causes the adapter to delay the bedtime for the listed\ndevices by the specified number of minutes.  It is a one-shot delay\nand once expired is not repeated.\n\nIF bedtime has not yet commenced for the day, the delay applies to\nthe bedtime which is next to occur.  The delay then causes the start\nto delay by the specified number of minutes.\n\nIF the bedtime has started but not yet finished, the delay applies\nto the currently active bedtime, and will delay it from its start\ntime by the specified number of minutes.  So, for example, if\nstarted at 10pm and at 10:15pm a delay of 45 minutes was received,\nthe devices internet would unpause and would re-pause at 10:45.",
+              "summary": "Advise the Router to delay the current or next bedtime start.",
+              "description": "This message causes the adapter to delay the bedtime for the listed\ndevices by the specified number of minutes.  It is a one-shot delay\nand once expired is not repeated.\n\nIF bedtime has not yet commenced for the day, the delay applies to\nthe bedtime which is next to occur.  The delay then causes the start\nto delay by the specified number of minutes.\n\nIF the bedtime has started but not yet finished, the delay applies\nto the currently active bedtime, and will delay it from its start\ntime by the specified number of minutes.  So, for example, if\nstarted at 10pm and at 10:15pm a delay of 45 minutes was received,\nthe devices internet would unpause and would re-pause at 10:45.\nThis message is responded to with the [*Bedtime Delayed*](#message-BedtimeDelayed) message\nfrom the router.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -2324,7 +2368,7 @@
                 "properties": {
                   "message": {
                     "type": "string",
-                    "description": "Advise the Adapter to delay the next (or currently active) bedtime for the listed devices.",
+                    "description": "Advise the Router to delay the current or next bedtime start.",
                     "const": "delay bedtime",
                     "minLength": 13,
                     "maxLength": 13
@@ -2336,7 +2380,7 @@
                   },
                   "id": {
                     "type": "string",
-                    "description": "ID Field.  The Adapter does not do any processing or verification\nof the ID field, it must be returned verbatim in the paired reply.",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
                     "minLength": 1,
                     "maxLength": 256
                   },
@@ -2361,7 +2405,7 @@
                 "example": {
                   "message": "delay bedtime",
                   "tstamp": 1592217870123,
-                  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "devices": [
                     "53:CB:12:79:E5:F6",
                     "DD:0F:91:FE:9E:00",

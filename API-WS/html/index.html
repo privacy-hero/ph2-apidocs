@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.0 documentation</title>
+  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.0wip documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/atom-one-dark.min.css" />
@@ -26,7 +26,7 @@
   <div class="sidebar-panel__content">
     
       <h1 class="text-2xl font-thin">
-        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.0
+        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.0wip
       </h1>
     
     <ul class="text-sm mt-10 list-reset mt-2">
@@ -581,6 +581,14 @@
             </div>
           </a>
         
+          <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-VPNReconnect">
+            <div style="display:inline-block;">
+              
+<span class="string-chunk" style="padding-top: 2px;">VPNReconnect</span>
+
+            </div>
+          </a>
+        
           <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-LogMsg">
             <div style="display:inline-block;">
               
@@ -684,7 +692,7 @@
     <div class="content-panel flex-1 leading-loose z-10">
       <div class="center-block p-8">
   <a name="introduction"></a>
-  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.0</h1>
+  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.0wip</h1>
   <div class="leading-normal mb-4">
     
     
@@ -712,20 +720,23 @@ documentation convention only.</p>
 <p>All messages to/from the adapter have a common format, which are documented in the
 <em>Basic Message Forms</em>. set of operations.</p>
 <h2>CHANGELOG</h2>
-<h3>V0.1.0</h3>
+<h3>V0.1.0wip</h3>
 <ol>
 <li>Added hyperlinks between messages to ease navigation.</li>
 <li>Added WPS service enable to <a href="#message-AdapterServices"><em>Adapter Services</em></a> message (and reply
 <a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>).</li>
 <li>Added Subscribed service enable to <a href="#message-AdapterServices"><em>Adapter Services</em></a> message (and
 reply <a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>).</li>
-<li>Removed &quot;VPN&quot; from <a href="#message-AdapterServices"><em>Adapter Services</em></a></li>
-<li>Added <a href=""><em>VPN Server Connect</em></a> message.</li>
+<li>Removed &quot;VPN&quot; from <a href="#message-AdapterServices"><em>Adapter Services</em></a> (and reply
+<a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>).</li>
+<li>Added <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</li>
 <li>Made ID field optional but present in every message by including in the
 <a href="#message-BaseMsg"><em>base message</em></a> specification.</li>
 <li>Created <a href="#message-UnsubscribedWhitelist"><em>unsubscribed-whitelist</em></a> msg to
 set configuration whitelist of domains which are still accessible when
 the router subscription is invalid.</li>
+<li>Add list of config messages sent by backend as a result of initial
+connection.</li>
 </ol>
 
   </div>
@@ -5425,6 +5436,8 @@ router in the following order:</p>
 <ol>
 <li><a href="#message-InitialConfig"><em>Initial Configuration</em></a></li>
 <li><a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a></li>
+<li><a href="#message-KnownDevices"><em>Known Devices</em></a></li>
+<li><a href="#message-SetBedtime"><em>Set Bedtime</em></a> 1 message each for as many bedtime schedules exist.</li>
 </ol>
 </div>
   
@@ -6808,17 +6821,17 @@ there was no connection to begin with.</p>
 immediately drop the connection and report the connection is down using
 the <a href=""><em>VPN Connection Status</em></a> message.</p>
 <p>This message is sent when a client requests the VPN connection be
-established, OR the Router has requested a <a href=""><em>VPN Server Reconnect</em></a>.</p>
+established, OR the Router has requested a <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a>.</p>
 <p>Because the router can ONLY rely on the credentials it was presented at
 the time the vpn-connect message was received, if for any reason the VPN
 tunnel disconnects, the router can try to immediately reconnect to the
 same tunnel with the same credentials.  If that fails, it can not use
 the credentials presented for any other tunnel as they may have expired
 or have been assigned to a different client.  In that case, the router
-can send a <a href=""><em>VPN Server Reconnect</em></a> message to the backend to be
+can send a <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a> message to the backend to be
 provided with a fresh list of VPN servers and credentials with wish to
 re-establish VPN connection.  The backend will then reply with this
-<a href=""><em>VPN Server Connect</em></a> message.</p>
+<a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</p>
 </div>
   
 <div>
@@ -9219,11 +9232,14 @@ required to reflect user changes in the configuration.</p>
 
 
     
-    <p>Accepts the following message:</p>
+    <p>Accepts <strong>one of</strong> the following messages:</p>
+    
     
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#1</span>
     
     
       Adapter Services State
@@ -9270,7 +9286,7 @@ state changed on the adapter, and there must be no ID field.</p>
   
 
 <div class="bg-grey-lighter  rounded">
-  <div class="is-open">
+  <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
         <span class="text-sm" style="word-break: break-word;">Payload</span>
@@ -9956,6 +9972,376 @@ boolean
 
 
     
+    
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#2</span>
+    
+    
+      VPN Server Reconnect
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNReconnect</span>
+    
+  </div>
+  <p class="text-grey-dark text-sm">Reconnect to a listed VPN Server.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message causes the backend to produce a new list of valid vpn
+servers and credentials and return it to the requesting router by way of
+a <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</p>
+<p>This message is only sent once, if an established VPN connection drops,
+and the Router is unable to re-establish a connection using the same
+credentials as the last dropped link.  IF the router is unable to
+establish a connection to any of the listed servers, the process
+terminates and this message is not sent.  Instead the router sends a
+<a href=""><em>VPN Connection Status</em></a> message detailing the failure.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 13</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 13</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Reconnect to a listed VPN Server.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;vpn-reconnect&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The request timestamp of the configuration.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+    
 
     
 
@@ -9975,6 +10361,7 @@ boolean
 <div class="right-block p-8">
   <h4 class="text-lg text-white mb-4">Examples</h4>
 
+  
   
   
 
@@ -10018,6 +10405,40 @@ boolean
 </form>
 
 
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">VPNReconnect</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "vpn-reconnect",
+  "tstamp": 1592217870123,
+  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
   
 </div>
 
@@ -12548,14 +12969,15 @@ devices.</p>
 
 
   <div class="mt-4 mb-4 markdown"><p>This message is sent by the Backend after initial adapter configuration
-upon successful connection of an adapter to the backend.  It tells the adapter
-all devices known by the backend.  If a device is not in this list of devices
-that the adapter knows about, and the device is currently offline, the device
-is deleted. If the device is Online, a new Device Info for the device is queued
-to the backend to update the backends knowledge of all the connected devices.
-IF any of the known device data differs to the data the adapter knows about
-the device, a new device info message is queued to update the backends knowledge
-of the device.</p>
+upon successful connection of an adapter to the backend (after receipt
+of the <a href="#message-LinkEstablished"><em>Link Established</em></a>) message.  It tells the adapter all
+devices known by the backend.  If a device is not in this list of
+devices that the adapter knows about, and the device is currently
+offline, the device is deleted. If the device is Online, a new Device
+Info for the device is queued to the backend to update the backends
+knowledge of all the connected devices.  IF any of the known device data
+differs to the data the adapter knows about the device, a new device
+info message is queued to update the backends knowledge of the device.</p>
 </div>
   
 <div>
@@ -14066,7 +14488,7 @@ devices.</p>
 
   <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend whenever a new device
 is discovered, or if any of the data fields (excluding the online status)
-within this message about the device changes.  There is not difference between
+within this message about the device changes.  There is no difference between
 a new device or updating a pre-existing device.  Devices are identified by their
 MAC address and MAC is assumed to be unique on a single adapter.</p>
 </div>
@@ -17487,7 +17909,8 @@ the detected useragents.</p>
   <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs the adapter
 to make the listed state changes to the listed devices.  The message can
 contain multiple state changes, and multiple devices.  The devices listed are
-all triggered with the same state changes.</p>
+all triggered with the same state changes.  The router will reply with a
+<a href="#message-DeviceStateChanged"><em>Device State Changed</em></a> reply.</p>
 </div>
   
 <div>
@@ -17754,8 +18177,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or verification
-of the ID field, if it is set, it must be returned verbatim in the paired reply.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -18471,15 +18895,19 @@ internal clock of the adapter.</p>
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs the adapter
-to set the listed bedtime schedule for the listed devices.  The devices listed are
-all set to the same bedtime schedule.  The Adapter will receive
-multiple &quot;set bedtime&quot; messages to set the schedules of all known
-devices.  If the Adapter knows a device, but has not received a
-bedtime schedule for it, it must assume there is no bedtime schedule
-that applies to it.  The full set of bedtime schedules are sent
-during initial configuration and also as required to reflect
-configuration changes as they occur.</p>
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs
+the adapter to set the listed bedtime schedule for the listed
+devices.  The devices listed are all set to the same bedtime
+schedule.  The Adapter will receive multiple &quot;set bedtime&quot; messages
+to set the schedules of all known devices.  If the Adapter knows a
+device, but has not received a bedtime schedule for it, it must
+assume there is no bedtime schedule that applies to it.  The full
+set of bedtime schedules are sent during initial configuration, in
+response to the backend receiving the <a href="#message-LinkEstablished"><em>Link Established</em></a>
+message. It is also sent as required to reflect configuration changes
+as they occur.  Once set, the backend replies with the
+<a href="#message-BedtimeSet"><em>Bedtime Set</em></a> message, with the tstamp and id (if present)
+matching those same fields in this request.</p>
 </div>
   
 <div>
@@ -19361,7 +19789,7 @@ be rejected.</p>
       <span class="border text-orange rounded text-xs ml-3 py-0 px-2">DelayBedtime</span>
     
   </div>
-  <p class="text-grey-dark text-sm">Advise the Adapter to delay the next (or currently active) bedtime for the listed devices.</p>
+  <p class="text-grey-dark text-sm">Advise the Router to delay the current or next bedtime start.</p>
   
   
 
@@ -19386,7 +19814,9 @@ to delay by the specified number of minutes.</p>
 to the currently active bedtime, and will delay it from its start
 time by the specified number of minutes.  So, for example, if
 started at 10pm and at 10:15pm a delay of 45 minutes was received,
-the devices internet would unpause and would re-pause at 10:45.</p>
+the devices internet would unpause and would re-pause at 10:45.
+This message is responded to with the <a href="#message-BedtimeDelayed"><em>Bedtime Delayed</em></a> message
+from the router.</p>
 </div>
   
 <div>
@@ -19489,7 +19919,7 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>Advise the Adapter to delay the next (or currently active) bedtime for the listed devices.</p>
+          <div class="text-sm markdown"><p>Advise the Router to delay the current or next bedtime start.</p>
 </div>
         
         
@@ -19655,8 +20085,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
-of the ID field, it must be returned verbatim in the paired reply.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -20024,7 +20455,7 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
   "message": "change device state",
   "tstamp": 1592217870123,
-  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "devices": [
     "53:CB:12:79:E5:F6",
     "DD:0F:91:FE:9E:00",
@@ -20144,7 +20575,7 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
   "message": "delay bedtime",
   "tstamp": 1592217870123,
-  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "devices": [
     "53:CB:12:79:E5:F6",
     "DD:0F:91:FE:9E:00",
@@ -20231,8 +20662,9 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
 
 
   <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend and either confirms
-the adapters request to set state, OR advises that the state changed
-asynchronously without being requested by the backend.</p>
+the adapters request to set state from the <a href="#message-ChangeDeviceState"><em>Change Device State</em></a>
+message, OR advises that the state changed asynchronously without being
+requested by the backend.</p>
 </div>
   
 <div>
@@ -20481,9 +20913,6 @@ string
           
           <div class="inline-block">
             
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">UUID</span>
-            
             
             
             
@@ -20492,11 +20921,11 @@ string
             
             
               <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">length <= 36</span>
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
             
             
             <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
-                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 36</span>
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
             
             
             
@@ -20504,8 +20933,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  This field is only set as a reply to a Change Device
-State command, if that command included an ID Field.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -22118,7 +22548,8 @@ be rejected.</p>
 
 
   <div class="mt-4 mb-4 markdown"><p>This message advises that a bedtime delay has been applied to the
-devices, and the absolute UTC time when the delay will complete.</p>
+devices, and the absolute UTC time when the delay will complete.  It
+is sent in response to a <a href="#message-SetBedtime"><em>Set Bedtime</em></a> message from the backend.</p>
 </div>
   
 <div>
@@ -22387,8 +22818,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
-of the ID field, it must be returned verbatim in the paired reply.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -22837,7 +23269,7 @@ the adapter for the listed devices.</p>
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
   "message": "device state changed",
   "tstamp": 1592217870123,
-  "id": "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
+  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "devices": [
     "53:CB:12:79:E5:F6",
     "DD:0F:91:FE:9E:00",
@@ -22957,7 +23389,7 @@ the adapter for the listed devices.</p>
         <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
   "message": "bedtime delayed",
   "tstamp": 1592217870123,
-  "id": "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
+  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "devices": [
     "53:CB:12:79:E5:F6",
     "DD:0F:91:FE:9E:00",
@@ -26825,6 +27257,8 @@ router in the following order:</p>
 <ol>
 <li><a href="#message-InitialConfig"><em>Initial Configuration</em></a></li>
 <li><a href="#message-UnsubscribedWhitelist"><em>Unsubscribed Whitlist</em></a></li>
+<li><a href="#message-KnownDevices"><em>Known Devices</em></a></li>
+<li><a href="#message-SetBedtime"><em>Set Bedtime</em></a> 1 message each for as many bedtime schedules exist.</li>
 </ol>
 </div>
   
@@ -28114,17 +28548,17 @@ there was no connection to begin with.</p>
 immediately drop the connection and report the connection is down using
 the <a href=""><em>VPN Connection Status</em></a> message.</p>
 <p>This message is sent when a client requests the VPN connection be
-established, OR the Router has requested a <a href=""><em>VPN Server Reconnect</em></a>.</p>
+established, OR the Router has requested a <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a>.</p>
 <p>Because the router can ONLY rely on the credentials it was presented at
 the time the vpn-connect message was received, if for any reason the VPN
 tunnel disconnects, the router can try to immediately reconnect to the
 same tunnel with the same credentials.  If that fails, it can not use
 the credentials presented for any other tunnel as they may have expired
 or have been assigned to a different client.  In that case, the router
-can send a <a href=""><em>VPN Server Reconnect</em></a> message to the backend to be
+can send a <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a> message to the backend to be
 provided with a fresh list of VPN servers and credentials with wish to
 re-establish VPN connection.  The backend will then reply with this
-<a href=""><em>VPN Server Connect</em></a> message.</p>
+<a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</p>
 </div>
   
 <div>
@@ -31117,13 +31551,383 @@ boolean
 
 
       
-      <a name="message-LogMsg"></a>
+      <a name="message-VPNReconnect"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
     <span class="text-grey-darker font-bold mr-2">#11</span>
+    
+    
+      VPN Server Reconnect
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNReconnect</span>
+    
+  </div>
+  <p class="text-grey-dark text-sm">Reconnect to a listed VPN Server.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message causes the backend to produce a new list of valid vpn
+servers and credentials and return it to the requesting router by way of
+a <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</p>
+<p>This message is only sent once, if an established VPN connection drops,
+and the Router is unable to re-establish a connection using the same
+credentials as the last dropped link.  IF the router is unable to
+establish a connection to any of the listed servers, the process
+terminates and this message is not sent.  Instead the router sends a
+<a href=""><em>VPN Connection Status</em></a> message detailing the failure.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 13</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 13</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Reconnect to a listed VPN Server.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;vpn-reconnect&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The request timestamp of the configuration.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-LogMsg"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#12</span>
     
     
       Log Message
@@ -31656,7 +32460,7 @@ string
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#12</span>
+    <span class="text-grey-darker font-bold mr-2">#13</span>
     
     
       Run Speed Test
@@ -32188,7 +32992,7 @@ the best url probed from speedtest server lists.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#13</span>
+    <span class="text-grey-darker font-bold mr-2">#14</span>
     
     
       Speed Test
@@ -33295,7 +34099,7 @@ string
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#14</span>
+    <span class="text-grey-darker font-bold mr-2">#15</span>
     
     
       Known Device Information
@@ -33318,14 +34122,15 @@ string
 
 
   <div class="mt-4 mb-4 markdown"><p>This message is sent by the Backend after initial adapter configuration
-upon successful connection of an adapter to the backend.  It tells the adapter
-all devices known by the backend.  If a device is not in this list of devices
-that the adapter knows about, and the device is currently offline, the device
-is deleted. If the device is Online, a new Device Info for the device is queued
-to the backend to update the backends knowledge of all the connected devices.
-IF any of the known device data differs to the data the adapter knows about
-the device, a new device info message is queued to update the backends knowledge
-of the device.</p>
+upon successful connection of an adapter to the backend (after receipt
+of the <a href="#message-LinkEstablished"><em>Link Established</em></a>) message.  It tells the adapter all
+devices known by the backend.  If a device is not in this list of
+devices that the adapter knows about, and the device is currently
+offline, the device is deleted. If the device is Online, a new Device
+Info for the device is queued to the backend to update the backends
+knowledge of all the connected devices.  IF any of the known device data
+differs to the data the adapter knows about the device, a new device
+info message is queued to update the backends knowledge of the device.</p>
 </div>
   
 <div>
@@ -34704,7 +35509,7 @@ Default to <em>false</em> if not present.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#15</span>
+    <span class="text-grey-darker font-bold mr-2">#16</span>
     
     
       Device Information
@@ -34728,7 +35533,7 @@ Default to <em>false</em> if not present.</p>
 
   <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend whenever a new device
 is discovered, or if any of the data fields (excluding the online status)
-within this message about the device changes.  There is not difference between
+within this message about the device changes.  There is no difference between
 a new device or updating a pre-existing device.  Devices are identified by their
 MAC address and MAC is assumed to be unique on a single adapter.</p>
 </div>
@@ -38026,7 +38831,7 @@ the detected useragents.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#16</span>
+    <span class="text-grey-darker font-bold mr-2">#17</span>
     
     
       Change Device State
@@ -38051,7 +38856,8 @@ the detected useragents.</p>
   <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs the adapter
 to make the listed state changes to the listed devices.  The message can
 contain multiple state changes, and multiple devices.  The devices listed are
-all triggered with the same state changes.</p>
+all triggered with the same state changes.  The router will reply with a
+<a href="#message-DeviceStateChanged"><em>Device State Changed</em></a> reply.</p>
 </div>
   
 <div>
@@ -38318,8 +39124,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or verification
-of the ID field, if it is set, it must be returned verbatim in the paired reply.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -39014,7 +39821,7 @@ internal clock of the adapter.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#17</span>
+    <span class="text-grey-darker font-bold mr-2">#18</span>
     
     
       Set Device Bedtime
@@ -39036,15 +39843,19 @@ internal clock of the adapter.</p>
 
 
 
-  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs the adapter
-to set the listed bedtime schedule for the listed devices.  The devices listed are
-all set to the same bedtime schedule.  The Adapter will receive
-multiple &quot;set bedtime&quot; messages to set the schedules of all known
-devices.  If the Adapter knows a device, but has not received a
-bedtime schedule for it, it must assume there is no bedtime schedule
-that applies to it.  The full set of bedtime schedules are sent
-during initial configuration and also as required to reflect
-configuration changes as they occur.</p>
+  <div class="mt-4 mb-4 markdown"><p>This message is sent from the Backend to the adapter and instructs
+the adapter to set the listed bedtime schedule for the listed
+devices.  The devices listed are all set to the same bedtime
+schedule.  The Adapter will receive multiple &quot;set bedtime&quot; messages
+to set the schedules of all known devices.  If the Adapter knows a
+device, but has not received a bedtime schedule for it, it must
+assume there is no bedtime schedule that applies to it.  The full
+set of bedtime schedules are sent during initial configuration, in
+response to the backend receiving the <a href="#message-LinkEstablished"><em>Link Established</em></a>
+message. It is also sent as required to reflect configuration changes
+as they occur.  Once set, the backend replies with the
+<a href="#message-BedtimeSet"><em>Bedtime Set</em></a> message, with the tstamp and id (if present)
+matching those same fields in this request.</p>
 </div>
   
 <div>
@@ -39920,14 +40731,14 @@ be rejected.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#18</span>
+    <span class="text-grey-darker font-bold mr-2">#19</span>
     
     
       Delay Bedtime
       <span class="border text-orange rounded text-xs ml-3 py-0 px-2">DelayBedtime</span>
     
   </div>
-  <p class="text-grey-dark text-sm">Advise the Adapter to delay the next (or currently active) bedtime for the listed devices.</p>
+  <p class="text-grey-dark text-sm">Advise the Router to delay the current or next bedtime start.</p>
   
   
 
@@ -39952,7 +40763,9 @@ to delay by the specified number of minutes.</p>
 to the currently active bedtime, and will delay it from its start
 time by the specified number of minutes.  So, for example, if
 started at 10pm and at 10:15pm a delay of 45 minutes was received,
-the devices internet would unpause and would re-pause at 10:45.</p>
+the devices internet would unpause and would re-pause at 10:45.
+This message is responded to with the <a href="#message-BedtimeDelayed"><em>Bedtime Delayed</em></a> message
+from the router.</p>
 </div>
   
 <div>
@@ -40055,7 +40868,7 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>Advise the Adapter to delay the next (or currently active) bedtime for the listed devices.</p>
+          <div class="text-sm markdown"><p>Advise the Router to delay the current or next bedtime start.</p>
 </div>
         
         
@@ -40221,8 +41034,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
-of the ID field, it must be returned verbatim in the paired reply.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -40554,7 +41368,7 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#19</span>
+    <span class="text-grey-darker font-bold mr-2">#20</span>
     
     
       Device State Changed
@@ -40577,8 +41391,9 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
 
 
   <div class="mt-4 mb-4 markdown"><p>This message is sent from the Adapter to the Backend and either confirms
-the adapters request to set state, OR advises that the state changed
-asynchronously without being requested by the backend.</p>
+the adapters request to set state from the <a href="#message-ChangeDeviceState"><em>Change Device State</em></a>
+message, OR advises that the state changed asynchronously without being
+requested by the backend.</p>
 </div>
   
 <div>
@@ -40827,9 +41642,6 @@ string
           
           <div class="inline-block">
             
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">UUID</span>
-            
             
             
             
@@ -40838,11 +41650,11 @@ string
             
             
               <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">length <= 36</span>
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
             
             
             <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
-                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 36</span>
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
             
             
             
@@ -40850,8 +41662,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  This field is only set as a reply to a Change Device
-State command, if that command included an ID Field.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -41544,7 +42357,7 @@ midnight 1970 UTC.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#20</span>
+    <span class="text-grey-darker font-bold mr-2">#21</span>
     
     
       Device Bedtime Set
@@ -42443,7 +43256,7 @@ be rejected.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#21</span>
+    <span class="text-grey-darker font-bold mr-2">#22</span>
     
     
       Bedtime Delayed
@@ -42466,7 +43279,8 @@ be rejected.</p>
 
 
   <div class="mt-4 mb-4 markdown"><p>This message advises that a bedtime delay has been applied to the
-devices, and the absolute UTC time when the delay will complete.</p>
+devices, and the absolute UTC time when the delay will complete.  It
+is sent in response to a <a href="#message-SetBedtime"><em>Set Bedtime</em></a> message from the backend.</p>
 </div>
   
 <div>
@@ -42735,8 +43549,9 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>ID Field.  The Adapter does not do any processing or verification
-of the ID field, it must be returned verbatim in the paired reply.</p>
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
 </div>
         
         
@@ -43149,7 +43964,7 @@ the adapter for the listed devices.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#22</span>
+    <span class="text-grey-darker font-bold mr-2">#23</span>
     
     
       Data Usage

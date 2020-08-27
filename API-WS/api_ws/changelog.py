@@ -7,7 +7,7 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
-    ### V0.1.0
+    ### V0.1.0wip
 
     1. Added hyperlinks between messages to ease navigation.
     2. Added WPS service enable to {Xref.adapter_services} message (and reply
@@ -22,4 +22,6 @@ CHANGELOG = f"""
     7. Created [*unsubscribed-whitelist*](#message-UnsubscribedWhitelist) msg to
        set configuration whitelist of domains which are still accessible when
        the router subscription is invalid.
+    8. Add list of config messages sent by backend as a result of initial
+       connection.
 """

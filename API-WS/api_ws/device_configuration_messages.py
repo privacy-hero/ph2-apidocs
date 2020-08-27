@@ -17,7 +17,7 @@ VPN On-Off:
 # from .util import mls
 from .schemas import base_message, channel, Field
 from .tags import TAGS
-
+from .xref import Xref
 
 DEVICE_SERVICES = [
     "vpn",
@@ -110,11 +110,12 @@ def device_states(reply=False):
 
 def change_device_state():
     """Change Device State."""
-    description = """
+    description = f"""
         This message is sent from the Backend to the adapter and instructs the adapter
         to make the listed state changes to the listed devices.  The message can
         contain multiple state changes, and multiple devices.  The devices listed are
-        all triggered with the same state changes.
+        all triggered with the same state changes.  The router will reply with a
+        {Xref.device_state_changed} reply.
     """
 
     tstamp_desc = """
@@ -126,11 +127,6 @@ def change_device_state():
     name = "ChangeDeviceState"
     title = "Change Device State"
     summary = "Advise the Adapter to change the state of the devices."
-
-    id_desc = """
-        **Optional**, ID Field.  The Adapter does not do any processing or verification
-        of the ID field, if it is set, it must be returned verbatim in the paired reply.
-    """
 
     devices_desc = """
         An array of Device MAC addresses the state changes are to be applied to.  All
@@ -152,13 +148,11 @@ def change_device_state():
     """
 
     extra_fields = f"""
-        {Field.string("id", id_desc, minlength=1, maxlength=256)},
         {Field.array("devices", devices_desc, Field.mac(None, mac_desc))},
         {Field.array("states", states_desc, device_states())}
     """
 
     extra_example = """
-        "id"       : "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
         "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
         "states" : [
             {"service": "ad-blocking", "state":false },
@@ -185,10 +179,11 @@ def change_device_state():
 
 def device_state_changed():
     """Device State Changed."""
-    description = """
+    description = f"""
         This message is sent from the Adapter to the Backend and either confirms
-        the adapters request to set state, OR advises that the state changed
-        asynchronously without being requested by the backend.
+        the adapters request to set state from the {Xref.change_device_state}
+        message, OR advises that the state changed asynchronously without being
+        requested by the backend.
     """
 
     tstamp_desc = """
@@ -202,11 +197,6 @@ def device_state_changed():
     name = "DeviceStateChanged"
     title = "Device State Changed"
     summary = "Advise the Adapter to change the state of the devices."
-
-    id_desc = """
-        **Optional**, ID Field.  This field is only set as a reply to a Change Device
-        State command, if that command included an ID Field.
-    """
 
     devices_desc = """
         An array of Device MAC addresses the state changes were applied to.  All
@@ -226,13 +216,11 @@ def device_state_changed():
     """
 
     extra_fields = f"""
-        {Field.uuid("id", id_desc)},
         {Field.array("devices", devices_desc, Field.mac(None, mac_desc))},
         {Field.array("states", states_desc, device_states(reply=True))}
     """
 
     extra_example = """
-        "id"       : "85647580-68ec-44da-8bc8-3e7b8cf7b0e6",
         "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
         "states" : [
             {"service": "ad-blocking", "state":false },
@@ -311,16 +299,20 @@ def set_device_bedtime(reply=False):
             "Advise the Adapter to set the bedtime schedule for the listed devices."
         )
 
-        description = """
-            This message is sent from the Backend to the adapter and instructs the adapter
-            to set the listed bedtime schedule for the listed devices.  The devices listed are
-            all set to the same bedtime schedule.  The Adapter will receive
-            multiple "set bedtime" messages to set the schedules of all known
-            devices.  If the Adapter knows a device, but has not received a
-            bedtime schedule for it, it must assume there is no bedtime schedule
-            that applies to it.  The full set of bedtime schedules are sent
-            during initial configuration and also as required to reflect
-            configuration changes as they occur.
+        description = f"""
+            This message is sent from the Backend to the adapter and instructs
+            the adapter to set the listed bedtime schedule for the listed
+            devices.  The devices listed are all set to the same bedtime
+            schedule.  The Adapter will receive multiple "set bedtime" messages
+            to set the schedules of all known devices.  If the Adapter knows a
+            device, but has not received a bedtime schedule for it, it must
+            assume there is no bedtime schedule that applies to it.  The full
+            set of bedtime schedules are sent during initial configuration, in
+            response to the backend receiving the {Xref.link_established}
+            message. It is also sent as required to reflect configuration changes
+            as they occur.  Once set, the backend replies with the
+            {Xref.bedtime_set} message, with the tstamp and id (if present)
+            matching those same fields in this request.
         """
 
         tstamp_desc = """
@@ -418,14 +410,12 @@ def set_device_bedtime(reply=False):
 
 def set_device_bedtime_delay(reply=False):
     """Delay Bedtime."""
-
     if not reply:
         cmd = "delay bedtime"
         name = "DelayBedtime"
         title = "Delay Bedtime"
-        summary = "Advise the Adapter to delay the next (or currently active) bedtime for the listed devices."
-
-        description = """
+        summary = "Advise the Router to delay the current or next bedtime start."
+        description = f"""
             This message causes the adapter to delay the bedtime for the listed
             devices by the specified number of minutes.  It is a one-shot delay
             and once expired is not repeated.
@@ -439,6 +429,8 @@ def set_device_bedtime_delay(reply=False):
             time by the specified number of minutes.  So, for example, if
             started at 10pm and at 10:15pm a delay of 45 minutes was received,
             the devices internet would unpause and would re-pause at 10:45.
+            This message is responded to with the {Xref.bedtime_delayed} message
+            from the router.
         """
 
         devices_desc = """
@@ -462,9 +454,10 @@ def set_device_bedtime_delay(reply=False):
             "Advise the Adapter that Bedtime has been Delayed for the listed devices."
         )
 
-        description = """
+        description = f"""
             This message advises that a bedtime delay has been applied to the
-            devices, and the absolute UTC time when the delay will complete.
+            devices, and the absolute UTC time when the delay will complete.  It
+            is sent in response to a {Xref.set_bedtime} message from the backend.
         """
 
         devices_desc = """
@@ -491,24 +484,17 @@ def set_device_bedtime_delay(reply=False):
         paired reply.
     """
 
-    id_desc = """
-        ID Field.  The Adapter does not do any processing or verification
-        of the ID field, it must be returned verbatim in the paired reply.
-    """
-
     mac_desc = """
         The Devices MAC address.  Assumed unique per adapter.  Eg. "00:11:22:33:44:55"
         Also accepts "001122334455" or "00-11-22-33-44-55"
     """
 
     extra_fields = f"""
-        {Field.string("id", id_desc, minlength=1, maxlength=256)},
         {Field.array("devices", devices_desc, Field.mac(None, mac_desc))},
         {Field.daytime("delay", delay_desc)}
     """
 
     extra_example = """
-        "id"       : "ODU2NDc1ODAtNjhlYy00NGRhLThiYzgtM2U3YjhjZjdiMGU2",
         "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
         "pause" : 45
     """
