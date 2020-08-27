@@ -615,6 +615,8 @@ components:
         - ad-blocking
         - stream-relocation
         - malware-phishing
+        - upnp
+        - wps
       properties:
         online:
           $ref: "#/components/schemas/state"
@@ -627,6 +629,8 @@ components:
         malware-phishing:
           $ref: "#/components/schemas/state"
         upnp:
+          $ref: "#/components/schemas/state"
+        wps:
           $ref: "#/components/schemas/state"
 
     Adapter-Usage-Record:

@@ -688,6 +688,7 @@ components:
         - "StreamRelocation"
         - "Malware"
         - "UPNP"
+        - "WPS"
       example: "VPN"
       description: |-
         A service running on the adapter.

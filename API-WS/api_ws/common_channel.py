@@ -6,10 +6,10 @@ Privacy Hero 2 - Websocket API - Common Channel Definition.
 
 from .util import mls
 from .tags import TAGS
-from .schemas import base_message_schema, channel
+from .schemas import base_message_schema, channel, MsgDirection
 
 
-def multi_field():
+def multi_field(direction: MsgDirection = MsgDirection.TX_TO_ROUTER):
     """Return Multiple message packet field."""
     description = """
         An array of complete and individual messages as defined elsewhere in
@@ -19,14 +19,14 @@ def multi_field():
         "msgs": {{
             "type": "array",
             "description": {mls(description)},
-            "items": {{ {base_message_schema()} }},
+            "items": {{ {base_message_schema(direction=direction)} }},
             "minItems": 1,
             "maxItems": 32
         }}
     """
 
 
-def base_message():
+def base_message(direction: MsgDirection = MsgDirection.TX_TO_ROUTER):
     """Return Standard Base Message Structure."""
     description = """
         All Privacy Hero 2 system messages have the following standard form.
@@ -41,12 +41,12 @@ def base_message():
             {TAGS.get(TAGS.MSG_FORMATS)}
         ],
         "payload" : {{
-            {base_message_schema()}
+            {base_message_schema(direction=direction)}
         }}
     """
 
 
-def multi_message():
+def multi_message(direction: MsgDirection = MsgDirection.TX_TO_ROUTER):
     """Return Standard Multi Message Structure."""
     description = """
         All Privacy Hero 2 system messages may be bundled into a single multi-message.
@@ -71,6 +71,9 @@ def multi_message():
         bundled, but MUST be sent as a discreet message.  In this case, the maximum
         message size must never exceed 128KB.
 
+        The multi-message is guaranteed NOT to have an *id* field, but the
+        messages contained within it, may have *id* fields and they should be
+        processed accordingly.
         """
 
     tstamp_desc = """
@@ -78,7 +81,7 @@ def multi_message():
         timestamps.
     """
 
-    extra_fields = f"{multi_field()}"
+    extra_fields = f"{multi_field(direction=direction)}"
     extra_example = '"msgs" : []'
     extra_required = '"tstamp", "msgs"'
 
@@ -97,7 +100,8 @@ def multi_message():
                 tstamp_desc,
                 extra_fields,
                 extra_example,
-                extra_required) },
+                extra_required,
+                id_field=False) },
             "additionalProperties": false
         }}
     """
@@ -122,6 +126,10 @@ def common_channel():
     """
 
     publish_msgs = [base_message(), multi_message()]
+    subscribe_msgs = [
+        base_message(direction=MsgDirection.RX_FROM_ROUTER),
+        multi_message(),
+    ]
 
     return channel(
         description,
@@ -129,6 +137,6 @@ def common_channel():
         sub_desc=publish_desc,
         sub_msgs=publish_msgs,
         pub_desc=publish_desc,
-        pub_msgs=publish_msgs,
+        pub_msgs=subscribe_msgs,
         tags=TAGS.MSG_FORMATS,
     )

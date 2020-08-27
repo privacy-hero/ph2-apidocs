@@ -83,11 +83,11 @@ def adapter_speedtest_results():
         The distance is measured in whole MILES.
     """
 
-    connection_desc = """
-        The connection which was tested.
-
-        * **WAN** is the native WAN Interface of the Adapter.
-        * **VPN** is the through the VPN tunnel.
+    vpn_desc = """
+        IF and ONLY IF this speedtest is through the VPN Tunnel, the URL of the
+        VPN Server tested will be returned in the vpn field.  The backend will
+        assume the speedtest result is for a WAN if this field is missing,
+        therefore it is optional and must only be included in VPN Speedtest results.
     """
 
     cmd = "speedtest"
@@ -105,9 +105,9 @@ def adapter_speedtest_results():
         {Field.int64("distance", distance_desc)},
         {Field.int("rx", "Result in bits per second of the receive speed test.")},
         {Field.int("tx", "Result in bits per second of the transmit speed test.")},
-        {Field.enum("connection",connection_desc, ["WAN","VPN"])},
         {Field.ipv4("ipv4", "The Connections Internet IPv4 Address")},
-        {Field.ipv6("ipv6", "The Connections Internet IPv6 Address")}
+        {Field.ipv6("ipv6", "The Connections Internet IPv6 Address")},
+        {Field.url("vpn", vpn_desc)}
     """
     extra_example = """
         "url": "http://www.3bb.com/speedtest",
@@ -116,7 +116,6 @@ def adapter_speedtest_results():
         "distance": -50,
         "rx": 185608437,
         "tx": 282140344,
-        "connection": "WAN",
         "ipv4": "183.89.198.67"
     """
     extra_required = """
@@ -127,7 +126,6 @@ def adapter_speedtest_results():
         "distance",
         "rx",
         "tx",
-        "connection",
         "ipv4"
     """
 
@@ -147,7 +145,16 @@ def adapter_speedtest_results():
 
 def adapter_service_state():
     """Individual Service State Record."""
-    service_list = ["VPN", "AdBlocking", "StreamRelocation", "Malware", "UPNP", "WIFI"]
+    service_list = [
+        "VPN",
+        "AdBlocking",
+        "StreamRelocation",
+        "Malware",
+        "UPNP",
+        "WIFI",
+        "WPS",
+        "Subscribed",
+    ]
 
     service_state_desc = """
         An individual service state.
@@ -155,6 +162,16 @@ def adapter_service_state():
 
     service_desc = """
         The name of the service being configured.
+        - VPN = Turn the VPN Tunnel On/Off
+        - AdBlocking = Globally Enable/Disable AdBlocking
+        - StreamRelocation = Globally Enable/Disabe Stream Relocation
+        - UPNP = Enable a UPNP server to manage port forwarding for lan clients.
+        - WIFI = Globally Enable/Disbale the Wifi on the Router.
+        - WPS = Enable/Disable the WPS Button. This does not enable the WPS
+          function, only allows the button to operate normally or not.
+        - Subscribed = True - Normal Operation.  False - Subscription captive
+          portal mode.  In captive portal mode only whitelisted domains have
+          access to the internet. See "CaptivePortalWhiteList" message.
     """
 
     state_desc = """
@@ -217,7 +234,9 @@ def configure_service_state(reply=False):
             "services": [
                 {"service": "VPN", "state": true},
                 {"service": "AdBlocking", "state": true},
-                {"service": "UPNP", "state": false}
+                {"service": "UPNP", "state": false},
+                {"service": "WPS", "state": false},
+                {"service": "Subscribed", "state": true}
             ]
         """
     else:
@@ -288,6 +307,71 @@ def configure_service_state(reply=False):
     )
 
 
+def configure_vpn_servers():
+    """Configure the VPN Servers the Router will communicate with."""
+    cmd = "vpn-servers"
+    name = "VPNServers"
+    title = "VPN Server List"
+    summary = "Configure VPN Server list for use by the Router."
+
+    description = """
+        This message causes the router to configure its list of VPN Servers.
+
+        The router may begin testing them to find the best VPN connection but
+        should not establish a permament connection unless it has been told to
+        turn the VPN on via the adapter-services message.
+
+        IF the router has already established a VPN connection, it will not
+        disconnect or attempt to reconnect as a result of receiving this
+        message.  It will simply remember the server list and apply it on the
+        next VPN connection.
+    """
+
+    tstamp_desc = """
+        The request timestamp of the configuration.
+    """
+
+    server_desc = """
+        The message will contain a list of viable pre-selected servers.
+
+        The highest priority entires (and therefore the first listed) will be
+        those servers which require testing, in order of test priority.  There may be
+        no servers of this type listed if there are no servers that REQUIRE
+        testing.
+
+        Following this will be a list of servers in priority order.  When
+        connecting to the VPN, the router is to use this list and try to connect
+        in the order presented.  IF the router is unable to establish a
+        connection after trying all servers, it gives up attempting to connect.
+    """
+
+    extra_example = """
+        "servers": [
+        ]
+    """
+
+    extra_fields = f"""
+        {Field.array("servers", server_desc, adapter_service_state())}
+    """
+
+    extra_required = """
+        "tstamp", "servers"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def adapter_configuration_channel():
     """Adapter Config messages."""
     description = """
@@ -301,7 +385,7 @@ def adapter_configuration_channel():
     subscribe_msgs = [configure_service_state(reply=True)]
 
     publish_desc = "Commands to set the Adapter Configuration."
-    publish_msgs = [configure_service_state()]
+    publish_msgs = [configure_service_state(), configure_vpn_servers()]
 
     return channel(
         description,

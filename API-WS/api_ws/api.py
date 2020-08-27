@@ -13,6 +13,7 @@ NOTE: Literal Json { and }  must be represented as {{ and }} inside the f string
 
 from .util import mls
 from .common_channel import common_channel
+from .changelog import CHANGELOG
 
 from .aws_errors import aws_errors_channel
 from .adapter_diagnostics import adapter_diagnostics_channel, speedtest_channel
@@ -25,9 +26,9 @@ from .data_usage_messages import data_usage_channel
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.0.8"
+VERSION = "0.1.0"
 DESC = mls(
-    """
+    f"""
     # The API for Adapter to Backend communication.
 
     ## Overview
@@ -55,6 +56,8 @@ DESC = mls(
 
     All messages to/from the adapter have a common format, which are documented in the
     *Basic Message Forms*. set of operations.
+
+    {CHANGELOG}
     """
 )
 

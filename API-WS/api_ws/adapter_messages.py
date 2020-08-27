@@ -4,7 +4,7 @@ Privacy Hero 2 - Websocket API - Adapter Diagnostic Message Definitions.
 """
 
 # from .util import mls
-from .schemas import base_message, channel, Field, sha256_example
+from .schemas import base_message, channel, Field, sha256_example, MsgDirection
 from .adapter_diagnostics import log_level_field
 from .tags import TAGS
 
@@ -16,6 +16,11 @@ def link_established():
         message it sends AFTER establishing any websocket connection to the
         backend.  It allows the backend to perform link connection housekeeping
         for the adapter, which is necessary for proper operation.
+
+        Upon receipt, the Backend will queue the initial configuration for the
+        router in the following order:
+
+        1. [*Initial Config*](#message-InitialConfig)
     """
 
     tstamp_desc = """
@@ -72,6 +77,8 @@ def link_established():
         extra_fields,
         extra_example,
         extra_required,
+        id_field=False,
+        direction=MsgDirection.RX_FROM_ROUTER,
     )
 
 
@@ -80,7 +87,7 @@ def initial_config():
     description = """
         This message contains the highest level configuration and is sent by the
         backend after a link is established, and the backend receives the
-        *Link Established* message from the Adapter.
+        [*Link Established*](#message-LinkEstablished) message from the Adapter.
     """
 
     tstamp_desc = """
@@ -138,6 +145,8 @@ def initial_config():
         extra_fields,
         extra_example,
         extra_required,
+        id_field=False,
+        direction=MsgDirection.TX_TO_ROUTER,
     )
 
 

@@ -1,43 +1,75 @@
-const parser = require( '@asyncapi/parser' );
-var fs = require( 'fs' );
-var path = require( 'path' );
-var Ajv = require( 'ajv' );
-var betterAjvErrors = require( 'better-ajv-errors' );
-var os = require( 'os' );
+const parser = require("@asyncapi/parser");
+var fs = require("fs");
+var path = require("path");
+var Ajv = require("ajv");
+var betterAjvErrors = require("better-ajv-errors");
+var os = require("os");
 
+var BUFFER = bufferFile("./json/asyncapi.json");
+var json_data = BUFFER.toString();
+var json_lines = json_data.split(os.EOL);
+var json_obj = require("./json/asyncapi.json")
 
-var BUFFER = bufferFile( './json/asyncapi.json' );
-var json_data = BUFFER.toString()
-var json_lines = json_data.split( os.EOL );
+var hasExcape = /~/;
+var escapeMatcher = /~[01]/g;
 
-function bufferFile( relPath ) {
-    return fs.readFileSync( path.join( __dirname, relPath ) );
+function escapeReplacer(m) {
+  switch (m) {
+    case "~1":
+      return "/";
+    case "~0":
+      return "~";
+  }
+  throw new Error("Invalid tilde escape: " + m);
 }
 
-const doc = parser.parse( json_data ).catch( ( ex ) => {
-    // console.log( ex.toJS() );
-    // console.log( JSON.stringify( ex.validationErrors, null, 2 ) );
+function untilde(str) {
+  if (!hasExcape.test(str)) return str;
+  return str.replace(escapeMatcher, escapeReplacer);
+}
+function bufferFile(relPath) {
+  return fs.readFileSync(path.join(__dirname, relPath));
+}
 
-    var err = ex.validationErrors[ 0 ]
-    var start = err.location.startLine - 1
-    var end = err.location.endLine - 1
-    var x1 = err.location.startColumn
-    var x2 = err.location.endColumn
+function compilePointer(pointer) {
+  if (typeof pointer === "string") {
+    pointer = pointer.split("/");
+    if (pointer[0] === "") return pointer;
+    throw new Error("Invalid JSON pointer.");
+  } else if (Array.isArray(pointer)) {
+    return pointer;
+  }
 
-    console.log( "Error : ", err.title )
-    console.log( "  Line: ", start + 1, "to", end + 1 )
-    console.log( "-".repeat( 79 ) )
+  throw new Error("Invalid JSON pointer.");
+}
 
+function get(obj, pointer) {
+  if (typeof obj !== "object") throw new Error("Invalid input object.");
+  pointer = compilePointer(pointer);
+  var len = pointer.length;
+  if (len === 1) return obj;
 
-    for ( var line = 0; line < json_lines.length; line++ ) {
-        if ( ( line >= start - 5 ) && ( line <= start + 5 ) ) {
-            if ( ( line >= start ) && ( line <= start ) ) {
-                console.log( line, "-->" + json_lines[ line ] );
-                console.log( line, "   ", " ".repeat( x1 - 1 ), "^".repeat( x2 - x1 ) );
-            } else {
-                console.log( line, "   " + json_lines[ line ] );
-            }
-        }
-    }
-    process.exit( 1 )
-} );
+  for (var p = 1; p < len; ) {
+    key = untilde(pointer[p++]);
+    console.log(key);
+    obj = obj[key];
+    //console.log(JSON.stringify(obj));
+    if (len === p) return obj;
+    if (typeof obj !== "object")
+      return " Err @ " + key + ":" + typeof obj + ":" + JSON.stringify(obj);
+  }
+}
+
+const doc = parser.parse(json_data).catch((ex) => {
+  //console.log( ex.toJS() );
+  //console.log( JSON.stringify( ex.validationErrors, null, 2 ) );
+
+  ex.validationErrors.forEach(function (err) {
+    console.log("Error : ", err.title);
+    console.log("  Loc : ", err.location.jsonPointer);
+    //console.log("  Val : ", get(json_obj, "/channels"));
+    console.log("  Val : ", get(json_obj, err.location.jsonPointer));
+    //console.log( err );
+  });
+  process.exit(1);
+});

@@ -2,9 +2,19 @@
 import json
 import hashlib
 from base64 import urlsafe_b64encode
+from enum import Enum
 
 from .util import mls, KB
 from .tags import TAGS
+
+# =====================================================================
+
+
+class MsgDirection(Enum):
+    """Define the direction of a Message."""
+
+    TX_TO_ROUTER = 0
+    RX_FROM_ROUTER = 1
 
 
 # =====================================================================
@@ -88,7 +98,7 @@ class Field:  # pylint: disable=too-many-public-methods
         return Field.named(
             name,
             f"""
-                "type" : "int",
+                "type" : "integer",
                 "format": "int64",
                 "description" :{mls(desc)}
             """,
@@ -101,7 +111,7 @@ class Field:  # pylint: disable=too-many-public-methods
         return Field.named(
             name,
             f"""
-                "type" : "int",
+                "type" : "integer",
                 "format": "int64",
                 "description" :{mls(desc)}
             """,
@@ -114,7 +124,7 @@ class Field:  # pylint: disable=too-many-public-methods
         return Field.named(
             name,
             f"""
-                "type" : "int",
+                "type" : "integer",
                 "format": "int64",
                 "description" :{mls(desc)}
             """,
@@ -133,7 +143,7 @@ class Field:  # pylint: disable=too-many-public-methods
         return Field.named(
             name,
             f"""
-                "type" : "int",
+                "type" : "integer",
                 "format": "int16",
                 "description" :{mls(desc)}
             """,
@@ -286,7 +296,7 @@ class Field:  # pylint: disable=too-many-public-methods
         return Field.named(
             name,
             f"""
-                "type" : "int",
+                "type" : "integer",
                 "format" : "{inttype}",
                 "description" :{mls(desc)}
                 {Field.optional("minValue", minvalue, quote="")}
@@ -391,7 +401,7 @@ class Field:  # pylint: disable=too-many-public-methods
     def nullable(field, nullable=False):
         """Return an optional nullable type."""
         if not nullable:
-            return '"field"'
+            return f'"{field}"'
         return f'["null", "{field}"]'
 
 
@@ -399,14 +409,34 @@ class Field:  # pylint: disable=too-many-public-methods
 
 
 def base_message_schema(
-    mtype=None,
-    mdesc=None,
-    tdesc=None,
-    extra_fields=None,
-    extra_example=None,
-    extra_required=None,
+    mtype: str = None,
+    mdesc: str = None,
+    tdesc: str = None,
+    extra_fields: str = None,
+    extra_example: str = None,
+    extra_required: str = None,
+    id_field: bool = True,
+    direction: ModuleNotFoundError = MsgDirection.TX_TO_ROUTER,
 ):  # pylint: disable=too-many-arguments
     """Return the base message schema."""
+    idf = ""
+    idf_example = ""
+    if id_field:
+        if direction == MsgDirection.TX_TO_ROUTER:
+            id_desc = """
+                **Optional**, ID Field.  The Adapter does not do any processing or
+                verification of the ID field, if it is set, it must be returned
+                verbatim in the paired reply.
+            """
+        else:
+            id_desc = """
+                **Optional**, ID Field.  This field is only sent if this message
+                is a reply to a message received from the backend, AND that
+                message included the ID Field.  In that case, it is included unchanged.
+            """
+        idf = f',{Field.string("id", id_desc, minlength=1, maxlength=256)}'
+        idf_example = ',"id":"eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"'
+
     exf = ""
     if extra_fields is not None:
         exf = f", {extra_fields}"
@@ -428,11 +458,13 @@ def base_message_schema(
         "properties" : {{
             {Field.message_type(mtype, mdesc)},
             {Field.tstamp(tdesc)}
+            {idf}
             {exf}
         }},
         "example" : {{
             "message" : "{example_msg}",
             "tstamp"  : 1592217870123
+            {idf_example}
             {exe}
         }},
         "required" : [
@@ -453,6 +485,8 @@ def base_message(  # pylint: disable=too-many-arguments
     extra_fields=None,
     extra_example=None,
     extra_required=None,
+    id_field: bool = True,
+    direction: MsgDirection = MsgDirection.TX_TO_ROUTER,
 ):
     """Generate a full message based on the base message."""
     return f"""
@@ -468,7 +502,10 @@ def base_message(  # pylint: disable=too-many-arguments
                 tstamp_desc,
                 extra_fields,
                 extra_example,
-                extra_required) },
+                extra_required,
+                id_field,
+                direction
+                ) },
             "additionalProperties": false
         }}
     """
