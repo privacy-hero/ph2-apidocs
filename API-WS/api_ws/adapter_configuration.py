@@ -509,6 +509,91 @@ def vpn_reconnect():
     )
 
 
+def vpn_status():
+    """Advises the Backend of the current status of the VPN connection."""
+    cmd = "vpn-status"
+    name = "VPNStatus"
+    title = "VPN Connection Status"
+    summary = "Report VPN Connection Status."
+
+    description = f"""
+        This message advises the current VPN status to the backend.
+
+        During VPN connection, multiple status messages should be sent tracking
+        the major phases of VPN connection initiation, and also, reconnections
+        on a failed link and link disconnection.  VPN Connection/Disconnection
+        is triggered by the receipt of a {Xref.vpn_server_connect} message.
+    """
+
+    tstamp_desc = """
+        The request timestamp of the configuration.
+    """
+
+    status_desc = f"""
+    The current status of the VPN process.
+
+    - *test-connecting* = Connecting to a VPN server to test. *server* is to be
+      set to the IP/URL being connected to.
+    - *testing* = Test connection to VPN succeeded and test started.  Test
+      results will be sent in {Xref.speedtest_result}. *server* is to be set to
+      the IP/URL being tested.
+    - *test-failed* = Either the connection couldn't be established to test, or
+      the test has failed to execute. *server* is to be set to the IP/URL that
+      failed.
+    - *connecting* = Connecting the VPN tunnel for general use. *server* is to
+      be set to the IP/URL being connected to.
+    - *connected* = The connection to the VPN is established and routing is
+      operational.  *server* is to be set to the IP/URL connected to.
+    - *failed* = The vpn server failed to connect or the link broke. *server* =
+      the server url or ip which failed.  After this call the router may no
+      longer use the credentials presented in {Xref.vpn_server_connect} for the
+      server.
+    - *reconnecting* = The VPN server was running and failed, trying to
+      reconnect. This status is sent instead of the *connecting* status when a
+      was established, but dropped and we are attempting to re-establish the
+      connection. *server* = The server we are re-trying due to broken tunnel.
+    - *disconnected* = The last possible server was tested and failed, giving up
+      trying to enable VPN.  *server* should not be present, as no server is
+      being accessed in this state.
+    """
+
+    desc_string = """
+    String description providing extra information about a state.
+    It is valid for the same state to be sent multiple times with changing desc_string.
+
+    For example *testing* multiple times for the same URL with a running commentary
+    about the test as it executes.
+    """
+
+    extra_fields = f"""
+        {Field.enum("status", status_desc,
+        ["test-connecting", "testing","test-failed", "connecting", "connected",
+        "failed", "reconnecting", "disconnected"])},
+        {Field.string("server", "The server URL or IP Address")},
+        {Field.string("description", desc_string)}
+    """
+
+    extra_required = '"tstamp","status"'
+    extra_example = """
+        "status" : "testing",
+        "server" : "66-165-251-250.vpn.privacyhero.com",
+        "description" : "TX Speedtest started"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def adapter_configuration_channel():
     """Adapter Config messages."""
     description = """
@@ -519,7 +604,11 @@ def adapter_configuration_channel():
     """
 
     subscribe_desc = "Configuration Acknowledgements from the Adapter"
-    subscribe_msgs = [configure_service_state(reply=True), vpn_reconnect()]
+    subscribe_msgs = [
+        configure_service_state(reply=True),
+        vpn_reconnect(),
+        vpn_status(),
+    ]
 
     publish_desc = "Commands to set the Adapter Configuration."
     publish_msgs = [configure_service_state(), vpn_connect()]

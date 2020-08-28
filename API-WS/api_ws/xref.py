@@ -30,10 +30,11 @@ class Xref:  # pylint: disable=too-few-public-methods
     data_usage = "[*Data Usage*](#message-DataUsage)"
     vpn_server_connect = "[*VPN Server Connect*](#message-VPNConnect)"
     vpn_server_reconnect = "[*VPN Server Reconnect*](#message-VPNReconnect)"
+    vpn_connection_status = "[*VPN Connection Status*](#message-VPNStatus)"
 
     # --------- Undefined links
 
     get_account_portal = "[*Get Account Portal*]()"
     account_portal = "[*Account Portal*]()"
-    vpn_connection_status = "[*VPN Connection Status*]()"
     wps_status = "[*WPS Status*]()"
+    streaming_cfg = "[*Streaming Cfg*]()"

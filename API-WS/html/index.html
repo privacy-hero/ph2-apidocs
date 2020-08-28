@@ -589,6 +589,14 @@
             </div>
           </a>
         
+          <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-VPNStatus">
+            <div style="display:inline-block;">
+              
+<span class="string-chunk" style="padding-top: 2px;">VPNStatus</span>
+
+            </div>
+          </a>
+        
           <a class="js-menu-item flex break-words no-underline text-grey-darkest mt-8 sm:mt-8 md:mt-3" href="#message-LogMsg">
             <div style="display:inline-block;">
               
@@ -730,6 +738,8 @@ reply <a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>
 <li>Removed &quot;VPN&quot; from <a href="#message-AdapterServices"><em>Adapter Services</em></a> (and reply
 <a href="#message-AdapterServicesState"><em>Adapter Service State</em></a>).</li>
 <li>Added <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</li>
+<li>Added <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a> message.</li>
+<li>Added <a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message.</li>
 <li>Made ID field optional but present in every message by including in the
 <a href="#message-BaseMsg"><em>base message</em></a> specification.</li>
 <li>Created <a href="#message-UnsubscribedWhitelist"><em>unsubscribed-whitelist</em></a> msg to
@@ -6812,14 +6822,14 @@ connected in the order presented.</p>
 server connected is present in the list (regardless of whether it has
 test data or not), then no reconnection will occur and it will not
 disconnect or attempt to reconnect as a result of receiving this
-message.  It will simply reply with the <a href=""><em>VPN Connection Status</em></a>
+message.  It will simply reply with the <a href="#message-VPNStatus"><em>VPN Connection Status</em></a>
 Message indicating the current server is connected.</p>
 <p>However, if the current VPN server connected IS NOT in the list, then
 the connection will be dropped and the list will be processed as if
 there was no connection to begin with.</p>
 <p>IF the server list is empty, and the VPN is connected, the Router will
 immediately drop the connection and report the connection is down using
-the <a href=""><em>VPN Connection Status</em></a> message.</p>
+the <a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message.</p>
 <p>This message is sent when a client requests the VPN connection be
 established, OR the Router has requested a <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a>.</p>
 <p>Because the router can ONLY rely on the credentials it was presented at
@@ -9275,7 +9285,7 @@ will be sent as a result of the failure AND will have its state set
 to false.  The tstamp will still reflect the tstamp in the original
 command, as will the ID if present.</p>
 <p>VPN status updates are not reported using this message. See the
-<a href=""><em>VPN Connection Status</em></a> message for details.</p>
+<a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message for details.</p>
 <p>IF a service state can change without command from the backend, this
 message is sent unsolicited with the changed state for the service.
 in that case, the tstamp MUST be set to the tstamp of the time the
@@ -10007,7 +10017,7 @@ and the Router is unable to re-establish a connection using the same
 credentials as the last dropped link.  IF the router is unable to
 establish a connection to any of the listed servers, the process
 terminates and this message is not sent.  Instead the router sends a
-<a href=""><em>VPN Connection Status</em></a> message detailing the failure.</p>
+<a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message detailing the failure.</p>
 </div>
   
 <div>
@@ -10343,6 +10353,647 @@ verbatim in the paired reply.</p>
     
     
 
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#3</span>
+    
+    
+      VPN Connection Status
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNStatus</span>
+    
+  </div>
+  <p class="text-grey-dark text-sm">Report VPN Connection Status.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message advises the current VPN status to the backend.</p>
+<p>During VPN connection, multiple status messages should be sent tracking
+the major phases of VPN connection initiation, and also, reconnections
+on a failed link and link disconnection.  VPN Connection/Disconnection
+is triggered by the receipt of a <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 10</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 10</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Report VPN Connection Status.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;vpn-status&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The request timestamp of the configuration.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">status</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The current status of the VPN process.</p>
+<ul>
+<li><em>test-connecting</em> = Connecting to a VPN server to test. <em>server</em> is to be
+set to the IP/URL being connected to.</li>
+<li><em>testing</em> = Test connection to VPN succeeded and test started.  Test
+results will be sent in <a href="#message-SpeedTest"><em>Speedtest Result</em></a>. <em>server</em> is to be set to
+the IP/URL being tested.</li>
+<li><em>test-failed</em> = Either the connection couldn't be established to test, or
+the test has failed to execute. <em>server</em> is to be set to the IP/URL that
+failed.</li>
+<li><em>connecting</em> = Connecting the VPN tunnel for general use. <em>server</em> is to
+be set to the IP/URL being connected to.</li>
+<li><em>connected</em> = The connection to the VPN is established and routing is
+operational.  <em>server</em> is to be set to the IP/URL connected to.</li>
+<li><em>failed</em> = The vpn server failed to connect or the link broke. <em>server</em> =
+the server url or ip which failed.  After this call the router may no
+longer use the credentials presented in <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> for the
+server.</li>
+<li><em>reconnecting</em> = The VPN server was running and failed, trying to
+reconnect. This status is sent instead of the <em>connecting</em> status when a
+was established, but dropped and we are attempting to re-establish the
+connection. <em>server</em> = The server we are re-trying due to broken tunnel.</li>
+<li><em>disconnected</em> = The last possible server was tested and failed, giving up
+trying to enable VPN.  <em>server</em> should not be present, as no server is
+being accessed in this state.</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"test-connecting"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"testing"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"test-failed"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"connecting"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"connected"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"failed"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"reconnecting"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"disconnected"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">server</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The server URL or IP Address</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">description</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>String description providing extra information about a state.
+It is valid for the same state to be sent multiple times with changing desc_string.</p>
+<p>For example <em>testing</em> multiple times for the same URL with a running commentary
+about the test as it executes.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+    
+    
+
     
 
 <div class="mt-4">
@@ -10427,6 +11078,42 @@ verbatim in the paired reply.</p>
   "message": "vpn-reconnect",
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"
+}</code></pre>
+        <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
+        
+      </div>
+    </div>
+  
+
+  
+</form>
+
+
+  
+  
+
+<form>
+  <h5 class="examples-uid text-orange mt-4">VPNStatus</h5>
+  
+    <div class="payload-examples mb-4 ">
+      <div class="js-prop cursor-pointer  flex property">
+        <span class="px-2 mr-2 text-grey-lightest text-sm border rounded focus:outline-none cursor-pointer">Payload</span>
+        
+          <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+            xmlns="http://www.w3.org/2000/svg" y="0">
+            <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+          </svg>
+        
+      </div>
+      <div class="children payload-examples mt-4">
+        
+        <pre class="hljs mb-4 border border-grey-darkest rounded"><code>{
+  "message": "vpn-status",
+  "tstamp": 1592217870123,
+  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+  "status": "testing",
+  "server": "66-165-251-250.vpn.privacyhero.com",
+  "description": "TX Speedtest started"
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
         
@@ -28539,14 +29226,14 @@ connected in the order presented.</p>
 server connected is present in the list (regardless of whether it has
 test data or not), then no reconnection will occur and it will not
 disconnect or attempt to reconnect as a result of receiving this
-message.  It will simply reply with the <a href=""><em>VPN Connection Status</em></a>
+message.  It will simply reply with the <a href="#message-VPNStatus"><em>VPN Connection Status</em></a>
 Message indicating the current server is connected.</p>
 <p>However, if the current VPN server connected IS NOT in the list, then
 the connection will be dropped and the list will be processed as if
 there was no connection to begin with.</p>
 <p>IF the server list is empty, and the VPN is connected, the Router will
 immediately drop the connection and report the connection is down using
-the <a href=""><em>VPN Connection Status</em></a> message.</p>
+the <a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message.</p>
 <p>This message is sent when a client requests the VPN connection be
 established, OR the Router has requested a <a href="#message-VPNReconnect"><em>VPN Server Reconnect</em></a>.</p>
 <p>Because the router can ONLY rely on the credentials it was presented at
@@ -30854,7 +31541,7 @@ will be sent as a result of the failure AND will have its state set
 to false.  The tstamp will still reflect the tstamp in the original
 command, as will the ID if present.</p>
 <p>VPN status updates are not reported using this message. See the
-<a href=""><em>VPN Connection Status</em></a> message for details.</p>
+<a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message for details.</p>
 <p>IF a service state can change without command from the backend, this
 message is sent unsolicited with the changed state for the service.
 in that case, the tstamp MUST be set to the tstamp of the time the
@@ -31587,7 +32274,7 @@ and the Router is unable to re-establish a connection using the same
 credentials as the last dropped link.  IF the router is unable to
 establish a connection to any of the listed servers, the process
 terminates and this message is not sent.  Instead the router sends a
-<a href=""><em>VPN Connection Status</em></a> message detailing the failure.</p>
+<a href="#message-VPNStatus"><em>VPN Connection Status</em></a> message detailing the failure.</p>
 </div>
   
 <div>
@@ -31921,13 +32608,655 @@ verbatim in the paired reply.</p>
 
 
       
-      <a name="message-LogMsg"></a>
+      <a name="message-VPNStatus"></a>
       
 
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
     <span class="text-grey-darker font-bold mr-2">#12</span>
+    
+    
+      VPN Connection Status
+      <span class="border text-orange rounded text-xs ml-3 py-0 px-2">VPNStatus</span>
+    
+  </div>
+  <p class="text-grey-dark text-sm">Report VPN Connection Status.</p>
+  
+  
+
+<div class="mt-4">
+  
+      
+        <span class="border font-normal text-sm no-underline text-blue-light rounded lowercase mr-2 px-2 py-1" title="Messages relating to the Adapter and its global state/configuration.">Adapter Messages</span>
+      
+  
+</div>
+
+
+
+
+  <div class="mt-4 mb-4 markdown"><p>This message advises the current VPN status to the backend.</p>
+<p>During VPN connection, multiple status messages should be sent tracking
+the major phases of VPN connection initiation, and also, reconnections
+on a failed link and link disconnection.  VPN Connection/Disconnection
+is triggered by the receipt of a <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message.</p>
+</div>
+  
+<div>
+  
+
+<div class="bg-grey-lighter  rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">Payload</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">message</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 10</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 10</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Report VPN Connection Status.</p>
+</div>
+        
+        
+        
+          <div class="text-xs">Const: &quot;vpn-status&quot;</div>
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tstamp</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The request timestamp of the configuration.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">id</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 256</span>
+            
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p><strong>Optional</strong>, ID Field.  The Adapter does not do any processing or
+verification of the ID field, if it is set, it must be returned
+verbatim in the paired reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">status</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The current status of the VPN process.</p>
+<ul>
+<li><em>test-connecting</em> = Connecting to a VPN server to test. <em>server</em> is to be
+set to the IP/URL being connected to.</li>
+<li><em>testing</em> = Test connection to VPN succeeded and test started.  Test
+results will be sent in <a href="#message-SpeedTest"><em>Speedtest Result</em></a>. <em>server</em> is to be set to
+the IP/URL being tested.</li>
+<li><em>test-failed</em> = Either the connection couldn't be established to test, or
+the test has failed to execute. <em>server</em> is to be set to the IP/URL that
+failed.</li>
+<li><em>connecting</em> = Connecting the VPN tunnel for general use. <em>server</em> is to
+be set to the IP/URL being connected to.</li>
+<li><em>connected</em> = The connection to the VPN is established and routing is
+operational.  <em>server</em> is to be set to the IP/URL connected to.</li>
+<li><em>failed</em> = The vpn server failed to connect or the link broke. <em>server</em> =
+the server url or ip which failed.  After this call the router may no
+longer use the credentials presented in <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> for the
+server.</li>
+<li><em>reconnecting</em> = The VPN server was running and failed, trying to
+reconnect. This status is sent instead of the <em>connecting</em> status when a
+was established, but dropped and we are attempting to re-establish the
+connection. <em>server</em> = The server we are re-trying due to broken tunnel.</li>
+<li><em>disconnected</em> = The last possible server was tested and failed, giving up
+trying to enable VPN.  <em>server</em> should not be present, as no server is
+being accessed in this state.</li>
+</ul>
+</div>
+        
+        
+        
+        
+          <div class="text-xs">
+            Enum:
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"test-connecting"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"testing"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"test-failed"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"connecting"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"connected"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"failed"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"reconnecting"</span>
+            
+              <span class="border text-orange rounded ml-1 py-0 px-2">"disconnected"</span>
+            
+          </div>
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">server</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The server URL or IP Address</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">description</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>String description providing extra information about a state.
+It is valid for the same state to be sent multiple times with changing desc_string.</p>
+<p>For example <em>testing</em> multiple times for the same URL with a running commentary
+about the test as it executes.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+</div>
+
+  
+</div>
+
+
+      
+      <a name="message-LogMsg"></a>
+      
+
+<div class="bg-grey-lighter rounded p-4 mt-2">
+  <div class="text-sm text-grey-darker mb-2">
+    
+    <span class="text-grey-darker font-bold mr-2">#13</span>
     
     
       Log Message
@@ -32460,7 +33789,7 @@ string
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#13</span>
+    <span class="text-grey-darker font-bold mr-2">#14</span>
     
     
       Run Speed Test
@@ -32992,7 +34321,7 @@ the best url probed from speedtest server lists.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#14</span>
+    <span class="text-grey-darker font-bold mr-2">#15</span>
     
     
       Speed Test
@@ -34099,7 +35428,7 @@ string
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#15</span>
+    <span class="text-grey-darker font-bold mr-2">#16</span>
     
     
       Known Device Information
@@ -35509,7 +36838,7 @@ Default to <em>false</em> if not present.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#16</span>
+    <span class="text-grey-darker font-bold mr-2">#17</span>
     
     
       Device Information
@@ -38831,7 +40160,7 @@ the detected useragents.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#17</span>
+    <span class="text-grey-darker font-bold mr-2">#18</span>
     
     
       Change Device State
@@ -39821,7 +41150,7 @@ internal clock of the adapter.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#18</span>
+    <span class="text-grey-darker font-bold mr-2">#19</span>
     
     
       Set Device Bedtime
@@ -40731,7 +42060,7 @@ be rejected.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#19</span>
+    <span class="text-grey-darker font-bold mr-2">#20</span>
     
     
       Delay Bedtime
@@ -41368,7 +42697,7 @@ subsequent delay is NOT an additional delay, it replaces the current delay.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#20</span>
+    <span class="text-grey-darker font-bold mr-2">#21</span>
     
     
       Device State Changed
@@ -42357,7 +43686,7 @@ midnight 1970 UTC.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#21</span>
+    <span class="text-grey-darker font-bold mr-2">#22</span>
     
     
       Device Bedtime Set
@@ -43256,7 +44585,7 @@ be rejected.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#22</span>
+    <span class="text-grey-darker font-bold mr-2">#23</span>
     
     
       Bedtime Delayed
@@ -43964,7 +45293,7 @@ the adapter for the listed devices.</p>
 <div class="bg-grey-lighter rounded p-4 mt-2">
   <div class="text-sm text-grey-darker mb-2">
     
-    <span class="text-grey-darker font-bold mr-2">#23</span>
+    <span class="text-grey-darker font-bold mr-2">#24</span>
     
     
       Data Usage
