@@ -12,6 +12,7 @@ class TAGS:
     ADAPTER_DIAGS = "Adapter Diagnostics"
     ADAPTER_MSGS = "Adapter Messages"
     DEVICE_MSGS = "Device Messages"
+    STREAMING_MSGS = "Streaming Messages"
 
     descriptions = {
         MSG_FORMATS: "Generic Message Formats.",
@@ -21,6 +22,7 @@ class TAGS:
         + "state/configuration.",
         DEVICE_MSGS: "Messages relating to the devices connected to an Adapter and"
         + " their state/configuration.",
+        STREAMING_MSGS: "Messages relating to streaming relocation.",
     }
 
     @classmethod

@@ -169,20 +169,16 @@ def unsubscribed_whitelist():
 
     whitelist_desc = f"""
         A list of regex url domains which, if matched, are allowed to be
-        accessed even when the router is unsubscribed. All other domains are to
-        be forwarded to a url provided by the backend {Xref.account_portal} message
-        which redirects the user to their chargebee account portal so that they
-        can correct their outstanding account.
+        accessed even when the router is unsubscribed. All other HTTP traffic is
+        routed to a url specified in the proxy field.
 
-        The router should serve any dns request which does not match the regex,
-        an ip answered by the router itself.  Upon receipt of an http request to
-        the routers captured portal endpoint, the router will call the backend
-        and retrieve the redirection URL specific to the clients account, and
-        then send a 307 redirect reply to the device.  The domain in the
-        redirection should already be in the whitelist and so should pass
-        unimpeded to the upstream server.  This functionality is ONLY active if
+        I addition, all HTTPS traffic not to a whitelisted domain is simply blocked.
+
+        This functionality is ONLY active if
         the {Xref.adapter_services} "Subscribed" service state is False.
     """
+
+    proxy_desc = "The URL to route all non-whitelisted traffic to."
 
     cmd = "unsubscribed-whitelist"
     name = "UnsubscribedWhitelist"
@@ -190,7 +186,8 @@ def unsubscribed_whitelist():
     summary = "List of all urls that may be accessed when the router is not subscribed."
 
     extra_fields = f"""
-        {Field.array("whitelist", whitelist_desc, Field.regex_url(None, "A URL Regex to match."))}
+        {Field.array("whitelist", whitelist_desc, Field.regex_url(None, "A URL Regex to match."))},
+        {Field.url("proxy", proxy_desc )}
     """
     extra_example = r"""
         "whitelist" : [

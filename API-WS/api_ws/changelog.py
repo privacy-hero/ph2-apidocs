@@ -7,7 +7,7 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
-    ### V0.1.0wip
+    ### V0.1.0
 
     1. Added hyperlinks between messages to ease navigation.
     2. Added WPS service enable to {Xref.adapter_services} message (and reply
@@ -20,10 +20,12 @@ CHANGELOG = f"""
     6. Added {Xref.vpn_server_reconnect} message.
     7. Added {Xref.vpn_connection_status} message.
     8. Made ID field optional but present in every message by including in the
-       [*base message*](#message-BaseMsg) specification.
-    9. Created [*unsubscribed-whitelist*](#message-UnsubscribedWhitelist) msg to
-       set configuration whitelist of domains which are still accessible when
-       the router subscription is invalid.
+       {Xref.base_msg} specification.
+    9. Created {Xref.unsubscribed_whitelist} message to set configuration
+       whitelist of domains which are still accessible when the router
+       subscription is invalid.
     10. Add list of config messages sent by backend as a result of initial
-       connection.
+        connection.
+    11. Add the {Xref.wps_status} message.
+    12.
 """

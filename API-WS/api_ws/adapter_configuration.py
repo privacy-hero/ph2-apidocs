@@ -594,6 +594,62 @@ def vpn_status():
     )
 
 
+def wps_status():
+    """Advises the Backend of the current status of the WPS Function."""
+    cmd = "wps-status"
+    name = "WPSStatus"
+    title = "WPS Function Status"
+    summary = "Report WPS Function Status."
+
+    description = f"""
+        This message advises the current WPS Function status to the backend.
+        This is a summary of the result of presing the WPS button on the router.
+
+        See {Xref.adapter_service_state} for the configuration which
+        enables/disables the WPS function.
+    """
+
+    tstamp_desc = """
+        The request timestamp of the configuration.
+    """
+
+    status_desc = """
+    The current status of the WPS function.
+
+    - *activated* = The WPS function is activated.  The optional **duration**
+      field defines the number of seconds the WPS mode will be active.
+    - *blocked* = The WPS function activation button was pressed, but the
+      function is blocked by configuration. **duration** is omitted with this
+      status.
+    - *completed* = The WPS function is no longer activated. **duration** is
+      omitted with this status.
+    """
+
+    extra_fields = f"""
+        {Field.enum("status", status_desc,["activated", "blocked","completed"])},
+        {Field.int("duration", "Number of seconds WPS will be activated on the router.")}
+    """
+
+    extra_required = '"tstamp","status"'
+    extra_example = """
+        "status" : "activated",
+        "duration" : 180
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
 def adapter_configuration_channel():
     """Adapter Config messages."""
     description = """
@@ -608,6 +664,7 @@ def adapter_configuration_channel():
         configure_service_state(reply=True),
         vpn_reconnect(),
         vpn_status(),
+        wps_status(),
     ]
 
     publish_desc = "Commands to set the Adapter Configuration."

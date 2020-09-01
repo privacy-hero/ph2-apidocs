@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.0wip",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0wip\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*base message*](#message-BaseMsg) specification.\n9. Created [*unsubscribed-whitelist*](#message-UnsubscribedWhitelist) msg to\n   set configuration whitelist of domains which are still accessible when\n   the router subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n   connection."
+    "version": "0.1.0",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
   },
   "servers": {
     "development": {
@@ -577,13 +577,18 @@
                   },
                   "whitelist": {
                     "type": "array",
-                    "description": "A list of regex url domains which, if matched, are allowed to be\naccessed even when the router is unsubscribed. All other domains are to\nbe forwarded to a url provided by the backend [*Account Portal*]() message\nwhich redirects the user to their chargebee account portal so that they\ncan correct their outstanding account.\n\nThe router should serve any dns request which does not match the regex,\nan ip answered by the router itself.  Upon receipt of an http request to\nthe routers captured portal endpoint, the router will call the backend\nand retrieve the redirection URL specific to the clients account, and\nthen send a 307 redirect reply to the device.  The domain in the\nredirection should already be in the whitelist and so should pass\nunimpeded to the upstream server.  This functionality is ONLY active if\nthe [*Adapter Services*](#message-AdapterServices) \"Subscribed\" service state is False.",
+                    "description": "A list of regex url domains which, if matched, are allowed to be\naccessed even when the router is unsubscribed. All other HTTP traffic is\nrouted to a url specified in the proxy field.\n\nI addition, all HTTPS traffic not to a whitelisted domain is simply blocked.\n\nThis functionality is ONLY active if\nthe [*Adapter Services*](#message-AdapterServices) \"Subscribed\" service state is False.",
                     "items": {
                       "type": "string",
                       "format": "regex",
                       "description": "A URL Regex to match."
                     },
                     "minItems": 1
+                  },
+                  "proxy": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "The URL to route all non-whitelisted traffic to."
                   }
                 },
                 "example": {
@@ -664,7 +669,7 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*]() message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
+                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*](#message-WPSStatus) message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
                           "enum": [
                             "AdBlocking",
                             "StreamRelocation",
@@ -823,6 +828,68 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "WPSStatus",
+              "title": "WPS Function Status",
+              "summary": "Report WPS Function Status.",
+              "description": "This message advises the current WPS Function status to the backend.\nThis is a summary of the result of presing the WPS button on the router.\n\nSee [*Adapter Service State*](#message-AdapterServicesState) for the configuration which\nenables/disables the WPS function.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Report WPS Function Status.",
+                    "const": "wps-status",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The current status of the WPS function.\n\n- *activated* = The WPS function is activated.  The optional **duration**\n  field defines the number of seconds the WPS mode will be active.\n- *blocked* = The WPS function activation button was pressed, but the\n  function is blocked by configuration. **duration** is omitted with this\n  status.\n- *completed* = The WPS function is no longer activated. **duration** is\n  omitted with this status.",
+                    "enum": [
+                      "activated",
+                      "blocked",
+                      "completed"
+                    ]
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "format": "Number of seconds WPS will be activated on the router.",
+                    "description": "A INT"
+                  }
+                },
+                "example": {
+                  "message": "wps-status",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "status": "activated",
+                  "duration": 180
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -883,7 +950,7 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*]() message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
+                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*](#message-WPSStatus) message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
                           "enum": [
                             "AdBlocking",
                             "StreamRelocation",
@@ -2633,6 +2700,169 @@
           }
         ]
       }
+    },
+    "STREAMING": {
+      "description": "These are messages related to the configuration of the streaming\nrelocation service.\n\nThese messages are sent on initial connection and also periodically as\nrequired to reflect user changes in the configuration.",
+      "publish": {
+        "summary": "Streaming Configuration",
+        "description": "Commands to set the Streaming Configuration.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "ConfigureStreaming",
+              "title": "Configure Streaming",
+              "summary": "Configure Router Streaming proxying.",
+              "description": "This message causes the adapter to route all traffic in the specified\nwildcarded domains to the specified proxies.  And streaming service that\nis not configured for proxying is omitted from the message.  If there\nare no streaming services configured, the message will be sent with both\nthe domain and ip lists empty.\n\nIt will be sent initially following the router sending the\n[*Link Established*](#message-LinkEstablished) message to the backend.  And then periodically\nto track changes to streaming configuration as set by the client.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Configure Router Streaming proxying.",
+                    "const": "cfg-streaming",
+                    "minLength": 13,
+                    "maxLength": 13
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The request timestamp of the configuration, this tstamp must be returned\nin the reply with the results as the message tstamp."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "domains": {
+                    "type": "array",
+                    "description": "Proxy domain url configuration.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "name",
+                        "match",
+                        "servers"
+                      ],
+                      "description": "The configuration for an individual proxy domain.",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "description": "Domain Descriptive Name"
+                        },
+                        "match": {
+                          "type": "object",
+                          "required": [
+                            "positive",
+                            "negative"
+                          ],
+                          "description": "Regex domains to match against.",
+                          "properties": {
+                            "positive": {
+                              "type": "array",
+                              "description": "positive regex matches",
+                              "items": {
+                                "type": "string",
+                                "format": "regex",
+                                "description": "Individual positive regex url match"
+                              },
+                              "minItems": 1
+                            },
+                            "negative": {
+                              "type": "array",
+                              "description": "negative regex matches",
+                              "items": {
+                                "type": "string",
+                                "format": "regex",
+                                "description": "Individual negative regex url match"
+                              },
+                              "minItems": 1
+                            }
+                          },
+                          "additionalProperties": false
+                        },
+                        "servers": {
+                          "type": "array",
+                          "description": "List of Proxy Server URLs",
+                          "items": {
+                            "type": "string",
+                            "format": "url",
+                            "description": "Individual Proxy URL"
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 0
+                  },
+                  "ip": {
+                    "type": "array",
+                    "description": "proxy ip address configuration.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "mask",
+                        "addrs"
+                      ],
+                      "description": "The configuration for an individual proxy IP Address.",
+                      "properties": {
+                        "mask": {
+                          "type": "string",
+                          "format": "IP Address",
+                          "description": "Net mask of the IP Address.",
+                          "minLength": 2,
+                          "maxLength": 39
+                        },
+                        "addrs": {
+                          "type": "array",
+                          "description": "List of Proxy Server IPs",
+                          "items": {
+                            "type": "string",
+                            "format": "IP Address",
+                            "description": "Individual Proxy IP",
+                            "minLength": 2,
+                            "maxLength": 39
+                          },
+                          "minItems": 1
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 0
+                  }
+                },
+                "example": {
+                  "message": "cfg-streaming",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "domains": [],
+                  "ip": []
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "domains",
+                  "ip"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Streaming Messages",
+            "description": "Messages relating to streaming relocation."
+          }
+        ]
+      }
     }
   },
   "tags": [
@@ -2655,6 +2885,10 @@
     {
       "name": "Device Messages",
       "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+    },
+    {
+      "name": "Streaming Messages",
+      "description": "Messages relating to streaming relocation."
     }
   ]
 }
