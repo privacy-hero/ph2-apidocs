@@ -9,7 +9,7 @@ from .util import mls
 
 def base_message():
     """Return Base Message Structure."""
-    return f"""
+    return """
         "name" : "BaseRouterMsg",
         "title" : "Base Router Message",
         "summary" : "Base Router Message Summary",
