@@ -7,6 +7,13 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.1
+
+    1. Added the Adapter Reset {Xref.reset_router} message.
+    2. Added the Adapter Resetting {Xref.router_resetting} reply.
+
+
+
     ### V0.1.0
 
     1. Added hyperlinks between messages to ease navigation.
