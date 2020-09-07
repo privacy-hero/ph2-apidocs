@@ -33,3 +33,5 @@ class Xref:  # pylint: disable=too-few-public-methods
     vpn_connection_status = "[*VPN Connection Status*](#message-VPNStatus)"
     wps_status = "[*WPS Status*](#message-WPSStatus)"
     streaming_cfg = "[*Streaming Cfg*](#message-ConfigureStreaming)"
+    reset_router = "[*Reset Router*](#message-Reset)"
+    router_resetting = "[*Router Reseting*](#message-Resetting)"
