@@ -216,6 +216,102 @@ def unsubscribed_whitelist():
     )
 
 
+def adapter_reset():
+    """Trigger a hardware reset if the router."""
+    description = f"""
+        This message causes, after an optional delay, the router to be reset.
+        {Xref.router_resetting} is sent in reply to this message before the reset
+        occurs.
+    """
+
+    tstamp_desc = """
+        The tstamp in this message is set by the Backend and must be returned
+        verbatim in the reply.
+    """
+
+    in_desc = """
+        The number of seconds to delay before resetting.  IF omitted, reset as
+        fast as possible.
+    """
+
+    cmd = "reset"
+    name = "Reset"
+    title = "Router Reset"
+    summary = "Cause Router to do a hardware reset."
+
+    extra_fields = f"""
+        {Field.timeout("in", in_desc)}
+    """
+    extra_example = """
+        "in": 10
+    """
+    extra_required = """
+        "tstamp"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+        id_field=True,
+        direction=MsgDirection.TX_TO_ROUTER,
+    )
+
+
+def adapter_resetting():
+    """Advise that the adapter is about to reset."""
+    description = f"""
+        This message is sent as a reply to the {Xref.reset_router} message.
+    """
+
+    tstamp_desc = """
+        The tstamp in this message is the same tstamp sent in the *Link Established*
+        message from the adapter which triggered it to be sent.
+    """
+
+    in_desc = """
+        The number of seconds before the reset will occur.  IF omitted, reset is
+        imminent.
+    """
+
+    cmd = "resetting"
+    name = "Resetting"
+    title = "Router Resetting"
+    summary = "Router is going to do a hardware reset."
+
+    extra_fields = f"""
+        {Field.timeout("in", in_desc)}
+    """
+    extra_example = """
+        "in": 10
+    """
+    extra_required = """
+        "tstamp"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+        id_field=True,
+        direction=MsgDirection.RX_FROM_ROUTER,
+    )
+
+
 def connection_channel():
     """Define Connection Management messages."""
     description = """
@@ -243,10 +339,10 @@ def connection_channel():
     """
 
     subscribe_desc = "Link Management Messages from the Adapter."
-    subscribe_msgs = [link_established()]
+    subscribe_msgs = [link_established(), adapter_resetting()]
 
     publish_desc = "Initial Configuration."
-    publish_msgs = [initial_config(), unsubscribed_whitelist()]
+    publish_msgs = [initial_config(), adapter_reset(), unsubscribed_whitelist()]
 
     return channel(
         description,
