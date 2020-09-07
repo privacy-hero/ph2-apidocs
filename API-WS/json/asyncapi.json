@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.0",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
+    "version": "0.1.1",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
   },
   "servers": {
     "development": {
@@ -468,6 +468,57 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "Resetting",
+              "title": "Router Resetting",
+              "summary": "Router is going to do a hardware reset.",
+              "description": "This message is sent as a reply to the [*Reset Router*](#message-Reset) message.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Router is going to do a hardware reset.",
+                    "const": "resetting",
+                    "minLength": 9,
+                    "maxLength": 9
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  This field is only sent if this message\nis a reply to a message received from the backend, AND that\nmessage included the ID Field.  In that case, it is included unchanged.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "in": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The number of seconds before the reset will occur.  IF omitted, reset is\nimminent."
+                  }
+                },
+                "example": {
+                  "message": "resetting",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "in": 10
+                },
+                "required": [
+                  "message",
+                  "tstamp"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -545,6 +596,57 @@
                   "version",
                   "firmware",
                   "loglevel"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "Reset",
+              "title": "Router Reset",
+              "summary": "Cause Router to do a hardware reset.",
+              "description": "This message causes, after an optional delay, the router to be reset.\n[*Router Reseting*](#message-Resetting) is sent in reply to this message before the reset\noccurs.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Cause Router to do a hardware reset.",
+                    "const": "reset",
+                    "minLength": 5,
+                    "maxLength": 5
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The tstamp in this message is set by the Backend and must be returned\nverbatim in the reply."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "in": {
+                    "type": "integer",
+                    "format": "int64",
+                    "description": "The number of seconds to delay before resetting.  IF omitted, reset as\nfast as possible."
+                  }
+                },
+                "example": {
+                  "message": "reset",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "in": 10
+                },
+                "required": [
+                  "message",
+                  "tstamp"
                 ],
                 "additionalProperties": false
               }
