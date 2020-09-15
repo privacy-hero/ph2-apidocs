@@ -224,9 +224,9 @@ class Field:  # pylint: disable=too-many-public-methods
     # -------------------------------------------------------------------------
 
     @staticmethod
-    def port(name="port", desc="A network port", minvalue=1, maxvalue=65535):
-        """Return the definition of the standard int64 field."""
-        return Field.int(name, "int", desc, minvalue, maxvalue)
+    def port(name="port", desc="A network port"):
+        """Return the definition of the standard string field."""
+        return Field.string(name, desc, minlength=1, maxlength=5)
 
     # -------------------------------------------------------------------------
 

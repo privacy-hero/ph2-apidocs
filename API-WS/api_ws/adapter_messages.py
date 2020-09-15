@@ -9,6 +9,8 @@ from .adapter_diagnostics import log_level_field
 from .tags import TAGS
 from .xref import Xref
 
+# ------------------------------------------------------------------------------
+
 
 def link_established():
     """Adapter advice that the websocket link is established."""
@@ -86,6 +88,9 @@ def link_established():
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 def initial_config():
     """Return Initial configuration of the adapter."""
     description = f"""
@@ -154,6 +159,9 @@ def initial_config():
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 def unsubscribed_whitelist():
     """Return the list of URLs which a user may access when unsubscribed."""
     description = f"""
@@ -216,6 +224,9 @@ def unsubscribed_whitelist():
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 def adapter_reset():
     """Trigger a hardware reset if the router."""
     description = f"""
@@ -265,6 +276,9 @@ def adapter_reset():
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 def adapter_resetting():
     """Advise that the adapter is about to reset."""
     description = f"""
@@ -310,6 +324,9 @@ def adapter_resetting():
         id_field=True,
         direction=MsgDirection.RX_FROM_ROUTER,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def connection_channel():

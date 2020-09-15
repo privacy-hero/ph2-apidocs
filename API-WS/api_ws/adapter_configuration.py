@@ -8,144 +8,7 @@ from .schemas import base_message, channel, Field
 from .tags import TAGS
 from .xref import Xref
 
-
-def log_level_field(none_ok=True, name="level", desc="The level of the log messages."):
-    """Return log level field."""
-    levels = []
-    if none_ok:
-        levels.append("NONE")
-    levels += ["ERROR", "WARNING", "DEBUG"]
-
-    return Field.enum(name, desc, levels)
-
-
-def adapter_log():
-    """Return Adapter Message Log Message."""
-    description = """
-        This message causes the backend to log error and general diagnostic messages
-        from the adapter to the system logs.  It can be sent anytime the adapter
-        wishes to log a message.
-        """
-
-    tstamp_desc = """
-        The time the log message was generated inside the adapter. (According to the
-        adapters internal clock.)
-    """
-
-    cmd = "log"
-    name = "LogMsg"
-    title = "Log Message"
-    summary = "Log Message to Backend"
-
-    extra_fields = f"""
-        {log_level_field(none_ok=False)},
-        {Field.string("log","The message to be logged by the Adapter.", minlength=1)}
-    """
-    extra_example = '"level" : "ERROR", "log" : "An Error ocurred inside the Adapter"'
-    extra_required = '"tstamp", "level", "log"'
-
-    return base_message(
-        cmd,
-        name,
-        title,
-        summary,
-        description,
-        TAGS.ADAPTER_DIAGS,
-        tstamp_desc,
-        extra_fields,
-        extra_example,
-        extra_required,
-    )
-
-
-def adapter_speedtest_results():
-    """Return the last speedtest result to the Backend."""
-    description = """
-        This message causes the latest speedtest result to be logged for the
-        Adapter in the backend.
-        """
-
-    tstamp_desc = """
-        IF the speedtest was performed as a result of a automatic or scheduled test
-        the timestamp is the time the speed test started on the adapter.
-
-        IF the speedtest was conducted as a result of a command from the backend,
-        the tstamp is the tstamp from the backend request to commence the speedtest.
-    """
-
-    distance_desc = """
-        The distance is the approximate distance from the adapter to the speedtest
-        server.  The distance can be either a value that is estimated to be LESS THAN
-        the distance stated, or CLOSE TO the distance stated.
-
-        * -VE = The estimate is a LESS THAN this estimate.
-        * +VE = The estimate is a CLOSE TO this estimate.
-
-        The distance is measured in whole MILES.
-    """
-
-    vpn_desc = f"""
-        IF and ONLY IF this speedtest is through the VPN Tunnel, the URL/IP address of the
-        VPN Server tested will be returned in the vpn field.  The backend will
-        assume the speedtest result is for a WAN if this field is missing,
-        therefore it is optional and must only be included in VPN Speedtest
-        results. If the tunnel tested was a wireguard tunnel, this is the value
-        from the *"server"* field in the servers vpn configuration.  And for
-        strongSwan it is the *"right"* field in the servers vpn configuration.
-        See {Xref.vpn_server_connect}.
-    """
-
-    cmd = "speedtest"
-    name = "SpeedTest"
-    title = "Speed Test"
-    summary = "Report of Speed Test Results"
-
-    extra_fields = f"""
-        {Field.url("url",
-            "The URL of the website the speedtest was conducted against.")},
-        {Field.string("location",
-            "The String description of the speedtest server location")},
-        {Field.string("provider",
-            "The name of the ISP/Network operator managing the speedtest server.")},
-        {Field.int64("distance", distance_desc)},
-        {Field.int("rx", "Result in bits per second of the receive speed test.")},
-        {Field.int("tx", "Result in bits per second of the transmit speed test.")},
-        {Field.ipv4("ipv4", "The Connections Internet IPv4 Address")},
-        {Field.ipv6("ipv6", "The Connections Internet IPv6 Address")},
-        {Field.url("vpn", vpn_desc)}
-    """
-    extra_example = """
-        "url": "http://www.3bb.com/speedtest",
-        "location": "Phuket, Thailand",
-        "provider": "3BB",
-        "distance": -50,
-        "rx": 185608437,
-        "tx": 282140344,
-        "ipv4": "183.89.198.67"
-    """
-    extra_required = """
-        "tstamp",
-        "url",
-        "location",
-        "provider",
-        "distance",
-        "rx",
-        "tx",
-        "ipv4"
-    """
-
-    return base_message(
-        cmd,
-        name,
-        title,
-        summary,
-        description,
-        TAGS.ADAPTER_DIAGS,
-        tstamp_desc,
-        extra_fields,
-        extra_example,
-        extra_required,
-    )
+# ------------------------------------------------------------------------------
 
 
 def adapter_service_state():
@@ -194,6 +57,9 @@ def adapter_service_state():
     return Field.object(
         None, service_state_desc, ["service", "state"], service_state_fields
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def configure_service_state(reply=False):
@@ -313,6 +179,9 @@ def configure_service_state(reply=False):
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 def vpn_server_strongswan_config():
     """Strongswan VPN Server Configuration."""
     cfg_desc = """
@@ -330,15 +199,16 @@ def vpn_server_strongswan_config():
         {Field.string("leftsourceip","Clients Source IP")},
         {Field.string("leftauth","The authentication protocol")},
         {Field.string("leftid","Clients ID")},
-        {Field.string("secret","Authentication Credential")},
-        {Field.int64("speed", "Current rated bandwidth for the tunnel.")},
-        {Field.int64("latency", "Current rated latency for the tunnel.")}
+        {Field.string("secret","Authentication Credential")}
     }}
     """
 
     cfg_required = ["type", "right", "rightid", "leftid", "secret"]
 
     return f"{{ {Field.object(None, cfg_desc, cfg_required, cfg_fields)} }}"
+
+
+# ------------------------------------------------------------------------------
 
 
 def vpn_server_wireguard_config():
@@ -355,15 +225,61 @@ def vpn_server_wireguard_config():
         {Field.ipv4("ipv4","Clients IPV4 Address through the tunnel.")},
         {Field.ipv6("ipv6","Clients IPV6 Address through the tunnel.")},
         {Field.string("publickey","Public authentication key.", minlength=1)},
-        {Field.string("privatekey","Private authentication key.", minlength=1)},
-        {Field.int64("speed", "Current rated bandwidth for the tunnel.")},
-        {Field.int64("latency", "Current rated latency for the tunnel.")}
+        {Field.string("privatekey","Private authentication key.", minlength=1)}
     }}
     """
 
     cfg_required = ["type", "server", "port", "ipv4", "ipv6", "publickey", "privatekey"]
 
     return f"{{ {Field.object(None, cfg_desc, cfg_required, cfg_fields)} }}"
+
+
+# ------------------------------------------------------------------------------
+
+
+def vpn_server_config():
+    """Wireguard VPN Server Configuration."""
+    cfg_desc = """
+        The configuration for an individual VPN server.
+
+        The vpn_id is to be used to report about status and speedtest results
+        for the configured vpn tunnel.
+
+        **speed** is the best speedtest TX result from the last *n* results.
+        **latency** is the average latency to the speedtest server from the last
+        *n* results.
+
+        IF **speed and latency** will either both be present, or neither
+        present.  If neither is present, the VPN tunnel is to be started and
+        tested.  The TX speed test result becomes the servers **speed** and the
+        average of at least 10 ping latencies becomes the **latency** value.
+    """
+
+    vpn_server_cfg = f"""
+    "config" : {{
+        {Field.one_of(
+            [vpn_server_wireguard_config(),
+             vpn_server_strongswan_config()])}
+    }}
+    """
+
+    cfg_fields = f"""
+    {{
+        {Field.string("vpn_id", "Unique VPN ID")},
+        {Field.int64("speed", "Current rated bandwidth for the tunnel.")},
+        {Field.int64("latency", "Current rated latency for the tunnel.")},
+        {vpn_server_cfg}
+    }}
+    """
+    #        {Field.object("config", "Server type specific configuration.", None,
+    #                  vpn_server_cfg)}
+
+    cfg_required = ["vpn_id"]
+
+    return Field.object(None, cfg_desc, cfg_required, cfg_fields)
+
+
+# ------------------------------------------------------------------------------
 
 
 def vpn_connect():
@@ -440,11 +356,37 @@ def vpn_connect():
 
     extra_example = """
         "servers": [
+            {
+                "vpn_id" : "wireguard-1",
+                "speed" : 12345678,
+                "latency" : 23,
+                "config" : {
+                    "type" : "wireguard",
+                    "server" : "123.231.113.201",
+                    "port" : "1234",
+                    "ipv4" : "111.222.33.44",
+                    "ipv6" : "87aa:5abf:2e90:574d:9dcc:cd2:af7b:fdfa",
+                    "publickey" : "kjldfbghiuph",
+                    "privatekey" : "skjdfbgkjqerbgkj"
+                }
+            },
+            {
+                "vpn_id" : "strongswan-1",
+                "speed" : 12330000,
+                "latency" : 27,
+                "config" : {
+                    "type" : "strongswan",
+                    "right" : "123.231.113.201",
+                    "rightid" : "serverid",
+                    "leftid" : "client1",
+                    "secret" : "kjldfbghiuph"
+                }
+            }
         ]
     """
 
     extra_fields = f"""
-        {Field.array("servers", server_desc, Field.one_of([vpn_server_wireguard_config(), vpn_server_strongswan_config()]) )}
+        {Field.array("servers", server_desc, vpn_server_config() )}
     """
 
     extra_required = """
@@ -463,6 +405,9 @@ def vpn_connect():
         extra_example,
         extra_required,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def vpn_reconnect():
@@ -509,6 +454,9 @@ def vpn_reconnect():
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 def vpn_status():
     """Advises the Backend of the current status of the VPN connection."""
     cmd = "vpn-status"
@@ -532,26 +480,21 @@ def vpn_status():
     status_desc = f"""
     The current status of the VPN process.
 
-    - *test-connecting* = Connecting to a VPN server to test. *server* is to be
-      set to the IP/URL being connected to.
+    - *test-connecting* = Connecting to a VPN server to test.
     - *testing* = Test connection to VPN succeeded and test started.  Test
-      results will be sent in {Xref.speedtest_result}. *server* is to be set to
-      the IP/URL being tested.
+      results will be sent in {Xref.speedtest_result}.
     - *test-failed* = Either the connection couldn't be established to test, or
-      the test has failed to execute. *server* is to be set to the IP/URL that
-      failed.
-    - *connecting* = Connecting the VPN tunnel for general use. *server* is to
-      be set to the IP/URL being connected to.
+      the test has failed to execute.
+    - *connecting* = Connecting the VPN tunnel for general use.
     - *connected* = The connection to the VPN is established and routing is
-      operational.  *server* is to be set to the IP/URL connected to.
-    - *failed* = The vpn server failed to connect or the link broke. *server* =
-      the server url or ip which failed.  After this call the router may no
-      longer use the credentials presented in {Xref.vpn_server_connect} for the
-      server.
+      operational.
+    - *failed* = The vpn server failed to connect or the link broke.   After
+      this call the router may no longer use the credentials presented in
+      {Xref.vpn_server_connect} for the server.
     - *reconnecting* = The VPN server was running and failed, trying to
       reconnect. This status is sent instead of the *connecting* status when a
-      was established, but dropped and we are attempting to re-establish the
-      connection. *server* = The server we are re-trying due to broken tunnel.
+      vpn link was established, but dropped and we are attempting to
+      re-establish the connection.
     - *disconnected* = The last possible server was tested and failed, giving up
       trying to enable VPN.  *server* should not be present, as no server is
       being accessed in this state.
@@ -569,14 +512,14 @@ def vpn_status():
         {Field.enum("status", status_desc,
         ["test-connecting", "testing","test-failed", "connecting", "connected",
         "failed", "reconnecting", "disconnected"])},
-        {Field.string("server", "The server URL or IP Address")},
+        {Field.string("server", "The server ID, sent for every status except *disconnected*")},
         {Field.string("description", desc_string)}
     """
 
     extra_required = '"tstamp","status"'
     extra_example = """
         "status" : "testing",
-        "server" : "66-165-251-250.vpn.privacyhero.com",
+        "server" : "wireguard-1",
         "description" : "TX Speedtest started"
     """
 
@@ -592,6 +535,9 @@ def vpn_status():
         extra_example,
         extra_required,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def wps_status():
@@ -648,6 +594,9 @@ def wps_status():
         extra_example,
         extra_required,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def adapter_configuration_channel():

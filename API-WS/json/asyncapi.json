@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.1",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
+    "version": "0.1.2",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
   },
   "servers": {
     "development": {
@@ -894,7 +894,7 @@
                   },
                   "status": {
                     "type": "string",
-                    "description": "The current status of the VPN process.\n\n- *test-connecting* = Connecting to a VPN server to test. *server* is to be\n  set to the IP/URL being connected to.\n- *testing* = Test connection to VPN succeeded and test started.  Test\n  results will be sent in [*Speedtest Result*](#message-SpeedTest). *server* is to be set to\n  the IP/URL being tested.\n- *test-failed* = Either the connection couldn't be established to test, or\n  the test has failed to execute. *server* is to be set to the IP/URL that\n  failed.\n- *connecting* = Connecting the VPN tunnel for general use. *server* is to\n  be set to the IP/URL being connected to.\n- *connected* = The connection to the VPN is established and routing is\n  operational.  *server* is to be set to the IP/URL connected to.\n- *failed* = The vpn server failed to connect or the link broke. *server* =\n  the server url or ip which failed.  After this call the router may no\n  longer use the credentials presented in [*VPN Server Connect*](#message-VPNConnect) for the\n  server.\n- *reconnecting* = The VPN server was running and failed, trying to\n  reconnect. This status is sent instead of the *connecting* status when a\n  was established, but dropped and we are attempting to re-establish the\n  connection. *server* = The server we are re-trying due to broken tunnel.\n- *disconnected* = The last possible server was tested and failed, giving up\n  trying to enable VPN.  *server* should not be present, as no server is\n  being accessed in this state.",
+                    "description": "The current status of the VPN process.\n\n- *test-connecting* = Connecting to a VPN server to test.\n- *testing* = Test connection to VPN succeeded and test started.  Test\n  results will be sent in [*Speedtest Result*](#message-SpeedTest).\n- *test-failed* = Either the connection couldn't be established to test, or\n  the test has failed to execute.\n- *connecting* = Connecting the VPN tunnel for general use.\n- *connected* = The connection to the VPN is established and routing is\n  operational.\n- *failed* = The vpn server failed to connect or the link broke.   After\n  this call the router may no longer use the credentials presented in\n  [*VPN Server Connect*](#message-VPNConnect) for the server.\n- *reconnecting* = The VPN server was running and failed, trying to\n  reconnect. This status is sent instead of the *connecting* status when a\n  vpn link was established, but dropped and we are attempting to\n  re-establish the connection.\n- *disconnected* = The last possible server was tested and failed, giving up\n  trying to enable VPN.  *server* should not be present, as no server is\n  being accessed in this state.",
                     "enum": [
                       "test-connecting",
                       "testing",
@@ -908,7 +908,7 @@
                   },
                   "server": {
                     "type": "string",
-                    "description": "The server URL or IP Address"
+                    "description": "The server ID, sent for every status except *disconnected*"
                   },
                   "description": {
                     "type": "string",
@@ -920,7 +920,7 @@
                   "tstamp": 1592217870123,
                   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
                   "status": "testing",
-                  "server": "66-165-251-250.vpn.privacyhero.com",
+                  "server": "wireguard-1",
                   "description": "TX Speedtest started"
                 },
                 "required": [
@@ -1140,143 +1140,146 @@
                     "type": "array",
                     "description": "The message will contain a list of viable pre-selected servers.\n\nThe highest priority entires (and therefore the first listed) will be\nthose servers which require testing, in order of test priority.  There may be\nno servers of this type listed if there are no servers that REQUIRE\ntesting.\n\nFollowing this will be a list of servers in priority order.  When\nconnecting to the VPN, the router is to use this list and try to connect\nin the order presented.  IF the router is unable to establish a\nconnection after trying all servers, it gives up attempting to connect.",
                     "items": {
-                      "oneOf": [
-                        {
-                          "type": "object",
-                          "required": [
-                            "type",
-                            "server",
-                            "port",
-                            "ipv4",
-                            "ipv6",
-                            "publickey",
-                            "privatekey"
-                          ],
-                          "description": "The configuration for an individual wireguard server.",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "description": "VPN Server Type",
-                              "const": "wireguard",
-                              "minLength": 9,
-                              "maxLength": 9
-                            },
-                            "server": {
-                              "type": "string",
-                              "format": "IP Address",
-                              "description": "Servers IP Address, may be IPv4 or IPv6",
-                              "minLength": 2,
-                              "maxLength": 39
-                            },
-                            "port": {
-                              "type": "integer",
-                              "format": "int",
-                              "description": "Servers Port",
-                              "minValue": 1,
-                              "maxValue": 65535
-                            },
-                            "ipv4": {
-                              "type": "string",
-                              "format": "IPv4 Address",
-                              "description": "Clients IPV4 Address through the tunnel.",
-                              "minLength": 7,
-                              "maxLength": 15
-                            },
-                            "ipv6": {
-                              "type": "string",
-                              "format": "IPv6 Address",
-                              "description": "Clients IPV6 Address through the tunnel.",
-                              "minLength": 2,
-                              "maxLength": 39
-                            },
-                            "publickey": {
-                              "type": "string",
-                              "description": "Public authentication key.",
-                              "minLength": 1
-                            },
-                            "privatekey": {
-                              "type": "string",
-                              "description": "Private authentication key.",
-                              "minLength": 1
-                            },
-                            "speed": {
-                              "type": "integer",
-                              "format": "int64",
-                              "description": "Current rated bandwidth for the tunnel."
-                            },
-                            "latency": {
-                              "type": "integer",
-                              "format": "int64",
-                              "description": "Current rated latency for the tunnel."
-                            }
-                          },
-                          "additionalProperties": false
+                      "type": "object",
+                      "required": [
+                        "vpn_id"
+                      ],
+                      "description": "The configuration for an individual VPN server.\n\nThe vpn_id is to be used to report about status and speedtest results\nfor the configured vpn tunnel.\n\n**speed** is the best speedtest TX result from the last *n* results.\n**latency** is the average latency to the speedtest server from the last\n*n* results.\n\nIF **speed and latency** will either both be present, or neither\npresent.  If neither is present, the VPN tunnel is to be started and\ntested.  The TX speed test result becomes the servers **speed** and the\naverage of at least 10 ping latencies becomes the **latency** value.",
+                      "properties": {
+                        "vpn_id": {
+                          "type": "string",
+                          "description": "Unique VPN ID"
                         },
-                        {
-                          "type": "object",
-                          "required": [
-                            "type",
-                            "right",
-                            "rightid",
-                            "leftid",
-                            "secret"
-                          ],
-                          "description": "The configuration for an individual strongswan server.",
-                          "properties": {
-                            "type": {
-                              "type": "string",
-                              "description": "VPN Server Type",
-                              "const": "strongswan",
-                              "minLength": 10,
-                              "maxLength": 10
+                        "speed": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "Current rated bandwidth for the tunnel."
+                        },
+                        "latency": {
+                          "type": "integer",
+                          "format": "int64",
+                          "description": "Current rated latency for the tunnel."
+                        },
+                        "config": {
+                          "oneOf": [
+                            {
+                              "type": "object",
+                              "required": [
+                                "type",
+                                "server",
+                                "port",
+                                "ipv4",
+                                "ipv6",
+                                "publickey",
+                                "privatekey"
+                              ],
+                              "description": "The configuration for an individual wireguard server.",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "VPN Server Type",
+                                  "const": "wireguard",
+                                  "minLength": 9,
+                                  "maxLength": 9
+                                },
+                                "server": {
+                                  "type": "string",
+                                  "format": "IP Address",
+                                  "description": "Servers IP Address, may be IPv4 or IPv6",
+                                  "minLength": 2,
+                                  "maxLength": 39
+                                },
+                                "port": {
+                                  "type": "string",
+                                  "description": "Servers Port",
+                                  "minLength": 1,
+                                  "maxLength": 5
+                                },
+                                "ipv4": {
+                                  "type": "string",
+                                  "format": "IPv4 Address",
+                                  "description": "Clients IPV4 Address through the tunnel.",
+                                  "minLength": 7,
+                                  "maxLength": 15
+                                },
+                                "ipv6": {
+                                  "type": "string",
+                                  "format": "IPv6 Address",
+                                  "description": "Clients IPV6 Address through the tunnel.",
+                                  "minLength": 2,
+                                  "maxLength": 39
+                                },
+                                "publickey": {
+                                  "type": "string",
+                                  "description": "Public authentication key.",
+                                  "minLength": 1
+                                },
+                                "privatekey": {
+                                  "type": "string",
+                                  "description": "Private authentication key.",
+                                  "minLength": 1
+                                }
+                              },
+                              "additionalProperties": false
                             },
-                            "right": {
-                              "type": "string",
-                              "format": "url",
-                              "description": "Servers IP Address, may be an IPv4 or IPv6 address or a Server URL"
-                            },
-                            "rightid": {
-                              "type": "string",
-                              "description": "Servers ID"
-                            },
-                            "rightsubnet": {
-                              "type": "string",
-                              "description": "The servers subnet"
-                            },
-                            "rightauth": {
-                              "type": "string",
-                              "description": "The servers authentication protocol"
-                            },
-                            "leftsourceip": {
-                              "type": "string",
-                              "description": "Clients Source IP"
-                            },
-                            "leftauth": {
-                              "type": "string",
-                              "description": "The authentication protocol"
-                            },
-                            "leftid": {
-                              "type": "string",
-                              "description": "Clients ID"
-                            },
-                            "secret": {
-                              "type": "string",
-                              "description": "Authentication Credential"
-                            },
-                            "speed": {
-                              "type": "integer",
-                              "format": "int64",
-                              "description": "Current rated bandwidth for the tunnel."
-                            },
-                            "latency": {
-                              "type": "integer",
-                              "format": "int64",
-                              "description": "Current rated latency for the tunnel."
+                            {
+                              "type": "object",
+                              "required": [
+                                "type",
+                                "right",
+                                "rightid",
+                                "leftid",
+                                "secret"
+                              ],
+                              "description": "The configuration for an individual strongswan server.",
+                              "properties": {
+                                "type": {
+                                  "type": "string",
+                                  "description": "VPN Server Type",
+                                  "const": "strongswan",
+                                  "minLength": 10,
+                                  "maxLength": 10
+                                },
+                                "right": {
+                                  "type": "string",
+                                  "format": "url",
+                                  "description": "Servers IP Address, may be an IPv4 or IPv6 address or a Server URL"
+                                },
+                                "rightid": {
+                                  "type": "string",
+                                  "description": "Servers ID"
+                                },
+                                "rightsubnet": {
+                                  "type": "string",
+                                  "description": "The servers subnet"
+                                },
+                                "rightauth": {
+                                  "type": "string",
+                                  "description": "The servers authentication protocol"
+                                },
+                                "leftsourceip": {
+                                  "type": "string",
+                                  "description": "Clients Source IP"
+                                },
+                                "leftauth": {
+                                  "type": "string",
+                                  "description": "The authentication protocol"
+                                },
+                                "leftid": {
+                                  "type": "string",
+                                  "description": "Clients ID"
+                                },
+                                "secret": {
+                                  "type": "string",
+                                  "description": "Authentication Credential"
+                                }
+                              },
+                              "additionalProperties": false
                             }
-                          },
-                          "additionalProperties": false
+                          ]
                         }
-                      ]
+                      },
+                      "additionalProperties": false
                     },
                     "minItems": 1
                   }
@@ -1285,7 +1288,34 @@
                   "message": "vpn-connect",
                   "tstamp": 1592217870123,
                   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-                  "servers": []
+                  "servers": [
+                    {
+                      "vpn_id": "wireguard-1",
+                      "speed": 12345678,
+                      "latency": 23,
+                      "config": {
+                        "type": "wireguard",
+                        "server": "123.231.113.201",
+                        "port": "1234",
+                        "ipv4": "111.222.33.44",
+                        "ipv6": "87aa:5abf:2e90:574d:9dcc:cd2:af7b:fdfa",
+                        "publickey": "kjldfbghiuph",
+                        "privatekey": "skjdfbgkjqerbgkj"
+                      }
+                    },
+                    {
+                      "vpn_id": "strongswan-1",
+                      "speed": 12330000,
+                      "latency": 27,
+                      "config": {
+                        "type": "strongswan",
+                        "right": "123.231.113.201",
+                        "rightid": "serverid",
+                        "leftid": "client1",
+                        "secret": "kjldfbghiuph"
+                      }
+                    }
+                  ]
                 },
                 "required": [
                   "message",
@@ -1424,41 +1454,12 @@
                     "minLength": 1,
                     "maxLength": 256
                   },
-                  "url": {
+                  "address": {
                     "type": "string",
-                    "format": "url",
-                    "description": "The URL of the website the speedtest was conducted against."
-                  },
-                  "location": {
-                    "type": "string",
-                    "description": "The String description of the speedtest server location"
-                  },
-                  "provider": {
-                    "type": "string",
-                    "description": "The name of the ISP/Network operator managing the speedtest server."
-                  },
-                  "distance": {
-                    "type": "integer",
-                    "format": "int64",
-                    "description": "The distance is the approximate distance from the adapter to the speedtest\nserver.  The distance can be either a value that is estimated to be LESS THAN\nthe distance stated, or CLOSE TO the distance stated.\n\n* -VE = The estimate is a LESS THAN this estimate.\n* +VE = The estimate is a CLOSE TO this estimate.\n\nThe distance is measured in whole MILES."
-                  },
-                  "rx": {
-                    "type": "integer",
-                    "format": "Result in bits per second of the receive speed test.",
-                    "description": "A INT"
-                  },
-                  "tx": {
-                    "type": "integer",
-                    "format": "Result in bits per second of the transmit speed test.",
-                    "description": "A INT"
-                  },
-                  "connection": {
-                    "type": "string",
-                    "description": "The connection which was tested.\n\n* **WAN** is the native WAN Interface of the Adapter.\n* **VPN** is the through the VPN tunnel.",
-                    "enum": [
-                      "WAN",
-                      "VPN"
-                    ]
+                    "format": "IP Address",
+                    "description": "The IP of the website the speedtest was conducted against.",
+                    "minLength": 2,
+                    "maxLength": 39
                   },
                   "ipv4": {
                     "type": "string",
@@ -1473,32 +1474,100 @@
                     "description": "The Connections Internet IPv6 Address",
                     "minLength": 2,
                     "maxLength": 39
+                  },
+                  "vpn": {
+                    "type": "string",
+                    "format": "url",
+                    "description": "IF and ONLY IF this speedtest is through the VPN Tunnel, the VPN ID of the\nVPN Server tested will be returned in the vpn field.  The backend will\nassume the speedtest result is for a WAN if this field is missing,\ntherefore it is optional and must only be included in VPN Speedtest\nresults. See [*VPN Server Connect*](#message-VPNConnect)."
+                  },
+                  "tx": {
+                    "type": "object",
+                    "required": [
+                      "txfr",
+                      "ms"
+                    ],
+                    "description": "The result of the speedtest in the specified direction.",
+                    "properties": {
+                      "txfr": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "The total number of bytes transferred."
+                      },
+                      "ms": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "The total number of milliseconds the transfer took."
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "rx": {
+                    "type": "object",
+                    "required": [
+                      "txfr",
+                      "ms"
+                    ],
+                    "description": "The result of the speedtest in the specified direction.",
+                    "properties": {
+                      "txfr": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "The total number of bytes transferred."
+                      },
+                      "ms": {
+                        "type": "integer",
+                        "format": "int64",
+                        "description": "The total number of milliseconds the transfer took."
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "latency": {
+                    "type": "array",
+                    "description": "Results of latency test on speedtest server, for a minimum of 10 tests.",
+                    "items": {
+                      "type": "integer",
+                      "format": "int64",
+                      "description": "Ping latency in ms, -1 for no reply."
+                    },
+                    "minItems": 10
                   }
                 },
                 "example": {
                   "message": "speedtest",
                   "tstamp": 1592217870123,
                   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-                  "url": "http://www.3bb.com/speedtest",
-                  "location": "Phuket, Thailand",
-                  "provider": "3BB",
-                  "distance": -50,
-                  "rx": 185608437,
-                  "tx": 282140344,
-                  "connection": "WAN",
-                  "ipv4": "183.89.198.67"
+                  "ip": "107.180.77.130",
+                  "ipv4": "183.89.198.67",
+                  "rx": {
+                    "txfr": 445173760,
+                    "ms": 30382
+                  },
+                  "tx": {
+                    "txfr": 11636736,
+                    "ms": 30222
+                  },
+                  "latency": [
+                    25,
+                    22,
+                    27,
+                    -1,
+                    19,
+                    -1,
+                    26,
+                    27,
+                    25,
+                    25
+                  ]
                 },
                 "required": [
                   "message",
                   "tstamp",
-                  "url",
-                  "location",
-                  "provider",
-                  "distance",
+                  "address",
+                  "ipv4",
                   "rx",
                   "tx",
-                  "connection",
-                  "ipv4"
+                  "latency"
                 ],
                 "additionalProperties": false
               }
@@ -1551,28 +1620,29 @@
                   },
                   "connection": {
                     "type": "string",
-                    "description": "OPTIONAL: The connection to test.  If not present, the test is to be preformed\nagainst the native WAN interface.\n\n* **WAN** is the native WAN Interface of the Adapter.\n* **VPN** is the through the VPN tunnel.",
+                    "description": "The connection to test.\n\n* **WAN** is the native WAN Interface of the Adapter.\n* **VPN** is the through the VPN tunnel.",
                     "enum": [
                       "WAN",
                       "VPN"
                     ]
                   },
-                  "url": {
+                  "ip": {
                     "type": "string",
                     "format": "url",
-                    "description": "OPTIONAL: URL to perform the speedtest against.  IF not supplied use\nthe best url probed from speedtest server lists."
+                    "description": "OPTIONAL, if present perform speedtest against the provided servers ip\naddress and not the one presented in configuration."
                   }
                 },
                 "example": {
                   "message": "run-speedtest",
                   "tstamp": 1592217870123,
                   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-                  "connection": "VPN",
-                  "url": "http://www.3bb.com/speedtest"
+                  "connection": "WAN",
+                  "ip": "107.180.77.130"
                 },
                 "required": [
                   "message",
-                  "tstamp"
+                  "tstamp",
+                  "connection"
                 ],
                 "additionalProperties": false
               }

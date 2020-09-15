@@ -6,6 +6,7 @@ Privacy Hero 2 - Websocket API - Adapter Diagnostic Message Definitions.
 # from .util import mls
 from .schemas import base_message, channel, Field
 from .tags import TAGS
+from .xref import Xref
 
 
 def log_level_field(none_ok=True, name="level", desc="The level of the log messages."):
@@ -16,6 +17,9 @@ def log_level_field(none_ok=True, name="level", desc="The level of the log messa
     levels += ["ERROR", "WARNING", "DEBUG"]
 
     return Field.enum(name, desc, levels)
+
+
+# ------------------------------------------------------------------------------
 
 
 def adapter_log():
@@ -57,6 +61,26 @@ def adapter_log():
     )
 
 
+# ------------------------------------------------------------------------------
+
+
+def adapter_speedtest_result_oneway(name: str) -> str:
+    """Speedtest result for a single direction."""
+    speedtest_desc = """The result of the speedtest in the specified direction."""
+
+    speedtest_fields = f"""
+    {{
+        {Field.int64("txfr", desc="The total number of bytes transferred.")},
+        {Field.int64("ms", desc="The total number of milliseconds the transfer took.")}
+    }}
+    """
+
+    return Field.object(name, speedtest_desc, ["txfr", "ms"], speedtest_fields)
+
+
+# ------------------------------------------------------------------------------
+
+
 def adapter_speedtest_results():
     """Return the last speedtest result to the Backend."""
     description = """
@@ -72,22 +96,12 @@ def adapter_speedtest_results():
         the tstamp is the tstamp from the backend request to commence the speedtest.
     """
 
-    distance_desc = """
-        The distance is the approximate distance from the adapter to the speedtest
-        server.  The distance can be either a value that is estimated to be LESS THAN
-        the distance stated, or CLOSE TO the distance stated.
-
-        * -VE = The estimate is a LESS THAN this estimate.
-        * +VE = The estimate is a CLOSE TO this estimate.
-
-        The distance is measured in whole MILES.
-    """
-
-    connection_desc = """
-        The connection which was tested.
-
-        * **WAN** is the native WAN Interface of the Adapter.
-        * **VPN** is the through the VPN tunnel.
+    vpn_desc = f"""
+        IF and ONLY IF this speedtest is through the VPN Tunnel, the VPN ID of the
+        VPN Server tested will be returned in the vpn field.  The backend will
+        assume the speedtest result is for a WAN if this field is missing,
+        therefore it is optional and must only be included in VPN Speedtest
+        results. See {Xref.vpn_server_connect}.
     """
 
     cmd = "speedtest"
@@ -96,39 +110,39 @@ def adapter_speedtest_results():
     summary = "Report of Speed Test Results"
 
     extra_fields = f"""
-        {Field.url("url",
-            "The URL of the website the speedtest was conducted against.")},
-        {Field.string("location",
-            "The String description of the speedtest server location")},
-        {Field.string("provider",
-            "The name of the ISP/Network operator managing the speedtest server.")},
-        {Field.int64("distance", distance_desc)},
-        {Field.int("rx", "Result in bits per second of the receive speed test.")},
-        {Field.int("tx", "Result in bits per second of the transmit speed test.")},
-        {Field.enum("connection",connection_desc, ["WAN","VPN"])},
+        {Field.ip("address",
+            "The IP of the website the speedtest was conducted against.")},
         {Field.ipv4("ipv4", "The Connections Internet IPv4 Address")},
-        {Field.ipv6("ipv6", "The Connections Internet IPv6 Address")}
+        {Field.ipv6("ipv6", "The Connections Internet IPv6 Address")},
+        {Field.url("vpn", vpn_desc)},
+        {adapter_speedtest_result_oneway("tx")},
+        {adapter_speedtest_result_oneway("rx")},
+        {Field.array("latency",
+            "Results of latency test on speedtest server, for a minimum of 10 tests.",
+            items=Field.int64(None, "Ping latency in ms, -1 for no reply."),
+            minitems=10)}
     """
+
     extra_example = """
-        "url": "http://www.3bb.com/speedtest",
-        "location": "Phuket, Thailand",
-        "provider": "3BB",
-        "distance": -50,
-        "rx": 185608437,
-        "tx": 282140344,
-        "connection": "WAN",
-        "ipv4": "183.89.198.67"
+        "ip": "107.180.77.130",
+        "ipv4": "183.89.198.67",
+        "rx": {
+            "txfr": 445173760,
+            "ms": 30382
+        },
+        "tx": {
+            "txfr": 11636736,
+            "ms": 30222
+        },
+        "latency": [25, 22, 27, -1, 19, -1, 26, 27, 25, 25]
     """
     extra_required = """
         "tstamp",
-        "url",
-        "location",
-        "provider",
-        "distance",
+        "address",
+        "ipv4",
         "rx",
         "tx",
-        "connection",
-        "ipv4"
+        "latency"
     """
 
     return base_message(
@@ -143,6 +157,9 @@ def adapter_speedtest_results():
         extra_example,
         extra_required,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def run_speedtest():
@@ -157,17 +174,16 @@ def run_speedtest():
         in the reply with the results as the message tstamp.
     """
 
-    url_desc = """
-        OPTIONAL: URL to perform the speedtest against.  IF not supplied use
-        the best url probed from speedtest server lists.
-    """
-
     connection_desc = """
-        OPTIONAL: The connection to test.  If not present, the test is to be preformed
-        against the native WAN interface.
+        The connection to test.
 
         * **WAN** is the native WAN Interface of the Adapter.
         * **VPN** is the through the VPN tunnel.
+    """
+
+    ip_desc = """
+        OPTIONAL, if present perform speedtest against the provided servers ip
+        address and not the one presented in configuration.
     """
 
     cmd = "run-speedtest"
@@ -177,15 +193,16 @@ def run_speedtest():
 
     extra_fields = f"""
         {Field.enum("connection",connection_desc, ["WAN","VPN"])},
-        {Field.url("url", url_desc)}
+        {Field.url("ip", ip_desc)}
     """
 
     extra_example = """
-        "connection": "VPN",
-        "url": "http://www.3bb.com/speedtest"
+        "connection": "WAN",
+        "ip": "107.180.77.130"
     """
     extra_required = """
-        "tstamp"
+        "tstamp",
+        "connection"
     """
 
     return base_message(
@@ -200,6 +217,9 @@ def run_speedtest():
         extra_example,
         extra_required,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def adapter_diagnostics_channel():
@@ -224,6 +244,9 @@ def adapter_diagnostics_channel():
         sub_msgs=subscribe_msgs,
         tags=TAGS.ADAPTER_DIAGS,
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def speedtest_channel():

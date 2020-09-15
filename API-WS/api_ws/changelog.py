@@ -7,6 +7,14 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.2
+
+    1. Modified speedtest result message {Xref.speedtest_result} to track pperf
+       implementation on router.
+    2. Changed organization of VPN server configuration in
+       {Xref.vpn_server_connect}.
+    3. {Xref.vpn_connection_status} updated to track new server id field.
+
     ### V0.1.1
 
     1. Added the Adapter Reset {Xref.reset_router} message.

@@ -2,10 +2,39 @@
 import subprocess
 import os
 import sys
+import json
+import traceback
+from pathlib import Path
 
 import click
+import jsonschema
 
 from .api import ws_api
+
+# ------------------------------------------------------------------------------
+
+
+def validate_asynapi(filename: str):
+    """Read a json file and validate against a schema."""
+    try:
+        schema_path = Path(__file__).parent / ".." / "json" / "asyncapi.schema.json"
+        data_path = Path(__file__).parent / ".." / filename
+        schema = json.loads(schema_path.read_text())
+        schema = json.loads(schema_path.read_text())
+
+        data = json.loads(data_path.read_text())
+        validator = jsonschema.Draft7Validator(schema)
+
+        cnt = 0
+        for error in validator.iter_errors(data):
+            cnt += 1
+            print(f"{filename} ERROR {cnt}:\n{error}")
+    except Exception:  # pylint:disable=broad-except
+        print(traceback.format_exc())
+        sys.exit(1)
+
+
+# ------------------------------------------------------------------------------
 
 
 def gen_directly(input_file, output_dir):
@@ -22,6 +51,9 @@ def gen_directly(input_file, output_dir):
             "@asyncapi/html-template",
         ]
     )
+
+
+# ------------------------------------------------------------------------------
 
 
 def gen_by_docker(input_file, output_dir):
@@ -48,12 +80,17 @@ def gen_by_docker(input_file, output_dir):
     )
 
 
+# ------------------------------------------------------------------------------
+
+
 @click.group()
 def cli():
     """Remains empty, just for the command line option parser."""
 
 
 CONTEXT_LINES = 10
+
+# ------------------------------------------------------------------------------
 
 
 def print_file_linenos(dump, lineno, col, msg):
@@ -69,6 +106,9 @@ def print_file_linenos(dump, lineno, col, msg):
             print(f'{" "*(col+11)}^ {msg}')
         linecount += 1
         this = "  "
+
+
+# ------------------------------------------------------------------------------
 
 
 @cli.command()
@@ -98,6 +138,9 @@ def make_docs():
         text_file.write(json_fmt_api.decode())
 
     print("Checking for valid ASYNCAPI...")
+    # We validate against the json-schema
+    validate_asynapi("json/asyncapi.json")
+    # And also an external tool because it finds more errors.
     # Check we made a valid asyncapi file
     try:
         subprocess.check_output(["node", "./validate-asyncapi.js"])
@@ -118,6 +161,8 @@ def make_docs():
         print(ex.output.decode())
         sys.exit(1)
 
+
+# ------------------------------------------------------------------------------
 
 if __name__ == "__main__":
     cli()

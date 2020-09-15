@@ -7,6 +7,8 @@ authors = ["Steven Johnson <sakurainds@gmail.com>"]
 [tool.poetry.dependencies]
 python = "^3.8"
 click = "^7.1.2"
+jsonschema = "^3.2.0"
+pyparsing = "^2.4.7"
 
 [tool.poetry.dev-dependencies]
 pytest = "^5.2"

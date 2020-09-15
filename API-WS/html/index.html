@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.1 documentation</title>
+  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.2 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/atom-one-dark.min.css" />
@@ -26,7 +26,7 @@
   <div class="sidebar-panel__content">
     
       <h1 class="text-2xl font-thin">
-        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.1
+        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.2
       </h1>
     
     <ul class="text-sm mt-10 list-reset mt-2">
@@ -819,7 +819,7 @@
     <div class="content-panel flex-1 leading-loose z-10">
       <div class="center-block p-8">
   <a name="introduction"></a>
-  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.1</h1>
+  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.2</h1>
   <div class="leading-normal mb-4">
     
     
@@ -847,6 +847,14 @@ documentation convention only.</p>
 <p>All messages to/from the adapter have a common format, which are documented in the
 <em>Basic Message Forms</em>. set of operations.</p>
 <h2>CHANGELOG</h2>
+<h3>V0.1.2</h3>
+<ol>
+<li>Modified speedtest result message <a href="#message-SpeedTest"><em>Speedtest Result</em></a> to track pperf
+implementation on router.</li>
+<li>Changed organization of VPN server configuration in
+<a href="#message-VPNConnect"><em>VPN Server Connect</em></a>.</li>
+<li><a href="#message-VPNStatus"><em>VPN Connection Status</em></a> updated to track new server id field.</li>
+</ol>
 <h3>V0.1.1</h3>
 <ol>
 <li>Added the Adapter Reset <a href="#message-Reset"><em>Reset Router</em></a> message.</li>
@@ -8321,7 +8329,7 @@ verbatim in the paired reply.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;Unknown&gt;
+array&lt;object&gt;
           
           
           
@@ -8395,6 +8403,302 @@ connection after trying all servers, it gives up attempting to connect.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The configuration for an individual VPN server.</p>
+<p>The vpn_id is to be used to report about status and speedtest results
+for the configured vpn tunnel.</p>
+<p><strong>speed</strong> is the best speedtest TX result from the last <em>n</em> results.
+<strong>latency</strong> is the average latency to the speedtest server from the last
+<em>n</em> results.</p>
+<p>IF <strong>speed and latency</strong> will either both be present, or neither
+present.  If neither is present, the VPN tunnel is to be started and
+tested.  The TX speed test result becomes the servers <strong>speed</strong> and the
+average of at least 10 ping latencies becomes the <strong>latency</strong> value.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">vpn_id</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Unique VPN ID</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">speed</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">config</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
 
           
           oneOf
@@ -8423,7 +8727,7 @@ connection after trying all servers, it gives up attempting to connect.</p>
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8439,7 +8743,7 @@ connection after trying all servers, it gives up attempting to connect.</p>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8488,12 +8792,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8552,7 +8856,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8578,7 +8882,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8638,7 +8942,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8664,7 +8968,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8684,14 +8988,12 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-integer
+string
           
           
           
           <div class="inline-block">
             
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int</span>
             
             
             
@@ -8699,7 +9001,12 @@ integer
             
             
             
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 5</span>
             
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
             
             
             
@@ -8718,7 +9025,7 @@ integer
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8744,7 +9051,7 @@ integer
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8804,7 +9111,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8830,7 +9137,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8890,7 +9197,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8916,7 +9223,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -8970,7 +9277,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -8996,7 +9303,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9050,163 +9357,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">speed</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">latency</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9257,7 +9408,7 @@ integer
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9306,12 +9457,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9370,7 +9521,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9396,7 +9547,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9450,7 +9601,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9476,7 +9627,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9527,7 +9678,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9553,7 +9704,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9602,7 +9753,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9628,7 +9779,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9677,7 +9828,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9703,7 +9854,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9752,7 +9903,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9778,7 +9929,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9827,7 +9978,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9853,7 +10004,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9904,7 +10055,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -9930,7 +10081,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -9981,163 +10132,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">speed</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">latency</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -10186,6 +10181,31 @@ integer
 
 
           
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
         
 
         
@@ -10344,7 +10364,34 @@ integer
   "message": "vpn-connect",
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-  "servers": []
+  "servers": [
+    {
+      "vpn_id": "wireguard-1",
+      "speed": 12345678,
+      "latency": 23,
+      "config": {
+        "type": "wireguard",
+        "server": "123.231.113.201",
+        "port": "1234",
+        "ipv4": "111.222.33.44",
+        "ipv6": "87aa:5abf:2e90:574d:9dcc:cd2:af7b:fdfa",
+        "publickey": "kjldfbghiuph",
+        "privatekey": "skjdfbgkjqerbgkj"
+      }
+    },
+    {
+      "vpn_id": "strongswan-1",
+      "speed": 12330000,
+      "latency": 27,
+      "config": {
+        "type": "strongswan",
+        "right": "123.231.113.201",
+        "rightid": "serverid",
+        "leftid": "client1",
+        "secret": "kjldfbghiuph"
+      }
+    }
+  ]
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
         
@@ -11884,26 +11931,21 @@ string
         
           <div class="text-sm markdown"><p>The current status of the VPN process.</p>
 <ul>
-<li><em>test-connecting</em> = Connecting to a VPN server to test. <em>server</em> is to be
-set to the IP/URL being connected to.</li>
+<li><em>test-connecting</em> = Connecting to a VPN server to test.</li>
 <li><em>testing</em> = Test connection to VPN succeeded and test started.  Test
-results will be sent in <a href="#message-SpeedTest"><em>Speedtest Result</em></a>. <em>server</em> is to be set to
-the IP/URL being tested.</li>
+results will be sent in <a href="#message-SpeedTest"><em>Speedtest Result</em></a>.</li>
 <li><em>test-failed</em> = Either the connection couldn't be established to test, or
-the test has failed to execute. <em>server</em> is to be set to the IP/URL that
-failed.</li>
-<li><em>connecting</em> = Connecting the VPN tunnel for general use. <em>server</em> is to
-be set to the IP/URL being connected to.</li>
+the test has failed to execute.</li>
+<li><em>connecting</em> = Connecting the VPN tunnel for general use.</li>
 <li><em>connected</em> = The connection to the VPN is established and routing is
-operational.  <em>server</em> is to be set to the IP/URL connected to.</li>
-<li><em>failed</em> = The vpn server failed to connect or the link broke. <em>server</em> =
-the server url or ip which failed.  After this call the router may no
-longer use the credentials presented in <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> for the
-server.</li>
+operational.</li>
+<li><em>failed</em> = The vpn server failed to connect or the link broke.   After
+this call the router may no longer use the credentials presented in
+<a href="#message-VPNConnect"><em>VPN Server Connect</em></a> for the server.</li>
 <li><em>reconnecting</em> = The VPN server was running and failed, trying to
 reconnect. This status is sent instead of the <em>connecting</em> status when a
-was established, but dropped and we are attempting to re-establish the
-connection. <em>server</em> = The server we are re-trying due to broken tunnel.</li>
+vpn link was established, but dropped and we are attempting to
+re-establish the connection.</li>
 <li><em>disconnected</em> = The last possible server was tested and failed, giving up
 trying to enable VPN.  <em>server</em> should not be present, as no server is
 being accessed in this state.</li>
@@ -12003,7 +12045,7 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>The server URL or IP Address</p>
+          <div class="text-sm markdown"><p>The server ID, sent for every status except <em>disconnected</em></p>
 </div>
         
         
@@ -12806,7 +12848,7 @@ integer
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "status": "testing",
-  "server": "66-165-251-250.vpn.privacyhero.com",
+  "server": "wireguard-1",
   "description": "TX Speedtest started"
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
@@ -13873,6 +13915,8 @@ verbatim in the paired reply.</p>
         </svg>
         
         
+          <div class="text-red-dark text-xs">required</div>
+        
         
       </div>
 
@@ -13899,8 +13943,7 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>OPTIONAL: The connection to test.  If not present, the test is to be preformed
-against the native WAN interface.</p>
+          <div class="text-sm markdown"><p>The connection to test.</p>
 <ul>
 <li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
 <li><strong>VPN</strong> is the through the VPN tunnel.</li>
@@ -13954,7 +13997,7 @@ against the native WAN interface.</p>
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">url</span>
+        <span class="text-sm" style="word-break: break-word;">ip</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -13991,8 +14034,8 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>OPTIONAL: URL to perform the speedtest against.  IF not supplied use
-the best url probed from speedtest server lists.</p>
+          <div class="text-sm markdown"><p>OPTIONAL, if present perform speedtest against the provided servers ip
+address and not the one presented in configuration.</p>
 </div>
         
         
@@ -14099,8 +14142,8 @@ the best url probed from speedtest server lists.</p>
   "message": "run-speedtest",
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-  "connection": "VPN",
-  "url": "http://www.3bb.com/speedtest"
+  "connection": "WAN",
+  "ip": "107.180.77.130"
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
         
@@ -14493,7 +14536,7 @@ verbatim in the paired reply.</p>
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">url</span>
+        <span class="text-sm" style="word-break: break-word;">address</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -14516,7 +14559,7 @@ string
           <div class="inline-block">
             
               <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+                style="height: 20px;font-size: 11px;padding: 3px;">IP Address</span>
             
             
             
@@ -14525,83 +14568,12 @@ string
             
             
             
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
             
             
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The URL of the website the speedtest was conducted against.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">location</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
             
             
             
@@ -14609,425 +14581,11 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>The String description of the speedtest server location</p>
+          <div class="text-sm markdown"><p>The IP of the website the speedtest was conducted against.</p>
 </div>
         
         
         
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">provider</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The name of the ISP/Network operator managing the speedtest server.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">distance</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The distance is the approximate distance from the adapter to the speedtest
-server.  The distance can be either a value that is estimated to be LESS THAN
-the distance stated, or CLOSE TO the distance stated.</p>
-<ul>
-<li>-VE = The estimate is a LESS THAN this estimate.</li>
-<li>+VE = The estimate is a CLOSE TO this estimate.</li>
-</ul>
-<p>The distance is measured in whole MILES.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">rx</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the receive speed test.</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>A INT</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">tx</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the transmit speed test.</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>A INT</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">connection</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The connection which was tested.</p>
-<ul>
-<li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
-<li><strong>VPN</strong> is the through the VPN tunnel.</li>
-</ul>
-</div>
-        
-        
-        
-        
-          <div class="text-xs">
-            Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"WAN"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
-            
-          </div>
         
         
       </div>
@@ -15228,6 +14786,737 @@ string
 
 
           
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">vpn</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>IF and ONLY IF this speedtest is through the VPN Tunnel, the VPN ID of the
+VPN Server tested will be returned in the vpn field.  The backend will
+assume the speedtest result is for a WAN if this field is missing,
+therefore it is optional and must only be included in VPN Speedtest
+results. See <a href="#message-VPNConnect"><em>VPN Server Connect</em></a>.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tx</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The result of the speedtest in the specified direction.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">txfr</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of bytes transferred.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ms</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of milliseconds the transfer took.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rx</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The result of the speedtest in the specified direction.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">txfr</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of bytes transferred.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ms</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of milliseconds the transfer took.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;integer&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 10 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Results of latency test on speedtest server, for a minimum of 10 tests.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Ping latency in ms, -1 for no reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
         
 
         
@@ -15300,14 +15589,28 @@ string
   "message": "speedtest",
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-  "url": "http://www.3bb.com/speedtest",
-  "location": "Phuket, Thailand",
-  "provider": "3BB",
-  "distance": -50,
-  "rx": 185608437,
-  "tx": 282140344,
-  "connection": "WAN",
-  "ipv4": "183.89.198.67"
+  "ip": "107.180.77.130",
+  "ipv4": "183.89.198.67",
+  "rx": {
+    "txfr": 445173760,
+    "ms": 30382
+  },
+  "tx": {
+    "txfr": 11636736,
+    "ms": 30222
+  },
+  "latency": [
+    25,
+    22,
+    27,
+    -1,
+    19,
+    -1,
+    26,
+    27,
+    25,
+    25
+  ]
 }</code></pre>
         <h6 class="text-xs font-bold text-grey-darker italic">This example has been generated automatically.</h6>
         
@@ -33976,7 +34279,7 @@ verbatim in the paired reply.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-array&lt;Unknown&gt;
+array&lt;object&gt;
           
           
           
@@ -34050,6 +34353,302 @@ connection after trying all servers, it gives up attempting to connect.</p>
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The configuration for an individual VPN server.</p>
+<p>The vpn_id is to be used to report about status and speedtest results
+for the configured vpn tunnel.</p>
+<p><strong>speed</strong> is the best speedtest TX result from the last <em>n</em> results.
+<strong>latency</strong> is the average latency to the speedtest server from the last
+<em>n</em> results.</p>
+<p>IF <strong>speed and latency</strong> will either both be present, or neither
+present.  If neither is present, the VPN tunnel is to be started and
+tested.  The TX speed test result becomes the servers <strong>speed</strong> and the
+average of at least 10 ping latencies becomes the <strong>latency</strong> value.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">vpn_id</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Unique VPN ID</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">speed</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">config</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
 
           
           oneOf
@@ -34078,7 +34677,7 @@ connection after trying all servers, it gives up attempting to connect.</p>
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34094,7 +34693,7 @@ connection after trying all servers, it gives up attempting to connect.</p>
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34143,12 +34742,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34207,7 +34806,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34233,7 +34832,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34293,7 +34892,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34319,7 +34918,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34339,14 +34938,12 @@ string
       <div>
         <div class="capitalize text-sm text-teal font-bold">
           
-integer
+string
           
           
           
           <div class="inline-block">
             
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int</span>
             
             
             
@@ -34354,7 +34951,12 @@ integer
             
             
             
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 5</span>
             
+            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 1</span>
             
             
             
@@ -34373,7 +34975,7 @@ integer
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34399,7 +35001,7 @@ integer
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34459,7 +35061,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34485,7 +35087,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34545,7 +35147,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34571,7 +35173,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34625,7 +35227,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34651,7 +35253,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34705,163 +35307,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">speed</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">latency</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -34912,7 +35358,7 @@ integer
           
             
 
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -34961,12 +35407,12 @@ object
     </div>
 
     
-      <div class="children bg-grey-lighter py-4 rounded">
+      <div class="children bg-grey-lightest py-4 rounded">
         
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35025,7 +35471,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35051,7 +35497,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35105,7 +35551,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35131,7 +35577,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35182,7 +35628,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35208,7 +35654,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35257,7 +35703,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35283,7 +35729,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35332,7 +35778,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35358,7 +35804,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35407,7 +35853,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35433,7 +35879,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35482,7 +35928,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35508,7 +35954,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35559,7 +36005,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35585,7 +36031,7 @@ string
           
             
 
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
@@ -35636,163 +36082,7 @@ string
     </div>
 
     
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">speed</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lighter pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">latency</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lightest py-4 rounded">
+      <div class="children bg-grey-lighter py-4 rounded">
         
           
         
@@ -35841,6 +36131,31 @@ integer
 
 
           
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
         
 
         
@@ -37393,26 +37708,21 @@ string
         
           <div class="text-sm markdown"><p>The current status of the VPN process.</p>
 <ul>
-<li><em>test-connecting</em> = Connecting to a VPN server to test. <em>server</em> is to be
-set to the IP/URL being connected to.</li>
+<li><em>test-connecting</em> = Connecting to a VPN server to test.</li>
 <li><em>testing</em> = Test connection to VPN succeeded and test started.  Test
-results will be sent in <a href="#message-SpeedTest"><em>Speedtest Result</em></a>. <em>server</em> is to be set to
-the IP/URL being tested.</li>
+results will be sent in <a href="#message-SpeedTest"><em>Speedtest Result</em></a>.</li>
 <li><em>test-failed</em> = Either the connection couldn't be established to test, or
-the test has failed to execute. <em>server</em> is to be set to the IP/URL that
-failed.</li>
-<li><em>connecting</em> = Connecting the VPN tunnel for general use. <em>server</em> is to
-be set to the IP/URL being connected to.</li>
+the test has failed to execute.</li>
+<li><em>connecting</em> = Connecting the VPN tunnel for general use.</li>
 <li><em>connected</em> = The connection to the VPN is established and routing is
-operational.  <em>server</em> is to be set to the IP/URL connected to.</li>
-<li><em>failed</em> = The vpn server failed to connect or the link broke. <em>server</em> =
-the server url or ip which failed.  After this call the router may no
-longer use the credentials presented in <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> for the
-server.</li>
+operational.</li>
+<li><em>failed</em> = The vpn server failed to connect or the link broke.   After
+this call the router may no longer use the credentials presented in
+<a href="#message-VPNConnect"><em>VPN Server Connect</em></a> for the server.</li>
 <li><em>reconnecting</em> = The VPN server was running and failed, trying to
 reconnect. This status is sent instead of the <em>connecting</em> status when a
-was established, but dropped and we are attempting to re-establish the
-connection. <em>server</em> = The server we are re-trying due to broken tunnel.</li>
+vpn link was established, but dropped and we are attempting to
+re-establish the connection.</li>
 <li><em>disconnected</em> = The last possible server was tested and failed, giving up
 trying to enable VPN.  <em>server</em> should not be present, as no server is
 being accessed in this state.</li>
@@ -37512,7 +37822,7 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>The server URL or IP Address</p>
+          <div class="text-sm markdown"><p>The server ID, sent for every status except <em>disconnected</em></p>
 </div>
         
         
@@ -39076,6 +39386,8 @@ verbatim in the paired reply.</p>
         </svg>
         
         
+          <div class="text-red-dark text-xs">required</div>
+        
         
       </div>
 
@@ -39102,8 +39414,7 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>OPTIONAL: The connection to test.  If not present, the test is to be preformed
-against the native WAN interface.</p>
+          <div class="text-sm markdown"><p>The connection to test.</p>
 <ul>
 <li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
 <li><strong>VPN</strong> is the through the VPN tunnel.</li>
@@ -39157,7 +39468,7 @@ against the native WAN interface.</p>
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">url</span>
+        <span class="text-sm" style="word-break: break-word;">ip</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -39194,8 +39505,8 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>OPTIONAL: URL to perform the speedtest against.  IF not supplied use
-the best url probed from speedtest server lists.</p>
+          <div class="text-sm markdown"><p>OPTIONAL, if present perform speedtest against the provided servers ip
+address and not the one presented in configuration.</p>
 </div>
         
         
@@ -39602,7 +39913,7 @@ verbatim in the paired reply.</p>
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">url</span>
+        <span class="text-sm" style="word-break: break-word;">address</span>
         
         <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
           xmlns="http://www.w3.org/2000/svg" y="0">
@@ -39625,7 +39936,7 @@ string
           <div class="inline-block">
             
               <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+                style="height: 20px;font-size: 11px;padding: 3px;">IP Address</span>
             
             
             
@@ -39634,83 +39945,12 @@ string
             
             
             
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">length <= 39</span>
             
             
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The URL of the website the speedtest was conducted against.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">location</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
+            <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                  style="height: 20px;font-size: 11px;padding: 3px;">length >= 2</span>
             
             
             
@@ -39718,425 +39958,11 @@ string
         </div>
 
         
-          <div class="text-sm markdown"><p>The String description of the speedtest server location</p>
+          <div class="text-sm markdown"><p>The IP of the website the speedtest was conducted against.</p>
 </div>
         
         
         
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">provider</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The name of the ISP/Network operator managing the speedtest server.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">distance</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The distance is the approximate distance from the adapter to the speedtest
-server.  The distance can be either a value that is estimated to be LESS THAN
-the distance stated, or CLOSE TO the distance stated.</p>
-<ul>
-<li>-VE = The estimate is a LESS THAN this estimate.</li>
-<li>+VE = The estimate is a CLOSE TO this estimate.</li>
-</ul>
-<p>The distance is measured in whole MILES.</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">rx</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the receive speed test.</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>A INT</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">tx</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-integer
-          
-          
-          
-          <div class="inline-block">
-            
-              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
-                style="height: 20px;font-size: 11px;padding: 3px;">Result in bits per second of the transmit speed test.</span>
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>A INT</p>
-</div>
-        
-        
-        
-        
-        
-      </div>
-    </div>
-
-    
-      <div class="children bg-grey-lighter py-4 rounded">
-        
-          
-        
-
-        
-        
-
-        
-
-        
-
-        
-
-        
-
-        
-      </div>
-    
-  </div>
-</div>
-
-
-          
-            
-
-<div class="bg-grey-lightest pl-8 pr-8 rounded">
-  <div class="">
-    <div class="js-prop cursor-pointer py-2 flex property">
-      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">connection</span>
-        
-        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
-          xmlns="http://www.w3.org/2000/svg" y="0">
-          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
-        </svg>
-        
-        
-          <div class="text-red-dark text-xs">required</div>
-        
-        
-      </div>
-
-      <div>
-        <div class="capitalize text-sm text-teal font-bold">
-          
-string
-          
-          
-          
-          <div class="inline-block">
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
-          </div>
-        </div>
-
-        
-          <div class="text-sm markdown"><p>The connection which was tested.</p>
-<ul>
-<li><strong>WAN</strong> is the native WAN Interface of the Adapter.</li>
-<li><strong>VPN</strong> is the through the VPN tunnel.</li>
-</ul>
-</div>
-        
-        
-        
-        
-          <div class="text-xs">
-            Enum:
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"WAN"</span>
-            
-              <span class="border text-orange rounded ml-1 py-0 px-2">"VPN"</span>
-            
-          </div>
         
         
       </div>
@@ -40321,6 +40147,737 @@ string
         
         
 
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">vpn</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">url</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>IF and ONLY IF this speedtest is through the VPN Tunnel, the VPN ID of the
+VPN Server tested will be returned in the vpn field.  The backend will
+assume the speedtest result is for a WAN if this field is missing,
+therefore it is optional and must only be included in VPN Speedtest
+results. See <a href="#message-VPNConnect"><em>VPN Server Connect</em></a>.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">tx</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The result of the speedtest in the specified direction.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">txfr</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of bytes transferred.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ms</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of milliseconds the transfer took.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">rx</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+object
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The result of the speedtest in the specified direction.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">txfr</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of bytes transferred.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">ms</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>The total number of milliseconds the transfer took.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+        
+
+        
+        
+
+        
+
+        
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional properties are <strong>NOT</strong> allowed.</p>
+          
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+          
+            
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">latency</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+          <div class="text-red-dark text-xs">required</div>
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+array&lt;integer&gt;
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+              <span class="bg-purple-dark font-bold no-underline text-white rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">>= 10 items</span>
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Results of latency test on speedtest server, for a minimum of 10 tests.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lighter py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+          
+            <p class="pl-6 mb-2 text-xs font-bold uppercase text-grey-darker">Items:</p>
+            
+              
+
+<div class="bg-grey-lighter pl-8 pr-8 rounded">
+  <div class="">
+    <div class="js-prop cursor-pointer py-2 flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">0</span>
+        
+        <svg class="expand" version="1.1" viewBox="0 0 24 24" x="0"
+          xmlns="http://www.w3.org/2000/svg" y="0">
+          <polygon points="17.3 8.3 12 13.6 6.7 8.3 5.3 9.7 12 16.4 18.7 9.7 "></polygon>
+        </svg>
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+integer
+          
+          
+          
+          <div class="inline-block">
+            
+              <span class="bg-yellow-dark font-bold no-underline text-black rounded lowercase ml-2"
+                style="height: 20px;font-size: 11px;padding: 3px;">int64</span>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+          <div class="text-sm markdown"><p>Ping latency in ms, -1 for no reply.</p>
+</div>
+        
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+      <div class="children bg-grey-lightest py-4 rounded">
+        
+          
+        
+
+        
+        
+
+        
+
+        
+
+        
+
+        
+
+        
+      </div>
+    
+  </div>
+</div>
+
+
+            
+          
+
+          
+            <p class="pl-6 mb-2 mt-4 text-xs text-grey-darker">Additional items are allowed.</p>
+          
         
 
         
