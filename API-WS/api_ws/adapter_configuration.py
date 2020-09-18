@@ -241,18 +241,51 @@ def vpn_server_config():
     """Wireguard VPN Server Configuration."""
     cfg_desc = """
         The configuration for an individual VPN server.
-
-        The vpn_id is to be used to report about status and speedtest results
+        \\
+        \\
+        The **vpn_id** is to be used to report about status and speedtest results
         for the configured vpn tunnel.
 
-        **speed** is the best speedtest TX result from the last *n* results.
-        **latency** is the average latency to the speedtest server from the last
-        *n* results.
+        **speed** is the average speedtest TX result from the last months worth
+        vpn speedtests on this server.  IF there is no **speed** field, the
+        router is to create the **speed** value by connecting the tunnel and
+        performing the speedtest.  The resulting TX speed in bytes per second of
+        this one test becomes the **speed** for the purpose of selecting the
+        fastest VPN Server.  Speed is selected as the TX value because most
+        consumer internet connections are asynchronous, but have higher raw TX
+        speed than RX, that means that any speedtest is more likely to max out
+        RX than TX.
 
-        IF **speed and latency** will either both be present, or neither
-        present.  If neither is present, the VPN tunnel is to be started and
-        tested.  The TX speed test result becomes the servers **speed** and the
-        average of at least 10 ping latencies becomes the **latency** value.
+        **latency** is the average latency to the speedtest server from the last
+        months worth of speedtest results on the server.  IF there is a missing
+        latency result (ie, the speedtest reported -1)  then the latency value
+        for the purpose of averaging is taken to be 1000ms which will force the
+        latency to dis-favor links with unreliable connections.  The average is
+        rounded to the nearest whole millisecond.
+
+        **speed and latency** will either both be present, or neither present.
+        If neither is present, the VPN tunnel is to be started and tested.
+
+        The array will be pre-sorted in order from backend identified fastest
+        server to slowest.  However, when the router must perform a speedtest to
+        determine the vpn speed, it must resort.  The sorting algorithm works
+        like this:
+
+        ```
+        Place all servers in an unsorted list of servers.
+        Create a sorted list of servers which initally is empty.
+
+        Of the servers in the list of unsorted servers, get the maximum speed
+        value.
+        Of the servers in the unsorted list whos speed is within 10% of the
+        fastest speed in the list, remove the server with the lowest latency value
+        and add it to the end of the list of sorted vpn servers.
+        Repeat this selection process until there are no more servers in the
+        unsorted server list.
+        ```
+
+        This algorithm will create a list of servers which trend from
+        fastest/lowest latency down to slowest/highest latency.
     """
 
     vpn_server_cfg = f"""
@@ -263,11 +296,19 @@ def vpn_server_config():
     }}
     """
 
+    speed_desc = """
+        Current rated bandwidth for the tunnel in bytes per second.
+    """
+
+    latency_desc = """
+        Current rated latency for the tunnel in milliseconds.
+    """
+
     cfg_fields = f"""
     {{
         {Field.string("vpn_id", "Unique VPN ID")},
-        {Field.int64("speed", "Current rated bandwidth for the tunnel.")},
-        {Field.int64("latency", "Current rated latency for the tunnel.")},
+        {Field.int64("speed", speed_desc)},
+        {Field.int64("latency", latency_desc)},
         {vpn_server_cfg}
     }}
     """
@@ -297,11 +338,7 @@ def vpn_connect():
         "speed" or "latency" fields in their configuration), the router will
         test them, and send the result back to the backend.  After testing is
         completed, the router will sort them, in order of fatest/lowest latency
-        and then attempt to connect in that order.  Sorting is done as follows,
-        the fastest server speed in the list is taken.  Of all servers that are
-        within 10% of that speed, the one with the smallest latency is assumed
-        to be the fastest.  The remaining servers are then sorted with the same
-        rules, until no servers remain to be sorted.
+        and then attempt to connect in that order.
         \\
         If there are no servers to be tested, then they are attempted to be
         connected in the order presented.

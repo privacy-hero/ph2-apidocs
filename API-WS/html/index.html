@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.2 documentation</title>
+  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.3 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="css/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/atom-one-dark.min.css" />
@@ -26,7 +26,7 @@
   <div class="sidebar-panel__content">
     
       <h1 class="text-2xl font-thin">
-        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.2
+        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.3
       </h1>
     
     <ul class="text-sm mt-10 list-reset mt-2">
@@ -819,7 +819,7 @@
     <div class="content-panel flex-1 leading-loose z-10">
       <div class="center-block p-8">
   <a name="introduction"></a>
-  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.2</h1>
+  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.3</h1>
   <div class="leading-normal mb-4">
     
     
@@ -847,6 +847,14 @@ documentation convention only.</p>
 <p>All messages to/from the adapter have a common format, which are documented in the
 <em>Basic Message Forms</em>. set of operations.</p>
 <h2>CHANGELOG</h2>
+<h3>V0.1.3</h3>
+<ol>
+<li>Fix Example for <a href="#message-DeviceInformation"><em>Device Information</em></a></li>
+<li>Better document how the speed and latency are calculated in
+<a href="#message-VPNConnect"><em>VPN Server Connect</em></a></li>
+<li>Better explain that <a href="#message-VPNConnect"><em>VPN Server Connect</em></a> message with an empty list
+of servers is to be used as a vpn_disconnect message.</li>
+</ol>
 <h3>V0.1.2</h3>
 <ol>
 <li>Modified speedtest result message <a href="#message-SpeedTest"><em>Speedtest Result</em></a> to track pperf
@@ -7974,11 +7982,7 @@ listed VPN servers.</p>
 &quot;speed&quot; or &quot;latency&quot; fields in their configuration), the router will
 test them, and send the result back to the backend.  After testing is
 completed, the router will sort them, in order of fatest/lowest latency
-and then attempt to connect in that order.  Sorting is done as follows,
-the fastest server speed in the list is taken.  Of all servers that are
-within 10% of that speed, the one with the smallest latency is assumed
-to be the fastest.  The remaining servers are then sorted with the same
-rules, until no servers remain to be sorted.</p>
+and then attempt to connect in that order.</p>
 <p>If there are no servers to be tested, then they are attempted to be
 connected in the order presented.</p>
 <p>IF the router has already established a VPN connection, AND the VPN
@@ -8424,15 +8428,42 @@ object
 
         
           <div class="text-sm markdown"><p>The configuration for an individual VPN server.</p>
-<p>The vpn_id is to be used to report about status and speedtest results
+<p>The <strong>vpn_id</strong> is to be used to report about status and speedtest results
 for the configured vpn tunnel.</p>
-<p><strong>speed</strong> is the best speedtest TX result from the last <em>n</em> results.
-<strong>latency</strong> is the average latency to the speedtest server from the last
-<em>n</em> results.</p>
-<p>IF <strong>speed and latency</strong> will either both be present, or neither
-present.  If neither is present, the VPN tunnel is to be started and
-tested.  The TX speed test result becomes the servers <strong>speed</strong> and the
-average of at least 10 ping latencies becomes the <strong>latency</strong> value.</p>
+<p><strong>speed</strong> is the average speedtest TX result from the last months worth
+vpn speedtests on this server.  IF there is no <strong>speed</strong> field, the
+router is to create the <strong>speed</strong> value by connecting the tunnel and
+performing the speedtest.  The resulting TX speed in bytes per second of
+this one test becomes the <strong>speed</strong> for the purpose of selecting the
+fastest VPN Server.  Speed is selected as the TX value because most
+consumer internet connections are asynchronous, but have higher raw TX
+speed than RX, that means that any speedtest is more likely to max out
+RX than TX.</p>
+<p><strong>latency</strong> is the average latency to the speedtest server from the last
+months worth of speedtest results on the server.  IF there is a missing
+latency result (ie, the speedtest reported -1)  then the latency value
+for the purpose of averaging is taken to be 1000ms which will force the
+latency to dis-favor links with unreliable connections.  The average is
+rounded to the nearest whole millisecond.</p>
+<p><strong>speed and latency</strong> will either both be present, or neither present.
+If neither is present, the VPN tunnel is to be started and tested.</p>
+<p>The array will be pre-sorted in order from backend identified fastest
+server to slowest.  However, when the router must perform a speedtest to
+determine the vpn speed, it must resort.  The sorting algorithm works
+like this:</p>
+<pre><code>Place all servers in an unsorted list of servers.
+Create a sorted list of servers which initally is empty.
+
+Of the servers in the list of unsorted servers, get the maximum speed
+value.
+Of the servers in the unsorted list whos speed is within 10% of the
+fastest speed in the list, remove the server with the lowest latency value
+and add it to the end of the list of sorted vpn servers.
+Repeat this selection process until there are no more servers in the
+unsorted server list.
+</code></pre>
+<p>This algorithm will create a list of servers which trend from
+fastest/lowest latency down to slowest/highest latency.</p>
 </div>
         
         
@@ -8566,7 +8597,7 @@ integer
         </div>
 
         
-          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel in bytes per second.</p>
 </div>
         
         
@@ -8644,7 +8675,7 @@ integer
         </div>
 
         
-          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel in milliseconds.</p>
 </div>
         
         
@@ -20543,8 +20574,10 @@ the detected useragents.</p>
   "mac": "00:11:22:33:44:55",
   "ipv4": "192.168.0.96",
   "ipv6": "::ffff:c0a8:60",
-  "dhcp": {
-    "hostname": "MyPS5"
+  "meta": {
+    "dhcp": {
+      "hostname": "MyPS5"
+    }
   },
   "online": true
 }</code></pre>
@@ -33924,11 +33957,7 @@ listed VPN servers.</p>
 &quot;speed&quot; or &quot;latency&quot; fields in their configuration), the router will
 test them, and send the result back to the backend.  After testing is
 completed, the router will sort them, in order of fatest/lowest latency
-and then attempt to connect in that order.  Sorting is done as follows,
-the fastest server speed in the list is taken.  Of all servers that are
-within 10% of that speed, the one with the smallest latency is assumed
-to be the fastest.  The remaining servers are then sorted with the same
-rules, until no servers remain to be sorted.</p>
+and then attempt to connect in that order.</p>
 <p>If there are no servers to be tested, then they are attempted to be
 connected in the order presented.</p>
 <p>IF the router has already established a VPN connection, AND the VPN
@@ -34374,15 +34403,42 @@ object
 
         
           <div class="text-sm markdown"><p>The configuration for an individual VPN server.</p>
-<p>The vpn_id is to be used to report about status and speedtest results
+<p>The <strong>vpn_id</strong> is to be used to report about status and speedtest results
 for the configured vpn tunnel.</p>
-<p><strong>speed</strong> is the best speedtest TX result from the last <em>n</em> results.
-<strong>latency</strong> is the average latency to the speedtest server from the last
-<em>n</em> results.</p>
-<p>IF <strong>speed and latency</strong> will either both be present, or neither
-present.  If neither is present, the VPN tunnel is to be started and
-tested.  The TX speed test result becomes the servers <strong>speed</strong> and the
-average of at least 10 ping latencies becomes the <strong>latency</strong> value.</p>
+<p><strong>speed</strong> is the average speedtest TX result from the last months worth
+vpn speedtests on this server.  IF there is no <strong>speed</strong> field, the
+router is to create the <strong>speed</strong> value by connecting the tunnel and
+performing the speedtest.  The resulting TX speed in bytes per second of
+this one test becomes the <strong>speed</strong> for the purpose of selecting the
+fastest VPN Server.  Speed is selected as the TX value because most
+consumer internet connections are asynchronous, but have higher raw TX
+speed than RX, that means that any speedtest is more likely to max out
+RX than TX.</p>
+<p><strong>latency</strong> is the average latency to the speedtest server from the last
+months worth of speedtest results on the server.  IF there is a missing
+latency result (ie, the speedtest reported -1)  then the latency value
+for the purpose of averaging is taken to be 1000ms which will force the
+latency to dis-favor links with unreliable connections.  The average is
+rounded to the nearest whole millisecond.</p>
+<p><strong>speed and latency</strong> will either both be present, or neither present.
+If neither is present, the VPN tunnel is to be started and tested.</p>
+<p>The array will be pre-sorted in order from backend identified fastest
+server to slowest.  However, when the router must perform a speedtest to
+determine the vpn speed, it must resort.  The sorting algorithm works
+like this:</p>
+<pre><code>Place all servers in an unsorted list of servers.
+Create a sorted list of servers which initally is empty.
+
+Of the servers in the list of unsorted servers, get the maximum speed
+value.
+Of the servers in the unsorted list whos speed is within 10% of the
+fastest speed in the list, remove the server with the lowest latency value
+and add it to the end of the list of sorted vpn servers.
+Repeat this selection process until there are no more servers in the
+unsorted server list.
+</code></pre>
+<p>This algorithm will create a list of servers which trend from
+fastest/lowest latency down to slowest/highest latency.</p>
 </div>
         
         
@@ -34516,7 +34572,7 @@ integer
         </div>
 
         
-          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel.</p>
+          <div class="text-sm markdown"><p>Current rated bandwidth for the tunnel in bytes per second.</p>
 </div>
         
         
@@ -34594,7 +34650,7 @@ integer
         </div>
 
         
-          <div class="text-sm markdown"><p>Current rated latency for the tunnel.</p>
+          <div class="text-sm markdown"><p>Current rated latency for the tunnel in milliseconds.</p>
 </div>
         
         

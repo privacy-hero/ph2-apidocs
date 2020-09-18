@@ -7,6 +7,14 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.3
+
+    1. Fix Example for {Xref.device_information}
+    2. Better document how the speed and latency are calculated in
+       {Xref.vpn_server_connect}
+    3. Better explain that {Xref.vpn_server_connect} message with an empty list
+       of servers is to be used as a vpn_disconnect message.
+
     ### V0.1.2
 
     1. Modified speedtest result message {Xref.speedtest_result} to track pperf

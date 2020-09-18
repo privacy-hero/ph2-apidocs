@@ -347,8 +347,10 @@ def device_info():
         "mac"       : "00:11:22:33:44:55",
         "ipv4"      : "192.168.0.96",
         "ipv6"      : "::ffff:c0a8:60",
-        "dhcp"      : {
-          "hostname"  : "MyPS5"
+        "meta"      : {
+            "dhcp"      : {
+            "hostname"  : "MyPS5"
+            }
         },
         "online" : true
     """
