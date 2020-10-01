@@ -7,6 +7,12 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.4
+
+    1. Broke down the messages into smaller groups to ease document navigation.
+    2. Added {Xref.wifi_configuration} message.
+    3. Added {Xref.streaming_auth} message.
+
     ### V0.1.3
 
     1. Fix Example for {Xref.device_information}

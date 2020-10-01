@@ -19,15 +19,19 @@ from .aws_errors import aws_errors_channel
 from .adapter_diagnostics import adapter_diagnostics_channel, speedtest_channel
 from .adapter_messages import connection_channel
 from .adapter_configuration import adapter_configuration_channel
+from .adapter_vpn_configuration import vpn_configuration_channel
+from .adapter_wps_configuration import adapter_wps_configuration_channel
+from .adapter_wifi_configuration import wifi_configuration_channel
 from .device_discovery_messages import device_discovery_channel
 from .device_configuration_messages import device_configuration_channel
+from .device_bedtime_configuration_messages import device_bedtime_configuration_channel
 from .data_usage_messages import data_usage_channel
 from .streaming_configuration import streaming_configuration_channel
 
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.1.3"
+VERSION = "0.1.4"
 DESC = mls(
     f"""
     # The API for Adapter to Backend communication.
@@ -137,10 +141,14 @@ def channels():
         "AWS_ERRORS"          : {{ {aws_errors_channel()} }},
         "CONNECTION"          : {{ {connection_channel()} }},
         "CONFIGURATION"       : {{ {adapter_configuration_channel()} }},
+        "VPN_CONFIGURATION"   : {{ {vpn_configuration_channel()} }},
+        "WPS_CONFIGURATION"   : {{ {adapter_wps_configuration_channel()} }},
+        "WIFI_CONFIGURATION"  : {{ {wifi_configuration_channel()} }},
         "ADAPTER_DIAGNOSTICS" : {{ {adapter_diagnostics_channel()} }},
         "SPEEDTEST"           : {{ {speedtest_channel()} }},
         "DEVICE_DISCOVERY"    : {{ {device_discovery_channel()} }},
         "DEVICE_CONFIGURATION": {{ {device_configuration_channel()} }},
+        "DEVICE_BEDTIME_CFG"  : {{ {device_bedtime_configuration_channel()} }},
         "DATA_USAGE"          : {{ {data_usage_channel()} }},
         "STREAMING"           : {{ {streaming_configuration_channel()} }}
     """

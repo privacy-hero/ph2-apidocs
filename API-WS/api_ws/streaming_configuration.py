@@ -8,6 +8,8 @@ from .schemas import base_message, channel, Field
 from .tags import TAGS
 from .xref import Xref
 
+# -------------------------------------------------------------------------
+
 
 def domain_proxy_cfg():
     """Domain Proxy Configuration."""
@@ -39,6 +41,9 @@ def domain_proxy_cfg():
     return f"{Field.object(None, cfg_desc, cfg_required, cfg_fields)}"
 
 
+# -------------------------------------------------------------------------
+
+
 def ip_proxy_cfg():
     """IP Proxy Configuration."""
     cfg_desc = """
@@ -56,6 +61,9 @@ def ip_proxy_cfg():
     cfg_required = ["mask", "addrs"]
 
     return f"{Field.object(None, cfg_desc, cfg_required, cfg_fields)}"
+
+
+# -------------------------------------------------------------------------
 
 
 def configure_streaming():
@@ -118,6 +126,61 @@ def configure_streaming():
     )
 
 
+# -------------------------------------------------------------------------
+
+
+def auth_streaming():
+    """Send streaming credentials to the router."""
+    cmd = "auth-streaming"
+    name = "AuthorizeStreaming"
+    title = "Authorize Streaming"
+    summary = "Authorize the router to use the streaming proxy servers."
+
+    description = f"""
+        This message provides the credential needed by the streaming proxy
+        server to authorize itself for streaming services.
+
+        It will be sent initially following the router sending the
+        {Xref.link_established} message to the backend.  Subsequently the
+        message will be sent at approximately hourly intervals.  Each new
+        credential supersedes the previous credential.
+    """
+
+    tstamp_desc = """
+        The timestamp of the message.
+    """
+
+    extra_example = """
+        "credential" : "e2d83939053740f1b80d84d09ed3c96b:1601543418:dGhpcyBpcyBub3QgYSBzaWduYXR1cmUuICBpdCBpcyBidXQgYW4gZXhhbXBsZS4gIFRoZSByZWFsIHNpZ25hdHVyZSBpcyBtdWNoIG11Y2ggbG9uZ2VyIGFzIGl0IGlzIGEgUlNBIFNpZ25hdHVyZSBvZiBhIFNIQTI1NiBIYXNoLg==",
+        "expires" : 1601543418
+    """
+
+    extra_fields = f"""
+        {Field.string("credential", "The credential to use to authenticate with the streaming proxy servers.")},
+        {Field.unixepoch("expires", "When the credential may no longer be used.")}
+    """
+
+    extra_required = """
+        "tstamp", "credential", "expires"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
+# -------------------------------------------------------------------------
+
+
 def streaming_configuration_channel():
     """Streaming Config messages."""
     description = """
@@ -132,7 +195,7 @@ def streaming_configuration_channel():
     # subscribe_msgs = []
 
     publish_desc = "Commands to set the Streaming Configuration."
-    publish_msgs = [configure_streaming()]
+    publish_msgs = [configure_streaming(), auth_streaming()]
 
     return channel(
         description,

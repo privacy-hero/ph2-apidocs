@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.3",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
+    "version": "0.1.4",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
   },
   "servers": {
     "development": {
@@ -74,7 +74,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "Every adapter/backend generated message contains a unique **tstamp**\nfield.  This field defines both the time of a particular event having\nocurred, and the pairing of messages in the case of events which are\ntriggered as a result of commands from the backend.\n\nAn Adapter will always return the tstamp of any message it is\nreplying to.  IF the Adapter is generating an event asynchronously\nand not as a result of a direct comment, the tstamp contains the time\nof the event as generated by the adapter.\n\nThe Field is an integer and is the number of **milliseconds** since\nmidnight 1970, UTC.  Otherwise known as the Unix Epoch."
                   },
                   "id": {
@@ -117,7 +117,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the message was generated, unrelated to the bundled messages\ntimestamps."
                   },
                   "msgs": {
@@ -132,7 +132,7 @@
                         },
                         "tstamp": {
                           "type": "integer",
-                          "format": "int64",
+                          "format": "epoch timestamp [milliseconds] (int64)",
                           "description": "Every adapter/backend generated message contains a unique **tstamp**\nfield.  This field defines both the time of a particular event having\nocurred, and the pairing of messages in the case of events which are\ntriggered as a result of commands from the backend.\n\nAn Adapter will always return the tstamp of any message it is\nreplying to.  IF the Adapter is generating an event asynchronously\nand not as a result of a direct comment, the tstamp contains the time\nof the event as generated by the adapter.\n\nThe Field is an integer and is the number of **milliseconds** since\nmidnight 1970, UTC.  Otherwise known as the Unix Epoch."
                         },
                         "id": {
@@ -202,7 +202,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "Every adapter/backend generated message contains a unique **tstamp**\nfield.  This field defines both the time of a particular event having\nocurred, and the pairing of messages in the case of events which are\ntriggered as a result of commands from the backend.\n\nAn Adapter will always return the tstamp of any message it is\nreplying to.  IF the Adapter is generating an event asynchronously\nand not as a result of a direct comment, the tstamp contains the time\nof the event as generated by the adapter.\n\nThe Field is an integer and is the number of **milliseconds** since\nmidnight 1970, UTC.  Otherwise known as the Unix Epoch."
                   },
                   "id": {
@@ -245,7 +245,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the message was generated, unrelated to the bundled messages\ntimestamps."
                   },
                   "msgs": {
@@ -260,7 +260,7 @@
                         },
                         "tstamp": {
                           "type": "integer",
-                          "format": "int64",
+                          "format": "epoch timestamp [milliseconds] (int64)",
                           "description": "Every adapter/backend generated message contains a unique **tstamp**\nfield.  This field defines both the time of a particular event having\nocurred, and the pairing of messages in the case of events which are\ntriggered as a result of commands from the backend.\n\nAn Adapter will always return the tstamp of any message it is\nreplying to.  IF the Adapter is generating an event asynchronously\nand not as a result of a direct comment, the tstamp contains the time\nof the event as generated by the adapter.\n\nThe Field is an integer and is the number of **milliseconds** since\nmidnight 1970, UTC.  Otherwise known as the Unix Epoch."
                         },
                         "id": {
@@ -433,7 +433,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the link established message was queued by the Adapter.\n(According to the adapters internal clock.)"
                   },
                   "version": {
@@ -450,7 +450,7 @@
                   },
                   "disconnected": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "Optional: If this message is being sent because the link was disconnected, the\n**disconnected** field is sent, containing the time in milliseconds when the\nadapter detected the link had failed.  If this is the first connection\nsince power on, this field is omitted."
                   }
                 },
@@ -492,7 +492,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
                   },
                   "id": {
@@ -557,7 +557,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
                   },
                   "version": {
@@ -623,7 +623,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The tstamp in this message is set by the Backend and must be returned\nverbatim in the reply."
                   },
                   "id": {
@@ -674,7 +674,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
                   },
                   "whitelist": {
@@ -749,7 +749,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The response tstamp, as taken from the original command in the case\nof a reply, OR the tstamp the state changed on the adapter if sent asynchronously."
                   },
                   "id": {
@@ -814,184 +814,6 @@
                 ],
                 "additionalProperties": false
               }
-            },
-            {
-              "name": "VPNReconnect",
-              "title": "VPN Server Reconnect",
-              "summary": "Reconnect to a listed VPN Server.",
-              "description": "This message causes the backend to produce a new list of valid vpn\nservers and credentials and return it to the requesting router by way of\na [*VPN Server Connect*](#message-VPNConnect) message.\n\nThis message is only sent once, if an established VPN connection drops,\nand the Router is unable to re-establish a connection using the same\ncredentials as the last dropped link.  IF the router is unable to\nestablish a connection to any of the listed servers, the process\nterminates and this message is not sent.  Instead the router sends a\n[*VPN Connection Status*](#message-VPNStatus) message detailing the failure.",
-              "tags": [
-                {
-                  "name": "Adapter Messages",
-                  "description": "Messages relating to the Adapter and its global state/configuration."
-                }
-              ],
-              "payload": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Reconnect to a listed VPN Server.",
-                    "const": "vpn-reconnect",
-                    "minLength": 13,
-                    "maxLength": 13
-                  },
-                  "tstamp": {
-                    "type": "integer",
-                    "format": "int64",
-                    "description": "The request timestamp of the configuration."
-                  },
-                  "id": {
-                    "type": "string",
-                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
-                    "minLength": 1,
-                    "maxLength": 256
-                  }
-                },
-                "example": {
-                  "message": "vpn-reconnect",
-                  "tstamp": 1592217870123,
-                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"
-                },
-                "required": [
-                  "message",
-                  "tstamp"
-                ],
-                "additionalProperties": false
-              }
-            },
-            {
-              "name": "VPNStatus",
-              "title": "VPN Connection Status",
-              "summary": "Report VPN Connection Status.",
-              "description": "This message advises the current VPN status to the backend.\n\nDuring VPN connection, multiple status messages should be sent tracking\nthe major phases of VPN connection initiation, and also, reconnections\non a failed link and link disconnection.  VPN Connection/Disconnection\nis triggered by the receipt of a [*VPN Server Connect*](#message-VPNConnect) message.",
-              "tags": [
-                {
-                  "name": "Adapter Messages",
-                  "description": "Messages relating to the Adapter and its global state/configuration."
-                }
-              ],
-              "payload": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Report VPN Connection Status.",
-                    "const": "vpn-status",
-                    "minLength": 10,
-                    "maxLength": 10
-                  },
-                  "tstamp": {
-                    "type": "integer",
-                    "format": "int64",
-                    "description": "The request timestamp of the configuration."
-                  },
-                  "id": {
-                    "type": "string",
-                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
-                    "minLength": 1,
-                    "maxLength": 256
-                  },
-                  "status": {
-                    "type": "string",
-                    "description": "The current status of the VPN process.\n\n- *test-connecting* = Connecting to a VPN server to test.\n- *testing* = Test connection to VPN succeeded and test started.  Test\n  results will be sent in [*Speedtest Result*](#message-SpeedTest).\n- *test-failed* = Either the connection couldn't be established to test, or\n  the test has failed to execute.\n- *connecting* = Connecting the VPN tunnel for general use.\n- *connected* = The connection to the VPN is established and routing is\n  operational.\n- *failed* = The vpn server failed to connect or the link broke.   After\n  this call the router may no longer use the credentials presented in\n  [*VPN Server Connect*](#message-VPNConnect) for the server.\n- *reconnecting* = The VPN server was running and failed, trying to\n  reconnect. This status is sent instead of the *connecting* status when a\n  vpn link was established, but dropped and we are attempting to\n  re-establish the connection.\n- *disconnected* = The last possible server was tested and failed, giving up\n  trying to enable VPN.  *server* should not be present, as no server is\n  being accessed in this state.",
-                    "enum": [
-                      "test-connecting",
-                      "testing",
-                      "test-failed",
-                      "connecting",
-                      "connected",
-                      "failed",
-                      "reconnecting",
-                      "disconnected"
-                    ]
-                  },
-                  "server": {
-                    "type": "string",
-                    "description": "The server ID, sent for every status except *disconnected*"
-                  },
-                  "description": {
-                    "type": "string",
-                    "description": "String description providing extra information about a state.\nIt is valid for the same state to be sent multiple times with changing desc_string.\n\nFor example *testing* multiple times for the same URL with a running commentary\nabout the test as it executes."
-                  }
-                },
-                "example": {
-                  "message": "vpn-status",
-                  "tstamp": 1592217870123,
-                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-                  "status": "testing",
-                  "server": "wireguard-1",
-                  "description": "TX Speedtest started"
-                },
-                "required": [
-                  "message",
-                  "tstamp",
-                  "status"
-                ],
-                "additionalProperties": false
-              }
-            },
-            {
-              "name": "WPSStatus",
-              "title": "WPS Function Status",
-              "summary": "Report WPS Function Status.",
-              "description": "This message advises the current WPS Function status to the backend.\nThis is a summary of the result of presing the WPS button on the router.\n\nSee [*Adapter Service State*](#message-AdapterServicesState) for the configuration which\nenables/disables the WPS function.",
-              "tags": [
-                {
-                  "name": "Adapter Messages",
-                  "description": "Messages relating to the Adapter and its global state/configuration."
-                }
-              ],
-              "payload": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Report WPS Function Status.",
-                    "const": "wps-status",
-                    "minLength": 10,
-                    "maxLength": 10
-                  },
-                  "tstamp": {
-                    "type": "integer",
-                    "format": "int64",
-                    "description": "The request timestamp of the configuration."
-                  },
-                  "id": {
-                    "type": "string",
-                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
-                    "minLength": 1,
-                    "maxLength": 256
-                  },
-                  "status": {
-                    "type": "string",
-                    "description": "The current status of the WPS function.\n\n- *activated* = The WPS function is activated.  The optional **duration**\n  field defines the number of seconds the WPS mode will be active.\n- *blocked* = The WPS function activation button was pressed, but the\n  function is blocked by configuration. **duration** is omitted with this\n  status.\n- *completed* = The WPS function is no longer activated. **duration** is\n  omitted with this status.",
-                    "enum": [
-                      "activated",
-                      "blocked",
-                      "completed"
-                    ]
-                  },
-                  "duration": {
-                    "type": "integer",
-                    "format": "Number of seconds WPS will be activated on the router.",
-                    "description": "A INT"
-                  }
-                },
-                "example": {
-                  "message": "wps-status",
-                  "tstamp": 1592217870123,
-                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-                  "status": "activated",
-                  "duration": 180
-                },
-                "required": [
-                  "message",
-                  "tstamp",
-                  "status"
-                ],
-                "additionalProperties": false
-              }
             }
           ]
         },
@@ -1030,7 +852,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The request timestamp of the configuration, this tstamp must be returned\nin the reply with the results as the message tstamp.  In the"
                   },
                   "id": {
@@ -1103,7 +925,154 @@
                 ],
                 "additionalProperties": false
               }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      }
+    },
+    "VPN_CONFIGURATION": {
+      "description": "These are messages related to the configuration of the VPN in the adapter.\n\nThese messages are sent on initial connection and also periodically as\nrequired to reflect user changes in the configuration.",
+      "subscribe": {
+        "summary": "Adapter VPN Configuration",
+        "description": "Configuration VPN Acknowledgements from the Adapter",
+        "message": {
+          "oneOf": [
+            {
+              "name": "VPNReconnect",
+              "title": "VPN Server Reconnect",
+              "summary": "Reconnect to a listed VPN Server.",
+              "description": "This message causes the backend to produce a new list of valid vpn\nservers and credentials and return it to the requesting router by way of\na [*VPN Server Connect*](#message-VPNConnect) message.\n\nThis message is only sent once, if an established VPN connection drops,\nand the Router is unable to re-establish a connection using the same\ncredentials as the last dropped link.  IF the router is unable to\nestablish a connection to any of the listed servers, the process\nterminates and this message is not sent.  Instead the router sends a\n[*VPN Connection Status*](#message-VPNStatus) message detailing the failure.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Reconnect to a listed VPN Server.",
+                    "const": "vpn-reconnect",
+                    "minLength": 13,
+                    "maxLength": 13
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "example": {
+                  "message": "vpn-reconnect",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"
+                },
+                "required": [
+                  "message",
+                  "tstamp"
+                ],
+                "additionalProperties": false
+              }
             },
+            {
+              "name": "VPNStatus",
+              "title": "VPN Connection Status",
+              "summary": "Report VPN Connection Status.",
+              "description": "This message advises the current VPN status to the backend.\n\nDuring VPN connection, multiple status messages should be sent tracking\nthe major phases of VPN connection initiation, and also, reconnections\non a failed link and link disconnection.  VPN Connection/Disconnection\nis triggered by the receipt of a [*VPN Server Connect*](#message-VPNConnect) message.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Report VPN Connection Status.",
+                    "const": "vpn-status",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The current status of the VPN process.\n\n- *test-connecting* = Connecting to a VPN server to test.\n- *testing* = Test connection to VPN succeeded and test started.  Test\n  results will be sent in [*Speedtest Result*](#message-SpeedTest).\n- *test-failed* = Either the connection couldn't be established to test, or\n  the test has failed to execute.\n- *connecting* = Connecting the VPN tunnel for general use.\n- *connected* = The connection to the VPN is established and routing is\n  operational.\n- *failed* = The vpn server failed to connect or the link broke.   After\n  this call the router may no longer use the credentials presented in\n  [*VPN Server Connect*](#message-VPNConnect) for the server.\n- *reconnecting* = The VPN server was running and failed, trying to\n  reconnect. This status is sent instead of the *connecting* status when a\n  vpn link was established, but dropped and we are attempting to\n  re-establish the connection.\n- *disconnected* = The last possible server was tested and failed, giving up\n  trying to enable VPN.  *server* should not be present, as no server is\n  being accessed in this state.",
+                    "enum": [
+                      "test-connecting",
+                      "testing",
+                      "test-failed",
+                      "connecting",
+                      "connected",
+                      "failed",
+                      "reconnecting",
+                      "disconnected"
+                    ]
+                  },
+                  "server": {
+                    "type": "string",
+                    "description": "The server ID, sent for every status except *disconnected*"
+                  },
+                  "description": {
+                    "type": "string",
+                    "description": "String description providing extra information about a state.\nIt is valid for the same state to be sent multiple times with changing desc_string.\n\nFor example *testing* multiple times for the same URL with a running commentary\nabout the test as it executes."
+                  }
+                },
+                "example": {
+                  "message": "vpn-status",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "status": "testing",
+                  "server": "wireguard-1",
+                  "description": "TX Speedtest started"
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      },
+      "publish": {
+        "summary": "Adapter VPN Configuration",
+        "description": "VPN Commands to set the Adapter Configuration.",
+        "message": {
+          "oneOf": [
             {
               "name": "VPNConnect",
               "title": "VPN Server Connect",
@@ -1127,7 +1096,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The request timestamp of the configuration."
                   },
                   "id": {
@@ -1144,7 +1113,7 @@
                       "required": [
                         "vpn_id"
                       ],
-                      "description": "The configuration for an individual VPN server.\n\n\nThe **vpn_id** is to be used to report about status and speedtest results\nfor the configured vpn tunnel.\n\n**speed** is the average speedtest TX result from the last months worth\nvpn speedtests on this server.  IF there is no **speed** field, the\nrouter is to create the **speed** value by connecting the tunnel and\nperforming the speedtest.  The resulting TX speed in bytes per second of\nthis one test becomes the **speed** for the purpose of selecting the\nfastest VPN Server.  Speed is selected as the TX value because most\nconsumer internet connections are asynchronous, but have higher raw TX\nspeed than RX, that means that any speedtest is more likely to max out\nRX than TX.\n\n**latency** is the average latency to the speedtest server from the last\nmonths worth of speedtest results on the server.  IF there is a missing\nlatency result (ie, the speedtest reported -1)  then the latency value\nfor the purpose of averaging is taken to be 1000ms which will force the\nlatency to dis-favor links with unreliable connections.  The average is\nrounded to the nearest whole millisecond.\n\n**speed and latency** will either both be present, or neither present.\nIf neither is present, the VPN tunnel is to be started and tested.\n\nThe array will be pre-sorted in order from backend identified fastest\nserver to slowest.  However, when the router must perform a speedtest to\ndetermine the vpn speed, it must resort.  The sorting algorithm works\nlike this:\n\n```\nPlace all servers in an unsorted list of servers.\nCreate a sorted list of servers which initally is empty.\n\nOf the servers in the list of unsorted servers, get the maximum speed\nvalue.\nOf the servers in the unsorted list whos speed is within 10% of the\nfastest speed in the list, remove the server with the lowest latency value\nand add it to the end of the list of sorted vpn servers.\nRepeat this selection process until there are no more servers in the\nunsorted server list.\n```\n\nThis algorithm will create a list of servers which trend from\nfastest/lowest latency down to slowest/highest latency.",
+                      "description": "The configuration for an individual VPN server.\n\n\nThe **vpn_id** is to be used to report about status and speedtest results\nfor the configured vpn tunnel.\n\n**speed** is the average speedtest TX result from the last months worth\nvpn speedtests on this server.  IF there is no **speed** field, the\nrouter is to create the **speed** value by connecting the tunnel and\nperforming the speedtest.  The resulting TX speed in bytes per second of\nthis one test becomes the **speed** for the purpose of selecting the\nfastest VPN Server.  Speed is selected as the TX value because most\nconsumer internet connections are asynchronous, but have higher raw TX\nspeed than RX, that means that any speedtest is more likely to max out\nRX than TX.\n\n**latency** is the average latency to the speedtest server from the last\nmonths worth of speedtest results on the server.  IF there is a missing\nlatency result (ie, the speedtest reported -1)  then the latency value\nfor the purpose of averaging is taken to be 1000ms which will force the\nlatency to dis-favor links with unreliable connections.  The average is\nrounded to the nearest whole millisecond.\n\n**speed and latency** will either both be present, or neither present.\nIf neither is present, the VPN tunnel is to be started and tested.\n\nThe array will be pre-sorted in order from backend identified fastest\nserver to slowest.  However, when the router must perform a speedtest to\ndetermine the vpn speed, it must resort.  The sorting algorithm works\nlike this:\n\n```\nPlace all servers in an unsorted list of servers.\nCreate a sorted list of servers which initally is empty.\n\nOf the servers in the list of unsorted servers, get the maximum speed\nvalue.\nOf the servers in the unsorted list whose speed is within 10% of the\nfastest speed in the list, remove the server with the lowest latency value\nand add it to the end of the list of sorted vpn servers.\nRepeat this selection process until there are no more servers in the\nunsorted server list.\n```\n\nThis algorithm will create a list of servers which trend from\nfastest/lowest latency down to slowest/highest latency.",
                       "properties": {
                         "vpn_id": {
                           "type": "string",
@@ -1335,6 +1304,234 @@
         ]
       }
     },
+    "WPS_CONFIGURATION": {
+      "description": "These are messages related to the WPS operation of the adapter.\n\nThese messages are sent on initial connection and also periodically as\nrequired to reflect user changes in the configuration.",
+      "subscribe": {
+        "summary": "Adapter WPS Configuration",
+        "description": "WPS Messages from the Adapter",
+        "message": {
+          "oneOf": [
+            {
+              "name": "WPSStatus",
+              "title": "WPS Function Status",
+              "summary": "Report WPS Function Status.",
+              "description": "This message advises the current WPS Function status to the backend.\nThis is a summary of the result of presing the WPS button on the router.\n\nSee [*Adapter Service State*](#message-AdapterServicesState) for the configuration which\nenables/disables the WPS function.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Report WPS Function Status.",
+                    "const": "wps-status",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "status": {
+                    "type": "string",
+                    "description": "The current status of the WPS function.\n\n- *activated* = The WPS function is activated.  The optional **duration**\n  field defines the number of seconds the WPS mode will be active.\n- *blocked* = The WPS function activation button was pressed, but the\n  function is blocked by configuration. **duration** is omitted with this\n  status.\n- *completed* = The WPS function is no longer activated. **duration** is\n  omitted with this status.",
+                    "enum": [
+                      "activated",
+                      "blocked",
+                      "completed"
+                    ]
+                  },
+                  "duration": {
+                    "type": "integer",
+                    "format": "Number of seconds WPS will be activated on the router.",
+                    "description": "A INT"
+                  }
+                },
+                "example": {
+                  "message": "wps-status",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "status": "activated",
+                  "duration": 180
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "status"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      }
+    },
+    "WIFI_CONFIGURATION": {
+      "description": "These are messages related to the configuration of the WIFI Radios in the adapter.\n\nThese messages are sent on initial connection and also periodically as\nrequired to reflect user changes in the configuration.",
+      "publish": {
+        "summary": "Adapter WIFI Configuration",
+        "description": "Messages to set the Adapter Wifi Configuration.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "WifiConfiguration",
+              "title": "WIFI Configuration",
+              "summary": "Set up the WIFI Radios following this configuration.",
+              "description": "This message causes the router to enable or disable its wifi radios, and\nif enabled, configure them accordingly.\n\n* *default* configuration specifies the wifi configuration for all\nradios within the router.  Each individual radio within the router may\nbe further configured to differ from the default by the \"custom\" array.\n* *custom* array.  This array specifies the configuration differences\nrequested for each radio within the device.  Any radio which is not\nspecified by the array obtains the default configuration.  The only\nmandatory fields are **enabled** and **band**.  If a configuration\nexists for a radio that does not exist, it is silently ignored.  The\narray is optional, and may not be sent in the message if there are no\nper-radio customizations to apply.\n\n* *channel* setting defines the numeric channel preference for the\nradio.  If the field is missing, or set to -1, then the channel is to be\nauto selected by the router.  If the **channel** is set, the router will\nset the actual channel to the closest valid numeric channel  for the\nradio.  IF the router is unable to determine which channel is being\nrequested, it simply defaults to AUTO, and does not reject the message.\n* *bandwidth* setting defines the radio channel bandwidth.  If the\nsetting is missing, or is set to -1, the bandwidth defaults to the\nwidest available channel bandwidth for the radio.  This is because\ndevices should be able to downgrade their individual connection based on\ntheir capabilities and interference, and the widest channel allows for\nthe greatest speed.  If the bandwidth is specified, the router sets the\nbandwidth to the closest numerical bandwidth valid for the particular\nradio.  For example,  a bandwidth setting of 75 would select 80Mhz\nbandwidth, and not 40Mhz.\n\n*NOTE:*  Both *channel* and *bandwidth* are preferences and not hard\nconfiguration.  The router is to attempt to make a best effort attempt\nto follow the preference and if it can not, default to a reasonable\nvalue, or auto select as the case dictates.  Neither fields should cause\nthe configuration to be rejected, and if the router is unable to change\neither setting, it will still accept the message if they are defined.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Set up the WIFI Radios following this configuration.",
+                    "const": "wifi-cfg",
+                    "minLength": 8,
+                    "maxLength": 8
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "default": {
+                    "type": "object",
+                    "required": [
+                      "enabled"
+                    ],
+                    "description": "Default Wifi Configuration for all radios",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "description": "Is the WIFI Enabled or Not."
+                      },
+                      "ssid": {
+                        "type": "string",
+                        "description": "The name of the wifi network.",
+                        "default": "PrivacyHero"
+                      },
+                      "key": {
+                        "type": "string",
+                        "description": "The network password (if defined)"
+                      },
+                      "channel": {
+                        "type": "integer",
+                        "format": "int16",
+                        "description": "The preferred channel.  Default to Auto, if not present or set to -1."
+                      },
+                      "bandwidth": {
+                        "type": "integer",
+                        "format": "int16",
+                        "description": "The preferred channel bandwidth.  Default to Max, if not present or set to -1."
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "custom": {
+                    "type": "array",
+                    "description": "A list of customizations to apply per radio.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "enabled",
+                        "band"
+                      ],
+                      "description": "Custom Wifi Channel Configuration",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "description": "Is the WIFI Enabled or Not."
+                        },
+                        "band": {
+                          "type": "string",
+                          "description": "The Frequency band the Radio operates in.",
+                          "enum": [
+                            "2.4Ghz",
+                            "5Ghz",
+                            "6Ghz"
+                          ]
+                        },
+                        "ssid": {
+                          "type": "string",
+                          "description": "The name of the wifi network.",
+                          "default": "PrivacyHero"
+                        },
+                        "key": {
+                          "type": "string",
+                          "description": "The network password (if defined)"
+                        },
+                        "channel": {
+                          "type": "integer",
+                          "format": "int16",
+                          "description": "The preferred channel.  Default to Auto, if not present or set to -1."
+                        },
+                        "bandwidth": {
+                          "type": "integer",
+                          "format": "int16",
+                          "description": "The preferred channel bandwidth.  Default to Max, if not present or set to -1."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "wifi-cfg",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "default": {
+                    "enabled": true,
+                    "ssid": "MyHouse",
+                    "key": "its a secret"
+                  }
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "default"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      }
+    },
     "ADAPTER_DIAGNOSTICS": {
       "description": "These are messages related to the diagnostic processes of the adapter.\n\nDiagnostics are performed as required by the adapter, and also as a result of\nexplicit command from the backend.\n\nIf the adapter requested a diagnostic check, the tstamp in the reply MUST match\nthe tstamp in the request.",
       "subscribe": {
@@ -1365,7 +1562,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the log message was generated inside the adapter. (According to the\nadapters internal clock.)"
                   },
                   "id": {
@@ -1445,7 +1642,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "IF the speedtest was performed as a result of a automatic or scheduled test\nthe timestamp is the time the speed test started on the adapter.\n\nIF the speedtest was conducted as a result of a command from the backend,\nthe tstamp is the tstamp from the backend request to commence the speedtest."
                   },
                   "id": {
@@ -1609,7 +1806,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The request timestamp of the speedtest, this tstamp must be returned\nin the reply with the results as the message tstamp."
                   },
                   "id": {
@@ -1687,7 +1884,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the device was discovered/changed."
                   },
                   "id": {
@@ -1961,7 +2158,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the device was discovered/changed."
                   },
                   "id": {
@@ -2117,7 +2314,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "IF this is a reply to the backend setting the device state, this must equal the\ntstamp in the original request.\nIF this is an advice that a state changed asynchronously, this is the time the\nadapter changed/detected the state."
                   },
                   "id": {
@@ -2169,7 +2366,7 @@
                         },
                         "finishes": {
                           "type": "integer",
-                          "format": "int64",
+                          "format": "epoch timestamp [seconds] (int64)",
                           "description": "**OPTIONAL**, and **ONLY INCLUDED** when a timeout is supplied for the\nstate, this field in the reply specifies when the timed operation\nwill complete.  It is the Unix Epoch Date/Time as seconds since\nmidnight 1970 UTC."
                         }
                       },
@@ -2210,7 +2407,155 @@
                 ],
                 "additionalProperties": false
               }
-            },
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Device Messages",
+            "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+          }
+        ]
+      },
+      "publish": {
+        "summary": "Device Configuration",
+        "description": "Device Configuration messages.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "ChangeDeviceState",
+              "title": "Change Device State",
+              "summary": "Advise the Adapter to change the state of the devices.",
+              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto make the listed state changes to the listed devices.  The message can\ncontain multiple state changes, and multiple devices.  The devices listed are\nall triggered with the same state changes.  The router will reply with a\n[*Device State Changed*](#message-DeviceStateChanged) reply.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Advise the Adapter to change the state of the devices.",
+                    "const": "change device state",
+                    "minLength": 19,
+                    "maxLength": 19
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The time the backend decided the state should change.  To be returned in the\npaired reply."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "devices": {
+                    "type": "array",
+                    "description": "An array of Device MAC addresses the state changes are to be applied to.  All\ndevices listed are to have the same state change made as listed in this message.\nOnly after all devices states have been changed does the adapter send the paired\nreply.",
+                    "items": {
+                      "type": "string",
+                      "format": "Mac EUI",
+                      "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
+                      "minLength": 1,
+                      "maxLength": 17
+                    },
+                    "minItems": 1
+                  },
+                  "states": {
+                    "type": "array",
+                    "description": "The array of services and states to change.  If the service already has the\nrequested state on the device no change is made but the reply includes this\nstate.  If the service is not present in the states array, its state is not\nchanged, and its current state is NOT returned to the paired reply.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "service",
+                        "state"
+                      ],
+                      "description": "Service State",
+                      "properties": {
+                        "service": {
+                          "type": "string",
+                          "description": "The service/filter on the device which we wish to change the state of.\n- **vpn** - The Device will route through the VPN when True (if VPN is enabled)\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n- **adultcontent** - Adult Content is \"blocked\" when True.\n\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
+                          "enum": [
+                            "vpn",
+                            "ad-blocking",
+                            "device-protection",
+                            "internet-pause",
+                            "youtube-restricted",
+                            "safesearch",
+                            "adultcontent",
+                            "online"
+                          ]
+                        },
+                        "state": {
+                          "type": "boolean",
+                          "description": "- **true** - The service/filter is enabled.\n- **false** - The service/filter is disabled."
+                        },
+                        "timeout": {
+                          "type": "integer",
+                          "format": "epoch timestamp [seconds] (int64)",
+                          "description": "**OPTIONAL**, specifies a duration for the state to be set before it\nchanges to the opposite state.  It is specified as the number of\nseconds follwing the receipt and processing of this message.  IF\nthis message is present, the reply will have the \"finishes\" field\nset, which is the time NOW + this timeout, NOW is determined by the\ninternal clock of the adapter.\n\nNOTE: Currently this field will ONLY be sent if required for the\n**internet-pause** state."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "change device state",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "devices": [
+                    "53:CB:12:79:E5:F6",
+                    "DD:0F:91:FE:9E:00",
+                    "54:A4:33:F5:D8:A4"
+                  ],
+                  "states": [
+                    {
+                      "service": "ad-blocking",
+                      "state": false
+                    },
+                    {
+                      "service": "internet-pause",
+                      "state": false
+                    },
+                    {
+                      "service": "safe-search",
+                      "state": true
+                    }
+                  ]
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "devices",
+                  "states"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Device Messages",
+            "description": "Messages relating to the devices connected to an Adapter and their state/configuration."
+          }
+        ]
+      }
+    },
+    "DEVICE_BEDTIME_CFG": {
+      "description": "These are messages related to the configuration of device bedtime schedules.",
+      "subscribe": {
+        "summary": "Device Bedtime Configuration",
+        "description": "Device Bedtime Status messages.",
+        "message": {
+          "oneOf": [
             {
               "name": "BedtimeSet",
               "title": "Device Bedtime Set",
@@ -2234,7 +2579,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The tstamp, as received in the message which triggered this reply to\nbe sent."
                   },
                   "id": {
@@ -2356,7 +2701,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the backend decided to set the bedtime delay.  To be returned in the\npaired reply."
                   },
                   "id": {
@@ -2384,7 +2729,7 @@
                   },
                   "ends": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [seconds] (int64)",
                     "description": "This is the absolute unix epoch time when the delay will finish on\nthe adapter for the listed devices."
                   }
                 },
@@ -2421,127 +2766,10 @@
         ]
       },
       "publish": {
-        "summary": "Device Configuration",
-        "description": "Device Configuration messages.",
+        "summary": "Device Bedtime Configuration",
+        "description": "Device Bedtime Configuration messages.",
         "message": {
           "oneOf": [
-            {
-              "name": "ChangeDeviceState",
-              "title": "Change Device State",
-              "summary": "Advise the Adapter to change the state of the devices.",
-              "description": "This message is sent from the Backend to the adapter and instructs the adapter\nto make the listed state changes to the listed devices.  The message can\ncontain multiple state changes, and multiple devices.  The devices listed are\nall triggered with the same state changes.  The router will reply with a\n[*Device State Changed*](#message-DeviceStateChanged) reply.",
-              "tags": [
-                {
-                  "name": "Adapter Messages",
-                  "description": "Messages relating to the Adapter and its global state/configuration."
-                }
-              ],
-              "payload": {
-                "type": "object",
-                "properties": {
-                  "message": {
-                    "type": "string",
-                    "description": "Advise the Adapter to change the state of the devices.",
-                    "const": "change device state",
-                    "minLength": 19,
-                    "maxLength": 19
-                  },
-                  "tstamp": {
-                    "type": "integer",
-                    "format": "int64",
-                    "description": "The time the backend decided the state should change.  To be returned in the\npaired reply."
-                  },
-                  "id": {
-                    "type": "string",
-                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
-                    "minLength": 1,
-                    "maxLength": 256
-                  },
-                  "devices": {
-                    "type": "array",
-                    "description": "An array of Device MAC addresses the state changes are to be applied to.  All\ndevices listed are to have the same state change made as listed in this message.\nOnly after all devices states have been changed does the adapter send the paired\nreply.",
-                    "items": {
-                      "type": "string",
-                      "format": "Mac EUI",
-                      "description": "The Devices MAC address.  Assumed unique per adapter.  Eg. \"00:11:22:33:44:55\"\nAlso accepts \"001122334455\" or \"00-11-22-33-44-55\"",
-                      "minLength": 1,
-                      "maxLength": 17
-                    },
-                    "minItems": 1
-                  },
-                  "states": {
-                    "type": "array",
-                    "description": "The array of services and states to change.  If the service already has the\nrequested state on the device no change is made but the reply includes this\nstate.  If the service is not present in the states array, its state is not\nchanged, and its current state is NOT returned to the paired reply.",
-                    "items": {
-                      "type": "object",
-                      "required": [
-                        "service",
-                        "state"
-                      ],
-                      "description": "Service State",
-                      "properties": {
-                        "service": {
-                          "type": "string",
-                          "description": "The service/filter on the device which we wish to change the state of.\n- **vpn** - The Device will route through the VPN when True (if VPN is enabled)\n- **ad-blocking** - Ad Blocking is Enabled on the device when True.\n- **device-protection** - Device Protection is Enabled on the device when True.\n- **internet-pause** - Internet is paused for the device when True.\n- **youtube-restricted** - Youtube returns restricted search results when True.\n- **safesearch** - Search Engines return \"safe\" results when True.\n- **adultcontent** - Adult Content is \"blocked\" when True.\n\n\nNote: **internet-pause** also has a timed mode.  The boolean option in this\nmessage terminates any timed-pause current on the device and sets the state\naccordingly.",
-                          "enum": [
-                            "vpn",
-                            "ad-blocking",
-                            "device-protection",
-                            "internet-pause",
-                            "youtube-restricted",
-                            "safesearch",
-                            "adultcontent",
-                            "online"
-                          ]
-                        },
-                        "state": {
-                          "type": "boolean",
-                          "description": "- **true** - The service/filter is enabled.\n- **false** - The service/filter is disabled."
-                        },
-                        "timeout": {
-                          "type": "integer",
-                          "format": "int64",
-                          "description": "**OPTIONAL**, specifies a duration for the state to be set before it\nchanges to the opposite state.  It is specified as the number of\nseconds follwing the receipt and processing of this message.  IF\nthis message is present, the reply will have the \"finishes\" field\nset, which is the time NOW + this timeout, NOW is determined by the\ninternal clock of the adapter.\n\nNOTE: Currently this field will ONLY be sent if required for the\n**internet-pause** state."
-                        }
-                      },
-                      "additionalProperties": false
-                    },
-                    "minItems": 1
-                  }
-                },
-                "example": {
-                  "message": "change device state",
-                  "tstamp": 1592217870123,
-                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
-                  "devices": [
-                    "53:CB:12:79:E5:F6",
-                    "DD:0F:91:FE:9E:00",
-                    "54:A4:33:F5:D8:A4"
-                  ],
-                  "states": [
-                    {
-                      "service": "ad-blocking",
-                      "state": false
-                    },
-                    {
-                      "service": "internet-pause",
-                      "state": false
-                    },
-                    {
-                      "service": "safe-search",
-                      "state": true
-                    }
-                  ]
-                },
-                "required": [
-                  "message",
-                  "tstamp",
-                  "devices",
-                  "states"
-                ],
-                "additionalProperties": false
-              }
-            },
             {
               "name": "SetBedtime",
               "title": "Set Device Bedtime",
@@ -2565,7 +2793,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the backend decided to set the bedtime schedule.  To be returned in the\npaired reply."
                   },
                   "id": {
@@ -2687,7 +2915,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time the backend decided to set the bedtime delay.  To be returned in the\npaired reply."
                   },
                   "id": {
@@ -2779,7 +3007,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The time of the Adapter/Device Data Usage Report, this should be\nsynchronized to the top of each hour."
                   },
                   "id": {
@@ -2905,7 +3133,7 @@
                   },
                   "tstamp": {
                     "type": "integer",
-                    "format": "int64",
+                    "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The request timestamp of the configuration, this tstamp must be returned\nin the reply with the results as the message tstamp."
                   },
                   "id": {
@@ -3024,6 +3252,64 @@
                   "tstamp",
                   "domains",
                   "ip"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "AuthorizeStreaming",
+              "title": "Authorize Streaming",
+              "summary": "Authorize the router to use the streaming proxy servers.",
+              "description": "This message provides the credential needed by the streaming proxy\nserver to authorize itself for streaming services.\n\nIt will be sent initially following the router sending the\n[*Link Established*](#message-LinkEstablished) message to the backend.  Subsequently the\nmessage will be sent at approximately hourly intervals.  Each new\ncredential supersedes the previous credential.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Authorize the router to use the streaming proxy servers.",
+                    "const": "auth-streaming",
+                    "minLength": 14,
+                    "maxLength": 14
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The timestamp of the message."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "credential": {
+                    "type": "string",
+                    "description": "The credential to use to authenticate with the streaming proxy servers."
+                  },
+                  "expires": {
+                    "type": "integer",
+                    "format": "epoch timestamp [seconds] (int64)",
+                    "description": "When the credential may no longer be used."
+                  }
+                },
+                "example": {
+                  "message": "auth-streaming",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "credential": "e2d83939053740f1b80d84d09ed3c96b:1601543418:dGhpcyBpcyBub3QgYSBzaWduYXR1cmUuICBpdCBpcyBidXQgYW4gZXhhbXBsZS4gIFRoZSByZWFsIHNpZ25hdHVyZSBpcyBtdWNoIG11Y2ggbG9uZ2VyIGFzIGl0IGlzIGEgUlNBIFNpZ25hdHVyZSBvZiBhIFNIQTI1NiBIYXNoLg==",
+                  "expires": 1601543418
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "credential",
+                  "expires"
                 ],
                 "additionalProperties": false
               }

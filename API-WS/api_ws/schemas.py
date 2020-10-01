@@ -100,7 +100,7 @@ class Field:  # pylint: disable=too-many-public-methods
             name,
             f"""
                 "type" : "integer",
-                "format": "int64",
+                "format": "epoch timestamp [milliseconds] (int64)",
                 "description" :{mls(desc)}
             """,
         )
@@ -113,7 +113,7 @@ class Field:  # pylint: disable=too-many-public-methods
             name,
             f"""
                 "type" : "integer",
-                "format": "int64",
+                "format": "epoch timestamp [seconds] (int64)",
                 "description" :{mls(desc)}
             """,
         )
@@ -291,7 +291,9 @@ class Field:  # pylint: disable=too-many-public-methods
 
     # -------------------------------------------------------------------------
     @staticmethod
-    def string(name="string", desc="A STRING", minlength=0, maxlength=0, fmat=None):
+    def string(
+        name="string", desc="A STRING", minlength=0, maxlength=0, fmat=None, default=""
+    ):
         """Return the definition of the standard string field."""
         return Field.named(
             name,
@@ -301,6 +303,7 @@ class Field:  # pylint: disable=too-many-public-methods
                 {Field.optional("minLength", minlength, 0, "")}
                 {Field.optional("maxLength", maxlength, 0, "")}
                 {Field.optional("format", fmat)}
+                {Field.optional("default", default, omitif="")}
             """,
         )
 
@@ -352,6 +355,12 @@ class Field:  # pylint: disable=too-many-public-methods
     def int32(name="int32", desc="A INT32", minvalue=None, maxvalue=None):
         """Return the definition of the standard int32 field."""
         return Field.int(name, "int32", desc, minvalue, maxvalue)
+
+    # -------------------------------------------------------------------------
+    @staticmethod
+    def int16(name="int16", desc="A INT16", minvalue=None, maxvalue=None):
+        """Return the definition of the standard int16 field."""
+        return Field.int(name, "int16", desc, minvalue, maxvalue)
 
     # -------------------------------------------------------------------------
     @staticmethod

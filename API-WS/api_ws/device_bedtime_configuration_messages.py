@@ -1,17 +1,6 @@
 """AsyncAPI Main Defintions.
 
-Privacy Hero 2 - Websocket API - Device Configuration Message Definitions.
-
-NOTES:
-Internet Pause timed:
-    Pause duration
-    id - Just returned in the reply, ignored otherwise
-    [List of device macs to pause]
-
-VPN On-Off:
-    URL - Optional - URL to establish VPN connection to.
-    Method - VPN Method Openvpn / wireguard
-
+Privacy Hero 2 - Websocket API - Device Bedtime Configuration Message Definitions.
 """
 
 # from .util import mls
@@ -527,29 +516,27 @@ def set_device_bedtime_delay(reply=False):
     )
 
 
-def device_configuration_channel():
-    """Device Configuration messages."""
+def device_bedtime_configuration_channel():
+    """Device Bedtime Configuration messages."""
     description = """
-        These are messages related to the configuration of known devices.
+        These are messages related to the configuration of device bedtime schedules.
     """
 
-    subscribe_desc = "Device Configuration messages."
+    subscribe_desc = "Device Bedtime Status messages."
     subscribe_msgs = [
-        device_state_changed(),
-        # set_device_bedtime(reply=True),
-        # set_device_bedtime_delay(reply=True),
+        set_device_bedtime(reply=True),
+        set_device_bedtime_delay(reply=True),
     ]
 
-    publish_desc = "Device Configuration messages."
+    publish_desc = "Device Bedtime Configuration messages."
     publish_msgs = [
-        change_device_state(),
-        # set_device_bedtime(),
-        # set_device_bedtime_delay(),
+        set_device_bedtime(),
+        set_device_bedtime_delay(),
     ]
 
     return channel(
         description,
-        "Device Configuration",
+        "Device Bedtime Configuration",
         sub_desc=subscribe_desc,
         sub_msgs=subscribe_msgs,
         pub_desc=publish_desc,
