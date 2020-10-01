@@ -35,51 +35,67 @@ def wifi_radio_config(default: bool = False):
 # ------------------------------------------------------------------------------
 
 
-def wifi_configure():
+def wifi_configure(reply: bool = False):
     """Configure the VPN Servers the Router will communicate with."""
-    cmd = "wifi-cfg"
-    name = "WifiConfiguration"
-    title = "WIFI Configuration"
-    summary = "Set up the WIFI Radios following this configuration."
+    if not reply:
+        cmd = "wifi-cfg"
+        name = "WifiConfiguration"
+        title = "WIFI Configuration"
+        summary = "Set up the WIFI Radios following this configuration."
 
-    description = """
-        This message causes the router to enable or disable its wifi radios, and
-        if enabled, configure them accordingly.
-        \\
-        * *default* configuration specifies the wifi configuration for all
-        radios within the router.  Each individual radio within the router may
-        be further configured to differ from the default by the "custom" array.
-        * *custom* array.  This array specifies the configuration differences
-        requested for each radio within the device.  Any radio which is not
-        specified by the array obtains the default configuration.  The only
-        mandatory fields are **enabled** and **band**.  If a configuration
-        exists for a radio that does not exist, it is silently ignored.  The
-        array is optional, and may not be sent in the message if there are no
-        per-radio customizations to apply.
-        \\
-        * *channel* setting defines the numeric channel preference for the
-        radio.  If the field is missing, or set to -1, then the channel is to be
-        auto selected by the router.  If the **channel** is set, the router will
-        set the actual channel to the closest valid numeric channel  for the
-        radio.  IF the router is unable to determine which channel is being
-        requested, it simply defaults to AUTO, and does not reject the message.
-        * *bandwidth* setting defines the radio channel bandwidth.  If the
-        setting is missing, or is set to -1, the bandwidth defaults to the
-        widest available channel bandwidth for the radio.  This is because
-        devices should be able to downgrade their individual connection based on
-        their capabilities and interference, and the widest channel allows for
-        the greatest speed.  If the bandwidth is specified, the router sets the
-        bandwidth to the closest numerical bandwidth valid for the particular
-        radio.  For example,  a bandwidth setting of 75 would select 80Mhz
-        bandwidth, and not 40Mhz.
-        \\
-        *NOTE:*  Both *channel* and *bandwidth* are preferences and not hard
-        configuration.  The router is to attempt to make a best effort attempt
-        to follow the preference and if it can not, default to a reasonable
-        value, or auto select as the case dictates.  Neither fields should cause
-        the configuration to be rejected, and if the router is unable to change
-        either setting, it will still accept the message if they are defined.
-    """
+        description = """
+            This message causes the router to enable or disable its wifi radios, and
+            if enabled, configure them accordingly.
+            \\
+            * *default* configuration specifies the wifi configuration for all
+            radios within the router.  Each individual radio within the router may
+            be further configured to differ from the default by the "custom" array.
+            * *custom* array.  This array specifies the configuration differences
+            requested for each radio within the device.  Any radio which is not
+            specified by the array obtains the default configuration.  The only
+            mandatory fields are **enabled** and **band**.  If a configuration
+            exists for a radio that does not exist, it is silently ignored.  The
+            array is optional, and may not be sent in the message if there are no
+            per-radio customizations to apply.
+            \\
+            * *channel* setting defines the numeric channel preference for the
+            radio.  If the field is missing, or set to -1, then the channel is to be
+            auto selected by the router.  If the **channel** is set, the router will
+            set the actual channel to the closest valid numeric channel  for the
+            radio.  IF the router is unable to determine which channel is being
+            requested, it simply defaults to AUTO, and does not reject the message.
+            * *bandwidth* setting defines the radio channel bandwidth.  If the
+            setting is missing, or is set to -1, the bandwidth defaults to the
+            widest available channel bandwidth for the radio.  This is because
+            devices should be able to downgrade their individual connection based on
+            their capabilities and interference, and the widest channel allows for
+            the greatest speed.  If the bandwidth is specified, the router sets the
+            bandwidth to the closest numerical bandwidth valid for the particular
+            radio.  For example,  a bandwidth setting of 75 would select 80Mhz
+            bandwidth, and not 40Mhz.
+            \\
+            *NOTE:*  Both *channel* and *bandwidth* are preferences and not hard
+            configuration.  The router is to attempt to make a best effort attempt
+            to follow the preference and if it can not, default to a reasonable
+            value, or auto select as the case dictates.  Neither fields should cause
+            the configuration to be rejected, and if the router is unable to change
+            either setting, it will still accept the message if they are defined.
+        """
+    else:
+        cmd = "wifi-status"
+        name = "WifiStatus"
+        title = "WIFI Status"
+        summary = "The current WIFI Radio status."
+
+        description = """
+            This message is the reply to the Wifi Configuration message.  Other
+            than the message type, all other fields should match the request.
+            \\
+            In the case of the *bandwidth* and *channel* fields, they should be
+            set to the actual bandwidth or channel selected for the radio, but
+            only in the *custom* array.  In the *default* config, they should be
+            returned exactly as requested by the backend.
+        """
 
     tstamp_desc = """
         The request timestamp of the configuration.
@@ -131,8 +147,8 @@ def wifi_configuration_channel():
         required to reflect user changes in the configuration.
     """
 
-    subscribe_desc = None
-    subscribe_msgs = None
+    subscribe_desc = "Messages from the Adapter to confirm Wifi Configuration."
+    subscribe_msgs = [wifi_configure(reply=True)]
 
     publish_desc = "Messages to set the Adapter Wifi Configuration."
     publish_msgs = [wifi_configure()]

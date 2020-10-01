@@ -1385,6 +1385,152 @@
     },
     "WIFI_CONFIGURATION": {
       "description": "These are messages related to the configuration of the WIFI Radios in the adapter.\n\nThese messages are sent on initial connection and also periodically as\nrequired to reflect user changes in the configuration.",
+      "subscribe": {
+        "summary": "Adapter WIFI Configuration",
+        "description": "Messages from the Adapter to confirm Wifi Configuration.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "WifiStatus",
+              "title": "WIFI Status",
+              "summary": "The current WIFI Radio status.",
+              "description": "This message is the reply to the Wifi Configuration message.  Other\nthan the message type, all other fields should match the request.\n\nIn the case of the *bandwidth* and *channel* fields, they should be\nset to the actual bandwidth or channel selected for the radio, but\nonly in the *custom* array.  In the *default* config, they should be\nreturned exactly as requested by the backend.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "The current WIFI Radio status.",
+                    "const": "wifi-status",
+                    "minLength": 11,
+                    "maxLength": 11
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "default": {
+                    "type": "object",
+                    "required": [
+                      "enabled"
+                    ],
+                    "description": "Default Wifi Configuration for all radios",
+                    "properties": {
+                      "enabled": {
+                        "type": "boolean",
+                        "description": "Is the WIFI Enabled or Not."
+                      },
+                      "ssid": {
+                        "type": "string",
+                        "description": "The name of the wifi network.",
+                        "default": "PrivacyHero"
+                      },
+                      "key": {
+                        "type": "string",
+                        "description": "The network password (if defined)"
+                      },
+                      "channel": {
+                        "type": "integer",
+                        "format": "int16",
+                        "description": "The preferred channel.  Default to Auto, if not present or set to -1."
+                      },
+                      "bandwidth": {
+                        "type": "integer",
+                        "format": "int16",
+                        "description": "The preferred channel bandwidth.  Default to Max, if not present or set to -1."
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "custom": {
+                    "type": "array",
+                    "description": "A list of customizations to apply per radio.",
+                    "items": {
+                      "type": "object",
+                      "required": [
+                        "enabled",
+                        "band"
+                      ],
+                      "description": "Custom Wifi Channel Configuration",
+                      "properties": {
+                        "enabled": {
+                          "type": "boolean",
+                          "description": "Is the WIFI Enabled or Not."
+                        },
+                        "band": {
+                          "type": "string",
+                          "description": "The Frequency band the Radio operates in.",
+                          "enum": [
+                            "2.4Ghz",
+                            "5Ghz",
+                            "6Ghz"
+                          ]
+                        },
+                        "ssid": {
+                          "type": "string",
+                          "description": "The name of the wifi network.",
+                          "default": "PrivacyHero"
+                        },
+                        "key": {
+                          "type": "string",
+                          "description": "The network password (if defined)"
+                        },
+                        "channel": {
+                          "type": "integer",
+                          "format": "int16",
+                          "description": "The preferred channel.  Default to Auto, if not present or set to -1."
+                        },
+                        "bandwidth": {
+                          "type": "integer",
+                          "format": "int16",
+                          "description": "The preferred channel bandwidth.  Default to Max, if not present or set to -1."
+                        }
+                      },
+                      "additionalProperties": false
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "wifi-status",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "default": {
+                    "enabled": true,
+                    "ssid": "MyHouse",
+                    "key": "its a secret"
+                  }
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "default"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      },
       "publish": {
         "summary": "Adapter WIFI Configuration",
         "description": "Messages to set the Adapter Wifi Configuration.",
