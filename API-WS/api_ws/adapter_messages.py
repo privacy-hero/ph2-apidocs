@@ -25,8 +25,15 @@ def link_established():
 
         1. {Xref.initial_config}
         2. {Xref.unsubscribed_whitelist}
-        3. {Xref.known_devices}
-        4. {Xref.set_bedtime} 1 message each for as many bedtime schedules exist.
+        3. {Xref.block_list} (1 message for each blocklist category)
+        4. {Xref.adapter_services}
+        5. {Xref.wifi_configuration}
+        6. {Xref.vpn_server_connect}
+        7. {Xref.streaming_auth}
+        8. {Xref.streaming_cfg}
+        9. {Xref.known_devices}
+        10. {Xref.change_device_state} (As many as required to configure all devices)
+        11. {Xref.set_bedtime} (1 message each for as many bedtime schedules exist.)
     """
 
     tstamp_desc = """

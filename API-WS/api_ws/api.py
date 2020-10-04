@@ -19,6 +19,7 @@ from .aws_errors import aws_errors_channel
 from .adapter_diagnostics import adapter_diagnostics_channel, speedtest_channel
 from .adapter_messages import connection_channel
 from .adapter_configuration import adapter_configuration_channel
+from .adapter_blocklist_configuration import adapter_blocklist_configuration_channel
 from .adapter_vpn_configuration import vpn_configuration_channel
 from .adapter_wps_configuration import adapter_wps_configuration_channel
 from .adapter_wifi_configuration import wifi_configuration_channel
@@ -31,7 +32,7 @@ from .streaming_configuration import streaming_configuration_channel
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.1.4"
+VERSION = "0.1.5 (draft)"
 DESC = mls(
     f"""
     # The API for Adapter to Backend communication.
@@ -141,6 +142,7 @@ def channels():
         "AWS_ERRORS"          : {{ {aws_errors_channel()} }},
         "CONNECTION"          : {{ {connection_channel()} }},
         "CONFIGURATION"       : {{ {adapter_configuration_channel()} }},
+        "BLOCKLIST_CFG"       : {{ {adapter_blocklist_configuration_channel()} }},
         "VPN_CONFIGURATION"   : {{ {vpn_configuration_channel()} }},
         "WPS_CONFIGURATION"   : {{ {adapter_wps_configuration_channel()} }},
         "WIFI_CONFIGURATION"  : {{ {wifi_configuration_channel()} }},

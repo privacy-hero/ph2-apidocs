@@ -206,4 +206,3 @@ def adapter_configuration_channel():
         pub_msgs=publish_msgs,
         tags=TAGS.ADAPTER_MSGS,
     )
-

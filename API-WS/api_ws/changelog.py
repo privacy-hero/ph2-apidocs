@@ -7,6 +7,14 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.5 (draft)
+
+    1. Added {Xref.block_list} message.
+    2. Added {Xref.block_list_applied} message.
+    3. Referenced blocklist config messages from {Xref.link_established}.
+    4. Added all current config messages needed to be sent on startup to
+       {Xref.link_established}.
+
     ### V0.1.4
 
     1. Broke down the messages into smaller groups to ease document navigation.

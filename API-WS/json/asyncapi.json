@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.4",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
+    "version": "0.1.5 (draft)",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.5 (draft)\n\n1. Added [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) message.\n2. Added [*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG) message.\n3. Referenced blocklist config messages from [*Link Established*](#message-LinkEstablished).\n4. Added all current config messages needed to be sent on startup to\n   [*Link Established*](#message-LinkEstablished).\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
   },
   "servers": {
     "development": {
@@ -414,7 +414,7 @@
               "name": "LinkEstablished",
               "title": "Link Established",
               "summary": "Advise the Backend that the Adapter has connected to a new websocket",
-              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist)\n3. [*Known Devices*](#message-KnownDevices)\n4. [*Set Bedtime*](#message-SetBedtime) 1 message each for as many bedtime schedules exist.",
+              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist)\n3. [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) (1 message for each blocklist category)\n4. [*Adapter Services*](#message-AdapterServices)\n5. [*WIFI Configuration*](#message-WifiConfiguration)\n6. [*VPN Server Connect*](#message-VPNConnect)\n7. [*Streaming Auth*](#message-AuthorizeStreaming)\n8. [*Streaming Cfg*](#message-ConfigureStreaming)\n9. [*Known Devices*](#message-KnownDevices)\n10. [*Change Device State*](#message-ChangeDeviceState) (As many as required to configure all devices)\n11. [*Set Bedtime*](#message-SetBedtime) (1 message each for as many bedtime schedules exist.)",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -771,7 +771,7 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*](#message-WPSStatus) message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
+                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*](#message-WPSStatus) message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message.",
                           "enum": [
                             "AdBlocking",
                             "StreamRelocation",
@@ -874,7 +874,7 @@
                       "properties": {
                         "service": {
                           "type": "string",
-                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*](#message-WPSStatus) message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist) message.",
+                          "description": "The name of the service being configured.\n- AdBlocking = Globally Enable/Disable AdBlocking\n- StreamRelocation = Globally Enable/Disabe Stream Relocation\n- UPNP = Enable a UPNP server to manage port forwarding for lan clients.\n- WIFI = Globally Enable/Disbale the Wifi on the Router.\n- WPS = Enable/Disable the WPS Button. This does not enable the WPS\n  function, only allows the button to operate normally or not. Active\n  WPS State changes are reported using the [*WPS Status*](#message-WPSStatus) message\n- Subscribed = True - Normal Operation.  False - Subscription captive\n  portal mode.  In captive portal mode only whitelisted domains have\n  access to the internet. See [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message.",
                           "enum": [
                             "AdBlocking",
                             "StreamRelocation",
@@ -922,6 +922,203 @@
                   "message",
                   "tstamp",
                   "services"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      }
+    },
+    "BLOCKLIST_CFG": {
+      "description": "These are messages related to the configuration of the adapter.\n\nThey configure the blocklist URLs where the actual blocklists are\nfetched from.\n\nThese messages are sent on initial connection and also periodically as\nrequired to reflect user changes in the configuration.",
+      "subscribe": {
+        "summary": "Adapter Blocklist Configuration",
+        "description": "Configuration Acknowledgements from the Adapter",
+        "message": {
+          "oneOf": [
+            {
+              "name": "BlockListApplied",
+              "title": "Block List Applied",
+              "summary": "The Acknowledgement that the updated blocklist urls have been applied.",
+              "description": "This is the reply to setting the block list URL with the\n[*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) message.\n\nThis message is sent after the blocking service has been\nre-configured with the new URL, and triggered to re-download it (if\nnecessary).",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "The Acknowledgement that the updated blocklist urls have been applied.",
+                    "const": "block-list-applied",
+                    "minLength": 18,
+                    "maxLength": 18
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The response tstamp, as taken from the original command in the case\nof a reply, OR the tstamp the state changed on the adapter if sent asynchronously."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "list name": {
+                    "type": "string",
+                    "description": "The category of blocklist that was applied.",
+                    "enum": [
+                      "adblock",
+                      "adult",
+                      "safesearch",
+                      "youtube"
+                    ]
+                  },
+                  "blacklist": {
+                    "type": "array",
+                    "description": "URLs of blacklists which were applied.",
+                    "items": {
+                      "type": "string",
+                      "format": "url",
+                      "description": "A blacklist URL"
+                    },
+                    "minItems": 1
+                  },
+                  "whitelist": {
+                    "type": "array",
+                    "description": "URLs of whitelists which were applied.",
+                    "items": {
+                      "type": "string",
+                      "format": "url",
+                      "description": "A whitelist URL"
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "block-list-applied",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "list name": "safesearch",
+                  "blacklist": [
+                    "https://our.s3.bucket/safesearch.lst"
+                  ],
+                  "whitelist": []
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "list name",
+                  "blacklist",
+                  "whitelist"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ]
+        },
+        "tags": [
+          {
+            "name": "Adapter Messages",
+            "description": "Messages relating to the Adapter and its global state/configuration."
+          }
+        ]
+      },
+      "publish": {
+        "summary": "Adapter Blocklist Configuration",
+        "description": "Commands to set the Adapter Configuration.",
+        "message": {
+          "oneOf": [
+            {
+              "name": "BlockList",
+              "title": "Block List",
+              "summary": "Configure URL the Adapter retrieves the blocklists from.",
+              "description": "This message causes the adapter to update the URL of the known\nhostlists that are blocked for the various categories of blocking we\nemploy.  Upon receipt, the router should look up and re-download any\nhostname file specified, even if that name ahs not changed since the\nlast receipt of this message.\n\nReplied to with a [*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG) message.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Configure URL the Adapter retrieves the blocklists from.",
+                    "const": "block-list",
+                    "minLength": 10,
+                    "maxLength": 10
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration, this tstamp must be returned\nin the reply with the results as the message tstamp.  In the"
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "list name": {
+                    "type": "string",
+                    "description": "A Category of block list URLs being configured.",
+                    "enum": [
+                      "adblock",
+                      "adult",
+                      "safesearch",
+                      "youtube"
+                    ]
+                  },
+                  "blacklist": {
+                    "type": "array",
+                    "description": "URLs of blacklists to apply.",
+                    "items": {
+                      "type": "string",
+                      "format": "url",
+                      "description": "A blacklist URL"
+                    },
+                    "minItems": 1
+                  },
+                  "whitelist": {
+                    "type": "array",
+                    "description": "URLs of whitelists to apply.",
+                    "items": {
+                      "type": "string",
+                      "format": "url",
+                      "description": "A whitelist URL"
+                    },
+                    "minItems": 1
+                  }
+                },
+                "example": {
+                  "message": "block-list",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "list name": "safesearch",
+                  "blacklist": [
+                    "https://our.s3.bucket/safesearch.lst"
+                  ],
+                  "whitelist": []
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "list name",
+                  "blacklist",
+                  "whitelist"
                 ],
                 "additionalProperties": false
               }

@@ -3,6 +3,8 @@
 Contains page cross references to ease document references.
 """
 
+# TODO: Where possible update the link to the operation link.
+
 
 class Xref:  # pylint: disable=too-few-public-methods
     """Individual Message Cross References."""
@@ -12,7 +14,9 @@ class Xref:  # pylint: disable=too-few-public-methods
     aws_internal_err = "[*AWS Internal Server Error*](#message-AWSInternalServerError)"
     aws_server_error = "[*AWS Server Error*](#message-AWSServerError)"
     initial_config = "[*Initial Configuration*](#message-InitialConfig)"
-    unsubscribed_whitelist = "[*Unsubscribed Whitlist*](#message-UnsubscribedWhitelist)"
+    unsubscribed_whitelist = (
+        "[*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist)"
+    )
     link_established = "[*Link Established*](#message-LinkEstablished)"
     adapter_services = "[*Adapter Services*](#message-AdapterServices)"
     adapter_service_state = "[*Adapter Service State*](#message-AdapterServicesState)"
@@ -37,3 +41,5 @@ class Xref:  # pylint: disable=too-few-public-methods
     streaming_auth = "[*Streaming Auth*](#message-AuthorizeStreaming)"
     reset_router = "[*Reset Router*](#message-Reset)"
     router_resetting = "[*Router Reseting*](#message-Resetting)"
+    block_list = "[*Block List Cfg*](#operation-publish-BLOCKLIST_CFG)"
+    block_list_applied = "[*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG)"
