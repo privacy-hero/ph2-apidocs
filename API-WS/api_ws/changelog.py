@@ -7,7 +7,7 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
-    ### V0.1.5 (draft)
+    ### V0.1.5
 
     1. Added {Xref.block_list} message.
     2. Added {Xref.block_list_applied} message.
