@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.0.24",
+    "version": "0.1.0",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -383,7 +383,9 @@
           "vpn",
           "ad-blocking",
           "stream-relocation",
-          "malware-phishing"
+          "malware-phishing",
+          "upnp",
+          "wps"
         ],
         "properties": {
           "online": {
@@ -402,6 +404,9 @@
             "$ref": "#/components/schemas/state"
           },
           "upnp": {
+            "$ref": "#/components/schemas/state"
+          },
+          "wps": {
             "$ref": "#/components/schemas/state"
           }
         }
@@ -617,7 +622,8 @@
           "AdBlocking",
           "StreamRelocation",
           "Malware",
-          "UPNP"
+          "UPNP",
+          "WPS"
         ],
         "example": "VPN",
         "description": "A service running on the adapter."
@@ -1179,6 +1185,16 @@
               "description": "Is the service subscription able to be used in multiple countries?",
               "default": true
             },
+            "subscription": {
+              "type": "string",
+              "enum": [
+                "free",
+                "paid",
+                "cable"
+              ],
+              "default": "paid",
+              "description": "Defines if the service is free, requires a paid subscription or\ncomes bundled with a cable subscription.  Currently this field is\nunimplemented and is **OPTIONAL**.  The Front end should ignore it\nif it receives it.  This is defined here to allow for a future\nfeature upgrade that will use this field.  The front end\naccepting, but ignoring the field allows the backend to implement\nthe function prior to any necessary front end changes, and still\nallow the system to work unimpeded."
+            },
             "countries": {
               "type": "object",
               "description": "List of all countries streaming service is available in.\n\n**proxy** countries may be used to proxy a stream to appear as if\nthe stream is being watched in that country.\n\n**non-proxy** are countries where the streaming service is\navailable but for which no proxy exists.  These can only be\nused if the Adapter is located in that country.",
@@ -1207,7 +1223,7 @@
       },
       "stream-settings": {
         "type": "object",
-        "description": "Streaming Services Settings",
+        "description": "**Streaming Services Settings**\n\nThe **subscription** field is OPTIONAL, it defines the country the\nclient holds their cubscription for.  It is not currently implemented in\nthe backend, but the front end can send it, and the backend will store\nit.  IF a **subscription** has been set for a stream, the value will be\nin the retrieval of the configuration, or the reply.  Otherwise it will\nbe omitted.",
         "required": [
           "id"
         ],
@@ -1217,6 +1233,9 @@
             "$ref": "#/components/schemas/uuid"
           },
           "country": {
+            "$ref": "#/components/schemas/iso3166-country"
+          },
+          "subscription": {
             "$ref": "#/components/schemas/iso3166-country"
           },
           "since": {
@@ -1247,6 +1266,9 @@
             "$ref": "#/components/schemas/uuid"
           },
           "country": {
+            "$ref": "#/components/schemas/iso3166-country"
+          },
+          "subscription": {
             "$ref": "#/components/schemas/iso3166-country"
           },
           "since": {
@@ -2812,7 +2834,7 @@
           "Client Management"
         ],
         "summary": "Manage Clients chargebee portal session.",
-        "description": "# Usage\nAllows the front end applications to manage a portal session for the\nclient without needing to store the security tokens for general\nchargebee access.\n\n## Parameters\n  - **operation**: the Portal Operation.\n  - **redirect_url**: Optional parameter for the operation. URL to\n    redirect when the user logs out from the portal.\n  - **forward_url**: Optional parameter for the operation. By default\n    access_url redirects the customer to the portal home page. If you\n    would like to redirect the customer to a different URL, you can use\n    this parameter to do so.\n  - **session_id**: Optional portal session id for the operation.\n  - **token**: Optional Unique pre-authenticated portal session token\n    to access customer portal directly.",
+        "description": "# Usage\nAllows the front end applications to manage a portal session for the\nclient without needing to store the security tokens for general\nchargebee access.\n\n## Parameters\n  - **operation**: the Portal Operation.\n  - **operation**: the Portal Operation.\n  - **redirect_url**: Optional parameter for the operation. URL to\n    redirect when the user logs out from the portal.\n  - **forward_url**: Optional parameter for the operation. By default\n    access_url redirects the customer to the portal home page. If you  \n    would like to redirect the customer to a different URL, you can use\n    this parameter to do so.\n  - **session_id**: Optional portal session id for the operation.\n  - **token**: Optional Unique pre-authenticated portal session token\n    to access customer portal directly.",
         "requestBody": {
           "required": true,
           "content": {
@@ -3348,7 +3370,7 @@
           "Adapter Management"
         ],
         "summary": "Change the Adapter Service Configuration.",
-        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n  - **state**: The state to set the service to.",
+        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n    - **VPN**: Enable or Disable the VPN Tunnel.\n    - **AdBlocking**: Globally Enable/Disable Ad Blocking.\n    - **StreamRelocation**: Enable or Disable stream relocation\n    functionality.\n    - **Malware**: Globally Enable/Disable malware protection.\n    - **UPNP**: Enable a UPNP server on the device to help manage port\n    forwarding through the router.\n    - **WPS**: Enable or Disable the WPS Button on the router.\n    (Wi-Fi Protected Setup)\n  - **state**: The state to set the service to.",
         "requestBody": {
           "required": true,
           "content": {

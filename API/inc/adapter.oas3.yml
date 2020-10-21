@@ -32,7 +32,6 @@ paths:
                 oneOf:
                   - $ref: "#/components/schemas/time-state"
                   - $ref: "#/components/schemas/streams"
-                  - $ref: "#/components/schemas/stream-setting"
                   - $ref: "#/components/schemas/streams-settings"
                   - $ref: "#/components/schemas/stream-setting-queued"
                   - $ref: "#/components/schemas/wifi-settings-change"
@@ -244,22 +243,18 @@ components:
         pending:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
-    stream-setting:
-      type: object
-      description: Settings for an individual relocatable stream
-      additionalProperties: false
-      properties:
-        enabled:
-          type: boolean
-          default: true
-          description: |-
-            If the stream relocation is enabled for this service or not.
-        country:
-          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
-
     stream-settings:
       type: object
-      description: Streaming Services Settings
+      description: |-
+        **Streaming Services Settings**
+
+        The **subscription** field is OPTIONAL, it defines the country the
+        client holds their cubscription for.  It is not currently implemented in
+        the backend, but the front end can send it, and the backend will store
+        it.  IF a **subscription** has been set for a stream, the value will be
+        in the retrieval of the configuration, or the reply.  Otherwise it will
+        be omitted.
+
       required:
         - id
       additionalProperties: false
@@ -267,6 +262,8 @@ components:
         id:
           $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         country:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
+        subscription:
           $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
         since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
@@ -283,6 +280,8 @@ components:
         adapter:
           $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
         country:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
+        subscription:
           $ref: "./simpletypes.oas3.yml#/components/schemas/iso3166-country"
         since:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
@@ -328,6 +327,22 @@ components:
             description: |-
               Is the service subscription able to be used in multiple countries?
             default: true
+          subscription:
+            type: string
+            enum:
+              - "free"
+              - "paid"
+              - "cable"
+            default: "paid"
+            description: |-
+              Defines if the service is free, requires a paid subscription or
+              comes bundled with a cable subscription.  Currently this field is
+              unimplemented and is **OPTIONAL**.  The Front end should ignore it
+              if it receives it.  This is defined here to allow for a future
+              feature upgrade that will use this field.  The front end
+              accepting, but ignoring the field allows the backend to implement
+              the function prior to any necessary front end changes, and still
+              allow the system to work unimpeded.
           countries:
             type: object
             description: |-
