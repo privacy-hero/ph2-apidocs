@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.1.0"
+  version: "0.1.1"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -50,7 +50,10 @@ servers:
           - dev
           - qa
           - prod
-        default: remote-dev
+          - sj-dev
+          - np-dev
+          - remote-dev
+        default: dev
         description: Deployment Stages
 
 #########################################################
@@ -89,8 +92,8 @@ components:
 
         ### Example Keys (only valid for development)
         - **WEB APP**: AOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjM2MDAsInJiZiI6NzIwMCwic3ViIjoiZGV2IHdlYiBhcHAifQ.jys7vsUg4D3zX7zrJ_LHjgsz0r6nPbn9VXgt_3aS4F4
-        - **Android**: aOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjMxNTM2MDAwMCwicmJmIjozNDY4OTYwMDAsInN1YiI6ImRldiBpb3MgYXBwIn0.pa7AgQDr6lvTbwYkFwEM7ceVD09quum5dmxNuD-RJr8
-        - **IOS APP**: aOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjYzMDcyMDAwLCJyYmYiOjk0NjA4MDAwLCJzdWIiOiJkZXYgYW5kcm9pZCBhcHAifQ.Z_crn9q4se2BlGfLrV7zkEf5nlIF6_TbfCo4_ct3xfE
+        - **IOS APP**: aOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjMxNTM2MDAwMCwicmJmIjozNDY4OTYwMDAsInN1YiI6ImRldiBpb3MgYXBwIn0.pa7AgQDr6lvTbwYkFwEM7ceVD09quum5dmxNuD-RJr8
+        - **Android**: aOiI2NTY4YTRkNy05MGFjLTQzMjQtYjJlOC04YWVlYzRkNmIxNWMiLCJleHAiOjYzMDcyMDAwLCJyYmYiOjk0NjA4MDAwLCJzdWIiOiJkZXYgYW5kcm9pZCBhcHAifQ.Z_crn9q4se2BlGfLrV7zkEf5nlIF6_TbfCo4_ct3xfE
 
 security:
   - jwtToken: []
