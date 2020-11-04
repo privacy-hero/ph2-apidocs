@@ -2,7 +2,7 @@
 openapi: "3.0.2"
 info:
   title: "Privacy Hero 2 - Mothership API"
-  version: "0.1.1"
+  version: "0.1.2"
   description: |-
     The complete backend API for the Privacy Hero 2.
 
@@ -197,6 +197,9 @@ paths:
 
   /v1/adapter/usage:
     $ref: "v1/adapter/usage.oas3.yml#/paths/~1adapter~1usage"
+
+  /v1/adapter/reset:
+    $ref: "v1/adapter/reset.oas3.yml#/paths/~1adapter~1reset"
 
   ######### STREAMING MANAGEMENT API CALLS ######################
 

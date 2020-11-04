@@ -1,0 +1,122 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /adapter/reset"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Reset the Adapter back to original config state.
+
+    `/adapter/reset`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Adapter Management
+    description: Operations related to Adapter Management
+
+paths:
+  /adapter/reset:
+    post:
+      operationId: adapterReset
+      tags:
+        - Adapter Management
+      summary: Reset the specified adapter on the clients account.
+      description: |-
+        # Usage
+
+        Resets the specified adapter back to the state it would be if it had
+        just been claimed.
+
+        - All Devices associated with the adapter are forgotten.
+        - All profiles configured for the adapter are deleted.
+        - The "shared and "guest" profiles are reset to their default settings.
+        - VPN's are deconfigured.
+        - Streaming services are de-configured.
+        - WiFi settings are returned to their defaults.
+        - Historical Usage and Health data is deleted.
+
+        ## Parameters
+          - **id**: The id of the adapter the client wants to reset.
+
+      requestBody:
+        required: true
+        content:
+          "application/json":
+            schema:
+              type: object
+              required:
+                - id
+              additionalProperties: false
+              properties:
+                id:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+            examples:
+              reset:
+                value:
+                  id: "d6faadd3-d339-4910-89b4-570ec9f72cb7"
+                description: Resetting an existing adapter.
+
+      responses:
+        "200":
+          description: |-
+            Success, The adapter has been reset.
+
+            - **AdapterID** - is the Unique ID of this Adapter.
+            - **mac** - The Adapters mac address.
+            - **ip** - list of ip addresses, either current, or last known.
+            - **registered** - the time the adapter was first claimed by the
+            customer.
+            - **state** - the current state of the listed services.
+            - **settings** - the current adapter level settings.
+            - **health** - the last and best result from diagnostic tests.
+
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/adapter.oas3.yml#/components/schemas/Adapter"
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "404":
+          $ref: "../../inc/response.oas3.yml#/components/responses/404"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
