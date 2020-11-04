@@ -1,0 +1,196 @@
+openapi: 3.0.1
+info:
+  title: "Privacy Hero 2 - Mothership API - /client/carousel"
+  version: "1.0"
+  description: |-
+    Privacy Hero 2 API.
+
+    Get the list of client "Messages of the Day" to be presented in a carousel.
+
+    `/client/carousel`
+  license:
+    name: Copyright © 2020 HelpOn Inc. All Rights Reserved
+    url: ./LICENSE.md
+  contact:
+    name: API Support
+    url: http://www.example.com/support
+    email: support@example.com
+
+###### THE SERVERS WHERE THIS API CAN BE USED ############
+servers:
+  - url: https://{awsid}.execute-api.us-east-1.amazonaws.com/dev
+    description: Development URL
+    variables:
+      awsid:
+        default: "999999"
+        description: The ID for your dev AWS deployment
+
+components:
+  securitySchemes:
+    $ref: "../../PH2-API.oas3.yml#/components/securitySchemes"
+
+tags:
+  - name: Client Management
+    description: Operations related to Client Management
+
+paths:
+  /client/carousel:
+    get:
+      operationId: clientCarousel
+      tags:
+        - Client Management
+      summary: Get the clients "Order and timing of Carousel Messages".
+      description: |-
+        # Usage
+        Called whenever the Carousel needs refreshing to determine how many
+        carousel pages exist, atheir order, and the timing between auto scrolling.
+
+      responses:
+        "200":
+          description: |-
+            List of MOTD pages to display in the carousel, in order.
+
+            - "since" is used to determine if any item in the carousel has
+            updated.  IF "since" is not the same value as the previous call to
+            this function, then One or more pages have changed in the carousel
+            and they all need to be refreshed.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - since
+                  - carousel
+                properties:
+                  since:
+                    $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+                  delay:
+                    type: integer
+                    minimum: 1
+                    description: :-
+                      The number of seconds to wait between pages on the
+                      carousel advancing.
+                    example: 15
+                  carousel:
+                    type: array
+                    maxItems: 100
+                    description: The list of carousel MOTD pages to display, in order.
+                    items:
+                      type: integer
+                      minimum: 0
+                    example: [10, 35, 19, 77, 100, 200, 695, 300]
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"
+
+    post:
+      operationId: clientCarouselRemove
+      tags:
+        - Client Management
+      summary: Remove a page from the carousel.
+      description: |-
+        # Usage
+        Called whenever the UI wants to mark a carousel page as no longer to be displayed.
+      requestBody:
+        required: true
+        description: "The Page to remove from the carousel."
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - id
+              additionalProperties: false
+              properties:
+                id:
+                  type: integer
+                  minimum: 0
+                  example: 0
+              example:
+                id: 35
+
+      responses:
+        "200":
+          description: |-
+            List of MOTD pages to display in the carousel, in order.
+
+            - "since" is used to determine if any item in the carousel has
+            updated.  IF "since" is not the same value as the previous call to
+            this function, then One or more pages have changed in the carousel
+            and they all need to be refreshed.  As this call modifies the
+            Carousel list, the returned result is the current carousel list,
+            updated to reflect the removed page.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - since
+                  - carousel
+                properties:
+                  since:
+                    $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+                  delay:
+                    type: integer
+                    minimum: 1
+                    description: :-
+                      The number of seconds to wait between pages on the
+                      carousel advancing.
+                    example: 15
+                  carousel:
+                    type: array
+                    maxItems: 100
+                    description: The list of carousel MOTD pages to display, in order.
+                    items:
+                      type: integer
+                      minimum: 0
+                    example: [10, 19, 77, 100, 200, 695, 300]
+
+        "400":
+          description: |-
+            General Request processing error.  Possible errors are:
+            * `"Internal Server Error."` - Fatal uncategorized error in server.
+            * `"Required Parameters missing or malformed."` - JSON Message Body
+            Error.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/response.oas3.yml#/components/schemas/Nack"
+              example:
+                error: "Internal Server Error."
+
+        "401":
+          $ref: "../../inc/response.oas3.yml#/components/responses/401"
+        "403":
+          $ref: "../../inc/response.oas3.yml#/components/responses/403"
+        "415":
+          $ref: "../../inc/response.oas3.yml#/components/responses/415"
+        "429":
+          $ref: "../../inc/response.oas3.yml#/components/responses/429"
+        "500":
+          $ref: "../../inc/response.oas3.yml#/components/responses/500"
+        default:
+          $ref: "../../inc/response.oas3.yml#/components/responses/default"

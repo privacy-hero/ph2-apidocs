@@ -163,6 +163,9 @@ paths:
   /v1/client/motd:
     $ref: "v1/client/motd.oas3.yml#/paths/~1client~1motd"
 
+  /v1/client/carousel:
+    $ref: "v1/client/carousel.oas3.yml#/paths/~1client~1carousel"
+
   ######### ADAPTER  MANAGEMENT API CALLS ######################
 
   /v1/adapter/find:
