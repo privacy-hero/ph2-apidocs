@@ -17,7 +17,7 @@
         Note over B: Get last reported adapter states of router from database.
         B->>-A: 200: {ad-blocking:true, since:1587732975}
 
-        A->>+B: /v1/adapter/cfg/service<br /> ad-blocking:false
+        A->>+B: /v1/adapter/cfg/service<br /> {"ad-blocking":false}
 
         Note over B: Get current time stamp: 1587742321
         par Send New State to Router
@@ -42,9 +42,6 @@
             R->>-B: "adapter-services-state" {service: "AdBlocking", state: false, tstamp:1587742321}
             Note over B: Backend records changed adapter state, since becomes tstamp.
         end
-
-
-
 
     </div>
     <script src="https://cdn.jsdelivr.net/npm/mermaid@8.8.3/dist/mermaid.min.js"></script>
