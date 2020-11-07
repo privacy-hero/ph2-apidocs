@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+</head>
+
+<body>
+    <div class="mermaid">
+        sequenceDiagram
+        autonumber
+        participant A as App
+        participant B as BackEnd
+        participant R as Router
+
+        A->>+B: /v1/adapter/list
+        Note over B: Get last reported adapter states of router from database.
+        B->>-A: 200: {ad-blocking:true, since:1587732975}
+
+        A->>+B: /v1/adapter/cfg/service<br /> ad-blocking:false
+
+        Note over B: Get current time stamp: 1587742321
+        par Send New State to Router
+            B->>+R: "adapter-services" {service: "AdBlocking", state: false, tstamp:1587742321}
+        and Send Current State and Pending Time to UI
+            Note over B: Get last reported adapter states of router from database.
+            B->>-A: 200:["ad-blocking":true, "since":1587732975, "pending":1587742321]
+        end
+
+        par UI Waiting for Async Operation to Complete
+            loop until timeout or since >= pending
+                A->>+B: /v1/adapter/list
+
+                alt no reply from router
+                    B->>A: 200: {ad-blocking:true, since:1587732975}
+                else router replied already
+                    B->>A: 200: {ad-blocking:false, since:1587742321}
+                end
+                deactivate B
+            end
+        and Backend Getting reply from router
+            R->>-B: "adapter-services-state" {service: "AdBlocking", state: false, tstamp:1587742321}
+            Note over B: Backend records changed adapter state, since becomes tstamp.
+        end
+
+
+
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@8.8.3/dist/mermaid.min.js"></script>
+    <script>
+        var config = {
+            theme: "forest",
+            startOnLoad: true,
+            securityLevel: 'loose',
+            logLevel: 'debug',
+            sequence: {
+                diagramMarginX: 250,
+                diagramMarginY: 25,
+                actorMargin: 90,
+                width: 350,
+                height: 65,
+                boxMargin: 25,
+                boxTextMargin: 5,
+                noteMargin: 10,
+                messageMargin: 35,
+                mirrorActors: true,
+                bottomMarginAdj: 10,
+                useMaxWidth: true,
+                rightAngles: false,
+                showSequenceNumbers: false,
+            },
+        };
+        mermaid.initialize( config );</script>
+</body>
+
+</html>
