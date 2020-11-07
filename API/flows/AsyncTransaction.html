@@ -27,20 +27,16 @@
             B->>-A: 200:["ad-blocking":true, "since":1587732975, "pending":1587742321]
         end
 
-        par UI Waiting for Async Operation to Complete
-            loop until timeout or since >= pending
+        loop until timeout or since >= pending
+            alt no reply yet from router
                 A->>+B: /v1/adapter/list
-
-                alt no reply from router
-                    B->>A: 200: {ad-blocking:true, since:1587732975}
-                else router replied already
-                    B->>A: 200: {ad-blocking:false, since:1587742321}
-                end
-                deactivate B
+                B->>-A: 200: {ad-blocking:true, since:1587732975}
+            else router replies to state change.
+                R->>-B: "adapter-services-state" {service: "AdBlocking", state: false, tstamp:1587742321}
+                Note over B: Backend records changed adapter state, since becomes tstamp.
+                A->>+B: /v1/adapter/list
+                B->>-A: 200: {ad-blocking:false, since:1587742321}
             end
-        and Backend Getting reply from router
-            R->>-B: "adapter-services-state" {service: "AdBlocking", state: false, tstamp:1587742321}
-            Note over B: Backend records changed adapter state, since becomes tstamp.
         end
 
     </div>
