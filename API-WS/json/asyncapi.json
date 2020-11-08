@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.5",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.5\n\n1. Added [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) message.\n2. Added [*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG) message.\n3. Referenced blocklist config messages from [*Link Established*](#message-LinkEstablished).\n4. Added all current config messages needed to be sent on startup to\n   [*Link Established*](#message-LinkEstablished).\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
+    "version": "0.1.6",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.6\n\n1. Added Local Timezone to [*Initial Configuration*](#message-InitialConfig) message.\n2. Removed obsolete message data from [*Initial Configuration*](#message-InitialConfig) message.\n\n### V0.1.5\n\n1. Added [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) message.\n2. Added [*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG) message.\n3. Referenced blocklist config messages from [*Link Established*](#message-LinkEstablished).\n4. Added all current config messages needed to be sent on startup to\n   [*Link Established*](#message-LinkEstablished).\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message.\n12."
   },
   "servers": {
     "development": {
@@ -538,7 +538,7 @@
               "name": "InitialConfig",
               "title": "Initial Configuration",
               "summary": "Initial Highest Level Configuration",
-              "description": "This message contains the highest level configuration and is sent by the\nbackend after a link is established, and the backend receives the\n[*Link Established*](#message-LinkEstablished) message from the Adapter.",
+              "description": "This message contains the highest level configuration and is sent by the\nbackend after a link is established, and the backend receives the\n[*Link Established*](#message-LinkEstablished) message from the Adapter.\n\nIt may also be re-sent if any of the fields within it change, and the\nrouter needs to reconfigure itself upon receipt of the message.",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -560,17 +560,10 @@
                     "format": "epoch timestamp [milliseconds] (int64)",
                     "description": "The tstamp in this message is the same tstamp sent in the *Link Established*\nmessage from the adapter which triggered it to be sent."
                   },
-                  "version": {
+                  "tz": {
                     "type": "string",
-                    "format": "bas64-url-sha256",
-                    "description": "The version of the latest firmaware suitable for the adapter.  This\nversion should match the version installed in the adapter before it continues.\nIf it does noe, the adapter should retrieve the new version from the url in\nthis message, program that and restart the connection.",
-                    "minLength": 43,
-                    "maxLength": 43
-                  },
-                  "firmware": {
-                    "type": "string",
-                    "format": "url",
-                    "description": "The firmware url.  This is the location where the latest firmware may be\ndownloaded.  If the adapter detects that a firmware update is required it\ndownloads the firmware from this URL.  If the firmware can not be downloaded\nor the image downloaded does not match the **version** hash, then the firmware\nin the adapter must not be changed, and an error should be logged to the\nbackend."
+                    "format": "iana-tz",
+                    "description": "The IANA Timezone (see: https://www.iana.org/time-zones) of the routers\nlocaltime.  Only used by the router when it needs to calculate localtime\noffset back to UTC.  All internal timing inside the router and the vast\nmajority of timestamps specified in messages are in UTC.  For Example\n\"America/North_Dakota/New_Salem\" or \"Asia/Bangkok\"."
                   },
                   "loglevel": {
                     "type": "string",
@@ -586,15 +579,14 @@
                 "example": {
                   "message": "initial cfg",
                   "tstamp": 1592217870123,
-                  "version": "uDHqOfzVFgcldv41fTTAOVtJSLVxn8M36ufxrEnWtzg",
-                  "firmware": "https://dl.privacyhero.com/firmware/adapter_v107.fw",
+                  "tz": "Africa/Casablanca",
                   "loglevel": "DEBUG"
                 },
                 "required": [
                   "message",
                   "tstamp",
                   "version",
-                  "firmware",
+                  "tz",
                   "loglevel"
                 ],
                 "additionalProperties": false

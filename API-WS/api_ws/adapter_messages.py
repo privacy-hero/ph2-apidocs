@@ -104,6 +104,9 @@ def initial_config():
         This message contains the highest level configuration and is sent by the
         backend after a link is established, and the backend receives the
         {Xref.link_established} message from the Adapter.
+
+        It may also be re-sent if any of the fields within it change, and the
+        router needs to reconfigure itself upon receipt of the message.
     """
 
     tstamp_desc = """
@@ -111,20 +114,12 @@ def initial_config():
         message from the adapter which triggered it to be sent.
     """
 
-    version_desc = """
-        The version of the latest firmaware suitable for the adapter.  This
-        version should match the version installed in the adapter before it continues.
-        If it does noe, the adapter should retrieve the new version from the url in
-        this message, program that and restart the connection.
-    """
-
-    firmware_desc = """
-        The firmware url.  This is the location where the latest firmware may be
-        downloaded.  If the adapter detects that a firmware update is required it
-        downloads the firmware from this URL.  If the firmware can not be downloaded
-        or the image downloaded does not match the **version** hash, then the firmware
-        in the adapter must not be changed, and an error should be logged to the
-        backend.
+    localtime_desc = """
+        The IANA Timezone (see: https://www.iana.org/time-zones) of the routers
+        localtime.  Only used by the router when it needs to calculate localtime
+        offset back to UTC.  All internal timing inside the router and the vast
+        majority of timestamps specified in messages are in UTC.  For Example
+        "America/North_Dakota/New_Salem" or "Asia/Bangkok".
     """
 
     cmd = "initial cfg"
@@ -133,20 +128,18 @@ def initial_config():
     summary = "Initial Highest Level Configuration"
 
     extra_fields = f"""
-        {Field.sha256("version", version_desc)},
-        {Field.url("firmware", firmware_desc)},
+        {Field.iana_tz("tz", localtime_desc)},
         {log_level_field(none_ok=True, name="loglevel",
          desc="The Minimum level of messages which should be logged to the backend.")}
     """
     extra_example = f"""
-        "version": "{sha256_example("New Firmware Hash")}",
-        "firmware": "https://dl.privacyhero.com/firmware/adapter_v107.fw",
+        "tz": "Africa/Casablanca",
         "loglevel": "DEBUG"
     """
     extra_required = """
         "tstamp",
         "version",
-        "firmware",
+        "tz",
         "loglevel"
     """
 

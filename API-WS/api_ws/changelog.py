@@ -7,6 +7,11 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.6
+
+    1. Added Local Timezone to {Xref.initial_config} message.
+    2. Removed obsolete message data from {Xref.initial_config} message.
+
     ### V0.1.5
 
     1. Added {Xref.block_list} message.

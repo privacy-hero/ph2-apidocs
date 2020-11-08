@@ -165,6 +165,19 @@ class Field:  # pylint: disable=too-many-public-methods
 
     # -------------------------------------------------------------------------
     @staticmethod
+    def iana_tz(name="tz", desc="An IANA TimeZone Identifier"):
+        """Return the definition of the standard IANA TimeZone type field."""
+        return Field.named(
+            name,
+            f"""
+                "type" : "string",
+                "format": "iana-tz",
+                "description" :{mls(desc)}
+            """,
+        )
+
+    # -------------------------------------------------------------------------
+    @staticmethod
     def regex_url(name="regex_url", desc="A REGEX URL Pattern"):
         """Return the definition of the standard Regex pattern URL type field."""
         return Field.named(
