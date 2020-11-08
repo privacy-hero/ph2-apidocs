@@ -628,7 +628,6 @@ components:
         - online
         - vpn
         - ad-blocking
-        - stream-relocation
         - malware-phishing
         - upnp
         - wps
@@ -638,8 +637,6 @@ components:
         vpn:
           $ref: "#/components/schemas/state"
         ad-blocking:
-          $ref: "#/components/schemas/state"
-        stream-relocation:
           $ref: "#/components/schemas/state"
         malware-phishing:
           $ref: "#/components/schemas/state"

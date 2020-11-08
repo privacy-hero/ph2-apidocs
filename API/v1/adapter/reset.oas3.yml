@@ -87,7 +87,6 @@ paths:
             customer.
             - **state** - the current state of the listed services.
             - **settings** - the current adapter level settings.
-            - **health** - the last and best result from diagnostic tests.
 
           content:
             application/json:
