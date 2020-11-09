@@ -257,7 +257,7 @@ components:
           enum:
             - "VPN"
             - "Ad-Blocking"
-            - "DeviceProtection"
+            - "Device-Protection"
         setting:
           type: boolean
 
