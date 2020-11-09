@@ -274,7 +274,7 @@ components:
         service:
           type: string
           enum:
-            - "InternetPause"
+            - "Internet-Pause"
         setting:
           $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp-pause"
 

@@ -51,10 +51,10 @@ paths:
             - **"VPN"** : Set the VPN On/Off
             - **"Ad-Blocking"** : Set Ad-Blocking On/Off
             - **"Device-Protection"** : Set Device Protection On/Off
-            - **"InternetPause"** : Set the duration of a pause to internet access.
+            - **"Internet-Pause"** : Set the duration of a pause to internet access.
           - **setting**: The state we want the configuration to become.
             - For VPN/Ad-Blocking/Device-Protection - true or false
-            - For InternetPause - The time to pause until, -1 = pause
+            - For Internet-Pause - The time to pause until, -1 = pause
             indefinitely. 0 = Dont pause.
 
           All field must be present in the call.
@@ -76,7 +76,7 @@ paths:
               pause:
                 value:
                   id: "e22cfd99-44e5-4c93-8cad-3185c623cc25"
-                  service: "InternetPause"
+                  service: "Internet-Pause"
                   setting: -1
 
       responses:
