@@ -618,7 +618,7 @@
         "type": "string",
         "enum": [
           "VPN",
-          "AdBlocking",
+          "Ad-Blocking",
           "StreamRelocation",
           "Malware",
           "UPNP",
@@ -1697,8 +1697,8 @@
             "type": "string",
             "enum": [
               "VPN",
-              "AdBlocking",
-              "DeviceProtection"
+              "Ad-Blocking",
+              "Device-Protection"
             ]
           },
           "setting": {
@@ -1721,7 +1721,7 @@
           "service": {
             "type": "string",
             "enum": [
-              "InternetPause"
+              "Internet-Pause"
             ]
           },
           "setting": {
@@ -3609,7 +3609,7 @@
           "Adapter Management"
         ],
         "summary": "Change the Adapter Service Configuration.",
-        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n    - **VPN**: Enable or Disable the VPN Tunnel.\n    - **AdBlocking**: Globally Enable/Disable Ad Blocking.\n    - **StreamRelocation**: Enable or Disable stream relocation\n    functionality.\n    - **Malware**: Globally Enable/Disable malware protection.\n    - **UPNP**: Enable a UPNP server on the device to help manage port\n    forwarding through the router.\n    - **WPS**: Enable or Disable the WPS Button on the router.\n    (Wi-Fi Protected Setup)\n  - **state**: The state to set the service to.",
+        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n    - **VPN**: Enable or Disable the VPN Tunnel.\n    - **Ad-Blocking**: Globally Enable/Disable Ad Blocking.\n    - **StreamRelocation**: Enable or Disable stream relocation\n    functionality.\n    - **Malware**: Globally Enable/Disable malware protection.\n    - **UPNP**: Enable a UPNP server on the device to help manage port\n    forwarding through the router.\n    - **WPS**: Enable or Disable the WPS Button on the router.\n    (Wi-Fi Protected Setup)\n  - **state**: The state to set the service to.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5928,7 +5928,7 @@
           "Device Management"
         ],
         "summary": "Set device setting.",
-        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n    - **\"VPN\"** : Set the VPN On/Off\n    - **\"AdBlocking\"** : Set AdBlocking On/Off\n    - **\"DeviceProtection\"** : Set Device Protection On/Off\n    - **\"InternetPause\"** : Set the duration of a pause to internet access.\n  - **setting**: The state we want the configuration to become.\n    - For VPN/AdBlocking/DeviceProtection - true or false\n    - For InternetPause - The time to pause until, -1 = pause\n    indefinitely. 0 = Dont pause.\n\n  All field must be present in the call.",
+        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n    - **\"VPN\"** : Set the VPN On/Off\n    - **\"Ad-Blocking\"** : Set Ad-Blocking On/Off\n    - **\"Device-Protection\"** : Set Device Protection On/Off\n    - **\"Internet-Pause\"** : Set the duration of a pause to internet access.\n  - **setting**: The state we want the configuration to become.\n    - For VPN/Ad-Blocking/Device-Protection - true or false\n    - For Internet-Pause - The time to pause until, -1 = pause\n    indefinitely. 0 = Dont pause.\n\n  All field must be present in the call.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5954,7 +5954,7 @@
                 "pause": {
                   "value": {
                     "id": "e22cfd99-44e5-4c93-8cad-3185c623cc25",
-                    "service": "InternetPause",
+                    "service": "Internet-Pause",
                     "setting": -1
                   }
                 }
