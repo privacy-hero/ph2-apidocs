@@ -49,11 +49,11 @@ paths:
           - **id**: The unique id of the device.
           - **service**: The service we are configuring
             - **"VPN"** : Set the VPN On/Off
-            - **"AdBlocking"** : Set AdBlocking On/Off
+            - **"Ad-Blocking"** : Set Ad-Blocking On/Off
             - **"DeviceProtection"** : Set Device Protection On/Off
             - **"InternetPause"** : Set the duration of a pause to internet access.
           - **setting**: The state we want the configuration to become.
-            - For VPN/AdBlocking/DeviceProtection - true or false
+            - For VPN/Ad-Blocking/DeviceProtection - true or false
             - For InternetPause - The time to pause until, -1 = pause
             indefinitely. 0 = Dont pause.
 

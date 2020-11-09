@@ -34,7 +34,6 @@ tags:
     description: Operations related to Adapter Management
 
 paths:
-
   /adapter/cfg/service:
     post:
       operationId: adapterCfgService
@@ -60,7 +59,7 @@ paths:
           associated with the calling clients account.
           - **service**: The name of the service to set.
             - **VPN**: Enable or Disable the VPN Tunnel.
-            - **AdBlocking**: Globally Enable/Disable Ad Blocking.
+            - **Ad-Blocking**: Globally Enable/Disable Ad Blocking.
             - **StreamRelocation**: Enable or Disable stream relocation
             functionality.
             - **Malware**: Globally Enable/Disable malware protection.

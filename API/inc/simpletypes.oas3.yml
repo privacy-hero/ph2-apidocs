@@ -684,7 +684,7 @@ components:
       type: string
       enum:
         - "VPN"
-        - "AdBlocking"
+        - "Ad-Blocking"
         - "StreamRelocation"
         - "Malware"
         - "UPNP"
