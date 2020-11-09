@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.1.1",
+    "version": "0.1.4",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -385,7 +385,6 @@
           "online",
           "vpn",
           "ad-blocking",
-          "stream-relocation",
           "malware-phishing",
           "upnp",
           "wps"
@@ -398,9 +397,6 @@
             "$ref": "#/components/schemas/state"
           },
           "ad-blocking": {
-            "$ref": "#/components/schemas/state"
-          },
-          "stream-relocation": {
             "$ref": "#/components/schemas/state"
           },
           "malware-phishing": {
@@ -1388,12 +1384,13 @@
         }
       },
       "Profile": {
-        "description": "A device settings profile.  Profiles define common settings for all\nassociated devices.\n\n- **id**: The profiles unique id.\n- **adapter**: The unique id of the adapter the profile belongs to.\n- **name**: The descriptive name of the profile.\n- **icon**: An identifier for the icon.\n- **system**: Is this a system profile?  If so, can not be edited or\ndeleted.\n- **settings**: Current state of settings for the profile.",
+        "description": "A device settings profile.  Profiles define common settings for all\nassociated devices.\n\n- **id**: The profiles unique id.\n- **adapter**: The unique id of the adapter the profile belongs to.\n- **name**: The descriptive name of the profile.\n- **icon**: An identifier for the icon.\n- **system**: Is this a system profile?  If so, can not be edited or\ndeleted.\n- **settings**: Current state of settings for the profile.\n- **since**: Latest update timestamp of the **settings**.  Note, updates\nto **name** and **icon** do NOT update **since**",
         "type": "object",
         "required": [
           "id",
           "adapter",
-          "name"
+          "name",
+          "since"
         ],
         "additionalProperties": false,
         "properties": {
@@ -1416,6 +1413,9 @@
           },
           "settings": {
             "$ref": "#/components/schemas/ProfileSettings"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
           }
         }
       },
@@ -1426,6 +1426,46 @@
         "maxItems": 100,
         "items": {
           "$ref": "#/components/schemas/Profile"
+        }
+      },
+      "ProfileCfgPending": {
+        "description": "A device settings profile.  Profiles define common settings for all\nassociated devices.\n\n- **id**: The profiles unique id.\n- **adapter**: The unique id of the adapter the profile belongs to.\n- **name**: The descriptive name of the profile.\n- **icon**: An identifier for the icon.\n- **system**: Is this a system profile?  If so, can not be edited or\ndeleted.\n- **settings**: Current state of settings for the profile.\n- **since**: Latest update timestamp of the **settings**.  Note, updates\nto **name** and **icon** do NOT update **since**\n- **pending**: The timestamp at (or after) which the requested cfg\nchange has been applied.",
+        "type": "object",
+        "required": [
+          "id",
+          "adapter",
+          "name",
+          "since",
+          "pending"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "adapter": {
+            "$ref": "#/components/schemas/uuid"
+          },
+          "name": {
+            "$ref": "#/components/schemas/profile-name"
+          },
+          "icon": {
+            "$ref": "#/components/schemas/url"
+          },
+          "system": {
+            "type": "boolean",
+            "default": false,
+            "description": "System profiles are fixed by the system.  They may not be modified,\nrenamed or deleted.  Devices may be freely associated with them."
+          },
+          "settings": {
+            "$ref": "#/components/schemas/ProfileSettings"
+          },
+          "since": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          },
+          "pending": {
+            "$ref": "#/components/schemas/epoch-timestamp"
+          }
         }
       },
       "datausage": {
@@ -3145,6 +3185,202 @@
         }
       }
     },
+    "/v1/client/carousel": {
+      "get": {
+        "operationId": "clientCarousel",
+        "tags": [
+          "Client Management"
+        ],
+        "summary": "Get the clients \"Order and timing of Carousel Messages\".",
+        "description": "# Usage\nCalled whenever the Carousel needs refreshing to determine how many\ncarousel pages exist, atheir order, and the timing between auto scrolling.",
+        "responses": {
+          "200": {
+            "description": "List of MOTD pages to display in the carousel, in order.\n\n- \"since\" is used to determine if any item in the carousel has\nupdated.  IF \"since\" is not the same value as the previous call to\nthis function, then One or more pages have changed in the carousel\nand they all need to be refreshed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "since",
+                    "carousel"
+                  ],
+                  "properties": {
+                    "since": {
+                      "$ref": "#/components/schemas/epoch-timestamp"
+                    },
+                    "delay": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": ":- The number of seconds to wait between pages on the carousel advancing.",
+                      "example": 15
+                    },
+                    "carousel": {
+                      "type": "array",
+                      "maxItems": 100,
+                      "description": "The list of carousel MOTD pages to display, in order.",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "example": [
+                        10,
+                        35,
+                        19,
+                        77,
+                        100,
+                        200,
+                        695,
+                        300
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      },
+      "post": {
+        "operationId": "clientCarouselRemove",
+        "tags": [
+          "Client Management"
+        ],
+        "summary": "Remove a page from the carousel.",
+        "description": "# Usage\nCalled whenever the UI wants to mark a carousel page as no longer to be displayed.",
+        "requestBody": {
+          "required": true,
+          "description": "The Page to remove from the carousel.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "example": 0
+                  }
+                },
+                "example": {
+                  "id": 35
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "List of MOTD pages to display in the carousel, in order.\n\n- \"since\" is used to determine if any item in the carousel has\nupdated.  IF \"since\" is not the same value as the previous call to\nthis function, then One or more pages have changed in the carousel\nand they all need to be refreshed.  As this call modifies the\nCarousel list, the returned result is the current carousel list,\nupdated to reflect the removed page.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "since",
+                    "carousel"
+                  ],
+                  "properties": {
+                    "since": {
+                      "$ref": "#/components/schemas/epoch-timestamp"
+                    },
+                    "delay": {
+                      "type": "integer",
+                      "minimum": 1,
+                      "description": ":- The number of seconds to wait between pages on the carousel advancing.",
+                      "example": 15
+                    },
+                    "carousel": {
+                      "type": "array",
+                      "maxItems": 100,
+                      "description": "The list of carousel MOTD pages to display, in order.",
+                      "items": {
+                        "type": "integer",
+                        "minimum": 0
+                      },
+                      "example": [
+                        10,
+                        19,
+                        77,
+                        100,
+                        200,
+                        695,
+                        300
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
     "/v1/adapter/find": {
       "get": {
         "operationId": "adapterFind",
@@ -3256,7 +3492,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success, The claimed adapters details.\n\n- **AdapterID** - is the Unique ID of this Adapter.\n- **mac** - The Adapters mac address.\n- **ip** - list of ip addresses, either current, or last known.\n- **registered** - the time the adapter was first claimed by the\ncustomer.\n- **state** - the current state of the listed services.\n- **settings** - the current adapter level settings.\n- **health** - the last and best result from diagnostic tests.",
+            "description": "Success, The claimed adapters details.\n\n- **AdapterID** - is the Unique ID of this Adapter.\n- **mac** - The Adapters mac address.\n- **ip** - list of ip addresses, either current, or last known.\n- **registered** - the time the adapter was first claimed by the\ncustomer.\n- **state** - the current state of the listed services.\n- **settings** - the current adapter level settings.",
             "content": {
               "application/json": {
                 "schema": {
@@ -4167,6 +4403,89 @@
         }
       }
     },
+    "/v1/adapter/reset": {
+      "post": {
+        "operationId": "adapterReset",
+        "tags": [
+          "Adapter Management"
+        ],
+        "summary": "Reset the specified adapter on the clients account.",
+        "description": "# Usage\n\nResets the specified adapter back to the state it would be if it had\njust been claimed.\n\n- All Devices associated with the adapter are forgotten.\n- All profiles configured for the adapter are deleted.\n- The \"shared and \"guest\" profiles are reset to their default settings.\n- VPN's are deconfigured.\n- Streaming services are de-configured.\n- WiFi settings are returned to their defaults.\n- Historical Usage and Health data is deleted.\n\n## Parameters\n  - **id**: The id of the adapter the client wants to reset.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "$ref": "#/components/schemas/uuid"
+                  }
+                }
+              },
+              "examples": {
+                "reset": {
+                  "value": {
+                    "id": "d6faadd3-d339-4910-89b4-570ec9f72cb7"
+                  },
+                  "description": "Resetting an existing adapter."
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success, The adapter has been reset.\n\n- **AdapterID** - is the Unique ID of this Adapter.\n- **mac** - The Adapters mac address.\n- **ip** - list of ip addresses, either current, or last known.\n- **registered** - the time the adapter was first claimed by the\ncustomer.\n- **state** - the current state of the listed services.\n- **settings** - the current adapter level settings.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Adapter"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "General Request processing error.  Possible errors are:\n* `\"Internal Server Error.\"` - Fatal uncategorized error in server.\n* `\"Required Parameters missing or malformed.\"` - JSON Message Body\nError.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Nack"
+                },
+                "example": {
+                  "error": "Internal Server Error."
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/401"
+          },
+          "403": {
+            "$ref": "#/components/responses/403"
+          },
+          "404": {
+            "$ref": "#/components/responses/404"
+          },
+          "415": {
+            "$ref": "#/components/responses/415"
+          },
+          "429": {
+            "$ref": "#/components/responses/429"
+          },
+          "500": {
+            "$ref": "#/components/responses/500"
+          },
+          "default": {
+            "$ref": "#/components/responses/default"
+          }
+        }
+      }
+    },
     "/v1/streaming/services": {
       "get": {
         "operationId": "streamingServices",
@@ -4817,7 +5136,34 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Profile"
+                  "$ref": "#/components/schemas/ProfileCfgPending"
+                },
+                "example": {
+                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
+                  "name": "Rugrats",
+                  "icon": "rugrats.ico",
+                  "settings": {
+                    "youtube-restricted": false,
+                    "safesearch": false,
+                    "internet-pause": null,
+                    "bedtime": {
+                      "school-time": 1290,
+                      "other-time": -1,
+                      "school-nights": [
+                        true,
+                        true,
+                        true,
+                        true,
+                        false,
+                        false,
+                        true
+                      ]
+                    },
+                    "bedtime-delay": 45
+                  },
+                  "since": 1604896473,
+                  "pending": 1604897123
                 }
               }
             }
@@ -4900,7 +5246,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Profile"
+                  "$ref": "#/components/schemas/ProfileCfgPending"
                 },
                 "example": {
                   "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
@@ -4925,7 +5271,9 @@
                       ]
                     },
                     "bedtime-delay": 45
-                  }
+                  },
+                  "since": 1604896473,
+                  "pending": 1604897123
                 }
               }
             }
@@ -5048,7 +5396,34 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Profile"
+                  "$ref": "#/components/schemas/ProfileCfgPending"
+                },
+                "example": {
+                  "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
+                  "adapter": "d46cb964-4a40-43ac-87f6-cdefa19fa121",
+                  "name": "Rugrats",
+                  "icon": "rugrats.ico",
+                  "settings": {
+                    "youtube-restricted": false,
+                    "safesearch": false,
+                    "internet-pause": null,
+                    "bedtime": {
+                      "school-time": 1290,
+                      "other-time": -1,
+                      "school-nights": [
+                        true,
+                        true,
+                        true,
+                        true,
+                        false,
+                        false,
+                        true
+                      ]
+                    },
+                    "bedtime-delay": 45
+                  },
+                  "since": 1604896473,
+                  "pending": 1604897123
                 }
               }
             }

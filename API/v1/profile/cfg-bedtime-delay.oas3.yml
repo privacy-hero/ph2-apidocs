@@ -83,7 +83,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "../../inc/profile.oas3.yml#/components/schemas/Profile"
+                $ref: "../../inc/profile.oas3.yml#/components/schemas/ProfileCfgPending"
               example:
                 id: "cd73b915-89a4-4971-9d86-bce91786b12a"
                 adapter: "d46cb964-4a40-43ac-87f6-cdefa19fa121"
@@ -105,7 +105,8 @@ paths:
                       - false
                       - true
                   bedtime-delay: 45
-
+                since: 1604896473
+                pending: 1604897123
 
         "400":
           description: |-

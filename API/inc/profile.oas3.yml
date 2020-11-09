@@ -29,6 +29,7 @@ paths:
               schema:
                 oneOf:
                   - $ref: "#/components/schemas/Profile"
+                  - $ref: "#/components/schemas/ProfileCfgPending"
                   - $ref: "#/components/schemas/Profiles"
                   - $ref: "#/components/schemas/ProfileDevices"
                   - $ref: "#/components/schemas/ProfilesDevices"
@@ -63,11 +64,14 @@ components:
         - **system**: Is this a system profile?  If so, can not be edited or
         deleted.
         - **settings**: Current state of settings for the profile.
+        - **since**: Latest update timestamp of the **settings**.  Note, updates
+        to **name** and **icon** do NOT update **since**
       type: object
       required:
         - id
         - adapter
         - name
+        - since
       additionalProperties: false
       properties:
         id:
@@ -86,6 +90,54 @@ components:
             renamed or deleted.  Devices may be freely associated with them.
         settings:
           $ref: "#/components/schemas/ProfileSettings"
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+
+    ProfileCfgPending:
+      description: |-
+        A device settings profile.  Profiles define common settings for all
+        associated devices.
+
+        - **id**: The profiles unique id.
+        - **adapter**: The unique id of the adapter the profile belongs to.
+        - **name**: The descriptive name of the profile.
+        - **icon**: An identifier for the icon.
+        - **system**: Is this a system profile?  If so, can not be edited or
+        deleted.
+        - **settings**: Current state of settings for the profile.
+        - **since**: Latest update timestamp of the **settings**.  Note, updates
+        to **name** and **icon** do NOT update **since**
+        - **pending**: The timestamp at (or after) which the requested cfg
+        change has been applied.
+      type: object
+      required:
+        - id
+        - adapter
+        - name
+        - since
+        - pending
+      additionalProperties: false
+      properties:
+        id:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        adapter:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/uuid"
+        name:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/profile-name"
+        icon:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/url"
+        system:
+          type: boolean
+          default: false
+          description: |-
+            System profiles are fixed by the system.  They may not be modified,
+            renamed or deleted.  Devices may be freely associated with them.
+        settings:
+          $ref: "#/components/schemas/ProfileSettings"
+        since:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
+        pending:
+          $ref: "./simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
 
     #DataUsage:
     #  description: |-
