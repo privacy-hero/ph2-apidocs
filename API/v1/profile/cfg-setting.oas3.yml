@@ -55,7 +55,7 @@ paths:
           unrestricted.
           - **internet-paused**: The time when we "unpause" internet.  If this is in the
           past, then by definition internet is enabled.  To pause indefinitely,
-          set to 0.
+          set to -1.
           - **adult-block**: True, adult content is blocked. False, it is not blocked.
 
       requestBody:
@@ -122,7 +122,7 @@ paths:
                 settings:
                   youtube-restricted: false
                   safesearch: false
-                  internet-pause: 0
+                  internet-pause: -1
                   bedtime:
                     school-time: 1290
                     other-time: -1

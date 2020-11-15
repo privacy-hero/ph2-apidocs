@@ -187,7 +187,8 @@ components:
         - **youtube-restricted**: If youtube is restricted or normal.
         - **safesearch**: If search engines are forced to return safe results.
         - **internet-pause**: Internet will be paused until this time passes. If
-          the value is 0 (zero), internet is paused indefinitely.
+          the value is -1, internet is paused indefinitely, if it is 0, internet
+          is unpaused.
         - **adult-block**: If adult content is blocked or not.
         - **bedtime**: A list of bedtimes, one for each day of a week.
         - **bedtime-delay**: A once off delay for the current days bedtime
