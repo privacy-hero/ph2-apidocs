@@ -53,9 +53,8 @@ paths:
             example: 0
           required: true
           description: |-
-            The page number to retrieve. 0 is the first page.  Pages are
-            sequential, and without gaps in the sequence.
-            After the last page all requests will return 404.
+            The page number to retrieve. The page numbers are as returned in
+            /v1/client/motd response.  Any undefined page will return 404.
         - in: query
           name: deepurl
           schema:
