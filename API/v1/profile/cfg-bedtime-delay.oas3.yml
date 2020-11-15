@@ -92,7 +92,7 @@ paths:
                 settings:
                   youtube-restricted: false
                   safesearch: false
-                  internet-pause: null
+                  internet-pause: 0
                   bedtime:
                     school-time: 1290
                     other-time: -1
