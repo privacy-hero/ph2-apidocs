@@ -154,16 +154,21 @@ paths:
                   since:
                     $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/epoch-timestamp"
                   delay:
-                    type: integer
-                    minimum: 1
-                    description: :-
-                      The number of seconds to wait between pages on the
-                      carousel advancing.
-                    example: 15
+                    oneOf:
+                      - type: array
+                        maxItems: 100
+                        description: :-
+                          The number of seconds to wait between INDIVIDUAL pages on the
+                          carousel before advancing.  Must have no more entries
+                          than the "carousel" field.  May have less entires, but
+                          may not have less than 1 entry if "carousel" has 1 or
+                          more entries.  The least entry in the list is applied
+                          to all subsequent pages following that entry.
+                        example: [15, 10, 5, 10, 15]
                   carousel:
                     type: array
                     maxItems: 100
-                    description: The list of carousel MOTD pages to display, in order.
+                    description: The list of carousel MOTD page numbers to display, in order.
                     items:
                       type: integer
                       minimum: 0
