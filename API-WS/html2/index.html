@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Privacy Hero 2 - Router Websocket to Backend Protocol - PREVIEW</title>
+    <script src="https://unpkg.com/@asyncapi/web-component@0.17.5/lib/asyncapi-web-component.js" defer></script>
+    <script>
+        var schema = {
+            url: "https://privacy-hero.github.io/ph2-apidocs/API-WS/json/asyncapi.json"
+        };
+
+        window.onload = function() {
+            document.getElementById("asyncapi").schema = schema;
+        }
+    </script>
+</head>
+
+<body>
+
+    <asyncapi-component id="asyncapi" cssImportPath="https://unpkg.com/@asyncapi/react-component@0.17.5/lib/styles/fiori.css"></asyncapi-component>
+
+</body>
+
+</html>
