@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.6 documentation</title>
+  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.7 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <link href="css/tailwind.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
   <div class="sidebar-panel__content">
     
       <h1 class="text-2xl font-thin">
-        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.6
+        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.7
       </h1>
     
     <ul class="text-sm mt-10 list-reset mt-2">
@@ -1230,7 +1230,7 @@
     <div class="content-panel flex-1 leading-loose z-10">
       <div class="center-block p-8">
   <a name="introduction"></a>
-  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.6</h1>
+  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.7</h1>
   <div class="leading-normal mb-4">
     
     
@@ -1258,6 +1258,10 @@ documentation convention only.</p>
 <p>All messages to/from the adapter have a common format, which are documented in the
 <em>Basic Message Forms</em>. set of operations.</p>
 <h2>CHANGELOG</h2>
+<h3>V0.1.7</h3>
+<ol>
+<li>&quot;adultcontent&quot; was renamed to &quot;adult-block&quot; to unify with REST Api.</li>
+</ol>
 <h3>V0.1.6</h3>
 <ol>
 <li>Added Local Timezone to <a href="#message-InitialConfig"><em>Initial Configuration</em></a> message.</li>
@@ -1318,7 +1322,6 @@ subscription is invalid.</li>
 <li>Add list of config messages sent by backend as a result of initial
 connection.</li>
 <li>Add the <a href="#message-WPSStatus"><em>WPS Status</em></a> message.</li>
-<li></li>
 </ol>
 
   </div>
@@ -23300,7 +23303,7 @@ string
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
 <li><strong>safesearch</strong> - Search Engines return &quot;safe&quot; results when True.</li>
-<li><strong>adultcontent</strong> - Adult Content is &quot;blocked&quot; when True.</li>
+<li><strong>adult-block</strong> - Adult Content is &quot;blocked&quot; when True.</li>
 </ul>
 <p>Note: <strong>internet-pause</strong> also has a timed mode.  The boolean option in this
 message terminates any timed-pause current on the device and sets the state
@@ -23327,7 +23330,7 @@ accordingly.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"adultcontent"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adult-block"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
             
@@ -24232,7 +24235,7 @@ string
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
 <li><strong>safesearch</strong> - Search Engines return &quot;safe&quot; results when True.</li>
-<li><strong>adultcontent</strong> - Adult Content is &quot;blocked&quot; when True.</li>
+<li><strong>adult-block</strong> - Adult Content is &quot;blocked&quot; when True.</li>
 <li><strong>online</strong> - If the device is online or not. Only an asynchronous
 state change.</li>
 </ul>
@@ -24263,7 +24266,7 @@ a result of the adapter detecting a device coming online or falling offline.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"adultcontent"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adult-block"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
             
@@ -49071,7 +49074,7 @@ string
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
 <li><strong>safesearch</strong> - Search Engines return &quot;safe&quot; results when True.</li>
-<li><strong>adultcontent</strong> - Adult Content is &quot;blocked&quot; when True.</li>
+<li><strong>adult-block</strong> - Adult Content is &quot;blocked&quot; when True.</li>
 </ul>
 <p>Note: <strong>internet-pause</strong> also has a timed mode.  The boolean option in this
 message terminates any timed-pause current on the device and sets the state
@@ -49098,7 +49101,7 @@ accordingly.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"adultcontent"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adult-block"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
             
@@ -49896,7 +49899,7 @@ string
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
 <li><strong>safesearch</strong> - Search Engines return &quot;safe&quot; results when True.</li>
-<li><strong>adultcontent</strong> - Adult Content is &quot;blocked&quot; when True.</li>
+<li><strong>adult-block</strong> - Adult Content is &quot;blocked&quot; when True.</li>
 <li><strong>online</strong> - If the device is online or not. Only an asynchronous
 state change.</li>
 </ul>
@@ -49927,7 +49930,7 @@ a result of the adapter detecting a device coming online or falling offline.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"safesearch"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"adultcontent"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adult-block"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"online"</span>
             

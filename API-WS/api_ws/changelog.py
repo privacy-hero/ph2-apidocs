@@ -7,6 +7,10 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.7
+
+    1. "adultcontent" was renamed to "adult-block" to unify with REST Api.
+
     ### V0.1.6
 
     1. Added Local Timezone to {Xref.initial_config} message.
@@ -69,5 +73,4 @@ CHANGELOG = f"""
     10. Add list of config messages sent by backend as a result of initial
         connection.
     11. Add the {Xref.wps_status} message.
-    12.
 """
