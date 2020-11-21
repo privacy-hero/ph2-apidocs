@@ -51,6 +51,8 @@ paths:
 
         ## Parameters
           - **id**: The unique id of the profile.
+          - **enabled**: True if bedtime is enabled. False otherwise.  IF False,
+          no other parameters need to be sent.  See Schema for defaults.
           - **school**: The time in minutes from midnight when bedtime
           starts on a "school night".  Set to -1 if it is disabled.
           - **other**: The time in minutes from midnight when bedtime
@@ -58,7 +60,8 @@ paths:
           disabled.
           - **school-nights**: An array of booleans which sets which nights of the
           week are school nights.  The First entry is Monday, the last is
-          Sunday.  true = This is a school night.  false = It is not a school night.
+          Sunday.  true = This is a school night.  false = It is not a school
+          night.
 
       requestBody:
         required: true
@@ -69,16 +72,12 @@ paths:
               required:
                 - id
                 - enabled
-                - school
-                - other
-                - school-nights
               additionalProperties: false
               properties:
                 id:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
                 enabled:
                   type: boolean
-                  default: false
                   description: Enable the bedtime function (true) or not (false)
                 school:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
@@ -118,8 +117,8 @@ paths:
                   safesearch: false
                   internet-pause: 0
                   bedtime:
-                    school-time: 1290
-                    other-time: -1
+                    school: 1290
+                    other: -1
                     school-nights:
                       - true
                       - true

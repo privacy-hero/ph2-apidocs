@@ -1332,10 +1332,10 @@
             "type": "boolean",
             "description": "If the bedtime function is enabled or not."
           },
-          "school-time": {
+          "school": {
             "$ref": "#/components/schemas/time-of-day-mins"
           },
-          "other-time": {
+          "other": {
             "$ref": "#/components/schemas/time-of-day-mins"
           },
           "school-nights": {
@@ -1573,7 +1573,7 @@
           "ad-blocking"
         ],
         "additionalProperties": false,
-        "description": "- **vpn**: Enabled or Not.\n- **Ad-blocking**: Enabled or Not.\n- **device-protection**: Enabled or not.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is 0 (zero), internet is paused indefinitely.",
+        "description": "- **vpn**: Enabled or Not.\n- **Ad-blocking**: Enabled or Not.\n- **device-protection**: Enabled or not.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is -1, internet is paused indefinitely.  If it is 0,\n  internet is Un-paused.",
         "properties": {
           "vpn": {
             "$ref": "#/components/schemas/state"
@@ -5087,7 +5087,7 @@
           "Profile Management"
         ],
         "summary": "Set the weekly bedtimes for a profile.",
-        "description": "# Usage\n\nAllows the Start time for \"Bedtime\" to be set independently for \"School\nNights\" and \"Other Nights\".  The duration of a \"Bedtime\" is system\ncontrolled.  School Nights are the nights BEFORE a school day.  So, in\nthe typical school system where a school day is Monday to Friday, school\nnights are Sunday thru Thursday.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **school**: The time in minutes from midnight when bedtime\n  starts on a \"school night\".  Set to -1 if it is disabled.\n  - **other**: The time in minutes from midnight when bedtime\n  starts on nights other than school nights.  Set to -1 if it is\n  disabled.\n  - **school-nights**: An array of booleans which sets which nights of the\n  week are school nights.  The First entry is Monday, the last is\n  Sunday.  true = This is a school night.  false = It is not a school night.",
+        "description": "# Usage\n\nAllows the Start time for \"Bedtime\" to be set independently for \"School\nNights\" and \"Other Nights\".  The duration of a \"Bedtime\" is system\ncontrolled.  School Nights are the nights BEFORE a school day.  So, in\nthe typical school system where a school day is Monday to Friday, school\nnights are Sunday thru Thursday.\n\n## Parameters\n  - **id**: The unique id of the profile.\n  - **enabled**: True if bedtime is enabled. False otherwise.  IF False,\n  no other parameters need to be sent.  See Schema for defaults.\n  - **school**: The time in minutes from midnight when bedtime\n  starts on a \"school night\".  Set to -1 if it is disabled.\n  - **other**: The time in minutes from midnight when bedtime\n  starts on nights other than school nights.  Set to -1 if it is\n  disabled.\n  - **school-nights**: An array of booleans which sets which nights of the\n  week are school nights.  The First entry is Monday, the last is\n  Sunday.  true = This is a school night.  false = It is not a school\n  night.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5096,10 +5096,7 @@
                 "type": "object",
                 "required": [
                   "id",
-                  "enabled",
-                  "school",
-                  "other",
-                  "school-nights"
+                  "enabled"
                 ],
                 "additionalProperties": false,
                 "properties": {
@@ -5108,7 +5105,6 @@
                   },
                   "enabled": {
                     "type": "boolean",
-                    "default": false,
                     "description": "Enable the bedtime function (true) or not (false)"
                   },
                   "school": {
@@ -5158,8 +5154,8 @@
                     "safesearch": false,
                     "internet-pause": 0,
                     "bedtime": {
-                      "school-time": 1290,
-                      "other-time": -1,
+                      "school": 1290,
+                      "other": -1,
                       "school-nights": [
                         true,
                         true,
@@ -5268,8 +5264,8 @@
                     "safesearch": false,
                     "internet-pause": 0,
                     "bedtime": {
-                      "school-time": 1290,
-                      "other-time": -1,
+                      "school": 1290,
+                      "other": -1,
                       "school-nights": [
                         true,
                         true,
@@ -5418,8 +5414,8 @@
                     "safesearch": false,
                     "internet-pause": -1,
                     "bedtime": {
-                      "school-time": 1290,
-                      "other-time": -1,
+                      "school": 1290,
+                      "other": -1,
                       "school-nights": [
                         true,
                         true,

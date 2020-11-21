@@ -94,8 +94,8 @@ paths:
                   safesearch: false
                   internet-pause: 0
                   bedtime:
-                    school-time: 1290
-                    other-time: -1
+                    school: 1290
+                    other: -1
                     school-nights:
                       - true
                       - true

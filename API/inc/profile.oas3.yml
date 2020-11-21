@@ -174,9 +174,9 @@ components:
         enabled:
           type: boolean
           description: If the bedtime function is enabled or not.
-        school-time:
+        school:
           $ref: "./simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
-        other-time:
+        other:
           $ref: "./simpletypes.oas3.yml#/components/schemas/time-of-day-mins"
         school-nights:
           $ref: "#/components/schemas/school-nights"
