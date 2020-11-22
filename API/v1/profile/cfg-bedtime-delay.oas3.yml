@@ -57,6 +57,12 @@ paths:
           to be incremented or decremented, take the previous delay, adjust
           accordingly and re-set it using this call.
 
+        ## Note:
+          Bedtime can not be delayed if:
+          - The Bedtime Schedule of the Profile is Disabled.
+          - OR There are no devices configured on the profile.
+          In either case, an error will be returned.
+
       requestBody:
         required: true
         content:
