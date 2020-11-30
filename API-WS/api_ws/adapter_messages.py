@@ -133,7 +133,7 @@ def initial_config():
         {log_level_field(none_ok=True, name="loglevel",
          desc="The Minimum level of messages which should be logged to the backend.")}
     """
-    extra_example = f"""
+    extra_example = """
         "tz": "Africa/Casablanca",
         "loglevel": "DEBUG"
     """

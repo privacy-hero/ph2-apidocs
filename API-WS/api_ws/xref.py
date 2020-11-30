@@ -48,4 +48,3 @@ class Xref:  # pylint: disable=too-few-public-methods
     vpn_bypass_domain_reply = (
         "[*Set VPN Bypass Domains Reply*](#message-VPNBypassDomain)"
     )
-

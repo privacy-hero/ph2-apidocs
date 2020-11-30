@@ -276,8 +276,8 @@ def vpn_connect():
 # ------------------------------------------------------------------------------
 
 
-def bypassFields(bypass_desc: str, exclude_desc: str):
-    """The VPN Bypass Fields."""
+def bypass_fields(bypass_desc: str, exclude_desc: str):
+    """Return the VPN Bypass Fields."""
     return f"""
         {{
           {Field.array("bypass", bypass_desc,
@@ -354,10 +354,10 @@ def vpn_bypass_config():
     extra_fields = f"""
         {Field.object(
             "domains", "List of Domains to Bypass the VPN",
-            required=["bypass"], fields=bypassFields(domain_bypass_desc, domain_exclude_desc))},
+            required=["bypass"], fields=bypass_fields(domain_bypass_desc, domain_exclude_desc))},
         {Field.object(
             "dns", "List of DNS Queries to Bypass the VPN",
-            required=["bypass"], fields=bypassFields(dns_bypass_desc, dns_exclude_desc))}
+            required=["bypass"], fields=bypass_fields(dns_bypass_desc, dns_exclude_desc))}
     """
 
     extra_required = """
