@@ -4,8 +4,16 @@ List latest changes first.  Order should be descending.
 """
 from .xref import Xref
 
+
 CHANGELOG = f"""
     ## CHANGELOG
+
+    ### V0.1.8
+
+    1. Added VPN Bypass Configuration message: {Xref.vpn_set_bypass_domain}.
+    2. And its reply: {Xref.vpn_bypass_domain_reply}.
+    3. Added {Xref.vpn_set_bypass_domain} to messages sent in reply to
+       {Xref.link_established}.
 
     ### V0.1.7
 

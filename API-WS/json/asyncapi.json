@@ -3,8 +3,8 @@
   "defaultContentType": "application/json",
   "info": {
     "title": "Privacy Hero 2 - Adapter <-> Backend Websocket API",
-    "version": "0.1.7",
-    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.7\n\n1. \"adultcontent\" was renamed to \"adult-block\" to unify with REST Api.\n\n### V0.1.6\n\n1. Added Local Timezone to [*Initial Configuration*](#message-InitialConfig) message.\n2. Removed obsolete message data from [*Initial Configuration*](#message-InitialConfig) message.\n\n### V0.1.5\n\n1. Added [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) message.\n2. Added [*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG) message.\n3. Referenced blocklist config messages from [*Link Established*](#message-LinkEstablished).\n4. Added all current config messages needed to be sent on startup to\n   [*Link Established*](#message-LinkEstablished).\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message."
+    "version": "0.1.8",
+    "description": "# The API for Adapter to Backend communication.\n\n## Overview\n\nAll communication is carried out through a single websocket connection per\nadapter.  The Adapter connects and sends updates to state or requests for\nconfiguration as required, and is also triggered to perform operations or\nupdate its state asynchronously from the backend through the same connection.\n\nBoth directions of the connection use the same basic message format.\n\n## Operations\n\nThe API is broken down by operation, and message type/source.\n\n### Documentation Conventions:\n\n* **SUB** [Subscribe] messages are messages which are sent to the Backend from the\nAdapter.\n* **PUB** [Publish] messages are messages which are sent to the Adapter from the\nBackend.\n\nThe API does not have any inherent Publish/Subscribe semantics.  This is a\ndocumentation convention only.\n\nAll messages to/from the adapter have a common format, which are documented in the\n*Basic Message Forms*. set of operations.\n\n\n## CHANGELOG\n\n### V0.1.8\n\n1. Added VPN Bypass Configuration message: [*Set VPN Bypass Domains*](#message-VPNSetBypassDomain).\n2. And its reply: [*Set VPN Bypass Domains Reply*](#message-VPNBypassDomain).\n3. Added [*Set VPN Bypass Domains*](#message-VPNSetBypassDomain) to messages sent in reply to\n   [*Link Established*](#message-LinkEstablished).\n\n### V0.1.7\n\n1. \"adultcontent\" was renamed to \"adult-block\" to unify with REST Api.\n\n### V0.1.6\n\n1. Added Local Timezone to [*Initial Configuration*](#message-InitialConfig) message.\n2. Removed obsolete message data from [*Initial Configuration*](#message-InitialConfig) message.\n\n### V0.1.5\n\n1. Added [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) message.\n2. Added [*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG) message.\n3. Referenced blocklist config messages from [*Link Established*](#message-LinkEstablished).\n4. Added all current config messages needed to be sent on startup to\n   [*Link Established*](#message-LinkEstablished).\n\n### V0.1.4\n\n1. Broke down the messages into smaller groups to ease document navigation.\n2. Added [*WIFI Configuration*](#message-WifiConfiguration) message.\n3. Added [*Streaming Auth*](#message-AuthorizeStreaming) message.\n\n### V0.1.3\n\n1. Fix Example for [*Device Information*](#message-DeviceInformation)\n2. Better document how the speed and latency are calculated in\n   [*VPN Server Connect*](#message-VPNConnect)\n3. Better explain that [*VPN Server Connect*](#message-VPNConnect) message with an empty list\n   of servers is to be used as a vpn_disconnect message.\n\n### V0.1.2\n\n1. Modified speedtest result message [*Speedtest Result*](#message-SpeedTest) to track pperf\n   implementation on router.\n2. Changed organization of VPN server configuration in\n   [*VPN Server Connect*](#message-VPNConnect).\n3. [*VPN Connection Status*](#message-VPNStatus) updated to track new server id field.\n\n### V0.1.1\n\n1. Added the Adapter Reset [*Reset Router*](#message-Reset) message.\n2. Added the Adapter Resetting [*Router Reseting*](#message-Resetting) reply.\n\n\n\n### V0.1.0\n\n1. Added hyperlinks between messages to ease navigation.\n2. Added WPS service enable to [*Adapter Services*](#message-AdapterServices) message (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n3. Added Subscribed service enable to [*Adapter Services*](#message-AdapterServices) message (and\n   reply [*Adapter Service State*](#message-AdapterServicesState)).\n4. Removed \"VPN\" from [*Adapter Services*](#message-AdapterServices) (and reply\n   [*Adapter Service State*](#message-AdapterServicesState)).\n5. Added [*VPN Server Connect*](#message-VPNConnect) message.\n6. Added [*VPN Server Reconnect*](#message-VPNReconnect) message.\n7. Added [*VPN Connection Status*](#message-VPNStatus) message.\n8. Made ID field optional but present in every message by including in the\n   [*Base Message*](#message-BaseMsg) specification.\n9. Created [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist) message to set configuration\n   whitelist of domains which are still accessible when the router\n   subscription is invalid.\n10. Add list of config messages sent by backend as a result of initial\n    connection.\n11. Add the [*WPS Status*](#message-WPSStatus) message."
   },
   "servers": {
     "development": {
@@ -414,7 +414,7 @@
               "name": "LinkEstablished",
               "title": "Link Established",
               "summary": "Advise the Backend that the Adapter has connected to a new websocket",
-              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist)\n3. [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) (1 message for each blocklist category)\n4. [*Adapter Services*](#message-AdapterServices)\n5. [*WIFI Configuration*](#message-WifiConfiguration)\n6. [*VPN Server Connect*](#message-VPNConnect)\n7. [*Streaming Auth*](#message-AuthorizeStreaming)\n8. [*Streaming Cfg*](#message-ConfigureStreaming)\n9. [*Known Devices*](#message-KnownDevices)\n10. [*Change Device State*](#message-ChangeDeviceState) (As many as required to configure all devices)\n11. [*Set Bedtime*](#message-SetBedtime) (1 message each for as many bedtime schedules exist.)",
+              "description": "This message is sent from the Adapter to the Backend as the very first\nmessage it sends AFTER establishing any websocket connection to the\nbackend.  It allows the backend to perform link connection housekeeping\nfor the adapter, which is necessary for proper operation.\n\nUpon receipt, the Backend will queue the initial configuration for the\nrouter in the following order:\n\n1. [*Initial Configuration*](#message-InitialConfig)\n2. [*Unsubscribed Whitelist*](#message-UnsubscribedWhitelist)\n3. [*Block List Cfg*](#operation-publish-BLOCKLIST_CFG) (1 message for each blocklist category)\n4. [*Adapter Services*](#message-AdapterServices)\n5. [*WIFI Configuration*](#message-WifiConfiguration)\n6. [*Set VPN Bypass Domains*](#message-VPNSetBypassDomain)\n7. [*VPN Server Connect*](#message-VPNConnect)\n8. [*Streaming Auth*](#message-AuthorizeStreaming)\n9. [*Streaming Cfg*](#message-ConfigureStreaming)\n10. [*Known Devices*](#message-KnownDevices)\n11. [*Change Device State*](#message-ChangeDeviceState) (As many as required to configure all devices)\n12. [*Set Bedtime*](#message-SetBedtime) (1 message each for as many bedtime schedules exist.)",
               "tags": [
                 {
                   "name": "Adapter Messages",
@@ -1247,6 +1247,51 @@
                 ],
                 "additionalProperties": false
               }
+            },
+            {
+              "name": "VPNBypassDomain",
+              "title": "VPN Bypass Domain",
+              "summary": "Report VPN Bypass Domain Status.",
+              "description": "This message is sent in reply to [*Set VPN Bypass Domains*](#message-VPNSetBypassDomain) messages.",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Report VPN Bypass Domain Status.",
+                    "const": "vpn-bypass-domain",
+                    "minLength": 17,
+                    "maxLength": 17
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  }
+                },
+                "example": {
+                  "message": "vpn-bypass-domain",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ"
+                },
+                "required": [
+                  "message",
+                  "tstamp"
+                ],
+                "additionalProperties": false
+              }
             }
           ]
         },
@@ -1479,6 +1524,127 @@
                   "message",
                   "tstamp",
                   "servers"
+                ],
+                "additionalProperties": false
+              }
+            },
+            {
+              "name": "VPNSetBypassDomain",
+              "title": "Set VPN Bypass Domain",
+              "summary": "Set the Domains/DNS to never pass through the VPN.",
+              "description": "This message causes the router to configure the traffic which will not\npass through the VPN.  Domains are configured which are automatically\nadded to VPN bypass on DNS lookup, as well as DNS lookups which will be\nforwarded to the ISP DNS, and not the PrivacyHero DNS.  This message is\nreplied to with [*Set VPN Bypass Domains Reply*](#message-VPNBypassDomain).",
+              "tags": [
+                {
+                  "name": "Adapter Messages",
+                  "description": "Messages relating to the Adapter and its global state/configuration."
+                }
+              ],
+              "payload": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string",
+                    "description": "Set the Domains/DNS to never pass through the VPN.",
+                    "const": "set-vpn-bypass-domain",
+                    "minLength": 21,
+                    "maxLength": 21
+                  },
+                  "tstamp": {
+                    "type": "integer",
+                    "format": "epoch timestamp [milliseconds] (int64)",
+                    "description": "The request timestamp of the configuration."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "**Optional**, ID Field.  The Adapter does not do any processing or\nverification of the ID field, if it is set, it must be returned\nverbatim in the paired reply.",
+                    "minLength": 1,
+                    "maxLength": 256
+                  },
+                  "domains": {
+                    "type": "object",
+                    "required": [
+                      "bypass"
+                    ],
+                    "description": "List of Domains to Bypass the VPN",
+                    "properties": {
+                      "bypass": {
+                        "type": "array",
+                        "description": "The list of domains whos destination ip addresses will not be routed\nover the VPN.  Regex matching is allowed.",
+                        "items": {
+                          "type": "string",
+                          "description": "Individual Bypass Entry"
+                        },
+                        "minItems": 1
+                      },
+                      "exclude": {
+                        "type": "array",
+                        "description": "The list of domains whos destination ip addresses will be routed over\nthe VPN, even if they would match the domains listed in \"bypass\".  IE,\nthese domains are excluded from the vpn domain bypass.",
+                        "items": {
+                          "type": "string",
+                          "description": "Individual Bypass Exclusion Entry"
+                        },
+                        "minItems": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "dns": {
+                    "type": "object",
+                    "required": [
+                      "bypass"
+                    ],
+                    "description": "List of DNS Queries to Bypass the VPN",
+                    "properties": {
+                      "bypass": {
+                        "type": "array",
+                        "description": "The list of dns entries whos lookups will be performed to the ISP DNS\nServer, and not routed over the VPN to the PrivacyHero upstream DNS.\nSimple Wildcards are allowed.",
+                        "items": {
+                          "type": "string",
+                          "description": "Individual Bypass Entry"
+                        },
+                        "minItems": 1
+                      },
+                      "exclude": {
+                        "type": "array",
+                        "description": "The list of dns entries whos lookups are always performed to the\nPrivacyHero DNS even if they would match the dns bypass listed domains.\nIE, these domains are excluded from the vpn dns bypass.",
+                        "items": {
+                          "type": "string",
+                          "description": "Individual Bypass Exclusion Entry"
+                        },
+                        "minItems": 1
+                      }
+                    },
+                    "additionalProperties": false
+                  }
+                },
+                "example": {
+                  "message": "set-vpn-bypass-domain",
+                  "tstamp": 1592217870123,
+                  "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
+                  "domains": {
+                    "bypass": [
+                      "*.netflix.com",
+                      "*.disneyplus.com"
+                    ],
+                    "exclude": [
+                      "help.netflix.com"
+                    ]
+                  },
+                  "dns": {
+                    "bypass": [
+                      "netflix.com",
+                      "cloudflare.com"
+                    ],
+                    "exclude": [
+                      "tracker.cloudflare.com"
+                    ]
+                  }
+                },
+                "required": [
+                  "message",
+                  "tstamp",
+                  "domains",
+                  "dns"
                 ],
                 "additionalProperties": false
               }

@@ -276,6 +276,111 @@ def vpn_connect():
 # ------------------------------------------------------------------------------
 
 
+def bypassFields(bypass_desc: str, exclude_desc: str):
+    """The VPN Bypass Fields."""
+    return f"""
+        {{
+          {Field.array("bypass", bypass_desc,
+            items=Field.string(None,"Individual Bypass Entry"))},
+          {Field.array("exclude", exclude_desc,
+            items=Field.string(None,"Individual Bypass Exclusion Entry"))}
+        }}
+    """
+
+
+def vpn_bypass_config():
+    """Configure the Domains/DNS Searches that bypass the VPN Service."""
+    cmd = "set-vpn-bypass-domain"
+    name = "VPNSetBypassDomain"
+    title = "Set VPN Bypass Domain"
+    summary = "Set the Domains/DNS to never pass through the VPN."
+
+    description = f"""
+        This message causes the router to configure the traffic which will not
+        pass through the VPN.  Domains are configured which are automatically
+        added to VPN bypass on DNS lookup, as well as DNS lookups which will be
+        forwarded to the ISP DNS, and not the PrivacyHero DNS.  This message is
+        replied to with {Xref.vpn_bypass_domain_reply}.
+    """
+
+    tstamp_desc = """
+        The request timestamp of the configuration.
+    """
+
+    domain_bypass_desc = """
+        The list of domains whos destination ip addresses will not be routed
+        over the VPN.  Regex matching is allowed.
+    """
+
+    domain_exclude_desc = """
+        The list of domains whos destination ip addresses will be routed over
+        the VPN, even if they would match the domains listed in "bypass".  IE,
+        these domains are excluded from the vpn domain bypass.
+    """
+
+    dns_bypass_desc = """
+        The list of dns entries whos lookups will be performed to the ISP DNS
+        Server, and not routed over the VPN to the PrivacyHero upstream DNS.
+        Simple Wildcards are allowed.
+    """
+
+    dns_exclude_desc = """
+        The list of dns entries whos lookups are always performed to the
+        PrivacyHero DNS even if they would match the dns bypass listed domains.
+        IE, these domains are excluded from the vpn dns bypass.
+    """
+
+    extra_example = """
+        "domains": {
+            "bypass": [
+                "*.netflix.com",
+                "*.disneyplus.com"
+            ],
+            "exclude": [
+                "help.netflix.com"
+            ]
+        },
+        "dns" : {
+            "bypass": [
+                "netflix.com",
+                "cloudflare.com"
+            ],
+            "exclude": [
+                "tracker.cloudflare.com"
+            ]
+        }
+    """
+
+    extra_fields = f"""
+        {Field.object(
+            "domains", "List of Domains to Bypass the VPN",
+            required=["bypass"], fields=bypassFields(domain_bypass_desc, domain_exclude_desc))},
+        {Field.object(
+            "dns", "List of DNS Queries to Bypass the VPN",
+            required=["bypass"], fields=bypassFields(dns_bypass_desc, dns_exclude_desc))}
+    """
+
+    extra_required = """
+        "tstamp", "domains", "dns"
+    """
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_fields,
+        extra_example,
+        extra_required,
+    )
+
+
+# ------------------------------------------------------------------------------
+
+
 def vpn_reconnect():
     """Ask the Backend to reconnect the VPN and supply new server list/credentials."""
     cmd = "vpn-reconnect"
@@ -406,6 +511,38 @@ def vpn_status():
 # ------------------------------------------------------------------------------
 
 
+def vpn_bypass_configured():
+    """Advises the Backend that the vpn_bypass configuration has been received."""
+    cmd = "vpn-bypass-domain"
+    name = "VPNBypassDomain"
+    title = "VPN Bypass Domain"
+    summary = "Report VPN Bypass Domain Status."
+
+    description = f"""
+        This message is sent in reply to {Xref.vpn_set_bypass_domain} messages.
+    """
+
+    tstamp_desc = """
+        The request timestamp of the configuration.
+    """
+
+    extra_required = '"tstamp"'
+
+    return base_message(
+        cmd,
+        name,
+        title,
+        summary,
+        description,
+        TAGS.ADAPTER_MSGS,
+        tstamp_desc,
+        extra_required=extra_required,
+    )
+
+
+# ------------------------------------------------------------------------------
+
+
 def vpn_configuration_channel():
     """Adapter VPN Config messages."""
     description = """
@@ -416,13 +553,10 @@ def vpn_configuration_channel():
     """
 
     subscribe_desc = "Configuration VPN Acknowledgements from the Adapter"
-    subscribe_msgs = [
-        vpn_reconnect(),
-        vpn_status(),
-    ]
+    subscribe_msgs = [vpn_reconnect(), vpn_status(), vpn_bypass_configured()]
 
     publish_desc = "VPN Commands to set the Adapter Configuration."
-    publish_msgs = [vpn_connect()]
+    publish_msgs = [vpn_connect(), vpn_bypass_config()]
 
     return channel(
         description,

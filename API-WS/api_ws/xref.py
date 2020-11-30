@@ -43,3 +43,9 @@ class Xref:  # pylint: disable=too-few-public-methods
     router_resetting = "[*Router Reseting*](#message-Resetting)"
     block_list = "[*Block List Cfg*](#operation-publish-BLOCKLIST_CFG)"
     block_list_applied = "[*Block List Applied*](#operation-subscribe-BLOCKLIST_CFG)"
+
+    vpn_set_bypass_domain = "[*Set VPN Bypass Domains*](#message-VPNSetBypassDomain)"
+    vpn_bypass_domain_reply = (
+        "[*Set VPN Bypass Domains Reply*](#message-VPNBypassDomain)"
+    )
+
