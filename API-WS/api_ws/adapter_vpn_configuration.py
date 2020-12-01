@@ -280,9 +280,9 @@ def bypass_fields(bypass_desc: str, exclude_desc: str):
     """Return the VPN Bypass Fields."""
     return f"""
         {{
-          {Field.array("bypass", bypass_desc,
+          {Field.array("positive", bypass_desc,
             items=Field.string(None,"Individual Bypass Entry"))},
-          {Field.array("exclude", exclude_desc,
+          {Field.array("negative", exclude_desc,
             items=Field.string(None,"Individual Bypass Exclusion Entry"))}
         }}
     """
@@ -332,20 +332,20 @@ def vpn_bypass_config():
 
     extra_example = """
         "domains": {
-            "bypass": [
+            "positive": [
                 "*.netflix.com",
                 "*.disneyplus.com"
             ],
-            "exclude": [
+            "negative": [
                 "help.netflix.com"
             ]
         },
         "dns" : {
-            "bypass": [
+            "positive": [
                 "netflix.com",
                 "cloudflare.com"
             ],
-            "exclude": [
+            "negative": [
                 "tracker.cloudflare.com"
             ]
         }
@@ -354,10 +354,10 @@ def vpn_bypass_config():
     extra_fields = f"""
         {Field.object(
             "domains", "List of Domains to Bypass the VPN",
-            required=["bypass"], fields=bypass_fields(domain_bypass_desc, domain_exclude_desc))},
+            required=["positive"], fields=bypass_fields(domain_bypass_desc, domain_exclude_desc))},
         {Field.object(
             "dns", "List of DNS Queries to Bypass the VPN",
-            required=["bypass"], fields=bypass_fields(dns_bypass_desc, dns_exclude_desc))}
+            required=["positive"], fields=bypass_fields(dns_bypass_desc, dns_exclude_desc))}
     """
 
     extra_required = """

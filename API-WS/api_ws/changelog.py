@@ -14,6 +14,7 @@ CHANGELOG = f"""
     2. And its reply: {Xref.vpn_bypass_domain_reply}.
     3. Added {Xref.vpn_set_bypass_domain} to messages sent in reply to
        {Xref.link_established}.
+    4. Renamed fields in {Xref.vpn_set_bypass_domain} to `positive` and `negative`.
 
     ### V0.1.7
 

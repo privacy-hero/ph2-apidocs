@@ -1280,6 +1280,7 @@ documentation convention only.</p>
 <li>And its reply: <a href="#message-VPNBypassDomain"><em>Set VPN Bypass Domains Reply</em></a>.</li>
 <li>Added <a href="#message-VPNSetBypassDomain"><em>Set VPN Bypass Domains</em></a> to messages sent in reply to
 <a href="#message-LinkEstablished"><em>Link Established</em></a>.</li>
+<li>Renamed fields in <a href="#message-VPNSetBypassDomain"><em>Set VPN Bypass Domains</em></a> to <code>positive</code> and <code>negative</code>.</li>
 </ol>
 <h3>V0.1.7</h3>
 <ol>
@@ -12249,7 +12250,7 @@ object
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">bypass</span>
+        <span class="text-sm" style="word-break: break-word;">positive</span>
         
         
         
@@ -12406,7 +12407,7 @@ string
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">exclude</span>
+        <span class="text-sm" style="word-break: break-word;">negative</span>
         
         
         
@@ -12650,7 +12651,7 @@ object
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">bypass</span>
+        <span class="text-sm" style="word-break: break-word;">positive</span>
         
         
         
@@ -12808,7 +12809,7 @@ string
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">exclude</span>
+        <span class="text-sm" style="word-break: break-word;">negative</span>
         
         
         
@@ -13114,20 +13115,20 @@ string
   "tstamp": 1592217870123,
   "id": "eyJ0aGlzIjoiaXMiLCJhbiI6ImV4YW1wbGUiLCJpZCI6ZmllbGQifQ",
   "domains": {
-    "bypass": [
+    "positive": [
       "*.netflix.com",
       "*.disneyplus.com"
     ],
-    "exclude": [
+    "negative": [
       "help.netflix.com"
     ]
   },
   "dns": {
-    "bypass": [
+    "positive": [
       "netflix.com",
       "cloudflare.com"
     ],
-    "exclude": [
+    "negative": [
       "tracker.cloudflare.com"
     ]
   }
@@ -40607,7 +40608,7 @@ object
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">bypass</span>
+        <span class="text-sm" style="word-break: break-word;">positive</span>
         
         
         
@@ -40764,7 +40765,7 @@ string
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">exclude</span>
+        <span class="text-sm" style="word-break: break-word;">negative</span>
         
         
         
@@ -41008,7 +41009,7 @@ object
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">bypass</span>
+        <span class="text-sm" style="word-break: break-word;">positive</span>
         
         
         
@@ -41166,7 +41167,7 @@ string
   <div class="">
     <div class="js-prop cursor-pointer py-2 flex property">
       <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
-        <span class="text-sm" style="word-break: break-word;">exclude</span>
+        <span class="text-sm" style="word-break: break-word;">negative</span>
         
         
         
