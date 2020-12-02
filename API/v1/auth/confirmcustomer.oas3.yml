@@ -51,6 +51,11 @@ paths:
           call.
           - **pwd**: The clients chosen password.  This should only be provided
           if the callback specified that a password was required.
+          - **expchk**: Token Expiry Check.  Will not execute the confirmation,
+          instead will reply with a 202 IF the operation would have succeeded.
+          The backend will not do any updates if expchk is set, so, for
+          confirmations that require a password, the **pwd** field should be set
+          with a valid placeholder.
       requestBody:
         required: true
         content:
@@ -65,6 +70,8 @@ paths:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/ph2-bearer-token"
                 pwd:
                   $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/password"
+                expchk:
+                  $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/expchk"
 
       responses:
         "200":
@@ -74,6 +81,13 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/auth.oas3.yml#/components/schemas/Authorized"
+        "202":
+          description: |-
+            The token has not expired.  Only replied to if **expchk** is true.
+          content:
+            application/json:
+              schema:
+                $ref: "../../inc/auth.oas3.yml#/components/schemas/NotExpired"
         "400":
           description: |-
             General Request processing error.  Possible errors are:

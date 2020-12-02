@@ -74,6 +74,7 @@ paths:
                   - $ref: "#/components/schemas/device-type"
                   - $ref: "#/components/schemas/device-group"
                   - $ref: "#/components/schemas/datausage-predictable"
+                  - $ref: "#/components/schemas/expchk"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -700,6 +701,14 @@ components:
       description: |-
         **true**=Enable the Service. **false**=Disable the Service.
         **null**=No Change
+
+    expchk:
+      type: boolean
+      nullable: true
+      default: false
+      description: |-
+        **true**=Do not perform confirmation, just check if the token has not expired.<\br>
+        **null**/**false**=Perform confirmation normally.
 
     datacap:
       type: integer

@@ -31,6 +31,7 @@ paths:
               schema:
                 oneOf:
                   - $ref: "#/components/schemas/Authorized"
+                  - $ref: "#/components/schemas/NotExpired"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -95,3 +96,20 @@ components:
             present and must be **true** IF the user is an Admin.
         impersonator:
           $ref: "simpletypes.oas3.yml#/components/schemas/email-address"
+
+    NotExpired:
+      type: object
+      description: |-
+        This response is sent if the request had expchk set to true, and the
+        token expiry time has not yet passed.  The confirmation operation has
+        not been performed when this is returned, it is only an indication that
+        it is likely to succeed and has not yet expired.
+
+          - **exp**: The Time the token expires.
+
+      required:
+        - exp
+      additionalProperties: false
+      properties:
+        exp:
+          $ref: "simpletypes.oas3.yml#/components/schemas/epoch-timestamp-nonull"
