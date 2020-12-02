@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.1.5",
+    "version": "0.1.6",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -177,6 +177,12 @@
         "example": "my p455w0rd",
         "pattern": "^[ -~]*$"
       },
+      "expchk": {
+        "type": "boolean",
+        "nullable": true,
+        "default": false,
+        "description": "**true**=Do not perform confirmation, just check if the token has not expired.<\\br>\n**null**/**false**=Perform confirmation normally."
+      },
       "epoch-timestamp-nonull": {
         "type": "integer",
         "format": "int64",
@@ -212,6 +218,19 @@
           },
           "impersonator": {
             "$ref": "#/components/schemas/email-address"
+          }
+        }
+      },
+      "NotExpired": {
+        "type": "object",
+        "description": "This response is sent if the request had expchk set to true, and the\ntoken expiry time has not yet passed.  The confirmation operation has\nnot been performed when this is returned, it is only an indication that\nit is likely to succeed and has not yet expired.\n\n  - **exp**: The Time the token expires.",
+        "required": [
+          "exp"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "exp": {
+            "$ref": "#/components/schemas/epoch-timestamp-nonull"
           }
         }
       },
@@ -1855,6 +1874,19 @@
           }
         }
       },
+      "410": {
+        "description": "Gone - The Verification Token has expired.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Nack"
+            },
+            "example": {
+              "error": "Account Update Token has expired."
+            }
+          }
+        }
+      },
       "415": {
         "description": "Unsupported Media Type",
         "content": {
@@ -2163,7 +2195,7 @@
           "Account Management"
         ],
         "summary": "Confirm the Customer Account Maintenance Request",
-        "description": "# Usage\nConfirms creation of the new account for a Customer, via the back link\nprovided by the email to the customer.\n\n## Security Requirements\n  The Authorization Bearer token sent to authenticate for this message\n  is the Application unique and pre-distributed App Token.\n\n## Parameters\n  - **verify**: The token passed to the callback which invoked this API\n  call.\n  - **pwd**: The clients chosen password.  This should only be provided\n  if the callback specified that a password was required.",
+        "description": "# Usage\nConfirms creation of the new account for a Customer, via the back link\nprovided by the email to the customer.\n\n## Security Requirements\n  The Authorization Bearer token sent to authenticate for this message\n  is the Application unique and pre-distributed App Token.\n\n## Parameters\n  - **verify**: The token passed to the callback which invoked this API\n  call.\n  - **pwd**: The clients chosen password.  This should only be provided\n  if the callback specified that a password was required.\n  - **expchk**: Token Expiry Check.  Will not execute the confirmation,\n  instead will reply with a 202 IF the operation would have succeeded.\n  The backend will not do any updates if expchk is set, so, for\n  confirmations that require a password, the **pwd** field should be set\n  with a valid placeholder.",
         "requestBody": {
           "required": true,
           "content": {
@@ -2180,6 +2212,9 @@
                   },
                   "pwd": {
                     "$ref": "#/components/schemas/password"
+                  },
+                  "expchk": {
+                    "$ref": "#/components/schemas/expchk"
                   }
                 }
               }
@@ -2193,6 +2228,16 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/Authorized"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "The token has not expired.  Only replied to if **expchk** is true.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotExpired"
                 }
               }
             }
@@ -2215,6 +2260,9 @@
           },
           "403": {
             "$ref": "#/components/responses/403-appKey"
+          },
+          "410": {
+            "$ref": "#/components/responses/410"
           },
           "415": {
             "$ref": "#/components/responses/415"
