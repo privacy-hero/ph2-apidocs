@@ -28,15 +28,13 @@ paths:
         "200":
           description: dummy response to silence lint errors in this file
           content:
-              application/json:
-                schema:
-                  oneOf:
-                    - $ref: "#/components/schemas/Ack"
-                    - $ref: "#/components/schemas/Nack"
-                    - $ref: "#/components/schemas/GW_NegAuth"
-                    - $ref: "#/components/schemas/GW_InternalError"
-
-
+            application/json:
+              schema:
+                oneOf:
+                  - $ref: "#/components/schemas/Ack"
+                  - $ref: "#/components/schemas/Nack"
+                  - $ref: "#/components/schemas/GW_NegAuth"
+                  - $ref: "#/components/schemas/GW_InternalError"
 
 ###### THE SERVERS WHERE THIS API CAN BE USED ############
 servers:
@@ -54,7 +52,6 @@ tags:
 #########################################################
 # Components are preformatted data that can be reused in definitions.
 components:
-
   responses:
     "401":
       description: |-
@@ -121,7 +118,6 @@ components:
               value:
                 message: "User is not authorized to access this resource with an explicit deny"
 
-
     "404":
       description: Not found
       content:
@@ -130,6 +126,15 @@ components:
             $ref: "#/components/schemas/Nack"
           example:
             error: "Not Found"
+
+    "410":
+      description: Gone - The Verification Token has expired.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/Nack"
+          example:
+            error: "Account Update Token has expired."
 
     "415":
       description: |-
@@ -177,9 +182,7 @@ components:
           example:
             error: "Unspecified Error"
 
-
   schemas:
-
     Ack:
       type: object
       required:
@@ -239,4 +242,3 @@ components:
           maxLength: 1024
           pattern: "^([\\w\\W])*$"
           example: null
-

@@ -104,6 +104,8 @@ paths:
           $ref: "../../inc/response.oas3.yml#/components/responses/401-appKey"
         "403":
           $ref: "../../inc/response.oas3.yml#/components/responses/403-appKey"
+        "410":
+          $ref: "../../inc/response.oas3.yml#/components/responses/410"
         "415":
           $ref: "../../inc/response.oas3.yml#/components/responses/415"
         "429":
