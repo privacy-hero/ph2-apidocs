@@ -1274,6 +1274,11 @@ documentation convention only.</p>
 <p>All messages to/from the adapter have a common format, which are documented in the
 <em>Basic Message Forms</em>. set of operations.</p>
 <h2>CHANGELOG</h2>
+<h3>V0.1.9</h3>
+<ol>
+<li>Field name changes to bring consistent with websocket.
+ad-blocking became adblocking</li>
+</ol>
 <h3>V0.1.8</h3>
 <ol>
 <li>Added VPN Bypass Configuration message: <a href="#message-VPNSetBypassDomain"><em>Set VPN Bypass Domains</em></a>.</li>
@@ -24866,7 +24871,7 @@ string
 <div class="text-sm markdown"><p>The service/filter on the device which we wish to change the state of.</p>
 <ul>
 <li><strong>vpn</strong> - The Device will route through the VPN when True (if VPN is enabled)</li>
-<li><strong>ad-blocking</strong> - Ad Blocking is Enabled on the device when True.</li>
+<li><strong>adblocking</strong> - Ad Blocking is Enabled on the device when True.</li>
 <li><strong>device-protection</strong> - Device Protection is Enabled on the device when True.</li>
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
@@ -24888,7 +24893,7 @@ accordingly.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"vpn"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"ad-blocking"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adblocking"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"device-protection"</span>
             
@@ -25146,7 +25151,7 @@ internal clock of the adapter.</p>
   ],
   "states": [
     {
-      "service": "ad-blocking",
+      "service": "adblocking",
       "state": false
     },
     {
@@ -25798,7 +25803,7 @@ string
 <div class="text-sm markdown"><p>The service/filter on the device which changed state.</p>
 <ul>
 <li><strong>vpn</strong> - The Device will route through the VPN when True (if VPN is enabled)</li>
-<li><strong>ad-blocking</strong> - Ad Blocking is Enabled on the device when True.</li>
+<li><strong>adblocking</strong> - Ad Blocking is Enabled on the device when True.</li>
 <li><strong>device-protection</strong> - Device Protection is Enabled on the device when True.</li>
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
@@ -25824,7 +25829,7 @@ a result of the adapter detecting a device coming online or falling offline.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"vpn"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"ad-blocking"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adblocking"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"device-protection"</span>
             
@@ -26078,7 +26083,7 @@ midnight 1970 UTC.</p>
   ],
   "states": [
     {
-      "service": "ad-blocking",
+      "service": "adblocking",
       "state": false
     },
     {
@@ -52093,7 +52098,7 @@ string
 <div class="text-sm markdown"><p>The service/filter on the device which we wish to change the state of.</p>
 <ul>
 <li><strong>vpn</strong> - The Device will route through the VPN when True (if VPN is enabled)</li>
-<li><strong>ad-blocking</strong> - Ad Blocking is Enabled on the device when True.</li>
+<li><strong>adblocking</strong> - Ad Blocking is Enabled on the device when True.</li>
 <li><strong>device-protection</strong> - Device Protection is Enabled on the device when True.</li>
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
@@ -52115,7 +52120,7 @@ accordingly.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"vpn"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"ad-blocking"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adblocking"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"device-protection"</span>
             
@@ -52918,7 +52923,7 @@ string
 <div class="text-sm markdown"><p>The service/filter on the device which changed state.</p>
 <ul>
 <li><strong>vpn</strong> - The Device will route through the VPN when True (if VPN is enabled)</li>
-<li><strong>ad-blocking</strong> - Ad Blocking is Enabled on the device when True.</li>
+<li><strong>adblocking</strong> - Ad Blocking is Enabled on the device when True.</li>
 <li><strong>device-protection</strong> - Device Protection is Enabled on the device when True.</li>
 <li><strong>internet-pause</strong> - Internet is paused for the device when True.</li>
 <li><strong>youtube-restricted</strong> - Youtube returns restricted search results when True.</li>
@@ -52944,7 +52949,7 @@ a result of the adapter detecting a device coming online or falling offline.</p>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"vpn"</span>
             
-              <span class="border text-orange rounded ml-1 py-0 px-2">"ad-blocking"</span>
+              <span class="border text-orange rounded ml-1 py-0 px-2">"adblocking"</span>
             
               <span class="border text-orange rounded ml-1 py-0 px-2">"device-protection"</span>
             

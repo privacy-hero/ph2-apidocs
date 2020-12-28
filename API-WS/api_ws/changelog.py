@@ -8,6 +8,11 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.1.9
+
+    1. Field name changes to bring consistent with websocket.
+         ad-blocking became adblocking
+
     ### V0.1.8
 
     1. Added VPN Bypass Configuration message: {Xref.vpn_set_bypass_domain}.

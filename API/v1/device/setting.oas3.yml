@@ -48,13 +48,13 @@ paths:
         ## Parameters
           - **id**: The unique id of the device.
           - **service**: The service we are configuring
-            - **"VPN"** : Set the VPN On/Off
-            - **"Ad-Blocking"** : Set Ad-Blocking On/Off
-            - **"Device-Protection"** : Set Device Protection On/Off
-            - **"Internet-Pause"** : Set the duration of a pause to internet access.
+            - **"vpn"** : Set the VPN On/Off
+            - **"adblocking"** : Set Ad-Blocking On/Off
+            - **"device-protection"** : Set Device Protection On/Off
+            - **"internet-pause"** : Set the duration of a pause to internet access.
           - **setting**: The state we want the configuration to become.
-            - For VPN/Ad-Blocking/Device-Protection - true or false
-            - For Internet-Pause - The time to pause until, -1 = pause
+            - For vpn/adblocking/device-protection - true or false
+            - For internet-pause - The time to pause until, -1 = pause
             indefinitely. 0 = Dont pause.
 
           All field must be present in the call.

@@ -21,7 +21,7 @@ from .xref import Xref
 
 DEVICE_SERVICES = [
     "vpn",
-    "ad-blocking",
+    "adblocking",
     "device-protection",
     "internet-pause",
     "youtube-restricted",
@@ -76,7 +76,7 @@ def device_states(reply=False):
     service_desc = f"""
         {intro}
         - **vpn** - The Device will route through the VPN when True (if VPN is enabled)
-        - **ad-blocking** - Ad Blocking is Enabled on the device when True.
+        - **adblocking** - Ad Blocking is Enabled on the device when True.
         - **device-protection** - Device Protection is Enabled on the device when True.
         - **internet-pause** - Internet is paused for the device when True.
         - **youtube-restricted** - Youtube returns restricted search results when True.
@@ -155,7 +155,7 @@ def change_device_state():
     extra_example = """
         "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
         "states" : [
-            {"service": "ad-blocking", "state":false },
+            {"service": "adblocking", "state":false },
             {"service": "internet-pause", "state":false },
             {"service": "safe-search", "state":true }
         ]
@@ -223,7 +223,7 @@ def device_state_changed():
     extra_example = """
         "devices" : ["53:CB:12:79:E5:F6","DD:0F:91:FE:9E:00","54:A4:33:F5:D8:A4"],
         "states" : [
-            {"service": "ad-blocking", "state":false },
+            {"service": "adblocking", "state":false },
             {"service": "internet-pause", "state":false },
             {"service": "safe-search", "state":true }
         ]

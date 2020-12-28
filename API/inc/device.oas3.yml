@@ -70,11 +70,11 @@ components:
       required:
         - vpn
         - device-protection
-        - ad-blocking
+        - adblocking
       additionalProperties: false
       description: |-
         - **vpn**: Enabled or Not.
-        - **Ad-blocking**: Enabled or Not.
+        - **adblocking**: Enabled or Not.
         - **device-protection**: Enabled or not.
         - **internet-pause**: Internet will be paused until this time passes. If
           the value is -1, internet is paused indefinitely.  If it is 0,
@@ -82,7 +82,7 @@ components:
       properties:
         vpn:
           $ref: "./adapter.oas3.yml#/components/schemas/state"
-        ad-blocking:
+        adblocking:
           $ref: "./adapter.oas3.yml#/components/schemas/state"
         device-protection:
           $ref: "./adapter.oas3.yml#/components/schemas/state"
@@ -169,7 +169,7 @@ components:
           "cfg":
             {
               "vpn": { "state": false, "since": 1587732975 },
-              "ad-blocking": { "state": false, "since": 1587732975 },
+              "adblocking": { "state": false, "since": 1587732975 },
               "device-protection": { "state": false, "since": 1587732975 },
               "internet-pause": { "state": 0, "since": 1587732975 },
             },
@@ -256,9 +256,9 @@ components:
         service:
           type: string
           enum:
-            - "VPN"
-            - "Ad-Blocking"
-            - "Device-Protection"
+            - "vpn"
+            - "adblocking"
+            - "device-protection"
         setting:
           type: boolean
 

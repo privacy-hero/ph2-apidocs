@@ -684,13 +684,13 @@ components:
     adapter-services:
       type: string
       enum:
-        - "VPN"
-        - "Ad-Blocking"
-        - "StreamRelocation"
-        - "Malware"
-        - "UPNP"
-        - "WPS"
-      example: "VPN"
+        - "vpn"
+        - "adblocking"
+        - "streamrelocation"
+        - "malware"
+        - "upnp"
+        - "wps"
+      example: "vpn"
       description: |-
         A service running on the adapter.
 

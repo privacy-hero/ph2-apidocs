@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -403,8 +403,8 @@
         "required": [
           "online",
           "vpn",
-          "ad-blocking",
-          "malware-phishing",
+          "adblocking",
+          "malware",
           "upnp",
           "wps"
         ],
@@ -415,10 +415,10 @@
           "vpn": {
             "$ref": "#/components/schemas/state"
           },
-          "ad-blocking": {
+          "adblocking": {
             "$ref": "#/components/schemas/state"
           },
-          "malware-phishing": {
+          "malware": {
             "$ref": "#/components/schemas/state"
           },
           "upnp": {
@@ -636,14 +636,14 @@
       "adapter-services": {
         "type": "string",
         "enum": [
-          "VPN",
-          "Ad-Blocking",
-          "StreamRelocation",
-          "Malware",
-          "UPNP",
-          "WPS"
+          "vpn",
+          "adblocking",
+          "streamrelocation",
+          "malware",
+          "upnp",
+          "wps"
         ],
-        "example": "VPN",
+        "example": "vpn",
         "description": "A service running on the adapter."
       },
       "adapter-state": {
@@ -1589,15 +1589,15 @@
         "required": [
           "vpn",
           "device-protection",
-          "ad-blocking"
+          "adblocking"
         ],
         "additionalProperties": false,
-        "description": "- **vpn**: Enabled or Not.\n- **Ad-blocking**: Enabled or Not.\n- **device-protection**: Enabled or not.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is -1, internet is paused indefinitely.  If it is 0,\n  internet is Un-paused.",
+        "description": "- **vpn**: Enabled or Not.\n- **adblocking**: Enabled or Not.\n- **device-protection**: Enabled or not.\n- **internet-pause**: Internet will be paused until this time passes. If\n  the value is -1, internet is paused indefinitely.  If it is 0,\n  internet is Un-paused.",
         "properties": {
           "vpn": {
             "$ref": "#/components/schemas/state"
           },
-          "ad-blocking": {
+          "adblocking": {
             "$ref": "#/components/schemas/state"
           },
           "device-protection": {
@@ -1676,7 +1676,7 @@
               "state": false,
               "since": 1587732975
             },
-            "ad-blocking": {
+            "adblocking": {
               "state": false,
               "since": 1587732975
             },
@@ -1715,9 +1715,9 @@
           "service": {
             "type": "string",
             "enum": [
-              "VPN",
-              "Ad-Blocking",
-              "Device-Protection"
+              "vpn",
+              "adblocking",
+              "device-protection"
             ]
           },
           "setting": {
@@ -3667,7 +3667,7 @@
           "Adapter Management"
         ],
         "summary": "Change the Adapter Service Configuration.",
-        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n    - **VPN**: Enable or Disable the VPN Tunnel.\n    - **Ad-Blocking**: Globally Enable/Disable Ad Blocking.\n    - **StreamRelocation**: Enable or Disable stream relocation\n    functionality.\n    - **Malware**: Globally Enable/Disable malware protection.\n    - **UPNP**: Enable a UPNP server on the device to help manage port\n    forwarding through the router.\n    - **WPS**: Enable or Disable the WPS Button on the router.\n    (Wi-Fi Protected Setup)\n  - **state**: The state to set the service to.",
+        "description": "# Usage\nFor a particular Adapter, change its current service configuration.\nWhen called, if the state requested differs from the state currently\nactive in the router, the backend will create a timestamp for the\nrequest and send it to the router.  It will return that timestamp to the\ncaller.  The caller must then poll **v1/adapter/cfg** at regular\nintervals until either a reasonable time has passed, or the state\nchanges and/or the state timestamp equals or exceeds the returned\nrequest timestamp.  When the router applies the state change\nsuccessfully, the backend will be informed and supplied the timestamp of\nthe request, so that the backend can update the configuration to\npersistently store the new state of the router.\n\n## Parameters\n  - **id**: The adapters ID.  Can only change config for adapters\n  associated with the calling clients account.\n  - **service**: The name of the service to set.\n    - **vpn**: Enable or Disable the VPN Tunnel.\n    - **adblocking**: Globally Enable/Disable Ad Blocking.\n    - **streamrelocation**: Enable or Disable stream relocation\n    functionality.\n    - **malware**: Globally Enable/Disable malware protection.\n    - **upnp**: Enable a UPNP server on the device to help manage port\n    forwarding through the router.\n    - **wps**: Enable or Disable the WPS Button on the router.\n    (Wi-Fi Protected Setup)\n  - **state**: The state to set the service to.",
         "requestBody": {
           "required": true,
           "content": {
@@ -5925,7 +5925,7 @@
                       "state": false,
                       "since": 1587732975
                     },
-                    "ad-blocking": {
+                    "adblocking": {
                       "state": false,
                       "since": 1587732975
                     },
@@ -5982,7 +5982,7 @@
           "Device Management"
         ],
         "summary": "Set device setting.",
-        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n    - **\"VPN\"** : Set the VPN On/Off\n    - **\"Ad-Blocking\"** : Set Ad-Blocking On/Off\n    - **\"Device-Protection\"** : Set Device Protection On/Off\n    - **\"Internet-Pause\"** : Set the duration of a pause to internet access.\n  - **setting**: The state we want the configuration to become.\n    - For VPN/Ad-Blocking/Device-Protection - true or false\n    - For Internet-Pause - The time to pause until, -1 = pause\n    indefinitely. 0 = Dont pause.\n\n  All field must be present in the call.",
+        "description": "# Usage\n\nSets the state of a particular device setting.\n\n## Parameters\n  - **id**: The unique id of the device.\n  - **service**: The service we are configuring\n    - **\"vpn\"** : Set the VPN On/Off\n    - **\"adblocking\"** : Set Ad-Blocking On/Off\n    - **\"device-protection\"** : Set Device Protection On/Off\n    - **\"internet-pause\"** : Set the duration of a pause to internet access.\n  - **setting**: The state we want the configuration to become.\n    - For vpn/adblocking/device-protection - true or false\n    - For internet-pause - The time to pause until, -1 = pause\n    indefinitely. 0 = Dont pause.\n\n  All field must be present in the call.",
         "requestBody": {
           "required": true,
           "content": {

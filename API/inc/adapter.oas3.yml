@@ -627,8 +627,8 @@ components:
       required:
         - online
         - vpn
-        - ad-blocking
-        - malware-phishing
+        - adblocking
+        - malware
         - upnp
         - wps
       properties:
@@ -636,9 +636,9 @@ components:
           $ref: "#/components/schemas/state"
         vpn:
           $ref: "#/components/schemas/state"
-        ad-blocking:
+        adblocking:
           $ref: "#/components/schemas/state"
-        malware-phishing:
+        malware:
           $ref: "#/components/schemas/state"
         upnp:
           $ref: "#/components/schemas/state"

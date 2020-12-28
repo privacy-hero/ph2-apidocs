@@ -58,14 +58,14 @@ paths:
           - **id**: The adapters ID.  Can only change config for adapters
           associated with the calling clients account.
           - **service**: The name of the service to set.
-            - **VPN**: Enable or Disable the VPN Tunnel.
-            - **Ad-Blocking**: Globally Enable/Disable Ad Blocking.
-            - **StreamRelocation**: Enable or Disable stream relocation
+            - **vpn**: Enable or Disable the VPN Tunnel.
+            - **adblocking**: Globally Enable/Disable Ad Blocking.
+            - **streamrelocation**: Enable or Disable stream relocation
             functionality.
-            - **Malware**: Globally Enable/Disable malware protection.
-            - **UPNP**: Enable a UPNP server on the device to help manage port
+            - **malware**: Globally Enable/Disable malware protection.
+            - **upnp**: Enable a UPNP server on the device to help manage port
             forwarding through the router.
-            - **WPS**: Enable or Disable the WPS Button on the router.
+            - **wps**: Enable or Disable the WPS Button on the router.
             (Wi-Fi Protected Setup)
           - **state**: The state to set the service to.
 
