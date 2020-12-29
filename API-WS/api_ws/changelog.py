@@ -12,6 +12,8 @@ CHANGELOG = f"""
 
     1. Field name changes to bring consistent with websocket.
          ad-blocking became adblocking
+    2. Field name changes in {Xref.streaming_cfg} changed. "ip" -> "ip-proxy",
+       "mask" -> "range", "addrs" -> "servers".
 
     ### V0.1.8
 

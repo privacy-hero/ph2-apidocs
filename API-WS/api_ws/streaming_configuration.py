@@ -52,13 +52,13 @@ def ip_proxy_cfg():
 
     cfg_fields = f"""
     {{
-        {Field.ip("mask","Net mask of the IP Address.")},
-        {Field.array("addrs", "List of Proxy Server IPs",
+        {Field.ip("range","Net mask of the IP Address.")},
+        {Field.array("servers", "List of Proxy Server IPs",
             items=Field.ip(None, "Individual Proxy IP"))}
     }}
     """
 
-    cfg_required = ["mask", "addrs"]
+    cfg_required = ["range", "servers"]
 
     return f"{Field.object(None, cfg_desc, cfg_required, cfg_fields)}"
 
@@ -100,16 +100,16 @@ def configure_streaming():
 
     extra_example = """
         "domains" : [],
-        "ip" : []
+        "ip-proxy" : []
     """
 
     extra_fields = f"""
         {Field.array("domains", domain_desc, domain_proxy_cfg(), minitems=0)},
-        {Field.array("ip", ip_desc, ip_proxy_cfg(), minitems=0)}
+        {Field.array("ip-proxy", ip_desc, ip_proxy_cfg(), minitems=0)}
     """
 
     extra_required = """
-        "tstamp", "domains", "ip"
+        "tstamp", "domains", "ip-proxy"
     """
 
     return base_message(
