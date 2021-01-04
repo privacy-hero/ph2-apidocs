@@ -28,18 +28,18 @@ a self executing python template.
 
 1. Ensure pyenv is installed: `curl https://pyenv.run | bash`
 2. Create Python Development Environment:
-    - `pyenv update`
-    - `pyenv install 3.8.6`
-    - `pyenv virutalenv 3.8.6 ph2-apidocs`
-    - `pyenv activate ph2-apidocs`
+    * `pyenv update`
+    * `pyenv install 3.8.6`
+    * `pyenv virutalenv 3.8.6 ph2-apidocs`
+    * `pyenv activate ph2-apidocs`
 3. Install Development tools for python.
-    - `pyenv activate ph2-apidocs`
-    - `pip install --upgrade pip wheel poetry`
+    * `pyenv activate ph2-apidocs`
+    * `pip install --upgrade pip wheel poetry`
 4. Install all requirements (dev and runtime):
-    - `cd API-WS`
-    - `poetry install`
+    * `cd API-WS`
+    * `poetry install`
 
-#### VSCode Integration.
+#### VSCode Integration
 
 If using VSCode, the settings.json should be minimally set for python development as follows:
 
