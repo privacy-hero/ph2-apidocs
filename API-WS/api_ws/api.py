@@ -32,7 +32,7 @@ from .streaming_configuration import streaming_configuration_channel
 from .tags import TAGS
 
 TITLE = "Privacy Hero 2 - Adapter <-> Backend Websocket API"
-VERSION = "0.1.8"
+VERSION = "0.2.0"
 DESC = mls(
     f"""
     # The API for Adapter to Backend communication.

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   
-  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.8 documentation</title>
+  <title>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.2.0 documentation</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
   <link href="css/tailwind.min.css" rel="stylesheet">
@@ -28,7 +28,7 @@
   <div class="sidebar-panel__content">
     
       <h1 class="text-2xl font-thin">
-        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.8
+        Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.2.0
       </h1>
     
     <ul class="text-sm mt-10 list-reset mt-2">
@@ -1246,7 +1246,7 @@
     <div class="content-panel flex-1 leading-loose z-10">
       <div class="center-block p-8">
   <a name="introduction"></a>
-  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.1.8</h1>
+  <h1>Privacy Hero 2 - Adapter &lt;-&gt; Backend Websocket API 0.2.0</h1>
   <div class="leading-normal mb-4">
     
     
@@ -1274,6 +1274,10 @@ documentation convention only.</p>
 <p>All messages to/from the adapter have a common format, which are documented in the
 <em>Basic Message Forms</em>. set of operations.</p>
 <h2>CHANGELOG</h2>
+<h3>V0.2.0</h3>
+<ol>
+<li>Add the <em>OPTIONAL</em> &quot;connection&quot; and &quot;guest&quot; fields to <a href="#message-DeviceInformation"><em>Device Information</em></a></li>
+</ol>
 <h3>V0.1.9</h3>
 <ol>
 <li>Field name changes to bring consistent with websocket.
@@ -21923,6 +21927,135 @@ string
 <div class="text-sm markdown"><p><strong>Optional:</strong> The IPv6 Address assigned to this Device. Alternatively, if the
 device is using a fixed IPv6 and not one assigned by DHCP, the IP address it was
 discovered to be using.</p>
+</div>
+
+
+
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+            
+            
+            
+              
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">connection</span>
+        
+        
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+
+<div class="text-sm markdown"><p><strong>Optional:</strong> The port the device connected on.  IF not sent, it is
+interpreted as &quot;Unknown&quot;.  Valid values are &quot;lan&quot;, &quot;wifi2&quot; and &quot;wifi5&quot;.
+&quot;lan&quot; = Device was discovered over the wired lan port.  &quot;wifi2&quot; = Device
+was discovered on the 2.4Ghz Wifi connection to the router.  &quot;wifi5&quot; =
+Device was discovered on the 5ghz Wifi connection to the router.  IF the
+connection value is sent but is not one of these, the backend will record the
+connection as &quot;unknown&quot;.  This field is NOT case sensitive.</p>
+</div>
+
+
+
+        
+          <div class="text-xs">Default: &quot;unknown&quot;</div>
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+            
+            
+            
+              
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">guest</span>
+        
+        
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+
+<div class="text-sm markdown"><p><strong>Optional:</strong> If sent, AND set to true, the device was discovered on a
+&quot;guest&quot; network connection and not the main network.</p>
 </div>
 
 
@@ -49247,6 +49380,135 @@ string
 <div class="text-sm markdown"><p><strong>Optional:</strong> The IPv6 Address assigned to this Device. Alternatively, if the
 device is using a fixed IPv6 and not one assigned by DHCP, the IP address it was
 discovered to be using.</p>
+</div>
+
+
+
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+            
+            
+            
+              
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">connection</span>
+        
+        
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+string
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+
+<div class="text-sm markdown"><p><strong>Optional:</strong> The port the device connected on.  IF not sent, it is
+interpreted as &quot;Unknown&quot;.  Valid values are &quot;lan&quot;, &quot;wifi2&quot; and &quot;wifi5&quot;.
+&quot;lan&quot; = Device was discovered over the wired lan port.  &quot;wifi2&quot; = Device
+was discovered on the 2.4Ghz Wifi connection to the router.  &quot;wifi5&quot; =
+Device was discovered on the 5ghz Wifi connection to the router.  IF the
+connection value is sent but is not one of these, the backend will record the
+connection as &quot;unknown&quot;.  This field is NOT case sensitive.</p>
+</div>
+
+
+
+        
+          <div class="text-xs">Default: &quot;unknown&quot;</div>
+        
+        
+        
+        
+      </div>
+    </div>
+
+    
+  </div>
+</div>
+
+
+            
+          
+            
+            
+            
+              
+
+<div class="bg-grey-lightest pl-8 pr-8 rounded">
+  <div class="">
+    <div class=" flex property">
+      <div class="pr-4" style="margin-top:-2px; min-width: 25%;">
+        <span class="text-sm" style="word-break: break-word;">guest</span>
+        
+        
+        
+        
+        
+      </div>
+
+      <div>
+        <div class="capitalize text-sm text-teal font-bold">
+          
+boolean
+          
+          
+          
+          <div class="inline-block">
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+          </div>
+        </div>
+
+        
+
+<div class="text-sm markdown"><p><strong>Optional:</strong> If sent, AND set to true, the device was discovered on a
+&quot;guest&quot; network connection and not the main network.</p>
 </div>
 
 

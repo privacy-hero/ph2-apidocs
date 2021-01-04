@@ -279,6 +279,21 @@ def device_info():
         discovered to be using.
     """
 
+    connection_desc = """
+        **Optional:** The port the device connected on.  IF not sent, it is
+        interpreted as "Unknown".  Valid values are "lan", "wifi2" and "wifi5".
+        "lan" = Device was discovered over the wired lan port.  "wifi2" = Device
+        was discovered on the 2.4Ghz Wifi connection to the router.  "wifi5" =
+        Device was discovered on the 5ghz Wifi connection to the router.  IF the
+        connection value is sent but is not one of these, the backend will record the
+        connection as "unknown".  This field is NOT case sensitive.
+    """
+
+    guest_desc = """
+        **Optional:** If sent, AND set to true, the device was discovered on a
+        "guest" network connection and not the main network.
+    """
+
     dhcp_desc = """
         DHCP Data discovered about the device.
     """
@@ -337,6 +352,8 @@ def device_info():
         {Field.mac(desc=mac_desc)},
         {Field.ipv4(desc=ipv4_desc)},
         {Field.ipv6(desc=ipv6_desc)},
+        {Field.string("connection",connection_desc, default="unknown")},
+        {Field.boolean("guest", guest_desc)},
         {Field.boolean("online", online_desc)},
 
         {Field.object("meta", "metadata discovered about the device.",

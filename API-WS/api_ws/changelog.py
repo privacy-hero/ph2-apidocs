@@ -8,6 +8,10 @@ from .xref import Xref
 CHANGELOG = f"""
     ## CHANGELOG
 
+    ### V0.2.0
+
+    1. Add the *OPTIONAL* "connection" and "guest" fields to {Xref.device_information}
+
     ### V0.1.9
 
     1. Field name changes to bring consistent with websocket.
