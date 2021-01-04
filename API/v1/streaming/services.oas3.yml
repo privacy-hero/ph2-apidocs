@@ -83,6 +83,15 @@ paths:
             If the parameter is missing the call will return ALL services.
             type **"Summary"** will return a list of ALL services, excluding the
             countries lists for each service.
+        - in: query
+          name: id
+          schema:
+            $ref: "../../inc/simpletypes.oas3.yml#/components/schemas/uuid"
+          example: "cd73b915-89a4-4971-9d86-bce91786b12a"
+          description: |-
+            The Adapter ID to retrieve the services list for.  The services list
+            is customized to the country the adapter resides in.
+          required: true
       responses:
         "200":
           description: |-
@@ -91,35 +100,30 @@ paths:
             application/json:
               schema:
                 $ref: "../../inc/adapter.oas3.yml#/components/schemas/streams"
-              example: [
+              example:
+                [
                   {
                     "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
                     "name": "Netflix",
                     "icon": "netflix.ico",
                     "portable": true,
-                    "countries": {
-                      "proxy": [
-                        "US", "GB", "AU", "TH"
-                      ],
-                      "non-proxy": [
-                        "IL","ID"
-                      ]
-                    },
+                    "countries":
+                      {
+                        "proxy": ["US", "GB", "AU", "TH"],
+                        "non-proxy": ["IL", "ID"],
+                      },
                   },
                   {
                     "id": "29a16e31-bb4d-4407-8244-8e68b820b854",
                     "name": "Disney+",
                     "icon": "disneyplus.ico",
                     "portable": false,
-                    "countries": {
-                      "proxy": [
-                        "US", "GB", "IL",
-                      ],
-                      "non-proxy": [
-                        "TH","ID"
-                      ]
-                    },
-                  }
+                    "countries":
+                      {
+                        "proxy": ["US", "GB", "IL"],
+                        "non-proxy": ["TH", "ID"],
+                      },
+                  },
                 ]
 
         "400":

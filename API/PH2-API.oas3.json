@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -4568,6 +4568,16 @@
             },
             "example": "All",
             "description": "The filter to apply to the service list, the list can contain ALL\nservices, or only Portable or Non-Portable services.\nIf the parameter is missing the call will return ALL services.\ntype **\"Summary\"** will return a list of ALL services, excluding the\ncountries lists for each service."
+          },
+          {
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "$ref": "#/components/schemas/uuid"
+            },
+            "example": "cd73b915-89a4-4971-9d86-bce91786b12a",
+            "description": "The Adapter ID to retrieve the services list for.  The services list\nis customized to the country the adapter resides in.",
+            "required": true
           }
         ],
         "responses": {
