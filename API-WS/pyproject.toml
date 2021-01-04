@@ -11,10 +11,11 @@ jsonschema = "^3.2.0"
 pyparsing = "^2.4.7"
 
 [tool.poetry.dev-dependencies]
-pytest = "^5.2"
-pylint = "^2.5.3"
-pydocstyle = "^5.0.2"
-black = "^19.10b0"
+pytest = ">=5.2"
+pylint = ">=2.5.3"
+pydocstyle = ">=5.0.2"
+black = ">=20.8b1"
+isort = ">=5.7.0"
 
 [tool.poetry.scripts]
 ws_api = "api_ws.__main__:cli"
