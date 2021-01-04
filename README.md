@@ -14,6 +14,8 @@ Tools Needed:
 * [REDOCLY OpenAPI3 CLI](https://github.com/Redocly/openapi-cli)
 * [Python Poetry](https://python-poetry.org/)
 * [pyenv](https://github.com/pyenv/pyenv)
+* [nodejs & npm](https://nodejs.org)
+* [nvm](https://github.com/nvm-sh/nvm)
 * [jsonlint](https://github.com/zaach/jsonlint)
 * [AsyncAPI Generator](https://github.com/asyncapi/generator)
 * [AsyncAPI Parser](https://github.com/asyncapi/parser-js)
