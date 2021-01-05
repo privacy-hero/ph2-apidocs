@@ -327,6 +327,12 @@ components:
             description: |-
               Is the service subscription able to be used in multiple countries?
             default: true
+          default:
+            type: boolean
+            description: |-
+              True if the service defaulted, and non configurable. This field is
+              optional, and if not present the default value is false.
+            default: false
           subscription:
             type: string
             enum:

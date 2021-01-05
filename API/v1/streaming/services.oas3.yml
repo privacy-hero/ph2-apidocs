@@ -103,6 +103,14 @@ paths:
               example:
                 [
                   {
+                    "id": "8856d328-4fac-11eb-ae93-0242ac130002",
+                    "name": "Hulu",
+                    "icon": "hulu.ico",
+                    "portable": false,
+                    "default": true,
+                    "countries": { "proxy": ["US"] },
+                  },
+                  {
                     "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
                     "name": "Netflix",
                     "icon": "netflix.ico",

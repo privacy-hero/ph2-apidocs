@@ -2,7 +2,7 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Privacy Hero 2 - Mothership API",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "description": "The complete backend API for the Privacy Hero 2.\n\nThe backend server infrastructure is known as the *\"Mothership\"*\n\nThis API Documentation may be viewed at:\n  - [PrivacyHero2 API - Swagger UI](./index-swui.html)\n  - [PrivacyHero2 API - RapiDoc/PDF](./index-rapidoc.html)\n  - [Download API JSON](./API/PH2-API.oas3.json)\n\nThe Browser Extension API is maintained in a separate document and may be\nviewed at:\n  - [PrivacyHero2 Browser Extension API](./index-browser-extension.html)",
     "license": {
       "name": "Copyright © 2020 HelpOn Inc. All Rights Reserved",
@@ -1202,6 +1202,11 @@
               "type": "boolean",
               "description": "Is the service subscription able to be used in multiple countries?",
               "default": true
+            },
+            "default": {
+              "type": "boolean",
+              "description": "True if the service defaulted, and non configurable. This field is\noptional, and if not present the default value is false.",
+              "default": false
             },
             "subscription": {
               "type": "string",
@@ -4589,6 +4594,18 @@
                   "$ref": "#/components/schemas/streams"
                 },
                 "example": [
+                  {
+                    "id": "8856d328-4fac-11eb-ae93-0242ac130002",
+                    "name": "Hulu",
+                    "icon": "hulu.ico",
+                    "portable": false,
+                    "default": true,
+                    "countries": {
+                      "proxy": [
+                        "US"
+                      ]
+                    }
+                  },
                   {
                     "id": "cd73b915-89a4-4971-9d86-bce91786b12a",
                     "name": "Netflix",
