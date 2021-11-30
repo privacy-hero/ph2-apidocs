@@ -1,0 +1,268 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Streaming Proxy Integration API",
+    "version": "1.0",
+    "summary": "API to integrate/Configure the Streaming Proxy",
+    "description": "This API allows a streaming proxy to be configured and integrated with an external stream relocation service.",
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    },
+    "contact": {
+      "name": "HelpOn Inc."
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Example"
+    }
+  ],
+  "paths": {
+    "/v1/allowclients": {
+      "put": {
+        "summary": "",
+        "operationId": "post-v1-clientauth",
+        "responses": {
+          "200": {
+            "description": "# OK"
+          },
+          "401": {
+            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
+          },
+          "422": {
+            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "details": {
+                      "type": "string",
+                      "description": "The reason why the parameters/body could not be processed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "# Internal Server Error"
+          }
+        },
+        "description": "Advises the proxy which client ip addresses/ranges are authorized to use the proxy.  Only clients which have a public ip address matching the list supplied to this call will be allowed to connect.  This list will replace the existing list of allowed client IP Addresses/ranges.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ipv4": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 0,
+                    "items": {
+                      "type": "string",
+                      "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+                      "minLength": 7,
+                      "maxLength": 18
+                    }
+                  }
+                },
+                "required": [
+                  "ipv4"
+                ]
+              },
+              "examples": {
+                "Three individual IPv4 and one range": {
+                  "value": {
+                    "ipv4": [
+                      "183.89.192.99",
+                      "183.89.192.100",
+                      "183.89.192.101",
+                      "183.89.193.00/24"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": "An array of client IPv4 Addresses or CIDRs denoting the IPv4 Address/Range that may legally connect to the proxy.\nThis should ONLY list the valid IP Addresses of valid clients."
+        },
+        "tags": [
+          "Client"
+        ]
+      },
+      "parameters": []
+    },
+    "/v1/domains": {
+      "put": {
+        "summary": "",
+        "operationId": "post-v1-domains",
+        "responses": {
+          "200": {
+            "description": "# OK"
+          },
+          "401": {
+            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
+          },
+          "422": {
+            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "details": {
+                      "type": "string",
+                      "description": "The reason why the parameters/body could not be processed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "# Internal Server Error"
+          }
+        },
+        "description": "Add list of domains that are allowed to be proxied through the server.  This will replace any previous list of acceptable domains which will persist until replaced by another call to this endpoint.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "domains": {
+                    "type": "array",
+                    "description": "An arrya of optionally wildcarded domains allowed to be proxied through the proxy.  Domains without a wildcard `*`  *(asterix)* will match exactly.  Domains with a wildcard will match all domains with the suffix exactly matching the string following the wildcard `*`",
+                    "minItems": 1,
+                    "items": {
+                      "type": "string",
+                      "minLength": 1,
+                      "pattern": "^\\*?(?:\\.*[a-z0-9\\-]+)*$"
+                    }
+                  }
+                },
+                "required": [
+                  "domains"
+                ]
+              },
+              "examples": {
+                "wildcarded domains": {
+                  "value": {
+                    "domains": [
+                      "www.google.com",
+                      "*.facebook.com",
+                      "*api.twitter.com"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Client"
+        ]
+      }
+    },
+    "/admin/blacklist": {
+      "put": {
+        "summary": "",
+        "operationId": "post-admin-blacklist",
+        "responses": {
+          "200": {
+            "description": "# OK"
+          },
+          "401": {
+            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
+          },
+          "422": {
+            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "details": {
+                      "type": "string",
+                      "description": "The reason why the parameters/body could not be processed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "# Internal Server Error"
+          }
+        },
+        "description": "Blacklist Source Addresses from proxying.  This will cause the listed addresses to be prevented to be used as source addresses to the proxied services.  The address is an IPv6 Address Range.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "blacklist": {
+                    "type": "array",
+                    "minItems": 0,
+                    "items": {
+                      "type": "string",
+                      "pattern": "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))$",
+                      "minLength": 2,
+                      "maxLength": 43
+                    }
+                  }
+                },
+                "required": [
+                  "blacklist"
+                ]
+              },
+              "examples": {
+                "Blacklisted Ranges": {
+                  "value": {
+                    "blacklist": [
+                      "fe80:0:0:1::/64",
+                      "fe80:0:1234:45::/64",
+                      "fe80:0:aaaa::/64"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "admin"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "API_Key": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request."
+      }
+    },
+    "responses": {}
+  },
+  "security": [
+    {
+      "API Key - 1": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "admin"
+    },
+    {
+      "name": "Client"
+    }
+  ]
+}
