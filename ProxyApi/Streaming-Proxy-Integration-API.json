@@ -20,13 +20,30 @@
     }
   ],
   "paths": {
-    "/v1/allowclients": {
-      "put": {
-        "summary": "",
-        "operationId": "v1-clientauth",
+    "/v1/provision": {
+      "post": {
+        "summary": "Add Provisioned Clients",
+        "operationId": "post-v1-provision",
         "responses": {
           "200": {
-            "description": "# OK"
+            "description": "# OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "integer",
+                      "description": "The total number of NEW IP addresses added to the provisioned client list.",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "added"
+                  ]
+                }
+              }
+            }
           },
           "401": {
             "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
@@ -48,10 +65,10 @@
             }
           },
           "500": {
-            "description": "# Internal Server Error"
+            "description": "# Internal Server Error\n\nAn unexpected error occured in the server adding the clients ip."
           }
         },
-        "description": "Advises the proxy which client ip addresses/ranges are authorized to use the proxy.  Only clients which have a public ip address matching the list supplied to this call will be allowed to connect.  This list will replace the existing list of allowed client IP Addresses/ranges.",
+        "description": "Advises the proxy which client ip addresses/ranges are authorized to use the proxy.  Only clients which have a public ip address matching the list supplied to this call will be allowed to connect.  The supplied values add to the list of provision clients, and do not replace it.  The same IP address may be added multiple times without error, however the proxy will only add the ip address/range once when first requested.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -77,7 +94,7 @@
                 ]
               },
               "examples": {
-                "Three individual IPv4 and one range": {
+                "Provisioning three individual IPv4 and one range": {
                   "value": {
                     "ipv4": [
                       "183.89.192.99",
@@ -86,21 +103,203 @@
                       "183.89.193.00/24"
                     ]
                   }
+                },
+                "Provisioning a single client": {
+                  "value": {
+                    "ipv4": [
+                      "183.89.192.211"
+                    ]
+                  }
                 }
               }
             }
           },
-          "description": "An array of client IPv4 Addresses or CIDRs denoting the IPv4 Address/Range that may legally connect to the proxy.\nThis should ONLY list the valid IP Addresses of valid clients."
+          "description": "An array of client IPv4 Addresses or CIDRs to be added to the allowed list of client addresses."
         },
         "tags": [
           "Client"
         ]
       },
-      "parameters": []
+      "parameters": [],
+      "get": {
+        "summary": "Get Provisioned Clients",
+        "operationId": "get-v1-provision",
+        "responses": {
+          "200": {
+            "description": "# OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ipv4": {
+                      "type": "array",
+                      "minItems": 0,
+                      "uniqueItems": true,
+                      "description": "The full list of client ip addresses currently allowed to send traffic through the proxy.",
+                      "items": {
+                        "type": "string",
+                        "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+                        "minLength": 7,
+                        "maxLength": 18
+                      }
+                    }
+                  },
+                  "required": [
+                    "ipv4"
+                  ]
+                },
+                "examples": {
+                  "Three Individual IP Addresses and One Range": {
+                    "value": {
+                      "ipv4": [
+                        "183.89.192.99",
+                        "183.89.192.100",
+                        "183.89.192.101",
+                        "183.89.193.00/24"
+                      ]
+                    }
+                  },
+                  "No Clients provisioned": {
+                    "value": {
+                      "ipv4": []
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
+          },
+          "422": {
+            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "details": {
+                      "type": "string",
+                      "description": "The reason why the parameters/body could not be processed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "# Internal Server Error"
+          }
+        },
+        "description": "Get the full current list of provisioned client ip addresses.",
+        "tags": [
+          "Client"
+        ]
+      },
+      "delete": {
+        "summary": "Delete Provisioned Clients",
+        "operationId": "delete-v1-provision",
+        "responses": {
+          "200": {
+            "description": "# OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "deleted": {
+                      "type": "integer",
+                      "description": "The total number of IPv4 addresses/ranges deleted from the list of provisioned clients.",
+                      "minimum": 0
+                    }
+                  },
+                  "required": [
+                    "deleted"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
+          },
+          "422": {
+            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "details": {
+                      "type": "string",
+                      "description": "The reason why the parameters/body could not be processed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "# Internal Server Error\n\nAn unexpected error occured in the server adding the clients ip."
+          }
+        },
+        "description": "Advises the proxy which client ip addresses/ranges are to be de-authorized to use the proxy.  Any IP addresses in the supplied list will no longer be allowed to connect.  If an IP address is attempted to be deleted, that is not provisioned, it will be silently ignored.  Ranges must be deleted as Ranges, individual addresses within a range can not be deleted.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "ipv4": {
+                    "type": "array",
+                    "uniqueItems": true,
+                    "minItems": 0,
+                    "description": "The Array of IPv4 Addresses/Ranges",
+                    "items": {
+                      "type": "string",
+                      "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$",
+                      "minLength": 7,
+                      "maxLength": 18
+                    }
+                  }
+                },
+                "required": [
+                  "ipv4"
+                ]
+              },
+              "examples": {
+                "Deleting three individual IPv4 and one range": {
+                  "value": {
+                    "ipv4": [
+                      "183.89.192.99",
+                      "183.89.192.100",
+                      "183.89.192.101",
+                      "183.89.193.00/24"
+                    ]
+                  }
+                },
+                "Deleting a single client from the list of provisioned clients.": {
+                  "value": {
+                    "ipv4": [
+                      "183.89.192.211"
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "description": "The list of individual IPv4 addresses or CIDRv4 ranges to be removed from the list of allowed clients."
+        },
+        "tags": [
+          "Client"
+        ]
+      }
     },
-    "/v1/domains": {
+    "/v1/allowed_domains": {
       "put": {
-        "summary": "",
+        "summary": "Set List of Allowed Domains",
         "operationId": "v1-domains",
         "responses": {
           "200": {
@@ -170,80 +369,8 @@
         "tags": [
           "Client"
         ]
-      }
-    },
-    "/admin/blacklist": {
-      "put": {
-        "summary": "",
-        "operationId": "admin-blacklist",
-        "responses": {
-          "200": {
-            "description": "# OK"
-          },
-          "401": {
-            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
-          },
-          "422": {
-            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "details": {
-                      "type": "string",
-                      "description": "The reason why the parameters/body could not be processed."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "# Internal Server Error"
-          }
-        },
-        "description": "Blacklist Source Addresses from proxying.  This will cause the listed addresses to be prevented to be used as source addresses to the proxied services.  The address is an IPv6 Address Range. ",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "blacklist": {
-                    "type": "array",
-                    "minItems": 0,
-                    "items": {
-                      "type": "string",
-                      "pattern": "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))$",
-                      "minLength": 2,
-                      "maxLength": 43
-                    }
-                  }
-                },
-                "required": [
-                  "blacklist"
-                ]
-              },
-              "examples": {
-                "Blacklisted Ranges": {
-                  "value": {
-                    "blacklist": [
-                      "fe80:0:0:1::/64",
-                      "fe80:0:1234:45::/64",
-                      "fe80:0:aaaa::/64"
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        },
-        "tags": [
-          "admin"
-        ]
-      }
+      },
+      "parameters": []
     }
   },
   "components": {

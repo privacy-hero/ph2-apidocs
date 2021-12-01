@@ -1,0 +1,122 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Streaming Proxy Admin API",
+    "version": "1.0",
+    "summary": "API to Administrate the Streaming Proxy",
+    "description": "This API allows a streaming proxy to be administrated by external scripts.",
+    "license": {
+      "name": "Proprietary",
+      "identifier": "LicenseRef-Proprietary"
+    },
+    "contact": {
+      "name": "HelpOn Inc."
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Example"
+    }
+  ],
+  "paths": {
+    "/admin/blacklist": {
+      "put": {
+        "summary": "",
+        "operationId": "admin-blacklist",
+        "responses": {
+          "200": {
+            "description": "# OK"
+          },
+          "401": {
+            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
+          },
+          "422": {
+            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "details": {
+                      "type": "string",
+                      "description": "The reason why the parameters/body could not be processed."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "# Internal Server Error"
+          }
+        },
+        "description": "Blacklist Source Addresses from proxying.  This will cause the listed addresses to be prevented to be used as source addresses to the proxied services.  The address is an IPv6 Address Range. ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "blacklist": {
+                    "type": "array",
+                    "minItems": 0,
+                    "items": {
+                      "type": "string",
+                      "pattern": "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))$",
+                      "minLength": 2,
+                      "maxLength": 43
+                    }
+                  }
+                },
+                "required": [
+                  "blacklist"
+                ]
+              },
+              "examples": {
+                "Blacklisted Ranges": {
+                  "value": {
+                    "blacklist": [
+                      "fe80:0:0:1::/64",
+                      "fe80:0:1234:45::/64",
+                      "fe80:0:aaaa::/64"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "admin"
+        ],
+        "x-internal": true
+      }
+    }
+  },
+  "components": {
+    "schemas": {},
+    "securitySchemes": {
+      "API_Key": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request."
+      }
+    },
+    "responses": {}
+  },
+  "security": [
+    {
+      "API Key - 1": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "admin"
+    },
+    {
+      "name": "Client"
+    }
+  ]
+}
