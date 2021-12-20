@@ -32,16 +32,17 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "invalid_del": {
+                    "invalid_add": {
                       "type": "array",
                       "minItems": 0,
                       "uniqueItems": true,
                       "description": "The list of any client address which could not be added, because the address is malformed.",
                       "items": {
-                        "type": "string"
+                        "type": "string",
+                        "example": "123.abc.000.000"
                       }
                     },
-                    "invalid_add": {
+                    "invalid_del": {
                       "type": "array",
                       "description": "The list of any client address which could not be deleted, because the address is malformed.",
                       "minItems": 0,
