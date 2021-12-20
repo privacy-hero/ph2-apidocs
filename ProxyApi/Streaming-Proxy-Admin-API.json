@@ -26,7 +26,33 @@
         "operationId": "admin-blacklist",
         "responses": {
           "200": {
-            "description": "# OK"
+            "description": "# OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "description": "The total number of address ranges added"
+                    },
+                    "invalid": {
+                      "type": "array",
+                      "minItems": 0,
+                      "uniqueItems": true,
+                      "description": "The list of invalid addresses that failed to add.",
+                      "items": {
+                        "type": "string"
+                      }
+                    }
+                  },
+                  "required": [
+                    "added"
+                  ]
+                }
+              }
+            }
           },
           "401": {
             "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
@@ -51,7 +77,7 @@
             "description": "# Internal Server Error"
           }
         },
-        "description": "Blacklist Source Addresses from proxying.  This will cause the listed addresses to be prevented to be used as source addresses to the proxied services.  The address is an IPv6 Address Range. ",
+        "description": "Blacklist Source Addresses from proxying.  This will cause the listed addresses to be prevented to be used as source addresses to the proxied services.  The address is an IPv6 Address Range. Each call to this endpoint replaces the previous list of blacklisted addresses with the new list.  It does not incrementaily update.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -59,9 +85,10 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "blacklist": {
+                  "ipv6": {
                     "type": "array",
                     "minItems": 0,
+                    "description": "The list of IPv6 addresses or ranges to avoid using when dynamically allocating client source addresses.",
                     "items": {
                       "type": "string",
                       "pattern": "^s*((([0-9A-Fa-f]{1,4}:){7}([0-9A-Fa-f]{1,4}|:))|(([0-9A-Fa-f]{1,4}:){6}(:[0-9A-Fa-f]{1,4}|((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){5}(((:[0-9A-Fa-f]{1,4}){1,2})|:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3})|:))|(([0-9A-Fa-f]{1,4}:){4}(((:[0-9A-Fa-f]{1,4}){1,3})|((:[0-9A-Fa-f]{1,4})?:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){3}(((:[0-9A-Fa-f]{1,4}){1,4})|((:[0-9A-Fa-f]{1,4}){0,2}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){2}(((:[0-9A-Fa-f]{1,4}){1,5})|((:[0-9A-Fa-f]{1,4}){0,3}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(([0-9A-Fa-f]{1,4}:){1}(((:[0-9A-Fa-f]{1,4}){1,6})|((:[0-9A-Fa-f]{1,4}){0,4}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:))|(:(((:[0-9A-Fa-f]{1,4}){1,7})|((:[0-9A-Fa-f]{1,4}){0,5}:((25[0-5]|2[0-4]d|1dd|[1-9]?d)(.(25[0-5]|2[0-4]d|1dd|[1-9]?d)){3}))|:)))(%.+)?s*(\\/([0-9]|[1-9][0-9]|1[0-1][0-9]|12[0-8]))$",
@@ -71,13 +98,13 @@
                   }
                 },
                 "required": [
-                  "blacklist"
+                  "ipv6"
                 ]
               },
               "examples": {
                 "Blacklisted Ranges": {
                   "value": {
-                    "blacklist": [
+                    "ipv6": [
                       "fe80:0:0:1::/64",
                       "fe80:0:1234:45::/64",
                       "fe80:0:aaaa::/64"
@@ -86,12 +113,18 @@
                 }
               }
             }
-          }
+          },
+          "description": "The list of adresses/ranges we may not use as client source addresses."
         },
         "tags": [
           "admin"
         ],
-        "x-internal": true
+        "x-internal": true,
+        "security": [
+          {
+            "API_Key": []
+          }
+        ]
       }
     }
   },

@@ -32,15 +32,26 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "added": {
-                      "type": "integer",
-                      "description": "The total number of NEW IP addresses added to the provisioned client list.",
-                      "minimum": 0
+                    "invalid_del": {
+                      "type": "array",
+                      "minItems": 0,
+                      "uniqueItems": true,
+                      "description": "The list of any client address which could not be added, because the address is malformed.",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "invalid_add": {
+                      "type": "array",
+                      "description": "The list of any client address which could not be deleted, because the address is malformed.",
+                      "minItems": 0,
+                      "uniqueItems": true,
+                      "items": {
+                        "type": "string",
+                        "example": "123.456.789.000"
+                      }
                     }
-                  },
-                  "required": [
-                    "added"
-                  ]
+                  }
                 }
               }
             }
@@ -68,7 +79,7 @@
             "description": "# Internal Server Error\n\nAn unexpected error occured in the server adding the clients ip."
           }
         },
-        "description": "Advises the proxy which client ip addresses/ranges are authorized to use the proxy.  Only clients which have a public ip address matching the list supplied to this call will be allowed to connect.  The supplied values add to the list of provision clients, and do not replace it.  The same IP address may be added multiple times without error, however the proxy will only add the ip address/range once when first requested.",
+        "description": "Advises the proxy which client ip addresses are authorized to use the proxy.  Only clients which have a public ip address matching the list supplied to this call will be allowed to connect.  The supplied values add  (or delete) to the list of provision clients, and do not replace it.  The same IP address may be added/deleted multiple times without error, however the proxy will only add/delete the ip address/range once when first requested.  It is not an error to delete a client address that has not been previosuly added, it is equivalent to a no-op.\n\nA single call may add only, or delete only, or add and delete simultaneously.",
         "requestBody": {
           "content": {
             "application/json": {
@@ -76,48 +87,82 @@
                 "type": "object",
                 "additionalProperties": false,
                 "properties": {
-                  "ipv4": {
+                  "add": {
                     "type": "array",
                     "uniqueItems": true,
                     "minItems": 0,
                     "description": "The Array of IPv4 Addresses/Ranges",
                     "items": {
                       "type": "string",
-                      "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$",
                       "minLength": 7,
-                      "maxLength": 18
+                      "maxLength": 15,
+                      "pattern": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$"
+                    }
+                  },
+                  "del": {
+                    "type": "array",
+                    "description": "set delete to true to delete the listed ipv4 addresses.  It may be omitted or set to false for adding.",
+                    "uniqueItems": true,
+                    "minItems": 0,
+                    "items": {
+                      "type": "string",
+                      "minLength": 7,
+                      "maxLength": 15,
+                      "pattern": "^((25[0-5]|(2[0-4]|1\\d|[1-9]|)\\d)(\\.(?!$)|$)){4}$"
                     }
                   }
-                },
-                "required": [
-                  "ipv4"
-                ]
+                }
               },
               "examples": {
-                "Provisioning three individual IPv4 and one range": {
+                "Provisioning three individual IPv4": {
                   "value": {
-                    "ipv4": [
+                    "add": [
                       "183.89.192.99",
                       "183.89.192.100",
-                      "183.89.192.101",
-                      "183.89.193.00/24"
+                      "183.89.192.101"
                     ]
                   }
                 },
                 "Provisioning a single client": {
                   "value": {
-                    "ipv4": [
+                    "add": [
                       "183.89.192.211"
+                    ]
+                  }
+                },
+                "Delete two clients": {
+                  "value": {
+                    "del": [
+                      "183.89.192.99",
+                      "183.89.192.100"
+                    ]
+                  }
+                },
+                "Add two clients and delete three.": {
+                  "value": {
+                    "add": [
+                      "183.89.192.200",
+                      "183.89.192.84"
+                    ],
+                    "del": [
+                      "183.89.192.211",
+                      "183.89.192.45",
+                      "183.89.192.3"
                     ]
                   }
                 }
               }
             }
           },
-          "description": "An array of client IPv4 Addresses or CIDRs to be added to the allowed list of client addresses."
+          "description": "An array of client IPv4 Addresses or CIDRs to be added or deleted to the allowed list of client addresses."
         },
         "tags": [
           "Client"
+        ],
+        "security": [
+          {
+            "API_Key": []
+          }
         ]
       },
       "parameters": [],
@@ -195,105 +240,11 @@
         "description": "Get the full current list of provisioned client ip addresses.",
         "tags": [
           "Client"
-        ]
-      },
-      "delete": {
-        "summary": "Delete Provisioned Clients",
-        "operationId": "delete-v1-provision",
-        "responses": {
-          "200": {
-            "description": "# OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "deleted": {
-                      "type": "integer",
-                      "description": "The total number of IPv4 addresses/ranges deleted from the list of provisioned clients.",
-                      "minimum": 0
-                    }
-                  },
-                  "required": [
-                    "deleted"
-                  ]
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
-          },
-          "422": {
-            "description": "# Unprocessable Entity\n\nThe parameters of the operation are invalid.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "details": {
-                      "type": "string",
-                      "description": "The reason why the parameters/body could not be processed."
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "# Internal Server Error\n\nAn unexpected error occured in the server adding the clients ip."
+        ],
+        "security": [
+          {
+            "API_Key": []
           }
-        },
-        "description": "Advises the proxy which client ip addresses/ranges are to be de-authorized to use the proxy.  Any IP addresses in the supplied list will no longer be allowed to connect.  If an IP address is attempted to be deleted, that is not provisioned, it will be silently ignored.  Ranges must be deleted as Ranges, individual addresses within a range can not be deleted.",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "additionalProperties": false,
-                "properties": {
-                  "ipv4": {
-                    "type": "array",
-                    "uniqueItems": true,
-                    "minItems": 0,
-                    "description": "The Array of IPv4 Addresses/Ranges",
-                    "items": {
-                      "type": "string",
-                      "pattern": "^([0-9]{1,3}\\.){3}[0-9]{1,3}(\\/([0-9]|[1-2][0-9]|3[0-2]))?$",
-                      "minLength": 7,
-                      "maxLength": 18
-                    }
-                  }
-                },
-                "required": [
-                  "ipv4"
-                ]
-              },
-              "examples": {
-                "Deleting three individual IPv4 and one range": {
-                  "value": {
-                    "ipv4": [
-                      "183.89.192.99",
-                      "183.89.192.100",
-                      "183.89.192.101",
-                      "183.89.193.00/24"
-                    ]
-                  }
-                },
-                "Deleting a single client from the list of provisioned clients.": {
-                  "value": {
-                    "ipv4": [
-                      "183.89.192.211"
-                    ]
-                  }
-                }
-              }
-            }
-          },
-          "description": "The list of individual IPv4 addresses or CIDRv4 ranges to be removed from the list of allowed clients."
-        },
-        "tags": [
-          "Client"
         ]
       }
     },
@@ -303,7 +254,45 @@
         "operationId": "v1-domains",
         "responses": {
           "200": {
-            "description": "# OK"
+            "description": "# OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "added": {
+                      "type": "integer",
+                      "example": 53,
+                      "minimum": 0,
+                      "description": "The number of valid domains used as allowable domains."
+                    },
+                    "invalid": {
+                      "type": "array",
+                      "uniqueItems": true,
+                      "minItems": 0,
+                      "description": "If any domains were invalid, the invalid domains that were rejected are listed here.",
+                      "items": {
+                        "type": "string",
+                        "example": "**bad-wildcard.com"
+                      }
+                    }
+                  },
+                  "required": [
+                    "invalid"
+                  ]
+                },
+                "examples": {
+                  "example-1": {
+                    "value": {
+                      "added": 53,
+                      "invalid": [
+                        "**bad-wildcard.com"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
           },
           "401": {
             "description": "# Unauthorized\n\nThe Bearer Token is Invalid, request rejected."
@@ -357,7 +346,8 @@
                     "domains": [
                       "www.google.com",
                       "*.facebook.com",
-                      "*api.twitter.com"
+                      "*api.twitter.com",
+                      "*-reddit.net"
                     ]
                   }
                 }
@@ -368,6 +358,11 @@
         },
         "tags": [
           "Client"
+        ],
+        "security": [
+          {
+            "API_Key": []
+          }
         ]
       },
       "parameters": []
@@ -378,8 +373,7 @@
     "securitySchemes": {
       "API_Key": {
         "type": "http",
-        "scheme": "bearer",
-        "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request."
+        "scheme": "bearer"
       }
     },
     "responses": {}
