@@ -15,7 +15,7 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
+      "url": "http://166.70.53.208:3000",
       "description": "Example"
     }
   ],
@@ -328,7 +328,7 @@
                 "properties": {
                   "domains": {
                     "type": "array",
-                    "description": "An array of optionally wildcarded domains allowed to be proxied through the proxy.  Domains without a wildcard `*`  *(asterisk)* will match exactly.  Domains with a wildcard will match all domains with the suffix exactly matching the string following the wildcard `*`",
+                    "description": "An array of optionally wildcarded domains allowed to be proxied through the proxy.  Domains without a wildcard `*.`  *(asterisk dot)* will match exactly.  Domains with a wildcard `*.` will match all domains with the suffix matching the string following the wildcard `*.`",
                     "minItems": 1,
                     "items": {
                       "type": "string",
@@ -345,10 +345,15 @@
                 "wildcarded domains": {
                   "value": {
                     "domains": [
-                      "www.google.com",
-                      "*.facebook.com",
-                      "*api.twitter.com",
-                      "*-reddit.net"
+                      "*.netflix.com",
+                      "*.nflxvideo.net",
+                      "*.nflximg.com",
+                      "*.nflxso.net",
+                      "*.nflxext.com",
+                      "*.fast.com",
+                      "*.netflix.net",
+                      "*.nflximg.net",
+                      "*.onetrust.com"
                     ]
                   }
                 }
