@@ -129,7 +129,7 @@
     },
     "/admin/client": {
       "get": {
-        "summary": "Your GET endpoint",
+        "summary": "Get Client IP/Auth Data",
         "tags": [],
         "responses": {
           "200": {
