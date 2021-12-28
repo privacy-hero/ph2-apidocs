@@ -15,8 +15,8 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000",
-      "description": "Example"
+      "url": "http://166.70.53.208:3000",
+      "description": "Test Proxy"
     }
   ],
   "paths": {
@@ -122,16 +122,126 @@
         "x-internal": true,
         "security": [
           {
-            "API_Key": []
+            "API Key": []
           }
         ]
       }
+    },
+    "/admin/client": {
+      "get": {
+        "summary": "Your GET endpoint",
+        "tags": [],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "clients": {
+                      "type": "array",
+                      "description": "List of clients requested.",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "ipv4",
+                            "example": "123.123.123.1",
+                            "description": "This clients IPv4 incoming address."
+                          },
+                          "ipv4": {
+                            "type": "string",
+                            "format": "ipv4",
+                            "description": "The IPv4 this client will use as source for IPv4 ONLY proxying."
+                          },
+                          "ipv6": {
+                            "type": "string",
+                            "format": "ipv6",
+                            "description": "The IPv6 this client will use as source for IPv6 or IPv4 in IPv6 proxying."
+                          },
+                          "blacklist": {
+                            "type": "array",
+                            "description": "The list of all IP addresses blacklisted for this client.",
+                            "items": {
+                              "type": "string",
+                              "format": "ipv6"
+                            }
+                          },
+                          "auth": {
+                            "type": "integer",
+                            "description": "The time this clients authorization expires, in Unix Epoch \nTime. 0 = NOT Authorized. -1 = Authorized Forever.",
+                            "format": "int64",
+                            "minimum": -1,
+                            "example": 1640320732
+                          }
+                        },
+                        "required": [
+                          "id",
+                          "ipv4",
+                          "ipv6",
+                          "blacklist",
+                          "auth"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "clients"
+                  ]
+                },
+                "examples": {
+                  "1 Client Record": {
+                    "value": {
+                      "clients": [
+                        {
+                          "id": "123.123.123.1",
+                          "ipv4": "192.168.0.1",
+                          "ipv6": "2001:0db8:85a3:0000:0000:8a2e:0370:7334",
+                          "blacklist": [
+                            "2001:0db8:85a3:0000:0001:8a2e:0370:7334"
+                          ],
+                          "auth": 1640320732
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "operationId": "get-admin-client",
+        "description": "Get the details known about a client IP address or addresses.",
+        "parameters": [
+          {
+            "schema": {
+              "type": "array",
+              "example": "123.123.123.1|123.123.123.2",
+              "minItems": 1,
+              "format": "ipv4",
+              "uniqueItems": true
+            },
+            "in": "query",
+            "name": "ip",
+            "description": "A single or list of individual Client IPv4 Address. If not specified, then all currently authorized client IPv4 addresses will be listed. Multiple addresses can be listed with pipe `|` without any intervening spaces.",
+            "style": "pipeDelimited"
+          }
+        ],
+        "security": [
+          {
+            "API Key": []
+          }
+        ]
+      },
+      "parameters": []
     }
   },
   "components": {
     "schemas": {},
     "securitySchemes": {
-      "API_Key": {
+      "API Key": {
         "type": "http",
         "scheme": "bearer",
         "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request."
@@ -139,17 +249,17 @@
     },
     "responses": {}
   },
-  "security": [
-    {
-      "API Key - 1": []
-    }
-  ],
   "tags": [
     {
       "name": "admin"
     },
     {
       "name": "Client"
+    }
+  ],
+  "security": [
+    {
+      "API Key": []
     }
   ]
 }

@@ -16,7 +16,7 @@
   "servers": [
     {
       "url": "http://166.70.53.208:3000",
-      "description": "Example"
+      "description": "Test Proxy"
     }
   ],
   "paths": {
