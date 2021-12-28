@@ -130,7 +130,9 @@
     "/admin/client": {
       "get": {
         "summary": "Get Client IP/Auth Data",
-        "tags": [],
+        "tags": [
+          "admin"
+        ],
         "responses": {
           "200": {
             "description": "OK",
