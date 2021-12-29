@@ -17,6 +17,10 @@
     {
       "url": "http://166.70.53.208:3000",
       "description": "Test Proxy"
+    },
+    {
+      "url": "http://localproxy.lan:3000",
+      "description": "Local Test Proxy"
     }
   ],
   "paths": {
@@ -379,7 +383,9 @@
     "securitySchemes": {
       "API_Key": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request.",
+        "bearerFormat": "Preshared API Key"
       }
     },
     "responses": {}

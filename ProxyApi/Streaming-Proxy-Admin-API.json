@@ -17,12 +17,16 @@
     {
       "url": "http://166.70.53.208:3000",
       "description": "Test Proxy"
+    },
+    {
+      "url": "http://localproxy.lan:3000",
+      "description": "Local Test Proxy"
     }
   ],
   "paths": {
     "/admin/blacklist": {
       "put": {
-        "summary": "",
+        "summary": "Set Blacklisted IPv6 Subnets",
         "operationId": "admin-blacklist",
         "responses": {
           "200": {
@@ -50,6 +54,16 @@
                   "required": [
                     "added"
                   ]
+                },
+                "examples": {
+                  "Rejected 1 Bad Subnet": {
+                    "value": {
+                      "added": 3,
+                      "invalid": [
+                        "fe80:0:aaaz::/64"
+                      ]
+                    }
+                  }
                 }
               }
             }
@@ -107,7 +121,8 @@
                     "ipv6": [
                       "fe80:0:0:1::/64",
                       "fe80:0:1234:45::/64",
-                      "fe80:0:aaaa::/64"
+                      "fe80:0:aaaa::/64",
+                      "fe80:0:aaaz::/64"
                     ]
                   }
                 }
@@ -246,7 +261,9 @@
       "API Key": {
         "type": "http",
         "scheme": "bearer",
-        "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request."
+        "description": "The API Key will be supplied and is to be presented as a Bearer Token for validation with every request.",
+        "bearerFormat": "Preshared API Key"
+
       }
     },
     "responses": {}
